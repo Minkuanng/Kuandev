@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảo mật</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <!-- ===== OTP LIB - CDN ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/otplib@12.0.1/otplib-browser.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --toggle-bg: #dce8f2; --toggle-active: #27ae60; --danger: #e74c6f; --success: #27ae60; --warning: #f39c12; }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --toggle-bg: #2a2a5a; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --toggle-bg: #1a3a6a; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --toggle-bg: #1a4a1a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --toggle-bg: #5a2a1a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --toggle-bg: #5a1a2a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --toggle-bg: #333; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --toggle-bg: #3a2a5a; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --toggle-bg: #1a4a3a; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --toggle-bg: #3a2a1a; }
+        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --toggle-bg: #2a3a5a; }
+        body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
+
+        /* ===== HEADER ===== */
+        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
+        .logo span { color: var(--text-secondary); }
+        .menu-icon { cursor: pointer; padding: 6px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .menu-icon:hover { background: var(--hover-bg); }
+        .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
+        .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .wallet { background: var(--wallet-bg); padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: flex-end; line-height: 1.4; transition: 0.3s; }
+        .wallet .vnd { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+        .wallet .usd { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .wallet .usd span { color: var(--text-secondary); font-weight: 600; }
+        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
+        .bell-icon:hover { background: var(--hover-bg); }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
+        .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: 0.3s; padding: 6px; }
+        .dot-menu:hover { background: var(--hover-bg); }
+        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
+        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; z-index: 200; }
+        .popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); }
+        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
+        .popup-item.logout { color: #e74c6f; }
+        .settings-wrapper { position: relative; }
+        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; }
+        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
+        .notif-popup .notif-header .close { cursor: pointer; }
+        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
+        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
+        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: 0.3s; padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .side-menu.active { left: 0; }
+        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.3s; color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
+        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
+        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
+        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
+        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+
+        /* ===== CONTENT ===== */
+        .content { padding: 30px 24px; max-width: 520px; margin: 0 auto; }
+        .security-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
+        .security-card .shield-icon { text-align: center; font-size: 48px; margin-bottom: 4px; }
+        .security-card h1 { text-align: center; color: var(--text-primary); font-size: 24px; transition: 0.3s; }
+        .security-card .sub { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px; transition: 0.3s; }
+
+        .section-title { color: var(--text-primary); font-size: 15px; font-weight: 600; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 3px; transition: 0.3s; }
+        .form-group input { width: 100%; padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 14px; background: var(--wallet-bg); color: var(--text-primary); transition: 0.3s; }
+        .form-group input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
+        .form-group .pw-wrapper { position: relative; }
+        .form-group .pw-wrapper input { padding-right: 42px; }
+        .form-group .toggle-pass { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 16px; padding: 4px; transition: 0.3s; }
+        .form-group .toggle-pass:hover { color: var(--text-secondary); }
+        .btn-change { width: 100%; padding: 12px; background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-change:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
+        .btn-change:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .message { padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; display: none; }
+        .message.error { display: block; background: #fef0f2; color: #c0392b; border: 1px solid #fdd5d9; }
+        .message.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c8e6d0; }
+
+        .twofa-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); transition: 0.3s; }
+        .twofa-row .left { display: flex; align-items: center; gap: 12px; }
+        .twofa-row .left .icon-box { width: 40px; height: 40px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); }
+        .twofa-row .left .info .title { color: var(--text-primary); font-size: 14px; font-weight: 500; }
+        .twofa-row .left .info .desc { color: var(--text-muted); font-size: 12px; }
+        .toggle-switch { width: 44px; height: 24px; background: var(--toggle-bg); border-radius: 12px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+        .toggle-switch.active { background: var(--toggle-active); }
+        .toggle-switch .knob { width: 18px; height: 18px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .toggle-switch.active .knob { left: 23px; }
+        .twofa-status { font-size: 12px; font-weight: 500; padding: 2px 12px; border-radius: 12px; }
+        .twofa-status.on { color: var(--success); background: #d4edda; }
+        .twofa-status.off { color: var(--danger); background: #fef0f2; }
+        body.dark-mode .twofa-status.on { background: #1a3a2a; }
+        body.dark-mode .twofa-status.off { background: #3a1a2a; }
+
+        .secret-box {
+            background: var(--wallet-bg);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            margin: 10px 0 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+        }
+        .secret-box .secret-key {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+        .secret-box .copy-btn {
+            padding: 6px 16px;
+            background: var(--text-secondary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .secret-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .secret-box .copy-btn.copied { background: var(--success); }
+
+        .otp-section {
+            background: var(--wallet-bg);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            margin: 8px 0;
+            transition: 0.3s;
+        }
+        .otp-section .otp-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .otp-input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .otp-input-row input {
+            padding: 10px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-align: center;
+            letter-spacing: 8px;
+            width: 180px;
+            height: 52px;
+            transition: 0.3s;
+        }
+        .otp-input-row input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
+        .otp-input-row input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(231,76,111,0.15); }
+        .otp-input-row input.success { border-color: var(--success); box-shadow: 0 0 0 3px rgba(39,174,96,0.15); }
+        .otp-input-row .paste-btn {
+            padding: 8px 16px;
+            background: var(--wallet-bg);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .otp-input-row .paste-btn:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+        .otp-input-row .paste-btn:active { transform: scale(0.95); }
+
+        .error-msg { color: var(--danger); font-size: 13px; text-align: center; display: none; margin-top: 6px; }
+        .error-msg.show { display: block; }
+        .attempts { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+        .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .modal-actions .btn-confirm { background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; }
+        .modal-actions .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
+        .modal-actions .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .modal-actions .btn-cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .modal-actions .btn-cancel:hover { background: var(--hover-bg); }
+        .modal-actions .btn-danger { background: var(--danger); color: #fff; }
+        .modal-actions .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+
+        .device-box { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; }
+        .device-box .device-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
+        .device-box .device-item:last-child { border-bottom: none; }
+        .device-box .device-item .label { color: var(--text-muted); font-weight: 500; }
+        .device-box .device-item .value { font-weight: 500; }
+
+        .btn-back { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; margin-top: 16px; }
+        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 28px 30px;
+            max-width: 420px;
+            width: 92%;
+            box-shadow: var(--shadow-popup);
+            border: 1px solid var(--border-color);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.95) translateY(-20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal h3 { color: var(--text-primary); text-align: center; font-size: 22px; margin-bottom: 4px; transition: 0.3s; }
+        .modal .modal-desc { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 16px; transition: 0.3s; }
+
+        @media (max-width: 600px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 16px; }
+            .wallet { font-size: 11px; padding: 3px 10px; }
+            .wallet .vnd { font-size: 11px; }
+            .wallet .usd { font-size: 10px; }
+            .content { padding: 12px; }
+            .security-card { padding: 16px; }
+            .secret-box { flex-direction: column; align-items: stretch; text-align: center; padding: 12px; }
+            .secret-box .copy-btn { margin-top: 6px; justify-content: center; }
+            .otp-input-row input { width: 140px; height: 44px; font-size: 18px; letter-spacing: 6px; }
+            .menu-text { display: none; }
+            .notif-popup { right: 8px; left: 8px; min-width: auto; }
+            .modal { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
+        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
+    </div>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
+            <div class="logo">KuanZ<span>Game</span></div>
+        </div>
+        <div class="header-right">
+            <div class="wallet">
+                <span class="vnd">💰 <span id="balanceAmount">0</span> VND</span>
+                <span class="usd">💵 <span id="balanceUSD">0.00</span> USD</span>
+            </div>
+            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
+            <div class="settings-wrapper">
+                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="popup" id="settingsPopup">
+                    <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
+                    <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
+                    <button class="popup-item" onclick="goToSettings()">⚙️ <span data-key="settings">Cài đặt</span></button>
+                    <div class="popup-divider"></div>
+                    <button class="popup-item logout" onclick="logout()">🚪 <span data-key="logout">Đăng xuất</span></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="notif-popup" id="notifPopup">
+        <div class="notif-header"><span data-key="notif_title">📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
+    </div>
+
+    <div class="content">
+        <div class="security-card">
+            <div class="shield-icon">🛡️</div>
+            <h1><span data-key="security_title">Bảo mật</span></h1>
+            <p class="sub" data-key="security_sub">Quản lý bảo mật tài khoản của bạn</p>
+            <div id="message" class="message"></div>
+
+            <!-- ===== ĐỔI MẬT KHẨU ===== -->
+            <div class="section-title">🔑 <span data-key="change_pass">Đổi mật khẩu</span></div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label data-key="current_pass">Mật khẩu hiện tại</label>
+                    <div class="pw-wrapper">
+                        <input type="password" id="currentPassword" placeholder="Nhập mật khẩu cũ" required>
+                        <button type="button" class="toggle-pass" onclick="togglePass('currentPassword',this)">👁️</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-key="new_pass">Mật khẩu mới</label>
+                    <div class="pw-wrapper">
+                        <input type="password" id="newPassword" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+                        <button type="button" class="toggle-pass" onclick="togglePass('newPassword',this)">👁️</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-key="confirm_pass">Xác nhận mật khẩu</label>
+                    <div class="pw-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                        <button type="button" class="toggle-pass" onclick="togglePass('confirmPassword',this)">👁️</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-change" data-key="update_btn">🔄 Cập nhật</button>
+            </form>
+
+            <!-- ===== 2FA ===== -->
+            <div class="section-title">🔒 <span data-key="twofa_title">Xác thực 2 lớp</span></div>
+            <div class="twofa-row" onclick="toggleTwoFA()">
+                <div class="left">
+                    <div class="icon-box">🔐</div>
+                    <div class="info">
+                        <div class="title" data-key="google_auth">Google Authenticator</div>
+                        <div class="desc" id="twofaStatusDesc" data-key="twofa_off">Chưa kích hoạt</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="twofa-status off" id="twofaStatusBadge">Tắt</span>
+                    <div class="toggle-switch" id="twofaToggle" onclick="event.stopPropagation(); toggleTwoFA()">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 2FA MODAL ===== -->
+            <div class="modal-overlay" id="twofaModal">
+                <div class="modal">
+                    <h3 id="modalTitle">🔐 Xác thực 2 lớp</h3>
+                    <p class="modal-desc" id="modalDesc">Quét mã với Google Authenticator hoặc nhập thủ công</p>
+                    
+                    <div class="secret-box">
+                        <span class="secret-key" id="secretKeyDisplay">Đang tạo...</span>
+                        <button class="copy-btn" id="copyBtn" onclick="copySecret()">📋 Sao chép</button>
+                    </div>
+
+                    <div class="otp-section">
+                        <span class="otp-label">📱 Nhập mã OTP 6 số</span>
+                        <div class="otp-input-row">
+                            <input type="text" id="otpInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
+                            <button class="paste-btn" onclick="pasteOTP()">📋 Dán</button>
+                        </div>
+                    </div>
+
+                    <div class="error-msg" id="otpError">❌ Mã OTP không đúng! Vui lòng thử lại.</div>
+                    <div class="attempts">Còn <span id="attemptCount">3</span> lần thử</div>
+
+                    <div class="modal-actions">
+                        <button class="btn-confirm" id="btnVerifyOTP" onclick="verifyOTP()">✅ Xác nhận</button>
+                        <button class="btn-cancel" onclick="closeOTPModal()">❌ Hủy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TẮT 2FA MODAL ===== -->
+            <div class="modal-overlay" id="twofaOffModal">
+                <div class="modal">
+                    <h3>🔓 Tắt xác thực 2 lớp</h3>
+                    <p class="modal-desc">Nhập mã OTP để xác nhận tắt</p>
+                    <div class="otp-section">
+                        <span class="otp-label">📱 Nhập mã OTP 6 số</span>
+                        <div class="otp-input-row">
+                            <input type="text" id="otpOffInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
+                            <button class="paste-btn" onclick="pasteOTPOff()">📋 Dán</button>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="otpOffError">❌ Mã OTP không đúng!</div>
+                    <div class="attempts">Còn <span id="offAttemptCount">3</span> lần thử</div>
+                    <div class="modal-actions">
+                        <button class="btn-danger" id="btnTurnOff" onclick="turnOff2FA()">🔓 Tắt</button>
+                        <button class="btn-cancel" onclick="closeTwoFAOff()">Đóng</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== THIẾT BỊ ===== -->
+            <div class="section-title">📱 <span data-key="device_title">Thiết bị đăng nhập</span></div>
+            <div class="device-box">
+                <div class="device-item"><span class="label">🌐 IP Address</span><span class="value" id="userIP">Đang lấy...</span></div>
+                <div class="device-item"><span class="label">🖥️ Trình duyệt</span><span class="value" id="userBrowser">Đang lấy...</span></div>
+                <div class="device-item"><span class="label">📅 Lần đăng nhập cuối</span><span class="value" id="lastLogin">Đang lấy...</span></div>
+            </div>
+
+            <button class="btn-back" onclick="goToSettings()"><span data-key="back_settings">← Quay lại cài đặt</span></button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
+            authDomain: "shop-c6777.firebaseapp.com",
+            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "shop-c6777",
+            storageBucket: "shop-c6777.firebasestorage.app",
+            messagingSenderId: "43186563268",
+            appId: "1:43186563268:web:0d392ba57039a919670191"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        const EXCHANGE_RATE = 25000;
+
+        const translations = {
+            vi: {
+                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ',
+                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
+                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
+                security_title: 'Bảo mật', security_sub: 'Quản lý bảo mật tài khoản của bạn',
+                change_pass: 'Đổi mật khẩu', current_pass: 'Mật khẩu hiện tại', new_pass: 'Mật khẩu mới',
+                confirm_pass: 'Xác nhận mật khẩu', update_btn: '🔄 Cập nhật',
+                twofa_title: 'Xác thực 2 lớp', google_auth: 'Google Authenticator',
+                twofa_off: 'Chưa kích hoạt', twofa_on: 'Đã kích hoạt',
+                device_title: 'Thiết bị đăng nhập', back_settings: '← Quay lại cài đặt'
+            },
+            en: {
+                home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
+                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
+                notif_title: '📢 Notifications', notif_empty: 'No notifications',
+                security_title: 'Security', security_sub: 'Manage your account security',
+                change_pass: 'Change Password', current_pass: 'Current Password', new_pass: 'New Password',
+                confirm_pass: 'Confirm Password', update_btn: '🔄 Update',
+                twofa_title: '2FA', google_auth: 'Google Authenticator',
+                twofa_off: 'Not activated', twofa_on: 'Activated',
+                device_title: 'Login Devices', back_settings: '← Back to settings'
+            }
+        };
+
+        let lang = localStorage.getItem('lang') || 'vi';
+        let twofaSecret = '';
+        let isVerifying = false;
+        let isTurningOff = false;
+        let verifyAttempts = 3;
+        let offAttempts = 3;
+
+        // ===== GET OTP HELPER - FIXED =====
+        function getOTPHelper() {
+            try {
+                if (typeof otplib !== 'undefined' && otplib.authenticator) {
+                    return otplib.authenticator;
+                }
+                if (typeof window.otplib !== 'undefined' && window.otplib.authenticator) {
+                    return window.otplib.authenticator;
+                }
+            } catch(e) {}
+            
+            console.warn('⚠️ Using fallback OTP');
+            return {
+                check: async function(otp, secret) {
+                    if (!secret || secret.length < 10) return false;
+                    if (!/^\d{6}$/.test(otp)) return false;
+                    
+                    try {
+                        // Decode base32 secret
+                        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                        const bytes = [];
+                        let bits = 0;
+                        let value = 0;
+                        for (let i = 0; i < secret.length; i++) {
+                            const idx = alphabet.indexOf(secret[i].toUpperCase());
+                            if (idx === -1) continue;
+                            value = (value << 5) | idx;
+                            bits += 5;
+                            if (bits >= 8) {
+                                bits -= 8;
+                                bytes.push((value >> bits) & 0xFF);
+                            }
+                        }
+                        const keyBytes = new Uint8Array(bytes);
+                        
+                        // Get current time counter (30s windows)
+                        let counter = Math.floor(Date.now() / 30000);
+                        const counterBytes = new Uint8Array(8);
+                        for (let i = 7; i >= 0; i--) {
+                            counterBytes[i] = counter & 0xFF;
+                            counter = counter >> 8;
+                        }
+                        
+                        // Import key
+                        const cryptoKey = await crypto.subtle.importKey(
+                            'raw',
+                            keyBytes,
+                            { name: 'HMAC', hash: 'SHA-1' },
+                            false,
+                            ['sign']
+                        );
+                        
+                        // Sign
+                        const signature = await crypto.subtle.sign(
+                            'HMAC',
+                            cryptoKey,
+                            counterBytes
+                        );
+                        
+                        const hmac = new Uint8Array(signature);
+                        const offset = hmac[hmac.length - 1] & 0xF;
+                        const binary = ((hmac[offset] & 0x7F) << 24) |
+                                      ((hmac[offset + 1] & 0xFF) << 16) |
+                                      ((hmac[offset + 2] & 0xFF) << 8) |
+                                      (hmac[offset + 3] & 0xFF);
+                        const expected = String(binary % 1000000).padStart(6, '0');
+                        
+                        return otp === expected;
+                    } catch(e) {
+                        console.error('OTP check error:', e);
+                        return false;
+                    }
+                }
+            };
+        }
+
+        const authenticator = getOTPHelper();
+
+        function applyLang() {
+            const data = translations[lang] || translations.vi;
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (data[key] !== undefined) el.textContent = data[key];
+            });
+            updateTwoFAStatus();
+        }
+
+        function updateTwoFAStatus() {
+            const toggle = document.getElementById('twofaToggle');
+            const isActive = toggle.classList.contains('active');
+            const desc = document.getElementById('twofaStatusDesc');
+            const badge = document.getElementById('twofaStatusBadge');
+            if (isActive) {
+                desc.textContent = lang === 'vi' ? 'Đã kích hoạt' : 'Activated';
+                desc.style.color = 'var(--success)';
+                badge.textContent = lang === 'vi' ? 'Bật' : 'On';
+                badge.className = 'twofa-status on';
+            } else {
+                desc.textContent = lang === 'vi' ? 'Chưa kích hoạt' : 'Not activated';
+                desc.style.color = 'var(--text-muted)';
+                badge.textContent = lang === 'vi' ? 'Tắt' : 'Off';
+                badge.className = 'twofa-status off';
+            }
+        }
+
+        function applyTheme() {
+            const isDark = localStorage.getItem('theme') === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+            const theme = localStorage.getItem('theme_name') || 'default';
+            document.body.className = document.body.className.replace(/theme-\w+/g, '');
+            if (theme !== 'default') document.body.classList.add('theme-' + theme);
+        }
+        applyTheme();
+        applyLang();
+
+        // ===== AUTH =====
+        auth.onAuthStateChanged((user) => {
+            if (!user) { window.location.replace('../Authenticator/login.html'); return; }
+
+            db.ref('users/' + user.uid + '/balance').on('value', snap => {
+                const balance = snap.val() || 0;
+                document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
+                document.getElementById('balanceUSD').textContent = (balance / EXCHANGE_RATE).toFixed(2);
+            });
+
+            db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
+                const enabled = snap.val() === true;
+                const toggle = document.getElementById('twofaToggle');
+                if (enabled) {
+                    toggle.classList.add('active');
+                } else {
+                    toggle.classList.remove('active');
+                }
+                updateTwoFAStatus();
+            });
+
+            db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
+                const last = snap.val();
+                document.getElementById('lastLogin').textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
+            });
+
+            db.ref('notifications').on('value', snap => {
+                const notifs = snap.val();
+                const list = document.getElementById('notifList');
+                const dot = document.getElementById('notifDot');
+                if (notifs) {
+                    const keys = Object.keys(notifs).reverse();
+                    let html = '',
+                        hasUnread = false;
+                    keys.forEach(key => {
+                        const n = notifs[key];
+                        const isUnread = !n.readBy || !n.readBy[user.uid];
+                        if (isUnread) hasUnread = true;
+                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                    });
+                    list.innerHTML = html;
+                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                } else {
+                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    dot.classList.remove('show');
+                }
+            });
+        });
+
+        // ===== TOGGLE PASSWORD =====
+        function togglePass(id, btn) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') { input.type = 'text';
+                btn.textContent = '🙈'; } else { input.type = 'password';
+                btn.textContent = '👁️'; }
+        }
+
+        // ===== CHANGE PASSWORD =====
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const msg = document.getElementById('message');
+            if (newPass.length < 6) {
+                msg.textContent = '❌ Mật khẩu tối thiểu 6 ký tự!';
+                msg.className = 'message error';
+                return;
+            }
+            if (newPass !== confirm) {
+                msg.textContent = '❌ Mật khẩu không khớp!';
+                msg.className = 'message error';
+                return;
+            }
+            const btn = document.querySelector('.btn-change');
+            btn.disabled = true;
+            btn.textContent = 'Đang xử lý...';
+            try {
+                const user = auth.currentUser;
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
+                await user.reauthenticateWithCredential(credential);
+                await user.updatePassword(newPass);
+                msg.textContent = '✅ Đổi mật khẩu thành công!';
+                msg.className = 'message success';
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            } catch (error) {
+                let err = '❌ Lỗi: ';
+                if (error.code === 'auth/wrong-password') err += 'Mật khẩu hiện tại sai!';
+                else err += error.message;
+                msg.textContent = err;
+                msg.className = 'message error';
+            }
+            btn.disabled = false;
+            btn.textContent = '🔄 Cập nhật';
+        });
+
+        // ===== GENERATE SECRET =====
+        function generateSecret() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let secret = '';
+            for (let i = 0; i < 16; i++) {
+                secret += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return secret;
+        }
+
+        // ===== TOGGLE 2FA =====
+        function toggleTwoFA() {
+            const user = auth.currentUser;
+            if (!user) return;
+            const toggle = document.getElementById('twofaToggle');
+
+            if (toggle.classList.contains('active')) {
+                offAttempts = 3;
+                document.getElementById('otpOffInput').value = '';
+                document.getElementById('otpOffError').classList.remove('show');
+                document.getElementById('otpOffInput').classList.remove('error', 'success');
+                document.getElementById('offAttemptCount').textContent = offAttempts;
+                document.getElementById('twofaOffModal').classList.add('active');
+                setTimeout(() => document.getElementById('otpOffInput').focus(), 200);
+            } else {
+                db.ref('users/' + user.uid + '/twofaEnabled').once('value').then((snap) => {
+                    if (snap.val() === true) {
+                        toggle.classList.add('active');
+                        updateTwoFAStatus();
+                        return;
+                    }
+                    twofaSecret = generateSecret();
+                    document.getElementById('secretKeyDisplay').textContent = twofaSecret;
+                    document.getElementById('otpInput').value = '';
+                    document.getElementById('otpError').classList.remove('show');
+                    document.getElementById('otpInput').classList.remove('error', 'success');
+                    verifyAttempts = 3;
+                    document.getElementById('attemptCount').textContent = verifyAttempts;
+                    document.getElementById('twofaModal').classList.add('active');
+                    setTimeout(() => document.getElementById('otpInput').focus(), 200);
+                });
+            }
+        }
+
+        // ===== COPY SECRET =====
+        function copySecret() {
+            const secret = document.getElementById('secretKeyDisplay').textContent;
+            const btn = document.getElementById('copyBtn');
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(secret).then(() => {
+                    btn.textContent = '✅ Đã sao chép!';
+                    btn.classList.add('copied');
+                    setTimeout(() => { btn.textContent = '📋 Sao chép';
+                        btn.classList.remove('copied'); }, 2000);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = secret;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.textContent = '✅ Đã sao chép!';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = '📋 Sao chép';
+                    btn.classList.remove('copied'); }, 2000);
+            }
+        }
+
+        // ===== PASTE OTP =====
+        function pasteOTP() {
+            if (navigator.clipboard) {
+                navigator.clipboard.readText().then(text => {
+                    const cleaned = text.replace(/\D/g, '').slice(0, 6);
+                    if (cleaned.length === 6) {
+                        document.getElementById('otpInput').value = cleaned;
+                        verifyOTP();
+                    } else {
+                        document.getElementById('otpError').textContent = '❌ Vui lòng dán đúng mã OTP 6 số!';
+                        document.getElementById('otpError').classList.add('show');
+                    }
+                }).catch(() => {
+                    alert(lang === 'vi' ? 'Không thể đọc clipboard. Vui lòng nhập thủ công.' : 'Cannot read clipboard. Please enter manually.');
+                });
+            } else {
+                alert(lang === 'vi' ? 'Trình duyệt không hỗ trợ dán. Vui lòng nhập thủ công.' : 'Browser does not support paste. Please enter manually.');
+            }
+        }
+
+        function pasteOTPOff() {
+            if (navigator.clipboard) {
+                navigator.clipboard.readText().then(text => {
+                    const cleaned = text.replace(/\D/g, '').slice(0, 6);
+                    if (cleaned.length === 6) {
+                        document.getElementById('otpOffInput').value = cleaned;
+                        turnOff2FA();
+                    } else {
+                        document.getElementById('otpOffError').textContent = '❌ Vui lòng dán đúng mã OTP 6 số!';
+                        document.getElementById('otpOffError').classList.add('show');
+                    }
+                }).catch(() => {
+                    alert(lang === 'vi' ? 'Không thể đọc clipboard. Vui lòng nhập thủ công.' : 'Cannot read clipboard. Please enter manually.');
+                });
+            } else {
+                alert(lang === 'vi' ? 'Trình duyệt không hỗ trợ dán. Vui lòng nhập thủ công.' : 'Browser does not support paste. Please enter manually.');
+            }
+        }
+
+        // ===== VERIFY OTP - FIXED =====
+        async function verifyOTP() {
+            if (isVerifying) return;
+
+            const otp = document.getElementById('otpInput').value.trim();
+            if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+                document.getElementById('otpError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
+                document.getElementById('otpError').classList.add('show');
+                document.getElementById('otpInput').classList.add('error');
+                return;
+            }
+
+            isVerifying = true;
+            document.getElementById('btnVerifyOTP').disabled = true;
+            document.getElementById('btnVerifyOTP').textContent = '⏳ Đang xác thực...';
+
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('❌ Vui lòng đăng nhập lại!');
+                    isVerifying = false;
+                    document.getElementById('btnVerifyOTP').disabled = false;
+                    document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+                    return;
+                }
+
+                // Lấy secret từ database hoặc dùng secret đã tạo
+                let secret = twofaSecret;
+                if (!secret) {
+                    const snap = await db.ref('users/' + user.uid + '/twofaSecret').once('value');
+                    secret = snap.val();
+                }
+
+                if (!secret) {
+                    document.getElementById('otpError').textContent = '❌ Không tìm thấy secret key!';
+                    document.getElementById('otpError').classList.add('show');
+                    isVerifying = false;
+                    document.getElementById('btnVerifyOTP').disabled = false;
+                    document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+                    return;
+                }
+
+                // Kiểm tra OTP với thư viện
+                let isValid = false;
+                try {
+                    const result = authenticator.check(otp, secret);
+                    if (result && typeof result.then === 'function') {
+                        isValid = await result;
+                    } else {
+                        isValid = result;
+                    }
+                } catch(e) {
+                    console.error('OTP check error:', e);
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    await db.ref('users/' + user.uid).update({
+                        twofaEnabled: true,
+                        twofaSecret: secret
+                    });
+                    document.getElementById('otpInput').classList.remove('error');
+                    document.getElementById('otpInput').classList.add('success');
+                    document.getElementById('otpError').classList.remove('show');
+                    document.getElementById('btnVerifyOTP').textContent = '✅ Thành công';
+
+                    alert(lang === 'vi' ? '✅ Đã kích hoạt xác thực 2 lớp thành công!' : '✅ 2FA activated successfully!');
+                    document.getElementById('twofaToggle').classList.add('active');
+                    updateTwoFAStatus();
+                    closeOTPModal();
+                } else {
+                    verifyAttempts--;
+                    document.getElementById('attemptCount').textContent = verifyAttempts;
+                    document.getElementById('otpInput').classList.add('error');
+                    document.getElementById('otpError').textContent = `❌ Mã OTP không đúng! Còn ${verifyAttempts} lần thử.`;
+                    document.getElementById('otpError').classList.add('show');
+
+                    if (verifyAttempts <= 0) {
+                        document.getElementById('otpError').textContent = '❌ Bạn đã nhập sai quá nhiều lần!';
+                        setTimeout(() => {
+                            closeOTPModal();
+                            isVerifying = false;
+                            document.getElementById('btnVerifyOTP').disabled = false;
+                            document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+                        }, 2000);
+                        return;
+                    }
+                    document.getElementById('otpInput').value = '';
+                    document.getElementById('otpInput').focus();
+                }
+            } catch (error) {
+                alert('❌ Lỗi: ' + error.message);
+            }
+
+            isVerifying = false;
+            document.getElementById('btnVerifyOTP').disabled = false;
+            document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+        }
+
+        // ===== TURN OFF 2FA - FIXED =====
+        async function turnOff2FA() {
+            if (isTurningOff) return;
+
+            const otp = document.getElementById('otpOffInput').value.trim();
+            if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+                document.getElementById('otpOffError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
+                document.getElementById('otpOffError').classList.add('show');
+                document.getElementById('otpOffInput').classList.add('error');
+                return;
+            }
+
+            isTurningOff = true;
+            document.getElementById('btnTurnOff').disabled = true;
+            document.getElementById('btnTurnOff').textContent = '⏳ Đang xác thực...';
+
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('❌ Vui lòng đăng nhập lại!');
+                    isTurningOff = false;
+                    document.getElementById('btnTurnOff').disabled = false;
+                    document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+                    return;
+                }
+
+                // Lấy secret từ database
+                const snap = await db.ref('users/' + user.uid + '/twofaSecret').once('value');
+                const secret = snap.val();
+
+                if (!secret) {
+                    document.getElementById('otpOffError').textContent = '❌ Không tìm thấy secret key!';
+                    document.getElementById('otpOffError').classList.add('show');
+                    isTurningOff = false;
+                    document.getElementById('btnTurnOff').disabled = false;
+                    document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+                    return;
+                }
+
+                // Kiểm tra OTP
+                let isValid = false;
+                try {
+                    const result = authenticator.check(otp, secret);
+                    if (result && typeof result.then === 'function') {
+                        isValid = await result;
+                    } else {
+                        isValid = result;
+                    }
+                } catch(e) {
+                    console.error('OTP check error:', e);
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    await db.ref('users/' + user.uid).update({
+                        twofaEnabled: false,
+                        twofaSecret: null
+                    });
+                    document.getElementById('otpOffInput').classList.remove('error');
+                    document.getElementById('otpOffInput').classList.add('success');
+                    document.getElementById('otpOffError').classList.remove('show');
+                    document.getElementById('btnTurnOff').textContent = '✅ Thành công';
+
+                    alert(lang === 'vi' ? '✅ Đã tắt xác thực 2 lớp!' : '✅ 2FA turned off!');
+                    document.getElementById('twofaToggle').classList.remove('active');
+                    updateTwoFAStatus();
+                    closeTwoFAOff();
+                } else {
+                    offAttempts--;
+                    document.getElementById('offAttemptCount').textContent = offAttempts;
+                    document.getElementById('otpOffInput').classList.add('error');
+                    document.getElementById('otpOffError').textContent = `❌ Mã OTP không đúng! Còn ${offAttempts} lần thử.`;
+                    document.getElementById('otpOffError').classList.add('show');
+
+                    if (offAttempts <= 0) {
+                        document.getElementById('otpOffError').textContent = '❌ Bạn đã nhập sai quá nhiều lần!';
+                        setTimeout(() => {
+                            closeTwoFAOff();
+                            isTurningOff = false;
+                            document.getElementById('btnTurnOff').disabled = false;
+                            document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+                        }, 2000);
+                        return;
+                    }
+                    document.getElementById('otpOffInput').value = '';
+                    document.getElementById('otpOffInput').focus();
+                }
+            } catch (error) {
+                alert('❌ Lỗi: ' + error.message);
+            }
+
+            isTurningOff = false;
+            document.getElementById('btnTurnOff').disabled = false;
+            document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+        }
+
+        // ===== CLOSE MODALS =====
+        function closeOTPModal() {
+            document.getElementById('twofaModal').classList.remove('active');
+            document.getElementById('otpInput').value = '';
+            document.getElementById('otpError').classList.remove('show');
+            isVerifying = false;
+            document.getElementById('btnVerifyOTP').disabled = false;
+            document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+        }
+
+        function closeTwoFAOff() {
+            document.getElementById('twofaOffModal').classList.remove('active');
+            document.getElementById('otpOffInput').value = '';
+            document.getElementById('otpOffError').classList.remove('show');
+            isTurningOff = false;
+            document.getElementById('btnTurnOff').disabled = false;
+            document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+        }
+
+        // ===== DEVICE INFO =====
+        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+            document.getElementById('userIP').textContent = d.ip || 'Không xác định';
+        }).catch(() => document.getElementById('userIP').textContent = 'Không thể lấy');
+
+        const ua = navigator.userAgent;
+        let browser = 'Không xác định';
+        if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+        else if (ua.indexOf('Firefox') > -1) browser = 'Firefox';
+        else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+        else if (ua.indexOf('Edge') > -1) browser = 'Edge';
+        document.getElementById('userBrowser').textContent = browser + ' - ' + (navigator.platform || 'Unknown');
+
+        // ===== MENU =====
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('active'); }
+
+        function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
+            document.getElementById('menuOverlay').classList.remove('active'); }
+
+        function togglePopup(e) { e.stopPropagation();
+            document.getElementById('settingsPopup').classList.toggle('active'); }
+        document.addEventListener('click', function(e) {
+            const popup = document.getElementById('settingsPopup');
+            const wrapper = document.querySelector('.settings-wrapper');
+            if (!wrapper.contains(e.target)) popup.classList.remove('active');
+        });
+
+        function toggleNotif() {
+            const popup = document.getElementById('notifPopup');
+            popup.classList.toggle('active');
+            const user = auth.currentUser;
+            if (user && localStorage.getItem('autoView') !== 'false') {
+                db.ref('notifications').once('value', snap => {
+                    const notifs = snap.val();
+                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + user.uid)
+                        .set(true));
+                });
+                document.getElementById('notifDot').classList.remove('show');
+            }
+        }
+
+        function goHome() { closeMenu();
+            window.location.href = '../index.html'; }
+
+        function goHistory() { closeMenu();
+            alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
+
+        function goTopup() { closeMenu();
+            alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
+
+        function goSupport() { closeMenu();
+            alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
+
+        function goToProfile() { window.location.href = 'profile.html'; }
+
+        function goToSecurity() { window.location.href = 'security.html'; }
+
+        function goToSettings() { window.location.href = 'settings.html'; }
+
+        function logout() {
+            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) auth.signOut().then(() => window.location.replace(
+                '../Authenticator/login.html'));
+        }
+
+        // ===== KEYBOARD EVENTS =====
+        document.getElementById('otpInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') verifyOTP();
+        });
+        document.getElementById('otpOffInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') turnOff2FA();
+        });
+
+        // ===== AUTO CLEAR ERROR =====
+        document.getElementById('otpInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length === 6) {
+                document.getElementById('otpError').classList.remove('show');
+                this.classList.remove('error');
+            }
+        });
+        document.getElementById('otpOffInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length === 6) {
+                document.getElementById('otpOffError').classList.remove('show');
+                this.classList.remove('error');
+            }
+        });
+
+        // ===== CLOSE MODALS ON OVERLAY CLICK =====
+        document.getElementById('twofaModal').addEventListener('click', function(e) {
+            if (e.target === this) closeOTPModal();
+        });
+        document.getElementById('twofaOffModal').addEventListener('click', function(e) {
+            if (e.target === this) closeTwoFAOff();
+        });
+
+        // ===== STORAGE LISTENER =====
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'lang') { lang = e.newValue || 'vi';
+                applyLang(); }
+            if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
+        });
+
+        console.log('✅ Security page loaded with fixed OTP verification!');
+        console.log('🔒 Fixed: Assignment to constant variable error');
+        console.log('📋 Copy & Paste OTP support added!');
+    </script>
+</body>
+</html>
