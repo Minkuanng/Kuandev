@@ -68,22 +68,16 @@
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 40px 24px; max-width: 800px; margin: 0 auto; }
-        .welcome-card { background: var(--bg-card); border-radius: 16px; padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; text-align: center; }
-        .welcome-card h1 { color: var(--text-primary); font-size: 28px; transition: 0.3s; }
-        .welcome-card p { color: var(--text-muted); font-size: 16px; margin-top: 8px; transition: 0.3s; }
         .admin-badge { display: inline-block; background: linear-gradient(135deg, #f5a623, #f7c948); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
 
         /* ---- Intro/Shop banner ---- */
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
-        .intro-top { display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 10px; }
+        .intro-top { display: flex; align-items: center; gap: 10px; }
         .intro-top-left { display: flex; align-items: center; gap: 10px; }
         .intro-top-left .intro-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
         .intro-title { font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
         .intro-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
-        .intro-toggle { font-size: 11px; color: var(--text-secondary); font-weight: 600; border: 1px solid var(--border-color); background: var(--wallet-bg); padding: 5px 10px; border-radius: 20px; white-space: nowrap; transition: 0.3s; user-select: none; }
-        .intro-toggle:hover { background: var(--hover-bg); }
-        .intro-body { max-height: 0; opacity: 0; transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease; margin-top: 0; }
-        .intro-body.open { max-height: 900px; opacity: 1; margin-top: 16px; }
+        .intro-body { margin-top: 16px; }
         .intro-lead { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); }
         .intro-section { padding-top: 12px; }
         .intro-section + .intro-section { margin-top: 4px; }
@@ -94,7 +88,7 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { font-size: 11px; padding: 3px 10px; } .content { padding: 16px; } .welcome-card { padding: 24px; } .welcome-card h1 { font-size: 22px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .intro-card { padding: 16px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { font-size: 11px; padding: 3px 10px; } .content { padding: 16px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .intro-card { padding: 16px; } }
     </style>
 </head>
 <body>
@@ -142,7 +136,7 @@
 
         <!-- Intro / Giới thiệu shop -->
         <div class="intro-card">
-            <div class="intro-top" onclick="toggleIntro()">
+            <div class="intro-top">
                 <div class="intro-top-left">
                     <div class="intro-icon">🎮</div>
                     <div>
@@ -150,9 +144,8 @@
                         <div class="intro-sub">Hướng dẫn mua hàng &amp; lưu ý quan trọng</div>
                     </div>
                 </div>
-                <div class="intro-toggle" id="introToggleBtn">Xem thêm ▾</div>
             </div>
-            <div class="intro-body" id="introBody">
+            <div class="intro-body">
                 <p class="intro-lead">KuanZGame.site tự hào là địa chỉ uy tín cung cấp đa dạng tài khoản game và tài khoản điện thoại di động. Bên cạnh đó, bạn còn có thể kiếm điểm thưởng qua các nhiệm vụ hàng ngày để đổi quà miễn phí nhanh chóng, tiện lợi.</p>
 
                 <div class="intro-section">
@@ -175,12 +168,7 @@
             </div>
         </div>
 
-        <div class="welcome-card">
-            <h1 data-key="welcome_title">🏠 Chào mừng bạn!</h1>
-            <p id="userGreeting" data-key="welcome_greeting">Đang tải...</p>
-            <div id="adminBadgeContainer"></div>
-            <p style="margin-top:20px; color:var(--text-muted); font-size:14px;" data-key="welcome_desc">Đây là trang chủ của bạn.</p>
-        </div>
+        <div id="adminBadgeContainer" style="text-align:center; margin-top:6px;"></div>
     </div>
 
     <script>
@@ -226,8 +214,6 @@
 
         auth.onAuthStateChanged((user) => {
             if (!user) { window.location.replace('Authenticator/login.html'); return; }
-            const name = user.displayName || user.email || 'Người dùng';
-            document.getElementById('userGreeting').textContent = (lang === 'vi' ? 'Xin chào, ' : 'Hello, ') + name + '!';
             db.ref('users/' + user.uid).on('value', snap => {
                 const data = snap.val();
                 if (data) {
@@ -283,21 +269,6 @@
                 });
                 document.getElementById('notifDot').classList.remove('show');
             }
-        }
-
-        function toggleIntro() {
-            const body = document.getElementById('introBody');
-            const btn = document.getElementById('introToggleBtn');
-            const isOpen = body.classList.toggle('open');
-            btn.textContent = isOpen ? 'Thu gọn ▴' : 'Xem thêm ▾';
-            if (isOpen) localStorage.setItem('introSeen', '1');
-        }
-
-        // Mặc định mở sẵn phần giới thiệu cho người dùng mới, các lần sau sẽ thu gọn
-        if (localStorage.getItem('introSeen') === '1') {
-            // đã xem rồi -> để thu gọn, không làm gì thêm
-        } else {
-            document.addEventListener('DOMContentLoaded', () => toggleIntro());
         }
 
         function goHome() { closeMenu();
