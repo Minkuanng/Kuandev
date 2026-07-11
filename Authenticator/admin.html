@@ -26,7 +26,6 @@
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
         
-        /* Menu icon - thanh trên xuống dưới 1 nấc, thanh dưới lên trên 1 nấc */
         .menu-icon { 
             cursor: pointer; 
             padding: 8px 12px; 
@@ -51,9 +50,7 @@
             border-radius: 4px; 
             transition: 0.3s;
         }
-        /* Thanh trên xuống dưới 1 nấc */
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
-        /* Thanh dưới lên trên 1 nấc */
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
@@ -188,7 +185,6 @@
         <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
         <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
         <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
-        <button class="menu-item" onclick="goQuickLogin()"><span class="icon">⚡</span><span data-key="quicklogin">Đăng nhập nhanh</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
     </div>
@@ -200,7 +196,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">KuanZ<span>Game</span></div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -305,7 +301,7 @@
                 no_data: 'Không có dữ liệu', send_btn: '📢 Gửi', back: '← Quay lại',
                 modal_title: 'Quản lý user', user_label: 'User:', uid_label: 'UID:', amount_label: 'Số tiền:',
                 add_btn: '➕ Cộng', sub_btn: '➖ Trừ', lock_btn: '🔒 Khóa', unlock_btn: '🔓 Mở', 
-                delete_btn: '🗑️ Xóa', close_btn: 'Đóng', quicklogin: '⚡ Đăng nhập nhanh'
+                delete_btn: '🗑️ Xóa', close_btn: 'Đóng'
             },
             en: {
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
@@ -317,7 +313,7 @@
                 no_data: 'No data', send_btn: '📢 Send', back: '← Back',
                 modal_title: 'Manage User', user_label: 'User:', uid_label: 'UID:', amount_label: 'Amount:',
                 add_btn: '➕ Add', sub_btn: '➖ Sub', lock_btn: '🔒 Lock', unlock_btn: '🔓 Unlock',
-                delete_btn: '🗑️ Delete', close_btn: 'Close', quicklogin: '⚡ Quick Login'
+                delete_btn: '🗑️ Delete', close_btn: 'Close'
             }
         };
 
@@ -353,13 +349,6 @@
             document.getElementById('stats').style.display = show ? 'none' : 'flex';
             document.getElementById('tableContainer').style.display = show ? 'none' : 'block';
             document.getElementById('notifForm').style.display = show ? 'none' : 'block';
-        }
-
-        function isUserOnline(lastLogin) {
-            if (!lastLogin) return false;
-            const now = Date.now();
-            const diff = now - lastLogin;
-            return diff < 5 * 60 * 1000;
         }
 
         function watchOnlineStatus() {
@@ -654,7 +643,6 @@
         function goHistory() { closeMenu(); alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
         function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
         function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
-        function goQuickLogin() { closeMenu(); window.location.href = 'quick-login.html'; }
         function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
         function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
         function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
