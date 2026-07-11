@@ -30,15 +30,62 @@
         .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
         .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        
-        /* Ví mới */
-        .wallet { background: var(--wallet-bg); padding: 6px 16px; border-radius: 30px; border: 2px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; }
-        .wallet-icon { font-size: 18px; opacity: 0.8; }
-        .wallet-content { display: flex; align-items: center; gap: 6px; }
-        .wallet-content .vnd { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-        .wallet-divider { width: 2px; height: 20px; background: var(--border-color); border-radius: 2px; }
-        .wallet-content .usd { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-        .wallet-content .usd span { color: var(--accent); }
+
+        /* Wallet mới - hình chữ nhật với ví bên trong */
+        .wallet-container {
+            background: var(--wallet-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px 16px 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            cursor: default;
+            min-height: 44px;
+        }
+        .wallet-container:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 143, 214, 0.1);
+        }
+        .wallet-icon-box {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .wallet-icon-box svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+        }
+        .wallet-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+        .wallet-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .wallet-balance {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .wallet-balance span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-left: 2px;
+        }
 
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
@@ -74,7 +121,7 @@
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 40px 24px; max-width: 800px; margin: 0 auto; }
-        .admin-badge { display: none; }
+        .admin-badge { display: inline-block; background: linear-gradient(135deg, #f5a623, #f7c948); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
 
         /* ---- Intro/Shop banner ---- */
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
@@ -94,7 +141,19 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { padding: 4px 12px; gap: 8px; } .wallet-content .vnd { font-size: 12px; } .wallet-content .usd { font-size: 11px; } .content { padding: 16px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .intro-card { padding: 16px; } }
+        @media (max-width: 600px) { 
+            .header { padding: 10px 12px; } 
+            .logo { font-size: 16px; } 
+            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; }
+            .wallet-icon-box { width: 28px; height: 28px; }
+            .wallet-icon-box svg { width: 15px; height: 15px; }
+            .wallet-balance { font-size: 13px; }
+            .wallet-label { font-size: 9px; }
+            .content { padding: 16px; } 
+            .menu-text { display: none; } 
+            .notif-popup { right: 8px; left: 8px; min-width: auto; } 
+            .intro-card { padding: 16px; } 
+        }
     </style>
 </head>
 <body>
@@ -111,22 +170,40 @@
 
     <header class="header">
         <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <span class="menu-text">MENU</span>
+            </div>
             <div class="logo">KuanZ<span>Game</span></div>
         </div>
         <div class="header-right">
-            <!-- Ví mới -->
-            <div class="wallet">
-                <span class="wallet-icon">💎</span>
-                <div class="wallet-content">
-                    <span class="vnd"><span id="balanceAmount">0</span> VND</span>
-                    <span class="wallet-divider"></span>
-                    <span class="usd">💵 <span id="balanceUSD">0.40</span> USD</span>
+            <!-- Wallet mới - hình chữ nhật với ví bên trong -->
+            <div class="wallet-container">
+                <div class="wallet-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                    </svg>
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-label">Số dư</span>
+                    <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
                 </div>
             </div>
-            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
+
+            <div class="bell-icon" onclick="toggleNotif()">
+                <div class="bell-dot" id="notifDot"></div>
+                🔔
+            </div>
             <div class="settings-wrapper">
-                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="dot-menu" onclick="togglePopup(event)">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
                 <div class="popup" id="settingsPopup">
                     <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
                     <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
@@ -196,8 +273,6 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        const EXCHANGE_RATE = 25000;
-
         const translations = {
             vi: { home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo', welcome_title: '🏠 Chào mừng bạn!', welcome_greeting: 'Đang tải...', welcome_desc: 'Đây là trang chủ của bạn.' },
             en: { home: 'Home', history: 'History', topup: 'Top up', support: 'Support', profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', notif_title: '📢 Notifications', notif_empty: 'No notifications', welcome_title: '🏠 Welcome!', welcome_greeting: 'Loading...', welcome_desc: 'This is your homepage.' }
@@ -229,10 +304,7 @@
                 const data = snap.val();
                 if (data) {
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                    // Giá trị USD cố định 0.40
-                    document.getElementById('balanceUSD').textContent = '0.40';
-                    // Ẩn hoàn toàn badge admin
-                    document.getElementById('adminBadgeContainer').innerHTML = '';
+                    document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge">👑 ADMIN</span>' : '';
                 }
             });
             db.ref('notifications').on('value', snap => {
