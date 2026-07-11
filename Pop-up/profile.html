@@ -140,13 +140,6 @@
         .token-actions .btn-reset:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .token-status { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
-        .token-history { margin-top: 10px; max-height: 120px; overflow-y: auto; }
-        .token-history .th-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-muted); }
-        .token-history .th-item .th-token { font-family: monospace; color: var(--text-primary); }
-        .token-history .th-item .th-status { font-size: 10px; }
-        .token-history .th-item .th-status.used { color: var(--text-muted); }
-        .token-history .th-item .th-status.active { color: var(--success); }
-
         @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 16px; } .profile-card { padding: 20px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .token-box { flex-direction: column; align-items: stretch; } .token-box .copy-btn { margin-top: 4px; } }
     </style>
 </head>
@@ -229,11 +222,6 @@
                 <div class="token-actions">
                     <button class="btn-reset" id="resetTokenBtn" onclick="resetToken()">🔄 Tạo mới</button>
                 </div>
-                
-                <div id="tokenHistoryContainer" style="display:none; margin-top:10px;">
-                    <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px;">📜 Lịch sử token</div>
-                    <div class="token-history" id="tokenHistory"></div>
-                </div>
             </div>
 
             <button class="btn btn-security" onclick="goToSecurity()">🛡️ Bảo mật</button>
@@ -289,37 +277,19 @@
         applyTheme();
         applyLang();
 
-        function generateRandomToken() {
+        // ===== TẠO TOKEN DUY NHẤT =====
+        function generateUniqueToken() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let token = '';
-            for (let i = 0; i < 24; i++) {
+            for (let i = 0; i < 16; i++) {
                 token += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            return token;
+            // Thêm timestamp để đảm bảo duy nhất
+            const time = Date.now().toString(36);
+            return token + time.slice(-4);
         }
 
-        async function saveUserToken(uid, token) {
-            try {
-                await db.ref('users/' + uid + '/quickToken').set(token);
-                
-                const historyRef = db.ref('users/' + uid + '/tokenHistory');
-                const snapshot = await historyRef.once('value');
-                let history = snapshot.val() || [];
-                if (!Array.isArray(history)) history = [];
-                history.push({
-                    token: token,
-                    createdAt: new Date().toISOString(),
-                    used: false
-                });
-                if (history.length > 10) history = history.slice(-10);
-                await historyRef.set(history);
-                return true;
-            } catch (error) {
-                console.error('Lỗi lưu token:', error);
-                return false;
-            }
-        }
-
+        // ===== RESET TOKEN =====
         async function resetToken() {
             if (!currentUser) {
                 alert('Vui lòng đăng nhập!');
@@ -331,31 +301,37 @@
             btn.textContent = '⏳ Đang tạo...';
 
             try {
-                const newToken = generateRandomToken();
-                const success = await saveUserToken(currentUser.uid, newToken);
-                if (success) {
-                    document.getElementById('tokenDisplay').textContent = newToken;
-                    document.getElementById('tokenStatus').textContent = '✅ Token mới đã được tạo thành công!';
-                    document.getElementById('tokenStatus').style.color = 'var(--success)';
-                    loadTokenHistory();
-                    showToast('✅ Token mới đã được tạo!');
-                } else {
-                    document.getElementById('tokenStatus').textContent = '❌ Lỗi tạo token! Vui lòng thử lại.';
-                    document.getElementById('tokenStatus').style.color = 'var(--danger)';
-                }
+                const newToken = generateUniqueToken();
+                
+                // Ghi trực tiếp vào user
+                await db.ref('users/' + currentUser.uid + '/quickToken').set(newToken);
+                
+                document.getElementById('tokenDisplay').textContent = newToken;
+                document.getElementById('tokenStatus').textContent = '✅ Token mới đã được tạo thành công!';
+                document.getElementById('tokenStatus').style.color = 'var(--success)';
+                alert('✅ Token mới: ' + newToken);
+                
             } catch (error) {
-                document.getElementById('tokenStatus').textContent = '❌ Lỗi: ' + error.message;
+                let errorMsg = '❌ Lỗi tạo token! ';
+                if (error.code === 'PERMISSION_DENIED') {
+                    errorMsg += 'Vui lòng kiểm tra Firebase Rules (cần bật quyền ghi).';
+                } else {
+                    errorMsg += error.message;
+                }
+                document.getElementById('tokenStatus').textContent = errorMsg;
                 document.getElementById('tokenStatus').style.color = 'var(--danger)';
+                alert(errorMsg);
             }
 
             btn.disabled = false;
             btn.textContent = '🔄 Tạo mới';
         }
 
+        // ===== COPY TOKEN =====
         function copyToken() {
             const token = document.getElementById('tokenDisplay').textContent;
             if (token === 'Chưa có token') {
-                showToast('⚠️ Chưa có token để sao chép!');
+                alert('⚠️ Chưa có token để sao chép!');
                 return;
             }
             const btn = document.getElementById('copyTokenBtn');
@@ -380,57 +356,7 @@
             }
         }
 
-        async function loadTokenHistory() {
-            if (!currentUser) return;
-            try {
-                const snapshot = await db.ref('users/' + currentUser.uid + '/tokenHistory').once('value');
-                const history = snapshot.val() || [];
-                const container = document.getElementById('tokenHistoryContainer');
-                const historyDiv = document.getElementById('tokenHistory');
-                
-                if (Array.isArray(history) && history.length > 1) {
-                    container.style.display = 'block';
-                    let html = '';
-                    const recent = history.slice(0, -1);
-                    if (recent.length > 0) {
-                        recent.slice().reverse().forEach((item) => {
-                            const isUsed = item.used || false;
-                            html += `
-                                <div class="th-item">
-                                    <span class="th-token">${item.token.substring(0, 8)}...${item.token.substring(16)}</span>
-                                    <span class="th-status ${isUsed ? 'used' : 'active'}">${isUsed ? '✅ Đã dùng' : '🟢 Chưa dùng'}</span>
-                                </div>
-                            `;
-                        });
-                        historyDiv.innerHTML = html;
-                    } else {
-                        container.style.display = 'none';
-                    }
-                } else {
-                    container.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Lỗi load lịch sử token:', error);
-            }
-        }
-
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-                padding: 10px 24px; background: var(--bg-card); color: var(--text-primary);
-                border-radius: 10px; box-shadow: var(--shadow-popup);
-                border: 1px solid var(--border-color); z-index: 999;
-                font-weight: 500; font-size: 13px; transition: 0.5s;
-            `;
-            toast.textContent = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, 2500);
-        }
-
+        // ===== AUTH STATE =====
         auth.onAuthStateChanged((user) => {
             if (!user) { 
                 window.location.replace('../Authenticator/login.html'); 
@@ -467,7 +393,6 @@
                         document.getElementById('tokenStatus').textContent = '⚠️ Bạn chưa tạo token. Nhấn "Tạo mới" để tạo!';
                         document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
                     }
-                    loadTokenHistory();
                 }
             });
 
@@ -494,6 +419,7 @@
             });
         });
 
+        // ===== MENU FUNCTIONS =====
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); }
 
