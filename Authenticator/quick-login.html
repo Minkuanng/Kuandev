@@ -219,6 +219,40 @@
             setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
         }
 
+        // ===== KIỂM TRA TOKEN BẰNG CÁCH ĐỌC TỪNG USER (Tránh permission_denied) =====
+        async function findUserByToken(token) {
+            try {
+                // Cách 1: Đọc trực tiếp từ users (nếu rules cho phép)
+                const usersSnap = await db.ref('users').orderByChild('quickToken').equalTo(token).once('value');
+                const users = usersSnap.val();
+                if (users) {
+                    const keys = Object.keys(users);
+                    if (keys.length > 0) {
+                        return { uid: keys[0], data: users[keys[0]] };
+                    }
+                }
+                return null;
+            } catch (error) {
+                console.log('Cách 1 thất bại, thử cách 2...');
+                // Cách 2: Duyệt từng user (chậm hơn nhưng ít bị lỗi permission)
+                try {
+                    const allUsersSnap = await db.ref('users').once('value');
+                    const allUsers = allUsersSnap.val();
+                    if (allUsers) {
+                        for (const [uid, data] of Object.entries(allUsers)) {
+                            if (data.quickToken === token) {
+                                return { uid: uid, data: data };
+                            }
+                        }
+                    }
+                    return null;
+                } catch (err2) {
+                    console.error('Cách 2 cũng thất bại:', err2);
+                    throw err2;
+                }
+            }
+        }
+
         document.getElementById('quickLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const token = tokenInput.value.trim();
@@ -233,40 +267,34 @@
             btn.textContent = '⏳ Đang xử lý...';
 
             try {
-                // Dùng query thay vì đọc toàn bộ users để tránh permission_denied
-                const usersSnap = await db.ref('users').orderByChild('quickToken').equalTo(token).once('value');
-                const users = usersSnap.val();
-                let foundUid = null;
-                let foundUser = null;
-
-                if (users) {
-                    const keys = Object.keys(users);
-                    if (keys.length > 0) {
-                        foundUid = keys[0];
-                        foundUser = users[keys[0]];
-                    }
-                }
-
-                if (!foundUid) {
+                const result = await findUserByToken(token);
+                
+                if (!result) {
                     showMessage('❌ Token không hợp lệ hoặc đã hết hạn!', 'error');
                     btn.disabled = false;
                     btn.textContent = '🚀 Đăng nhập nhanh';
                     return;
                 }
 
-                if (foundUser.blocked === true) {
+                const { uid, data } = result;
+
+                if (data.blocked === true) {
                     showMessage('🚫 Tài khoản này đã bị khóa!', 'error');
                     btn.disabled = false;
                     btn.textContent = '🚀 Đăng nhập nhanh';
                     return;
                 }
 
-                localStorage.setItem('quickLoginUid', foundUid);
-                localStorage.setItem('quickLoginEmail', foundUser.email || '');
+                // Lưu thông tin đăng nhập
+                localStorage.setItem('quickLoginUid', uid);
+                localStorage.setItem('quickLoginEmail', data.email || '');
                 
-                await db.ref('users/' + foundUid + '/lastLogin').set(Date.now());
-                await db.ref('presence/' + foundUid).set(true);
-                db.ref('presence/' + foundUid).onDisconnect().set(false);
+                // Cập nhật lastLogin
+                await db.ref('users/' + uid + '/lastLogin').set(Date.now());
+                
+                // Update presence
+                await db.ref('presence/' + uid).set(true);
+                db.ref('presence/' + uid).onDisconnect().set(false);
 
                 showMessage('✅ Đăng nhập thành công! Đang chuyển hướng...', 'success');
                 setTimeout(() => {
@@ -276,17 +304,19 @@
             } catch (error) {
                 let errorMsg = '❌ Lỗi: ';
                 if (error.code === 'PERMISSION_DENIED') {
-                    errorMsg += 'Vui lòng kiểm tra Firebase Rules. Cần bật quyền đọc users.';
+                    errorMsg += 'Vui lòng vào Firebase Console → Realtime Database → Rules và đặt ".read": true, ".write": true';
                 } else {
                     errorMsg += error.message;
                 }
                 showMessage(errorMsg, 'error');
+                console.error('Chi tiết lỗi:', error);
             }
 
             btn.disabled = false;
             btn.textContent = '🚀 Đăng nhập nhanh';
         });
 
+        // Kiểm tra nếu có token trong URL
         const urlParams = new URLSearchParams(window.location.search);
         const tokenParam = urlParams.get('token');
         if (tokenParam) {
@@ -295,6 +325,7 @@
         }
 
         tokenInput.focus();
+        console.log('✅ Quick Login loaded!');
     </script>
 </body>
 </html>
