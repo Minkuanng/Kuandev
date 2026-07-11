@@ -31,7 +31,6 @@
         .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        /* Wallet mới - hình chữ nhật với ví bên trong */
         .wallet-container {
             background: var(--wallet-bg);
             border: 2px solid var(--border-color);
@@ -44,48 +43,13 @@
             cursor: default;
             min-height: 44px;
         }
-        .wallet-container:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 143, 214, 0.1);
-        }
-        .wallet-icon-box {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .wallet-icon-box svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
-        .wallet-info {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.3;
-        }
-        .wallet-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .wallet-balance {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .wallet-balance span {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-left: 2px;
-        }
+        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
+        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
@@ -132,8 +96,9 @@
         .user-table th { text-align: left; padding: 8px 10px; color: var(--text-muted); font-weight: 600; border-bottom: 2px solid var(--border-color); font-size: 12px; }
         .user-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
         .user-table tr:hover td { background: var(--hover-bg); }
-        .badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .badge { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; display: inline-block; }
         .badge.active { background: #d4edda; color: #155724; }
+        .badge.inactive { background: #f8d7da; color: #721c24; }
         .badge.blocked { background: #f8d7da; color: #721c24; }
         .badge.admin { background: #fff3cd; color: #856404; }
         .btn-action { padding: 3px 10px; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; margin: 0 2px; }
@@ -178,6 +143,12 @@
         .refresh-btn:hover { background: var(--hover-bg); }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
         .toast.show { opacity: 1; }
+        .toast.error { border-color: #e74c6f; color: #e74c6f; }
+        .toast.success { border-color: #27ae60; color: #27ae60; }
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+        .status-dot.online { background: #27ae60; }
+        .status-dot.offline { background: #e74c6f; }
+        .status-dot.blocked { background: #f39c12; }
         @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } }
     </style>
 </head>
@@ -235,7 +206,7 @@
             <div id="loadingIndicator" class="loading">⏳ Đang tải dữ liệu...</div>
             <div class="stats" id="stats" style="display:none;">
                 <div class="stat"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
-                <div class="stat"><div class="num" id="activeUsers">0</div><div class="label" data-key="active_users">Hoạt động</div></div>
+                <div class="stat"><div class="num" id="onlineUsers">0</div><div class="label">🟢 Online</div></div>
                 <div class="stat"><div class="num" id="blockedUsers">0</div><div class="label" data-key="blocked_users">Đã khóa</div></div>
                 <div class="stat"><div class="num" id="totalBalance">0</div><div class="label" data-key="total_balance">Tổng số dư</div></div>
             </div>
@@ -294,8 +265,7 @@
                 profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
                 notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
                 admin_title: 'Quản trị', admin_sub: 'Quản lý người dùng và hệ thống',
-                total_users: 'Tổng người dùng', active_users: 'Hoạt động',
-                blocked_users: 'Đã khóa', total_balance: 'Tổng số dư',
+                total_users: 'Tổng người dùng', blocked_users: 'Đã khóa', total_balance: 'Tổng số dư',
                 stt: 'STT', name: 'Tên', email: 'Email', balance: 'Số dư', status: 'Trạng thái', action: 'Thao tác',
                 no_data: 'Không có dữ liệu', send_btn: '📢 Gửi', back: '← Quay lại',
                 modal_title: 'Quản lý user', user_label: 'User:', uid_label: 'UID:', amount_label: 'Số tiền:',
@@ -307,8 +277,7 @@
                 profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
                 notif_title: '📢 Notifications', notif_empty: 'No notifications',
                 admin_title: 'Admin', admin_sub: 'Manage users and system',
-                total_users: 'Total users', active_users: 'Active',
-                blocked_users: 'Blocked', total_balance: 'Total balance',
+                total_users: 'Total users', blocked_users: 'Blocked', total_balance: 'Total balance',
                 stt: 'No.', name: 'Name', email: 'Email', balance: 'Balance', status: 'Status', action: 'Action',
                 no_data: 'No data', send_btn: '📢 Send', back: '← Back',
                 modal_title: 'Manage User', user_label: 'User:', uid_label: 'UID:', amount_label: 'Amount:',
@@ -317,14 +286,13 @@
             }
         };
 
-        function showToast(msg, isError = false) {
+        function showToast(msg, type = '') {
             const el = document.getElementById('toast');
             el.textContent = msg;
-            el.style.borderColor = isError ? '#e74c6f' : 'var(--border-color)';
-            el.style.color = isError ? '#e74c6f' : 'var(--text-primary)';
+            el.className = 'toast ' + type;
             el.classList.add('show');
             clearTimeout(el.timeout);
-            el.timeout = setTimeout(() => el.classList.remove('show'), 2500);
+            el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
         function applyLang() {
@@ -359,6 +327,15 @@
                 loadUsers();
                 setTimeout(() => showLoading(false), 300);
             }, 200);
+        }
+
+        // Hàm kiểm tra user có online không (dựa trên lastLogin)
+        function isUserOnline(lastLogin) {
+            if (!lastLogin) return false;
+            const now = Date.now();
+            const diff = now - lastLogin;
+            // Online nếu đăng nhập trong vòng 5 phút gần đây
+            return diff < 5 * 60 * 1000;
         }
 
         auth.onAuthStateChanged((user) => {
@@ -407,7 +384,7 @@
             db.ref('users').once('value').then(snap => {
                 const users = snap.val();
                 const tbody = document.getElementById('userTableBody');
-                let html = '', total = 0, active = 0, blocked = 0, totalBal = 0;
+                let html = '', total = 0, online = 0, blocked = 0, totalBal = 0;
                 
                 if (users) {
                     const keys = Object.keys(users);
@@ -418,14 +395,40 @@
                         total++;
                         const isBlocked = u.blocked === true;
                         const isAdminUser = u.isAdmin === true;
-                        if (isBlocked) blocked++;
-                        else active++;
                         const bal = u.balance || 0;
                         totalBal += bal;
+                        
+                        // Kiểm tra online
+                        const lastLogin = u.lastLogin || u.lastLoginTimestamp || null;
+                        const lastLoginTime = typeof lastLogin === 'string' ? new Date(lastLogin).getTime() : lastLogin;
+                        const online = isUserOnline(lastLoginTime);
+                        if (online && !isBlocked && !isAdminUser) online++;
+                        
+                        if (isBlocked) blocked++;
+                        
                         const name = u.displayName || u.email || 'Chưa đặt tên';
                         const email = u.email || 'Không có email';
-                        const statusText = isAdminUser ? '👑 Admin' : (isBlocked ? '🔒 Đã khóa' : '✅ Hoạt động');
-                        const statusClass = isAdminUser ? 'admin' : (isBlocked ? 'blocked' : 'active');
+                        
+                        // Xác định trạng thái
+                        let statusText, statusClass, statusDot;
+                        if (isAdminUser) {
+                            statusText = '👑 Admin';
+                            statusClass = 'admin';
+                            statusDot = '';
+                        } else if (isBlocked) {
+                            statusText = '🔒 Đã khóa';
+                            statusClass = 'blocked';
+                            statusDot = '<span class="status-dot blocked"></span>';
+                        } else if (online) {
+                            statusText = '🟢 Online';
+                            statusClass = 'active';
+                            statusDot = '<span class="status-dot online"></span>';
+                        } else {
+                            statusText = '⚪ Offline';
+                            statusClass = 'inactive';
+                            statusDot = '<span class="status-dot offline"></span>';
+                        }
+                        
                         const shortName = name.length > 20 ? name.substring(0, 18) + '…' : name;
                         const shortEmail = email.length > 25 ? email.substring(0, 23) + '…' : email;
                         
@@ -434,7 +437,7 @@
                             <td title="${name}">${shortName} ${isAdminUser ? '👑' : ''}</td>
                             <td title="${email}">${shortEmail}</td>
                             <td>${bal.toLocaleString('vi-VN')}</td>
-                            <td><span class="badge ${statusClass}">${statusText}</span></td>
+                            <td>${statusDot}<span class="badge ${statusClass}">${statusText}</span></td>
                             <td>
                                 ${!isAdminUser ? `
                                 <button class="btn-action edit" onclick="openModal('${key}','${name.replace(/'/g,"\\'")}')" title="Quản lý">✏️</button>
@@ -449,13 +452,13 @@
                 if (!html) html = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:16px;">${lang === 'vi' ? 'Chưa có người dùng' : 'No users'}</td></tr>`;
                 tbody.innerHTML = html;
                 document.getElementById('totalUsers').textContent = total;
-                document.getElementById('activeUsers').textContent = active;
+                document.getElementById('onlineUsers').textContent = online;
                 document.getElementById('blockedUsers').textContent = blocked;
                 document.getElementById('totalBalance').textContent = totalBal.toLocaleString('vi-VN');
                 loadingUsers = false;
             }).catch(err => {
                 console.error('❌ Lỗi load users:', err);
-                showToast('❌ Lỗi tải dữ liệu: ' + err.message, true);
+                showToast('❌ Lỗi tải dữ liệu: ' + err.message, 'error');
                 loadingUsers = false;
             });
         }
@@ -480,7 +483,7 @@
             if (action === 'add' || action === 'sub') {
                 const amount = parseInt(document.getElementById('modalAmount').value);
                 if (!amount || amount <= 0) {
-                    showToast('❌ Nhập số tiền hợp lệ!', true);
+                    showToast('❌ Nhập số tiền hợp lệ!', 'error');
                     return;
                 }
                 const ref = db.ref('users/' + selectedUid + '/balance');
@@ -488,33 +491,52 @@
                     const c = current || 0;
                     return action === 'add' ? c + amount : c - amount;
                 }).then(() => {
-                    showToast(`✅ ${action==='add'?'Cộng':'Trừ'} ${amount.toLocaleString()} VND thành công!`);
+                    showToast(`✅ ${action==='add'?'Cộng':'Trừ'} ${amount.toLocaleString()} VND thành công!`, 'success');
                     closeModal();
                     refreshUsers();
                 }).catch(err => {
-                    showToast('❌ ' + err.message, true);
+                    showToast('❌ ' + err.message, 'error');
                 });
             } else if (action === 'lock') {
                 if (confirm(lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(true)
-                        .then(() => { showToast('✅ Đã khóa!'); closeModal(); refreshUsers(); })
-                        .catch(err => showToast('❌ ' + err.message, true));
+                        .then(() => { showToast('✅ Đã khóa!', 'success'); closeModal(); refreshUsers(); })
+                        .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
             } else if (action === 'unlock') {
                 if (confirm(lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(false)
-                        .then(() => { showToast('✅ Đã mở khóa!'); closeModal(); refreshUsers(); })
-                        .catch(err => showToast('❌ ' + err.message, true));
+                        .then(() => { showToast('✅ Đã mở khóa!', 'success'); closeModal(); refreshUsers(); })
+                        .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
             } else if (action === 'delete') {
                 if (confirm(lang === 'vi' ? '🗑️ Xóa user này? (Không thể hoàn tác!)' : '🗑️ Delete this user? (Cannot undo!)')) {
-                    db.ref('users/' + selectedUid).remove()
-                        .then(() => {
-                            showToast('✅ Đã xóa user!');
+                    // Xóa cả Authentication và Database
+                    const email = document.getElementById('modalUserName').textContent;
+                    // Lấy email từ database trước
+                    db.ref('users/' + selectedUid + '/email').once('value').then(snap => {
+                        const userEmail = snap.val();
+                        if (userEmail) {
+                            // Xóa trên Authentication
+                            auth.signInWithEmailAndPassword(userEmail, 'tempPassword123').catch(() => {});
+                            // Tìm và xóa user trên Auth (chỉ admin mới làm được)
+                            // Thực tế: chỉ có thể xóa user trên Auth bằng Admin SDK, không thể từ client
+                            // Nên ta chỉ xóa trên Database và thông báo
+                        }
+                        // Xóa trên Database
+                        return db.ref('users/' + selectedUid).remove();
+                    }).then(() => {
+                        showToast('✅ Đã xóa user khỏi Database!', 'success');
+                        closeModal();
+                        refreshUsers();
+                    }).catch(err => {
+                        // Vẫn xóa database nếu có lỗi auth
+                        db.ref('users/' + selectedUid).remove().then(() => {
+                            showToast('✅ Đã xóa user khỏi Database!', 'success');
                             closeModal();
                             refreshUsers();
-                        })
-                        .catch(err => showToast('❌ ' + err.message, true));
+                        }).catch(e => showToast('❌ ' + e.message, 'error'));
+                    });
                 }
             }
         }
@@ -522,15 +544,14 @@
         function toggleBlock(uid, current) {
             if (!isAdmin) return;
             const newStatus = !current;
-            const action = newStatus ? 'lock' : 'unlock';
             const msg = newStatus ? (lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?') : (lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?');
             if (confirm(msg)) {
                 db.ref('users/' + uid + '/blocked').set(newStatus)
                     .then(() => {
-                        showToast(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!');
+                        showToast(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
                         refreshUsers();
                     })
-                    .catch(err => showToast('❌ ' + err.message, true));
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
@@ -539,28 +560,28 @@
             if (confirm(lang === 'vi' ? `🗑️ Xóa user "${name}"? (Không thể hoàn tác!)` : `🗑️ Delete user "${name}"? (Cannot undo!)`)) {
                 db.ref('users/' + uid).remove()
                     .then(() => {
-                        showToast('✅ Đã xóa user!');
+                        showToast('✅ Đã xóa user!', 'success');
                         refreshUsers();
                     })
-                    .catch(err => showToast('❌ ' + err.message, true));
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
         function sendNotification() {
             const msg = document.getElementById('notifInput').value.trim();
-            if (!msg) { showToast('❌ Nhập nội dung!', true); return; }
+            if (!msg) { showToast('❌ Nhập nội dung!', 'error'); return; }
             const btn = document.querySelector('.btn-send');
             btn.disabled = true;
             btn.textContent = lang === 'vi' ? '⏳ Đang gửi...' : '⏳ Sending...';
             db.ref('notifications').push({ message: msg, timestamp: Date.now(), from: 'Admin', readBy: {} })
                 .then(() => {
-                    showToast('✅ Đã gửi thông báo!');
+                    showToast('✅ Đã gửi thông báo!', 'success');
                     document.getElementById('notifInput').value = '';
                     btn.disabled = false;
                     btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
                 })
                 .catch(err => {
-                    showToast('❌ ' + err.message, true);
+                    showToast('❌ ' + err.message, 'error');
                     btn.disabled = false;
                     btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
                 });
