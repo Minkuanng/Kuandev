@@ -26,7 +26,6 @@
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
         
-        /* Menu icon - thanh trên xuống dưới 1 nấc, thanh dưới lên trên 1 nấc */
         .menu-icon { 
             cursor: pointer; 
             padding: 8px 12px; 
@@ -51,9 +50,7 @@
             border-radius: 4px; 
             transition: 0.3s;
         }
-        /* Thanh trên xuống dưới 1 nấc */
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
-        /* Thanh dưới lên trên 1 nấc */
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
@@ -131,18 +128,6 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        /* Quick login badge */
-        .quick-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f5a623, #f7c948);
-            color: #fff;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 700;
-            margin-left: 6px;
-        }
-
         @media (max-width: 600px) { 
             .header { padding: 10px 12px; } 
             .logo { font-size: 16px; } 
@@ -156,9 +141,7 @@
             .intro-card { padding: 16px; }
             .menu-icon { width: 34px; height: 34px; padding: 6px 8px; }
             .menu-icon .bar { width: 18px; height: 2px; }
-            /* Thanh trên xuống dưới 1 nấc */
             .menu-icon .bar:nth-child(1) { transform: translateY(3px); }
-            /* Thanh dưới lên trên 1 nấc */
             .menu-icon .bar:nth-child(3) { transform: translateY(-3px); }
         }
     </style>
@@ -171,7 +154,6 @@
         <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
         <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
         <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
-        <button class="menu-item" onclick="goQuickLogin()"><span class="icon">⚡</span><span data-key="quicklogin">Đăng nhập nhanh</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
     </div>
@@ -183,7 +165,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">KuanZ<span>Game</span></div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -231,13 +213,13 @@
                 <div class="intro-top-left">
                     <div class="intro-icon">🎮</div>
                     <div>
-                        <div class="intro-title">Chào mừng đến với KuanZGame.site</div>
+                        <div class="intro-title">Chào mừng bạn đến với trang chủ</div>
                         <div class="intro-sub">Hướng dẫn mua hàng &amp; lưu ý quan trọng</div>
                     </div>
                 </div>
             </div>
             <div class="intro-body">
-                <p class="intro-lead">KuanZGame.site tự hào là địa chỉ uy tín cung cấp đa dạng tài khoản game và tài khoản điện thoại đám mây 24/7. Bên cạnh đó, bạn còn có thể kiếm điểm thưởng qua các nhiệm vụ hàng ngày để đổi quà miễn phí nhanh chóng, tiện lợi.</p>
+                <p class="intro-lead">Đây là trang chủ của bạn. Hãy khám phá các tính năng bên trái menu.</p>
 
                 <div class="intro-section">
                     <div class="intro-section-title">📦 Hướng dẫn quy trình mua hàng</div>
@@ -255,7 +237,7 @@
                     </ul>
                 </div>
 
-                <div class="intro-footer">KuanZGame.site <span>–</span>C.ơn bạn đã tin tưởng và Đồng hành 🔥</div>
+                <div class="intro-footer">Cảm ơn bạn đã tin tưởng và đồng hành 🔥</div>
             </div>
         </div>
 
@@ -279,14 +261,12 @@
             vi: { 
                 home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
                 profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
-                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
-                quicklogin: '⚡ Đăng nhập nhanh'
+                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
                 profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', 
-                notif_title: '📢 Notifications', notif_empty: 'No notifications',
-                quicklogin: '⚡ Quick Login'
+                notif_title: '📢 Notifications', notif_empty: 'No notifications'
             }
         };
 
@@ -312,11 +292,6 @@
 
         auth.onAuthStateChanged((user) => {
             if (!user) { 
-                const quickUid = localStorage.getItem('quickLoginUid');
-                if (quickUid) {
-                    window.location.href = 'Authenticator/quick-login.html';
-                    return;
-                }
                 window.location.replace('Authenticator/login.html'); 
                 return; 
             }
@@ -392,9 +367,6 @@
 
         function goSupport() { closeMenu();
             alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
-
-        function goQuickLogin() { closeMenu();
-            window.location.href = 'Authenticator/quick-login.html'; }
 
         function goToProfile() { window.location.href = 'Pop-up/profile.html'; }
 
