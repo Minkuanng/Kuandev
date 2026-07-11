@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Nhập</title>
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
-    <!-- ===== TỰ XÂY DỰNG OTP LIB (KHÔNG CẦN CDN) ===== -->
     <script>
-        // ===== SIMPLE OTP IMPLEMENTATION =====
         class SimpleOTP {
             constructor() {
                 this.authenticator = {
@@ -127,7 +124,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-        /* ===== THEME VARIABLES ===== */
         :root {
             --bg-body: #f0f7ff;
             --bg-card: rgba(255,255,255,0.95);
@@ -149,160 +145,15 @@
             --link-color: #007bff;
         }
 
-        /* ===== 10 THEMES ===== */
-        .theme-galaxy {
-            --bg-body: #0a0a1a;
-            --bg-card: rgba(18,18,42,0.95);
-            --text-primary: #c8b8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #6a5a9a;
-            --border-color: rgba(42,42,90,0.5);
-            --input-bg: #1a1a3e;
-            --input-border: #2a2a5a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #6a5a9a, #8a7aff);
-            --btn-hover: linear-gradient(135deg, #8a7aff, #a89aff);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #1a1a3e;
-            --hover-bg: #2a2a5a;
-            --link-color: #8a7aff;
-        }
-        .theme-ocean {
-            --bg-body: #0a1628;
-            --bg-card: rgba(15,42,74,0.95);
-            --text-primary: #7fc8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a6a8a;
-            --border-color: rgba(26,58,106,0.5);
-            --input-bg: #0d2847;
-            --input-border: #1a3a6a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a6a8a, #4a9aff);
-            --btn-hover: linear-gradient(135deg, #4a9aff, #5aaaff);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #0d2847;
-            --hover-bg: #1a3a6a;
-            --link-color: #4a9aff;
-        }
-        .theme-forest {
-            --bg-body: #0a1a0a;
-            --bg-card: rgba(15,42,15,0.95);
-            --text-primary: #7fdf7f;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a7a3a;
-            --border-color: rgba(26,74,26,0.5);
-            --input-bg: #0d2a0d;
-            --input-border: #1a4a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a7a3a, #4abf4a);
-            --btn-hover: linear-gradient(135deg, #4abf4a, #5adf5a);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #0d2a0d;
-            --hover-bg: #1a4a1a;
-            --link-color: #4abf4a;
-        }
-        .theme-sunset {
-            --bg-body: #1a0a0a;
-            --bg-card: rgba(42,18,10,0.95);
-            --text-primary: #ffb87f;
-            --text-secondary: #e8e8e8;
-            --text-muted: #9a6a3a;
-            --border-color: rgba(90,42,26,0.5);
-            --input-bg: #3e1a0a;
-            --input-border: #5a2a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #9a6a3a, #ff8a4a);
-            --btn-hover: linear-gradient(135deg, #ff8a4a, #ff9a5a);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #3e1a0a;
-            --hover-bg: #5a2a1a;
-            --link-color: #ff8a4a;
-        }
-        .theme-cherry {
-            --bg-body: #1a0a12;
-            --bg-card: rgba(42,10,22,0.95);
-            --text-primary: #ff7fa8;
-            --text-secondary: #e8e8e8;
-            --text-muted: #9a3a5a;
-            --border-color: rgba(90,26,42,0.5);
-            --input-bg: #3e0a1a;
-            --input-border: #5a1a2a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #9a3a5a, #ff4a7a);
-            --btn-hover: linear-gradient(135deg, #ff4a7a, #ff5a8a);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #3e0a1a;
-            --hover-bg: #5a1a2a;
-            --link-color: #ff4a7a;
-        }
-        .theme-neon {
-            --bg-body: #0a0a0a;
-            --bg-card: rgba(18,18,18,0.95);
-            --text-primary: #00ff88;
-            --text-secondary: #e8e8e8;
-            --text-muted: #666666;
-            --border-color: rgba(51,51,51,0.5);
-            --input-bg: #1a1a1a;
-            --input-border: #333333;
-            --shadow: 0 10px 40px rgba(0,0,0,0.6);
-            --btn-bg: linear-gradient(135deg, #00cc66, #00ff88);
-            --btn-hover: linear-gradient(135deg, #00ff88, #00ccff);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.8);
-            --wallet-bg: #1a1a1a;
-            --hover-bg: #2a2a2a;
-            --link-color: #00ff88;
-        }
-        .theme-lavender {
-            --bg-body: #1a0a2a;
-            --bg-card: rgba(34,26,58,0.95);
-            --text-primary: #d4a8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #7a5a9a;
-            --border-color: rgba(58,42,90,0.5);
-            --input-bg: #2a1a3e;
-            --input-border: #3a2a5a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #7a5a9a, #b87aff);
-            --btn-hover: linear-gradient(135deg, #b87aff, #d4a8ff);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #2a1a3e;
-            --hover-bg: #3a2a5a;
-            --link-color: #b87aff;
-        }
-        .theme-mint {
-            --bg-body: #0a1a12;
-            --bg-card: rgba(15,42,26,0.95);
-            --text-primary: #7fffd4;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a7a6a;
-            --border-color: rgba(26,74,58,0.5);
-            --input-bg: #0d2a1a;
-            --input-border: #1a4a3a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a7a6a, #4abfa0);
-            --btn-hover: linear-gradient(135deg, #4abfa0, #7fffd4);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #0d2a1a;
-            --hover-bg: #1a4a3a;
-            --link-color: #4abfa0;
-        }
-        .theme-coffee {
-            --bg-body: #1a0f0a;
-            --bg-card: rgba(34,26,18,0.95);
-            --text-primary: #d4b896;
-            --text-secondary: #e8e8e8;
-            --text-muted: #7a6a5a;
-            --border-color: rgba(58,42,26,0.5);
-            --input-bg: #2a1a12;
-            --input-border: #3a2a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #7a6a5a, #b8987a);
-            --btn-hover: linear-gradient(135deg, #b8987a, #d4b896);
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.6);
-            --wallet-bg: #2a1a12;
-            --hover-bg: #3a2a1a;
-            --link-color: #b8987a;
-        }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: rgba(18,18,42,0.95); --text-primary: #c8b8ff; --text-secondary: #e8e8e8; --text-muted: #6a5a9a; --border-color: rgba(42,42,90,0.5); --input-bg: #1a1a3e; --input-border: #2a2a5a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #6a5a9a, #8a7aff); --btn-hover: linear-gradient(135deg, #8a7aff, #a89aff); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --link-color: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: rgba(15,42,74,0.95); --text-primary: #7fc8ff; --text-secondary: #e8e8e8; --text-muted: #3a6a8a; --border-color: rgba(26,58,106,0.5); --input-bg: #0d2847; --input-border: #1a3a6a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a6a8a, #4a9aff); --btn-hover: linear-gradient(135deg, #4a9aff, #5aaaff); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --link-color: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: rgba(15,42,15,0.95); --text-primary: #7fdf7f; --text-secondary: #e8e8e8; --text-muted: #3a7a3a; --border-color: rgba(26,74,26,0.5); --input-bg: #0d2a0d; --input-border: #1a4a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a7a3a, #4abf4a); --btn-hover: linear-gradient(135deg, #4abf4a, #5adf5a); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --link-color: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: rgba(42,18,10,0.95); --text-primary: #ffb87f; --text-secondary: #e8e8e8; --text-muted: #9a6a3a; --border-color: rgba(90,42,26,0.5); --input-bg: #3e1a0a; --input-border: #5a2a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #9a6a3a, #ff8a4a); --btn-hover: linear-gradient(135deg, #ff8a4a, #ff9a5a); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --link-color: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: rgba(42,10,22,0.95); --text-primary: #ff7fa8; --text-secondary: #e8e8e8; --text-muted: #9a3a5a; --border-color: rgba(90,26,42,0.5); --input-bg: #3e0a1a; --input-border: #5a1a2a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #9a3a5a, #ff4a7a); --btn-hover: linear-gradient(135deg, #ff4a7a, #ff5a8a); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --link-color: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: rgba(18,18,18,0.95); --text-primary: #00ff88; --text-secondary: #e8e8e8; --text-muted: #666666; --border-color: rgba(51,51,51,0.5); --input-bg: #1a1a1a; --input-border: #333333; --shadow: 0 10px 40px rgba(0,0,0,0.6); --btn-bg: linear-gradient(135deg, #00cc66, #00ff88); --btn-hover: linear-gradient(135deg, #00ff88, #00ccff); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --link-color: #00ff88; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: rgba(34,26,58,0.95); --text-primary: #d4a8ff; --text-secondary: #e8e8e8; --text-muted: #7a5a9a; --border-color: rgba(58,42,90,0.5); --input-bg: #2a1a3e; --input-border: #3a2a5a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #7a5a9a, #b87aff); --btn-hover: linear-gradient(135deg, #b87aff, #d4a8ff); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --link-color: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: rgba(15,42,26,0.95); --text-primary: #7fffd4; --text-secondary: #e8e8e8; --text-muted: #3a7a6a; --border-color: rgba(26,74,58,0.5); --input-bg: #0d2a1a; --input-border: #1a4a3a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a7a6a, #4abfa0); --btn-hover: linear-gradient(135deg, #4abfa0, #7fffd4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --link-color: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: rgba(34,26,18,0.95); --text-primary: #d4b896; --text-secondary: #e8e8e8; --text-muted: #7a6a5a; --border-color: rgba(58,42,26,0.5); --input-bg: #2a1a12; --input-border: #3a2a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #7a6a5a, #b8987a); --btn-hover: linear-gradient(135deg, #b8987a, #d4b896); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --link-color: #b8987a; }
 
         body.dark-mode {
             --bg-body: #1a1a2e;
@@ -433,6 +284,7 @@
         .links { text-align: center; margin-top: 18px; }
         .links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s; font-weight: 500; cursor: pointer; }
         .links a:hover { color: var(--text-primary); text-decoration: underline; }
+        .links .sep { color: var(--text-muted); margin: 0 8px; }
 
         .message {
             padding: 12px 16px;
@@ -473,7 +325,6 @@
         .divider::before { left: 0; }
         .divider::after { right: 0; }
 
-        /* ===== ĐIỀU KHOẢN & CHÍNH SÁCH ===== */
         .terms-section {
             margin-top: 20px;
             padding-top: 16px;
@@ -550,7 +401,6 @@
             display: block;
         }
 
-        /* ===== 2FA MODAL ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -643,7 +493,6 @@
             color: var(--text-primary);
         }
 
-        /* ===== LOADING OVERLAY ===== */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -688,6 +537,22 @@
             font-size: 14px;
         }
 
+        .quick-login-link {
+            text-align: center;
+            margin-top: 12px;
+        }
+        .quick-login-link a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .quick-login-link a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 480px) {
             .container { padding: 30px 20px; max-width: 100%; }
             h2 { font-size: 24px; }
@@ -727,15 +592,14 @@
                 </div>
             </div>
 
-            <!-- ===== ĐIỀU KHOẢN & CHÍNH SÁCH ===== -->
             <div class="terms-section">
                 <label class="terms-checkbox">
                     <input type="checkbox" id="termsCheckbox">
                     <span class="terms-text">
                         Tôi đồng ý với 
-                        <span class="link" onclick="event.preventDefault(); window.location.href='clause.html'">Điều khoản</span>
+                        <span class="link" onclick="event.preventDefault(); window.location.href='../Assets/Terms-of-Service.html'">Điều khoản</span>
                         và 
-                        <span class="link-policy" onclick="event.preventDefault(); window.location.href='policy.html'">Chính sách</span>
+                        <span class="link-policy" onclick="event.preventDefault(); window.location.href='../Assets/Privacy-Policy.html'">Chính sách</span>
                         của chúng tôi
                     </span>
                 </label>
@@ -759,17 +623,17 @@
 
         <div class="links">
             <a onclick="window.location.href='signup.html'">📝 Đăng ký tài khoản</a>
+            <span class="sep">|</span>
+            <a onclick="window.location.href='quick-login.html'">⚡ Đăng nhập nhanh</a>
         </div>
     </div>
 
-    <!-- ===== LOADING OVERLAY ===== -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text" id="loadingText">⏳ Đang kiểm tra bảo mật...</div>
         <div class="loading-sub" id="loadingSub">Vui lòng đợi trong giây lát</div>
     </div>
 
-    <!-- ===== 2FA MODAL ===== -->
     <div class="modal-overlay" id="twofaModal">
         <div class="modal">
             <h3>🔐 Xác thực 2 lớp</h3>
@@ -793,7 +657,6 @@
     </div>
 
     <script>
-        // ===== FIREBASE =====
         const firebaseConfig = {
             apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
             authDomain: "shop-c6777.firebaseapp.com",
@@ -801,24 +664,19 @@
             projectId: "shop-c6777",
             storageBucket: "shop-c6777.firebasestorage.app",
             messagingSenderId: "43186563268",
-            appId: "1:43186563268:web:0d392ba57039a919670191",
-            measurementId: "G-445DCB6NV0"
+            appId: "1:43186563268:web:0d392ba57039a919670191"
         };
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // ===== KHÔI PHỤC THEME =====
         function applyTheme() {
-            // Dark mode
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             } else {
                 document.body.classList.remove('dark-mode');
             }
-            
-            // Theme color (10 themes)
             const savedTheme = localStorage.getItem('theme_name') || 'default';
             document.body.classList.remove(
                 'theme-galaxy', 'theme-ocean', 'theme-forest', 
@@ -830,17 +688,14 @@
             }
         }
 
-        // Áp dụng theme ngay khi load
         applyTheme();
 
-        // Lắng nghe thay đổi theme từ localStorage (khi settings thay đổi)
         window.addEventListener('storage', function(e) {
             if (e.key === 'theme' || e.key === 'theme_name') {
                 applyTheme();
             }
         });
 
-        // ===== DOM ELEMENTS =====
         const loginForm = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
@@ -858,7 +713,6 @@
         let timerInterval = null;
         let timerCount = 30;
 
-        // ===== TOGGLE PASSWORD =====
         let isPasswordVisible = false;
         togglePasswordBtn.addEventListener('click', () => {
             isPasswordVisible = !isPasswordVisible;
@@ -874,7 +728,6 @@
                 </svg>`;
         });
 
-        // ===== HELPER FUNCTIONS =====
         function showMessage(text, type) {
             messageDiv.textContent = text;
             messageDiv.className = 'message ' + type;
@@ -904,7 +757,6 @@
             }
         }
 
-        // ===== OTP TIMER =====
         function startTimer() {
             timerCount = 30;
             document.getElementById('timerCount').textContent = timerCount;
@@ -931,7 +783,6 @@
             }
         }
 
-        // ===== SHOW OTP MODAL =====
         function showOTPModal(secret) {
             pendingSecret = secret;
             attempts = 3;
@@ -968,7 +819,6 @@
             hideLoading();
         }
 
-        // ===== VERIFY OTP =====
         async function verifyOTPLogin() {
             if (isVerifying) return;
             
@@ -1016,6 +866,10 @@
                         return;
                     }
 
+                    // Cập nhật presence online
+                    await db.ref('presence/' + pendingUser.uid).set(true);
+                    db.ref('presence/' + pendingUser.uid).onDisconnect().set(false);
+
                     showMessage('✅ Xác thực thành công! Đang chuyển hướng...', 'success');
                     hideLoading();
                     setTimeout(() => {
@@ -1057,7 +911,6 @@
             document.getElementById('btnVerifyOTP').innerHTML = '✅ Xác nhận';
         }
 
-        // ===== KIỂM TRA 2FA NHANH =====
         async function checkTwoFA(user) {
             try {
                 const snapshot = await db.ref('users/' + user.uid + '/twofaEnabled').once('value');
@@ -1067,12 +920,10 @@
             }
         }
 
-        // ===== ĐĂNG NHẬP EMAIL =====
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             hideMessage();
             
-            // ===== KIỂM TRA ĐIỀU KHOẢN =====
             if (!termsCheckbox.checked) {
                 termsError.classList.add('show');
                 termsCheckbox.style.borderColor = '#e74c6f';
@@ -1127,6 +978,10 @@
                     return;
                 }
 
+                // Cập nhật presence online
+                await db.ref('presence/' + userCredential.user.uid).set(true);
+                db.ref('presence/' + userCredential.user.uid).onDisconnect().set(false);
+
                 hideLoading();
                 showMessage('✅ Đăng nhập thành công!', 'success');
                 setTimeout(() => {
@@ -1149,11 +1004,9 @@
             }
         });
 
-        // ===== ĐĂNG NHẬP GOOGLE =====
         googleLoginBtn.addEventListener('click', async () => {
             hideMessage();
             
-            // ===== KIỂM TRA ĐIỀU KHOẢN =====
             if (!termsCheckbox.checked) {
                 termsError.classList.add('show');
                 termsCheckbox.style.borderColor = '#e74c6f';
@@ -1193,6 +1046,10 @@
                     return;
                 }
 
+                // Cập nhật presence online
+                await db.ref('presence/' + result.user.uid).set(true);
+                db.ref('presence/' + result.user.uid).onDisconnect().set(false);
+
                 hideLoading();
                 showMessage('✅ Đăng nhập thành công!', 'success');
                 setTimeout(() => {
@@ -1211,7 +1068,6 @@
             }
         });
 
-        // ===== AUTO REDIRECT =====
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 if (document.getElementById('twofaModal').classList.contains('active')) {
@@ -1235,18 +1091,20 @@
                     return;
                 }
                 
+                // Cập nhật presence online
+                await db.ref('presence/' + user.uid).set(true);
+                db.ref('presence/' + user.uid).onDisconnect().set(false);
+                
                 window.location.href = '../index.html';
             }
         });
 
-        // ===== ENTER KEY CHO OTP =====
         document.getElementById('otpInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 verifyOTPLogin();
             }
         });
 
-        // ===== AUTO CLEAR ERROR =====
         document.getElementById('otpInput').addEventListener('input', function(e) {
             this.value = this.value.replace(/\D/g, '');
             if (this.value.length === 6) {
@@ -1255,7 +1113,6 @@
             }
         });
 
-        // Focus vào email
         emailInput.focus();
         
     </script>
