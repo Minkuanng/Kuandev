@@ -30,10 +30,16 @@
         .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
         .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .wallet { background: var(--wallet-bg); padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: flex-end; line-height: 1.4; transition: 0.3s; }
-        .wallet .vnd { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-        .wallet .usd { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-        .wallet .usd span { color: var(--text-secondary); font-weight: 600; }
+        
+        /* Ví mới */
+        .wallet { background: var(--wallet-bg); padding: 6px 16px; border-radius: 30px; border: 2px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .wallet-icon { font-size: 18px; opacity: 0.8; }
+        .wallet-content { display: flex; align-items: center; gap: 6px; }
+        .wallet-content .vnd { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .wallet-divider { width: 2px; height: 20px; background: var(--border-color); border-radius: 2px; }
+        .wallet-content .usd { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+        .wallet-content .usd span { color: var(--accent); }
+
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
         .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
@@ -68,7 +74,7 @@
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 40px 24px; max-width: 800px; margin: 0 auto; }
-        .admin-badge { display: inline-block; background: linear-gradient(135deg, #f5a623, #f7c948); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
+        .admin-badge { display: none; }
 
         /* ---- Intro/Shop banner ---- */
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
@@ -88,7 +94,7 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { font-size: 11px; padding: 3px 10px; } .content { padding: 16px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .intro-card { padding: 16px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { padding: 4px 12px; gap: 8px; } .wallet-content .vnd { font-size: 12px; } .wallet-content .usd { font-size: 11px; } .content { padding: 16px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .intro-card { padding: 16px; } }
     </style>
 </head>
 <body>
@@ -109,9 +115,14 @@
             <div class="logo">KuanZ<span>Game</span></div>
         </div>
         <div class="header-right">
+            <!-- Ví mới -->
             <div class="wallet">
-                <span class="vnd">💰 <span id="balanceAmount">0</span> VND</span>
-                <span class="usd">💵 <span id="balanceUSD">0.00</span> USD</span>
+                <span class="wallet-icon">💎</span>
+                <div class="wallet-content">
+                    <span class="vnd"><span id="balanceAmount">0</span> VND</span>
+                    <span class="wallet-divider"></span>
+                    <span class="usd">💵 <span id="balanceUSD">0.40</span> USD</span>
+                </div>
             </div>
             <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
             <div class="settings-wrapper">
@@ -151,7 +162,7 @@
                 <div class="intro-section">
                     <div class="intro-section-title">📦 Hướng dẫn quy trình mua hàng</div>
                     <ul class="intro-list">
-                        <li>Quay lại toàn bộ quá trình nhận hàng để làm bằng chứng đối chiếu sản phẩm.</li>
+                        <li>Quay lại toàn bộ quá trình mua hàng để làm bằng chứng đối chiếu sản phẩm.</li>
                         <li>Nếu phát hiện sai sót hoặc lỗi kỹ thuật, hãy liên hệ ngay Admin để được hỗ trợ xử lý đổi/trả sớm nhất.</li>
                     </ul>
                 </div>
@@ -164,7 +175,7 @@
                     </ul>
                 </div>
 
-                <div class="intro-footer">KuanZGame.site <span>–</span> Đồng hành cùng bạn trên mọi chiến trường! 🔥</div>
+                <div class="intro-footer">KuanZGame.site <span>–</span>C.ơn bạn đã tin tưởng và Đồng hành 🔥</div>
             </div>
         </div>
 
@@ -218,8 +229,10 @@
                 const data = snap.val();
                 if (data) {
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                    document.getElementById('balanceUSD').textContent = ((data.balance || 0) / EXCHANGE_RATE).toFixed(2);
-                    document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge">👑 ADMIN</span>' : '';
+                    // Giá trị USD cố định 0.40
+                    document.getElementById('balanceUSD').textContent = '0.40';
+                    // Ẩn hoàn toàn badge admin
+                    document.getElementById('adminBadgeContainer').innerHTML = '';
                 }
             });
             db.ref('notifications').on('value', snap => {
