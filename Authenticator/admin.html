@@ -25,10 +25,36 @@
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
-        .menu-icon { cursor: pointer; padding: 6px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        
+        /* === MENU ICON - GIÃN ĐỀU === */
+        .menu-icon { 
+            cursor: pointer; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            background: var(--wallet-bg); 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            gap: 5px; 
+            transition: 0.3s; 
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+        }
         .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
-        .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+        .menu-icon .bar { 
+            display: block; 
+            width: 22px; 
+            height: 2.5px; 
+            background: var(--text-secondary); 
+            border-radius: 4px; 
+            transition: 0.3s;
+        }
+        .menu-icon .bar:nth-child(1) { transform: translateY(-3px); }
+        .menu-icon .bar:nth-child(3) { transform: translateY(3px); }
+        .menu-icon:hover .bar { background: var(--text-primary); }
+        
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
         .wallet-container {
@@ -146,10 +172,11 @@
         .toast.error { border-color: #e74c6f; color: #e74c6f; }
         .toast.success { border-color: #27ae60; color: #27ae60; }
         .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
-        .status-dot.online { background: #27ae60; }
-        .status-dot.offline { background: #e74c6f; }
+        .status-dot.online { background: #27ae60; animation: pulse-dot 1.5s infinite; }
+        .status-dot.offline { background: #95a5a6; }
         .status-dot.blocked { background: #f39c12; }
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } }
+        @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } }
     </style>
 </head>
 <body>
@@ -159,13 +186,18 @@
         <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
         <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
         <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goQuickLogin()"><span class="icon">⚡</span><span data-key="quicklogin">Đăng nhập nhanh</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
     </div>
 
     <header class="header">
         <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <div class="logo"></div>
         </div>
         <div class="header-right">
@@ -258,6 +290,8 @@
         let isAdmin = false;
         let lang = localStorage.getItem('lang') || 'vi';
         let loadingUsers = false;
+        // Lưu trạng thái online của users
+        let onlineUsersMap = {};
 
         const translations = {
             vi: {
@@ -270,7 +304,7 @@
                 no_data: 'Không có dữ liệu', send_btn: '📢 Gửi', back: '← Quay lại',
                 modal_title: 'Quản lý user', user_label: 'User:', uid_label: 'UID:', amount_label: 'Số tiền:',
                 add_btn: '➕ Cộng', sub_btn: '➖ Trừ', lock_btn: '🔒 Khóa', unlock_btn: '🔓 Mở', 
-                delete_btn: '🗑️ Xóa', close_btn: 'Đóng'
+                delete_btn: '🗑️ Xóa', close_btn: 'Đóng', quicklogin: '⚡ Đăng nhập nhanh'
             },
             en: {
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
@@ -282,7 +316,7 @@
                 no_data: 'No data', send_btn: '📢 Send', back: '← Back',
                 modal_title: 'Manage User', user_label: 'User:', uid_label: 'UID:', amount_label: 'Amount:',
                 add_btn: '➕ Add', sub_btn: '➖ Sub', lock_btn: '🔒 Lock', unlock_btn: '🔓 Unlock',
-                delete_btn: '🗑️ Delete', close_btn: 'Close'
+                delete_btn: '🗑️ Delete', close_btn: 'Close', quicklogin: '⚡ Quick Login'
             }
         };
 
@@ -320,6 +354,90 @@
             document.getElementById('notifForm').style.display = show ? 'none' : 'block';
         }
 
+        // === CHECK ONLINE ===
+        function isUserOnline(lastLogin) {
+            if (!lastLogin) return false;
+            const now = Date.now();
+            const diff = now - lastLogin;
+            return diff < 5 * 60 * 1000; // 5 phút
+        }
+
+        // Cập nhật online status từ Firebase Presence
+        function updateOnlineStatus(userId, isOnline) {
+            onlineUsersMap[userId] = isOnline;
+            // Cập nhật giao diện nếu đang hiển thị
+            updateUserStatusDisplay(userId);
+        }
+
+        function updateUserStatusDisplay(userId) {
+            // Tìm row của user và cập nhật status
+            const rows = document.querySelectorAll('#userTableBody tr');
+            rows.forEach(row => {
+                const uidCell = row.querySelector('.user-uid-hidden');
+                if (uidCell && uidCell.textContent === userId) {
+                    const statusCell = row.querySelector('.status-cell');
+                    if (statusCell) {
+                        const isOnline = onlineUsersMap[userId] || false;
+                        const isBlocked = statusCell.dataset.blocked === 'true';
+                        const isAdminUser = statusCell.dataset.admin === 'true';
+                        
+                        let statusText, statusClass, statusDot;
+                        if (isAdminUser) {
+                            statusText = '👑 Admin';
+                            statusClass = 'admin';
+                            statusDot = '';
+                        } else if (isBlocked) {
+                            statusText = '🔒 Đã khóa';
+                            statusClass = 'blocked';
+                            statusDot = '<span class="status-dot blocked"></span>';
+                        } else if (isOnline) {
+                            statusText = '🟢 Online';
+                            statusClass = 'active';
+                            statusDot = '<span class="status-dot online"></span>';
+                        } else {
+                            statusText = '⚪ Offline';
+                            statusClass = 'inactive';
+                            statusDot = '<span class="status-dot offline"></span>';
+                        }
+                        statusCell.innerHTML = statusDot + '<span class="badge ' + statusClass + '">' + statusText + '</span>';
+                    }
+                }
+            });
+        }
+
+        // Theo dõi trạng thái online của tất cả users
+        function watchOnlineStatus() {
+            // Sử dụng presence của Firebase Realtime Database
+            // Mỗi user khi online sẽ update /presence/{uid} = true
+            const presenceRef = db.ref('presence');
+            presenceRef.on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                // Cập nhật map online
+                Object.keys(data).forEach(uid => {
+                    onlineUsersMap[uid] = data[uid] === true;
+                });
+                // Refresh UI
+                if (!loadingUsers) {
+                    Object.keys(onlineUsersMap).forEach(uid => {
+                        updateUserStatusDisplay(uid);
+                    });
+                }
+            });
+        }
+
+        // Bắt đầu theo dõi online
+        watchOnlineStatus();
+
+        // Khi user đăng nhập, update presence
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Set online
+                db.ref('presence/' + user.uid).set(true);
+                // Khi disconnect, set offline
+                db.ref('presence/' + user.uid).onDisconnect().set(false);
+            }
+        });
+
         function refreshUsers() {
             if (loadingUsers) return;
             showLoading(true);
@@ -327,15 +445,6 @@
                 loadUsers();
                 setTimeout(() => showLoading(false), 300);
             }, 200);
-        }
-
-        // Hàm kiểm tra user có online không (dựa trên lastLogin)
-        function isUserOnline(lastLogin) {
-            if (!lastLogin) return false;
-            const now = Date.now();
-            const diff = now - lastLogin;
-            // Online nếu đăng nhập trong vòng 5 phút gần đây
-            return diff < 5 * 60 * 1000;
         }
 
         auth.onAuthStateChanged((user) => {
@@ -398,18 +507,15 @@
                         const bal = u.balance || 0;
                         totalBal += bal;
                         
-                        // Kiểm tra online
-                        const lastLogin = u.lastLogin || u.lastLoginTimestamp || null;
-                        const lastLoginTime = typeof lastLogin === 'string' ? new Date(lastLogin).getTime() : lastLogin;
-                        const online = isUserOnline(lastLoginTime);
-                        if (online && !isBlocked && !isAdminUser) online++;
+                        // Kiểm tra online từ presence
+                        const isOnline = onlineUsersMap[key] || false;
+                        if (isOnline && !isBlocked && !isAdminUser) online++;
                         
                         if (isBlocked) blocked++;
                         
                         const name = u.displayName || u.email || 'Chưa đặt tên';
                         const email = u.email || 'Không có email';
                         
-                        // Xác định trạng thái
                         let statusText, statusClass, statusDot;
                         if (isAdminUser) {
                             statusText = '👑 Admin';
@@ -419,7 +525,7 @@
                             statusText = '🔒 Đã khóa';
                             statusClass = 'blocked';
                             statusDot = '<span class="status-dot blocked"></span>';
-                        } else if (online) {
+                        } else if (isOnline) {
                             statusText = '🟢 Online';
                             statusClass = 'active';
                             statusDot = '<span class="status-dot online"></span>';
@@ -434,10 +540,12 @@
                         
                         html += `<tr>
                             <td>${count}</td>
-                            <td title="${name}">${shortName} ${isAdminUser ? '👑' : ''}</td>
+                            <td title="${name}">${shortName}</td>
                             <td title="${email}">${shortEmail}</td>
                             <td>${bal.toLocaleString('vi-VN')}</td>
-                            <td>${statusDot}<span class="badge ${statusClass}">${statusText}</span></td>
+                            <td class="status-cell" data-blocked="${isBlocked}" data-admin="${isAdminUser}" data-uid="${key}">
+                                ${statusDot}<span class="badge ${statusClass}">${statusText}</span>
+                            </td>
                             <td>
                                 ${!isAdminUser ? `
                                 <button class="btn-action edit" onclick="openModal('${key}','${name.replace(/'/g,"\\'")}')" title="Quản lý">✏️</button>
@@ -445,6 +553,7 @@
                                 <button class="btn-action delete" onclick="deleteUser('${key}','${name.replace(/'/g,"\\'")}')" title="Xóa">🗑️</button>
                                 ` : '<span style="color:var(--text-muted);font-size:11px;">—</span>'}
                             </td>
+                            <td class="user-uid-hidden" style="display:none;">${key}</td>
                         </tr>`;
                     });
                 }
@@ -511,32 +620,13 @@
                 }
             } else if (action === 'delete') {
                 if (confirm(lang === 'vi' ? '🗑️ Xóa user này? (Không thể hoàn tác!)' : '🗑️ Delete this user? (Cannot undo!)')) {
-                    // Xóa cả Authentication và Database
-                    const email = document.getElementById('modalUserName').textContent;
-                    // Lấy email từ database trước
-                    db.ref('users/' + selectedUid + '/email').once('value').then(snap => {
-                        const userEmail = snap.val();
-                        if (userEmail) {
-                            // Xóa trên Authentication
-                            auth.signInWithEmailAndPassword(userEmail, 'tempPassword123').catch(() => {});
-                            // Tìm và xóa user trên Auth (chỉ admin mới làm được)
-                            // Thực tế: chỉ có thể xóa user trên Auth bằng Admin SDK, không thể từ client
-                            // Nên ta chỉ xóa trên Database và thông báo
-                        }
-                        // Xóa trên Database
-                        return db.ref('users/' + selectedUid).remove();
-                    }).then(() => {
-                        showToast('✅ Đã xóa user khỏi Database!', 'success');
-                        closeModal();
-                        refreshUsers();
-                    }).catch(err => {
-                        // Vẫn xóa database nếu có lỗi auth
-                        db.ref('users/' + selectedUid).remove().then(() => {
-                            showToast('✅ Đã xóa user khỏi Database!', 'success');
+                    db.ref('users/' + selectedUid).remove()
+                        .then(() => {
+                            showToast('✅ Đã xóa user!', 'success');
                             closeModal();
                             refreshUsers();
-                        }).catch(e => showToast('❌ ' + e.message, 'error'));
-                    });
+                        })
+                        .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
             }
         }
@@ -617,12 +707,18 @@
         function goHistory() { closeMenu(); alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
         function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
         function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
+        function goQuickLogin() { closeMenu(); window.location.href = 'quick-login.html'; }
         function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
         function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
         function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
 
         function logout() {
             if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+                // Khi logout, set offline
+                const user = auth.currentUser;
+                if (user) {
+                    db.ref('presence/' + user.uid).set(false);
+                }
                 auth.signOut().then(() => window.location.replace('login.html'));
             }
         }
@@ -636,7 +732,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded!');
+        console.log('✅ Admin panel loaded with Online status tracking!');
     </script>
 </body>
 </html>
