@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -21,17 +21,42 @@
         .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
+        
+        /* Menu icon - giãn đều */
+        .menu-icon { 
+            cursor: pointer; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            background: var(--wallet-bg); 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            gap: 5px; 
+            transition: 0.3s; 
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+        }
+        .menu-icon:hover { background: var(--hover-bg); }
+        .menu-icon .bar { 
+            display: block; 
+            width: 22px; 
+            height: 2.5px; 
+            background: var(--text-secondary); 
+            border-radius: 4px; 
+            transition: 0.3s;
+        }
+        .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
+        .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
+        .menu-icon:hover .bar { background: var(--text-primary); }
+
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
-        .menu-icon { cursor: pointer; padding: 6px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
-        .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        /* Wallet mới - hình chữ nhật với ví bên trong */
         .wallet-container {
             background: var(--wallet-bg);
             border: 2px solid var(--border-color);
@@ -44,48 +69,13 @@
             cursor: default;
             min-height: 44px;
         }
-        .wallet-container:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 143, 214, 0.1);
-        }
-        .wallet-icon-box {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .wallet-icon-box svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
-        .wallet-info {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.3;
-        }
-        .wallet-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .wallet-balance {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .wallet-balance span {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-left: 2px;
-        }
+        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
+        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
@@ -136,7 +126,30 @@
         .btn-security:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(44,90,122,0.3); }
         .btn-back { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 16px; } .profile-card { padding: 20px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } }
+
+        /* Token Section */
+        .token-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+        .token-section .token-label { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .token-box { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: 0.3s; }
+        .token-box .token-key { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 1px; word-break: break-all; }
+        .token-box .copy-btn { padding: 4px 14px; background: var(--text-secondary); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+        .token-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .token-box .copy-btn.copied { background: var(--success); }
+        .token-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .token-actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .token-actions .btn-reset { background: #f39c12; color: #fff; }
+        .token-actions .btn-reset:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
+        .token-actions .btn-reset:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .token-status { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+        .token-history { margin-top: 10px; max-height: 120px; overflow-y: auto; }
+        .token-history .th-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-muted); }
+        .token-history .th-item .th-token { font-family: monospace; color: var(--text-primary); }
+        .token-history .th-item .th-status { font-size: 10px; }
+        .token-history .th-item .th-status.used { color: var(--text-muted); }
+        .token-history .th-item .th-status.active { color: var(--success); }
+
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 16px; } .profile-card { padding: 20px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .token-box { flex-direction: column; align-items: stretch; } .token-box .copy-btn { margin-top: 4px; } }
     </style>
 </head>
 <body>
@@ -147,17 +160,21 @@
         <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
         <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
         <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goQuickLogin()"><span class="icon">⚡</span><span data-key="quicklogin">Đăng nhập nhanh</span></button>
         <div class="menu-divider"></div>
         <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
     </div>
 
     <header class="header">
         <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
-            <div class="logo"></div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <div class="logo">KuanZ<span>Game</span></div>
         </div>
         <div class="header-right">
-            <!-- Wallet mới - hình chữ nhật với ví bên trong -->
             <div class="wallet-container">
                 <div class="wallet-icon-box">
                     <svg viewBox="0 0 24 24">
@@ -200,6 +217,29 @@
             <div class="info-item"><span class="label">🆔 UID</span><span id="displayUid" style="font-size:12px;">---</span></div>
             <div class="info-item"><span class="label">📅 Ngày tạo</span><span id="displayCreated">---</span></div>
             <div class="balance-box"><div class="blabel">💰 Số dư</div><div class="bamount" id="profileBalance">0 VND</div></div>
+
+            <!-- Token Section -->
+            <div class="token-section">
+                <div class="token-label">
+                    <span>🔑 Token đăng nhập nhanh</span>
+                    <span style="font-size:10px;color:var(--text-muted);">(Dùng để đăng nhập không cần mật khẩu)</span>
+                </div>
+                <div class="token-box">
+                    <span class="token-key" id="tokenDisplay">Chưa có token</span>
+                    <button class="copy-btn" id="copyTokenBtn" onclick="copyToken()">📋 Sao chép</button>
+                </div>
+                <div class="token-status" id="tokenStatus">⚠️ Bạn chưa tạo token. Nhấn "Tạo mới" để tạo!</div>
+                <div class="token-actions">
+                    <button class="btn-reset" id="resetTokenBtn" onclick="resetToken()">🔄 Tạo mới</button>
+                </div>
+                
+                <!-- Token History -->
+                <div id="tokenHistoryContainer" style="display:none; margin-top:10px;">
+                    <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:4px;">📜 Lịch sử token</div>
+                    <div class="token-history" id="tokenHistory"></div>
+                </div>
+            </div>
+
             <button class="btn btn-security" onclick="goToSecurity()">🛡️ Bảo mật</button>
             <button class="btn btn-back" onclick="goHome()">🏠 Quay lại</button>
         </div>
@@ -219,14 +259,23 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        const EXCHANGE_RATE = 25000;
-
         const translations = {
-            vi: { home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo' },
-            en: { home: 'Home', history: 'History', topup: 'Top up', support: 'Support', profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', notif_title: '📢 Notifications', notif_empty: 'No notifications' }
+            vi: { 
+                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
+                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
+                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
+                quicklogin: '⚡ Đăng nhập nhanh'
+            },
+            en: { 
+                home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
+                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', 
+                notif_title: '📢 Notifications', notif_empty: 'No notifications',
+                quicklogin: '⚡ Quick Login'
+            }
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
+        let currentUser = null;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -246,8 +295,170 @@
         applyTheme();
         applyLang();
 
+        // Generate random token
+        function generateRandomToken() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let token = '';
+            for (let i = 0; i < 24; i++) {
+                token += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return token;
+        }
+
+        // Save token to database
+        async function saveUserToken(uid, token) {
+            try {
+                await db.ref('users/' + uid + '/quickToken').set(token);
+                // Save to history
+                const historyRef = db.ref('users/' + uid + '/tokenHistory');
+                const snapshot = await historyRef.once('value');
+                let history = snapshot.val() || [];
+                if (!Array.isArray(history)) history = [];
+                history.push({
+                    token: token,
+                    createdAt: new Date().toISOString(),
+                    used: false
+                });
+                if (history.length > 10) history = history.slice(-10);
+                await historyRef.set(history);
+                return true;
+            } catch (error) {
+                console.error('Lỗi lưu token:', error);
+                return false;
+            }
+        }
+
+        // Reset token
+        async function resetToken() {
+            if (!currentUser) {
+                alert('Vui lòng đăng nhập!');
+                return;
+            }
+            
+            const btn = document.getElementById('resetTokenBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Đang tạo...';
+
+            try {
+                const newToken = generateRandomToken();
+                const success = await saveUserToken(currentUser.uid, newToken);
+                if (success) {
+                    document.getElementById('tokenDisplay').textContent = newToken;
+                    document.getElementById('tokenStatus').textContent = '✅ Token mới đã được tạo thành công!';
+                    document.getElementById('tokenStatus').style.color = 'var(--success)';
+                    loadTokenHistory();
+                    showToast('✅ Token mới đã được tạo!');
+                } else {
+                    document.getElementById('tokenStatus').textContent = '❌ Lỗi tạo token!';
+                    document.getElementById('tokenStatus').style.color = 'var(--danger)';
+                }
+            } catch (error) {
+                document.getElementById('tokenStatus').textContent = '❌ Lỗi: ' + error.message;
+                document.getElementById('tokenStatus').style.color = 'var(--danger)';
+            }
+
+            btn.disabled = false;
+            btn.textContent = '🔄 Tạo mới';
+        }
+
+        // Copy token
+        function copyToken() {
+            const token = document.getElementById('tokenDisplay').textContent;
+            if (token === 'Chưa có token') {
+                showToast('⚠️ Chưa có token để sao chép!');
+                return;
+            }
+            const btn = document.getElementById('copyTokenBtn');
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(token).then(() => {
+                    btn.textContent = '✅ Đã sao chép!';
+                    btn.classList.add('copied');
+                    setTimeout(() => { btn.textContent = '📋 Sao chép';
+                        btn.classList.remove('copied'); }, 2000);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = token;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.textContent = '✅ Đã sao chép!';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = '📋 Sao chép';
+                    btn.classList.remove('copied'); }, 2000);
+            }
+        }
+
+        // Load token history
+        async function loadTokenHistory() {
+            if (!currentUser) return;
+            try {
+                const snapshot = await db.ref('users/' + currentUser.uid + '/tokenHistory').once('value');
+                const history = snapshot.val() || [];
+                const container = document.getElementById('tokenHistoryContainer');
+                const historyDiv = document.getElementById('tokenHistory');
+                
+                if (Array.isArray(history) && history.length > 1) {
+                    container.style.display = 'block';
+                    let html = '';
+                    // Show only recent tokens (excluding current)
+                    const recent = history.slice(0, -1);
+                    if (recent.length > 0) {
+                        recent.slice().reverse().forEach((item) => {
+                            const isUsed = item.used || false;
+                            html += `
+                                <div class="th-item">
+                                    <span class="th-token">${item.token.substring(0, 8)}...${item.token.substring(16)}</span>
+                                    <span class="th-status ${isUsed ? 'used' : 'active'}">${isUsed ? '✅ Đã dùng' : '🟢 Chưa dùng'}</span>
+                                </div>
+                            `;
+                        });
+                        historyDiv.innerHTML = html;
+                    } else {
+                        container.style.display = 'none';
+                    }
+                } else {
+                    container.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Lỗi load lịch sử token:', error);
+            }
+        }
+
+        // Show toast
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+                padding: 10px 24px; background: var(--bg-card); color: var(--text-primary);
+                border-radius: 10px; box-shadow: var(--shadow-popup);
+                border: 1px solid var(--border-color); z-index: 999;
+                font-weight: 500; font-size: 13px; transition: 0.5s;
+            `;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
+        }
+
         auth.onAuthStateChanged((user) => {
-            if (!user) { window.location.replace('../Authenticator/login.html'); return; }
+            if (!user) { 
+                const quickUid = localStorage.getItem('quickLoginUid');
+                if (quickUid) {
+                    window.location.href = '../Authenticator/quick-login.html';
+                    return;
+                }
+                window.location.replace('../Authenticator/login.html'); 
+                return; 
+            }
+            
+            currentUser = user;
+            db.ref('presence/' + user.uid).set(true);
+            db.ref('presence/' + user.uid).onDisconnect().set(false);
+
             const name = user.displayName || user.email || 'U';
             document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
             document.getElementById('userName').textContent = name;
@@ -264,6 +475,18 @@
                     document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                     document.getElementById('profileBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
                     document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge">👑 ADMIN</span>' : '';
+                    
+                    // Load token
+                    if (data.quickToken) {
+                        document.getElementById('tokenDisplay').textContent = data.quickToken;
+                        document.getElementById('tokenStatus').textContent = '✅ Token đã sẵn sàng!';
+                        document.getElementById('tokenStatus').style.color = 'var(--success)';
+                    } else {
+                        document.getElementById('tokenDisplay').textContent = 'Chưa có token';
+                        document.getElementById('tokenStatus').textContent = '⚠️ Bạn chưa tạo token. Nhấn "Tạo mới" để tạo!';
+                        document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
+                    }
+                    loadTokenHistory();
                 }
             });
 
@@ -283,8 +506,10 @@
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else { list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
-                    dot.classList.remove('show'); }
+                } else { 
+                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    dot.classList.remove('show'); 
+                }
             });
         });
 
@@ -328,14 +553,28 @@
         function goSupport() { closeMenu();
             alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
 
+        function goQuickLogin() { closeMenu();
+            window.location.href = '../Authenticator/quick-login.html'; }
+
         function goToProfile() { window.location.href = 'profile.html'; }
 
         function goToSecurity() { window.location.href = 'security.html'; }
 
         function goToSettings() { window.location.href = 'settings.html'; }
 
-        function logout() { if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) auth.signOut().then(() => window.location.replace(
-                '../Authenticator/login.html')); }
+        function logout() { 
+            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+                const user = auth.currentUser;
+                if (user) {
+                    db.ref('presence/' + user.uid).set(false);
+                }
+                auth.signOut().then(() => {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginEmail');
+                    window.location.replace('../Authenticator/login.html');
+                });
+            }
+        }
 
         window.addEventListener('storage', function(e) {
             if (e.key === 'lang') { lang = e.newValue || 'vi';
