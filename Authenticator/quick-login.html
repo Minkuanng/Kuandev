@@ -185,6 +185,9 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
+        // ===== BIẾN KIỂM TRA ĐÃ LOGIN THÀNH CÔNG CHƯA =====
+        let isQuickLoginSuccess = false;
+
         function applyTheme() {
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -219,10 +222,8 @@
             setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
         }
 
-        // ===== KIỂM TRA TOKEN BẰNG CÁCH ĐỌC TỪNG USER (Tránh permission_denied) =====
         async function findUserByToken(token) {
             try {
-                // Cách 1: Đọc trực tiếp từ users (nếu rules cho phép)
                 const usersSnap = await db.ref('users').orderByChild('quickToken').equalTo(token).once('value');
                 const users = usersSnap.val();
                 if (users) {
@@ -234,7 +235,6 @@
                 return null;
             } catch (error) {
                 console.log('Cách 1 thất bại, thử cách 2...');
-                // Cách 2: Duyệt từng user (chậm hơn nhưng ít bị lỗi permission)
                 try {
                     const allUsersSnap = await db.ref('users').once('value');
                     const allUsers = allUsersSnap.val();
@@ -255,6 +255,10 @@
 
         document.getElementById('quickLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Nếu đã login thành công thì không làm gì
+            if (isQuickLoginSuccess) return;
+            
             const token = tokenInput.value.trim();
 
             if (!token) {
@@ -285,9 +289,13 @@
                     return;
                 }
 
+                // Đánh dấu đã login thành công
+                isQuickLoginSuccess = true;
+
                 // Lưu thông tin đăng nhập
                 localStorage.setItem('quickLoginUid', uid);
                 localStorage.setItem('quickLoginEmail', data.email || '');
+                localStorage.setItem('quickLoginSuccess', 'true');
                 
                 // Cập nhật lastLogin
                 await db.ref('users/' + uid + '/lastLogin').set(Date.now());
@@ -297,11 +305,14 @@
                 db.ref('presence/' + uid).onDisconnect().set(false);
 
                 showMessage('✅ Đăng nhập thành công! Đang chuyển hướng...', 'success');
+                
+                // Chuyển hướng sau 1.5s
                 setTimeout(() => {
                     window.location.href = '../index.html';
                 }, 1500);
 
             } catch (error) {
+                isQuickLoginSuccess = false;
                 let errorMsg = '❌ Lỗi: ';
                 if (error.code === 'PERMISSION_DENIED') {
                     errorMsg += 'Vui lòng vào Firebase Console → Realtime Database → Rules và đặt ".read": true, ".write": true';
@@ -314,6 +325,19 @@
 
             btn.disabled = false;
             btn.textContent = '🚀 Đăng nhập nhanh';
+        });
+
+        // ===== QUAN TRỌNG: NGĂN CHẶN TỰ ĐỘNG CHUYỂN HƯỚNG =====
+        auth.onAuthStateChanged((user) => {
+            // Nếu đã login thành công hoặc có quickLoginSuccess thì không làm gì
+            if (isQuickLoginSuccess || localStorage.getItem('quickLoginSuccess') === 'true') {
+                return;
+            }
+            
+            // Nếu user đã đăng nhập và không phải quick login, chuyển về index
+            if (user) {
+                window.location.href = '../index.html';
+            }
         });
 
         // Kiểm tra nếu có token trong URL
