@@ -122,7 +122,7 @@
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 24px; max-width: 1000px; margin: 0 auto; }
         .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
-        .admin-card h1 { color: var(--text-primary); font-size: 22px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .admin-card h1 { color: var(--text-primary); font-size: 22px; transition: 0.3s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .admin-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
         .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
         .stats .stat { background: var(--wallet-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); flex: 1; min-width: 80px; transition: 0.3s; }
@@ -176,7 +176,8 @@
         .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
         .refresh-btn { background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: 0.3s; }
         .refresh-btn:hover { background: var(--hover-bg); }
-        .debug-info { background: var(--wallet-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 12px; font-size: 12px; color: var(--text-muted); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .toast.show { opacity: 1; }
         @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } }
     </style>
 </head>
@@ -231,8 +232,7 @@
         <div class="admin-card">
             <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshUsers()">🔄 Làm mới</button></h1>
             <p class="sub" data-key="admin_sub">Quản lý người dùng và hệ thống</p>
-            <div id="debugInfo" class="debug-info">🔍 Đang kiểm tra dữ liệu...</div>
-            <div id="loadingIndicator" class="loading" data-key="loading">Đang tải...</div>
+            <div id="loadingIndicator" class="loading">⏳ Đang tải dữ liệu...</div>
             <div class="stats" id="stats" style="display:none;">
                 <div class="stat"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
                 <div class="stat"><div class="num" id="activeUsers">0</div><div class="label" data-key="active_users">Hoạt động</div></div>
@@ -267,6 +267,8 @@
         </div>
     </div>
 
+    <div class="toast" id="toast"></div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
@@ -284,6 +286,7 @@
         let selectedUid = null;
         let isAdmin = false;
         let lang = localStorage.getItem('lang') || 'vi';
+        let loadingUsers = false;
 
         const translations = {
             vi: {
@@ -291,7 +294,7 @@
                 profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
                 notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
                 admin_title: 'Quản trị', admin_sub: 'Quản lý người dùng và hệ thống',
-                loading: 'Đang tải...', total_users: 'Tổng người dùng', active_users: 'Hoạt động',
+                total_users: 'Tổng người dùng', active_users: 'Hoạt động',
                 blocked_users: 'Đã khóa', total_balance: 'Tổng số dư',
                 stt: 'STT', name: 'Tên', email: 'Email', balance: 'Số dư', status: 'Trạng thái', action: 'Thao tác',
                 no_data: 'Không có dữ liệu', send_btn: '📢 Gửi', back: '← Quay lại',
@@ -304,7 +307,7 @@
                 profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
                 notif_title: '📢 Notifications', notif_empty: 'No notifications',
                 admin_title: 'Admin', admin_sub: 'Manage users and system',
-                loading: 'Loading...', total_users: 'Total users', active_users: 'Active',
+                total_users: 'Total users', active_users: 'Active',
                 blocked_users: 'Blocked', total_balance: 'Total balance',
                 stt: 'No.', name: 'Name', email: 'Email', balance: 'Balance', status: 'Status', action: 'Action',
                 no_data: 'No data', send_btn: '📢 Send', back: '← Back',
@@ -313,6 +316,16 @@
                 delete_btn: '🗑️ Delete', close_btn: 'Close'
             }
         };
+
+        function showToast(msg, isError = false) {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.style.borderColor = isError ? '#e74c6f' : 'var(--border-color)';
+            el.style.color = isError ? '#e74c6f' : 'var(--text-primary)';
+            el.classList.add('show');
+            clearTimeout(el.timeout);
+            el.timeout = setTimeout(() => el.classList.remove('show'), 2500);
+        }
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -340,12 +353,12 @@
         }
 
         function refreshUsers() {
+            if (loadingUsers) return;
             showLoading(true);
-            document.getElementById('debugInfo').textContent = '🔄 Đang làm mới dữ liệu...';
             setTimeout(() => {
                 loadUsers();
-                setTimeout(() => showLoading(false), 800);
-            }, 300);
+                setTimeout(() => showLoading(false), 300);
+            }, 200);
         }
 
         auth.onAuthStateChanged((user) => {
@@ -358,14 +371,12 @@
                     return;
                 }
                 isAdmin = true;
-                document.getElementById('debugInfo').textContent = '✅ Đã xác thực Admin. Đang tải dữ liệu...';
                 showLoading(true);
                 loadUsers();
-                setTimeout(() => showLoading(false), 800);
+                setTimeout(() => showLoading(false), 300);
             });
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
-                const balance = snap.val() || 0;
-                document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
+                document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
             });
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
@@ -373,8 +384,7 @@
                 const dot = document.getElementById('notifDot');
                 if (notifs) {
                     const keys = Object.keys(notifs).reverse();
-                    let html = '',
-                        hasUnread = false;
+                    let html = '', hasUnread = false;
                     keys.forEach(key => {
                         const n = notifs[key];
                         const isUnread = !n.readBy || !n.readBy[user.uid];
@@ -383,33 +393,27 @@
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else { list.innerHTML =
-                    `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
-                    dot.classList.remove('show'); }
+                } else {
+                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    dot.classList.remove('show');
+                }
             });
         });
 
         function loadUsers() {
-            db.ref('users').off();
-            db.ref('users').once('value', snap => {
+            if (loadingUsers) return;
+            loadingUsers = true;
+            
+            db.ref('users').once('value').then(snap => {
                 const users = snap.val();
                 const tbody = document.getElementById('userTableBody');
-                let html = '',
-                    total = 0,
-                    active = 0,
-                    blocked = 0,
-                    totalBal = 0;
+                let html = '', total = 0, active = 0, blocked = 0, totalBal = 0;
                 
-                // Debug
                 if (users) {
                     const keys = Object.keys(users);
-                    document.getElementById('debugInfo').textContent = `📊 Tìm thấy ${keys.length} user trong database.`;
-                    console.log('📊 Users data:', users);
-                    
                     let count = 0;
                     keys.forEach(key => {
                         const u = users[key];
-                        // Hiển thị TẤT CẢ user, kể cả admin
                         count++;
                         total++;
                         const isBlocked = u.blocked === true;
@@ -420,41 +424,39 @@
                         totalBal += bal;
                         const name = u.displayName || u.email || 'Chưa đặt tên';
                         const email = u.email || 'Không có email';
-                        const displayName = name.length > 20 ? name.substring(0, 20) + '...' : name;
-                        const displayEmail = email.length > 25 ? email.substring(0, 25) + '...' : email;
                         const statusText = isAdminUser ? '👑 Admin' : (isBlocked ? '🔒 Đã khóa' : '✅ Hoạt động');
                         const statusClass = isAdminUser ? 'admin' : (isBlocked ? 'blocked' : 'active');
+                        const shortName = name.length > 20 ? name.substring(0, 18) + '…' : name;
+                        const shortEmail = email.length > 25 ? email.substring(0, 23) + '…' : email;
                         
                         html += `<tr>
                             <td>${count}</td>
-                            <td title="${name}">${displayName} ${isAdminUser ? '👑' : ''}</td>
-                            <td title="${email}">${displayEmail}</td>
-                            <td>${bal.toLocaleString('vi-VN')} VND</td>
+                            <td title="${name}">${shortName} ${isAdminUser ? '👑' : ''}</td>
+                            <td title="${email}">${shortEmail}</td>
+                            <td>${bal.toLocaleString('vi-VN')}</td>
                             <td><span class="badge ${statusClass}">${statusText}</span></td>
                             <td>
                                 ${!isAdminUser ? `
                                 <button class="btn-action edit" onclick="openModal('${key}','${name.replace(/'/g,"\\'")}')" title="Quản lý">✏️</button>
                                 <button class="btn-action ${isBlocked?'unblock':'block'}" onclick="toggleBlock('${key}',${isBlocked})" title="${isBlocked?'Mở khóa':'Khóa'}">${isBlocked?'🔓':'🔒'}</button>
                                 <button class="btn-action delete" onclick="deleteUser('${key}','${name.replace(/'/g,"\\'")}')" title="Xóa">🗑️</button>
-                                ` : '<span style="color:var(--text-muted);font-size:11px;">Không thể</span>'}
+                                ` : '<span style="color:var(--text-muted);font-size:11px;">—</span>'}
                             </td>
                         </tr>`;
                     });
-                } else {
-                    document.getElementById('debugInfo').textContent = '⚠️ Không tìm thấy user nào trong database!';
-                    console.warn('⚠️ No users found in database');
                 }
                 
-                if (!html) html =
-                    `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:16px;">${lang === 'vi' ? 'Chưa có người dùng' : 'No users'}</td></tr>`;
+                if (!html) html = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:16px;">${lang === 'vi' ? 'Chưa có người dùng' : 'No users'}</td></tr>`;
                 tbody.innerHTML = html;
                 document.getElementById('totalUsers').textContent = total;
                 document.getElementById('activeUsers').textContent = active;
                 document.getElementById('blockedUsers').textContent = blocked;
                 document.getElementById('totalBalance').textContent = totalBal.toLocaleString('vi-VN');
+                loadingUsers = false;
             }).catch(err => {
                 console.error('❌ Lỗi load users:', err);
-                document.getElementById('debugInfo').textContent = '❌ Lỗi: ' + err.message;
+                showToast('❌ Lỗi tải dữ liệu: ' + err.message, true);
+                loadingUsers = false;
             });
         }
 
@@ -467,8 +469,10 @@
             document.getElementById('modalOverlay').classList.add('active');
         }
 
-        function closeModal() { document.getElementById('modalOverlay').classList.remove('active');
-            selectedUid = null; }
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            selectedUid = null;
+        }
 
         function modalAction(action) {
             if (!selectedUid || !isAdmin) return;
@@ -476,35 +480,41 @@
             if (action === 'add' || action === 'sub') {
                 const amount = parseInt(document.getElementById('modalAmount').value);
                 if (!amount || amount <= 0) {
-                    alert(lang === 'vi' ? 'Nhập số tiền hợp lệ!' : 'Enter valid amount!');
+                    showToast('❌ Nhập số tiền hợp lệ!', true);
                     return;
                 }
                 const ref = db.ref('users/' + selectedUid + '/balance');
-                ref.transaction(current => { const c = current || 0; return action === 'add' ? c + amount : c - amount; })
-                    .then(() => { 
-                        alert(`${action==='add'?'✅ Cộng':'✅ Trừ'} ${amount.toLocaleString()} VND thành công!`);
-                        closeModal(); 
-                    })
-                    .catch(err => alert('❌ ' + err.message));
+                ref.transaction(current => {
+                    const c = current || 0;
+                    return action === 'add' ? c + amount : c - amount;
+                }).then(() => {
+                    showToast(`✅ ${action==='add'?'Cộng':'Trừ'} ${amount.toLocaleString()} VND thành công!`);
+                    closeModal();
+                    refreshUsers();
+                }).catch(err => {
+                    showToast('❌ ' + err.message, true);
+                });
             } else if (action === 'lock') {
-                if (confirm(lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?'))
+                if (confirm(lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(true)
-                        .then(() => { alert('✅ Đã khóa!'); closeModal(); })
-                        .catch(err => alert('❌ ' + err.message));
+                        .then(() => { showToast('✅ Đã khóa!'); closeModal(); refreshUsers(); })
+                        .catch(err => showToast('❌ ' + err.message, true));
+                }
             } else if (action === 'unlock') {
-                if (confirm(lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?'))
+                if (confirm(lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(false)
-                        .then(() => { alert('✅ Đã mở khóa!'); closeModal(); })
-                        .catch(err => alert('❌ ' + err.message));
+                        .then(() => { showToast('✅ Đã mở khóa!'); closeModal(); refreshUsers(); })
+                        .catch(err => showToast('❌ ' + err.message, true));
+                }
             } else if (action === 'delete') {
                 if (confirm(lang === 'vi' ? '🗑️ Xóa user này? (Không thể hoàn tác!)' : '🗑️ Delete this user? (Cannot undo!)')) {
                     db.ref('users/' + selectedUid).remove()
-                        .then(() => { 
-                            alert(lang === 'vi' ? '✅ Đã xóa user!' : '✅ User deleted!');
+                        .then(() => {
+                            showToast('✅ Đã xóa user!');
                             closeModal();
                             refreshUsers();
                         })
-                        .catch(err => alert('❌ ' + err.message));
+                        .catch(err => showToast('❌ ' + err.message, true));
                 }
             }
         }
@@ -512,11 +522,15 @@
         function toggleBlock(uid, current) {
             if (!isAdmin) return;
             const newStatus = !current;
-            if (confirm(newStatus ? (lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?') : (lang === 'vi' ?
-                    '🔓 Mở khóa user này?' : '🔓 Unlock this user?'))) {
+            const action = newStatus ? 'lock' : 'unlock';
+            const msg = newStatus ? (lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?') : (lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?');
+            if (confirm(msg)) {
                 db.ref('users/' + uid + '/blocked').set(newStatus)
-                    .then(() => { alert(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!'); })
-                    .catch(err => alert('❌ ' + err.message));
+                    .then(() => {
+                        showToast(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!');
+                        refreshUsers();
+                    })
+                    .catch(err => showToast('❌ ' + err.message, true));
             }
         }
 
@@ -525,32 +539,35 @@
             if (confirm(lang === 'vi' ? `🗑️ Xóa user "${name}"? (Không thể hoàn tác!)` : `🗑️ Delete user "${name}"? (Cannot undo!)`)) {
                 db.ref('users/' + uid).remove()
                     .then(() => {
-                        alert(lang === 'vi' ? '✅ Đã xóa user!' : '✅ User deleted!');
+                        showToast('✅ Đã xóa user!');
                         refreshUsers();
                     })
-                    .catch(err => alert('❌ ' + err.message));
+                    .catch(err => showToast('❌ ' + err.message, true));
             }
         }
 
         function sendNotification() {
             const msg = document.getElementById('notifInput').value.trim();
-            if (!msg) { alert(lang === 'vi' ? 'Nhập nội dung!' : 'Enter content!'); return; }
+            if (!msg) { showToast('❌ Nhập nội dung!', true); return; }
             const btn = document.querySelector('.btn-send');
             btn.disabled = true;
-            btn.textContent = lang === 'vi' ? 'Đang gửi...' : 'Sending...';
+            btn.textContent = lang === 'vi' ? '⏳ Đang gửi...' : '⏳ Sending...';
             db.ref('notifications').push({ message: msg, timestamp: Date.now(), from: 'Admin', readBy: {} })
-                .then(() => { alert(lang === 'vi' ? '✅ Đã gửi!' : '✅ Sent!');
+                .then(() => {
+                    showToast('✅ Đã gửi thông báo!');
                     document.getElementById('notifInput').value = '';
                     btn.disabled = false;
-                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send'; })
-                .catch(err => { alert('❌ ' + err.message);
+                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
+                })
+                .catch(err => {
+                    showToast('❌ ' + err.message, true);
                     btn.disabled = false;
-                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send'; });
+                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
+                });
         }
 
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); }
-
         function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
             document.getElementById('menuOverlay').classList.remove('active'); }
 
@@ -569,41 +586,36 @@
             if (user && localStorage.getItem('autoView') !== 'false') {
                 db.ref('notifications').once('value', snap => {
                     const notifs = snap.val();
-                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + user.uid)
-                        .set(true));
+                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + user.uid).set(true));
                 });
                 document.getElementById('notifDot').classList.remove('show');
             }
         }
 
-        function goHome() { closeMenu();
-            window.location.href = '../index.html'; }
-
-        function goHistory() { closeMenu();
-            alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
-
-        function goTopup() { closeMenu();
-            alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
-
-        function goSupport() { closeMenu();
-            alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
-
+        function goHome() { closeMenu(); window.location.href = '../index.html'; }
+        function goHistory() { closeMenu(); alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
+        function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
+        function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
         function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
-
         function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
-
         function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
 
-        function logout() { if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) auth.signOut().then(() => window.location.replace(
-                'login.html')); }
+        function logout() {
+            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+                auth.signOut().then(() => window.location.replace('login.html'));
+            }
+        }
 
-        document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         window.addEventListener('storage', function(e) {
-            if (e.key === 'lang') { lang = e.newValue || 'vi';
-                applyLang(); }
+            if (e.key === 'lang') { lang = e.newValue || 'vi'; applyLang(); }
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
+
+        console.log('✅ Admin panel loaded!');
     </script>
 </body>
 </html>
