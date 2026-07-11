@@ -317,6 +317,7 @@
 
         let lang = localStorage.getItem('lang') || 'vi';
         let currentUser = null;
+        let isDataLoaded = false;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -350,7 +351,65 @@
             overlay.classList.remove('hidden');
         }
 
-        // ===== TẠO TOKEN DUY NHẤT =====
+        // ===== KIỂM TRA QUICK LOGIN =====
+        function checkQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            const quickPending = localStorage.getItem('quickLoginPending');
+            return !!(quickUid && quickToken && quickPending === 'true');
+        }
+
+        // ===== COMPLETE QUICK LOGIN =====
+        async function completeQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            if (!quickUid) return false;
+            
+            try {
+                // Lấy dữ liệu user từ database
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const data = snap.val();
+                if (data) {
+                    // Cập nhật UI
+                    const name = data.displayName || data.email || 'U';
+                    document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
+                    document.getElementById('userName').textContent = name;
+                    document.getElementById('userEmail').textContent = data.email || '';
+                    document.getElementById('displayEmail').textContent = data.email || 'Chưa có';
+                    document.getElementById('displayName').textContent = data.displayName || 'Chưa cập nhật';
+                    document.getElementById('displayUid').textContent = quickUid;
+                    document.getElementById('displayCreated').textContent = data.createdAt ? new Date(data.createdAt).toLocaleString('vi-VN') : '---';
+                    
+                    const balance = data.balance || 0;
+                    document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
+                    document.getElementById('profileBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
+                    document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge">👑 ADMIN</span>' : '';
+                    
+                    if (data.quickToken) {
+                        document.getElementById('tokenDisplay').textContent = data.quickToken;
+                        document.getElementById('tokenStatus').textContent = '✅ Token đã sẵn sàng!';
+                        document.getElementById('tokenStatus').style.color = 'var(--success)';
+                    } else {
+                        document.getElementById('tokenDisplay').textContent = 'Chưa có token';
+                        document.getElementById('tokenStatus').textContent = '⚠️ Bạn chưa tạo token. Nhấn "Tạo mới" để tạo!';
+                        document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
+                    }
+                    
+                    // Cập nhật presence
+                    await db.ref('presence/' + quickUid).set(true);
+                    db.ref('presence/' + quickUid).onDisconnect().set(false);
+                    
+                    isDataLoaded = true;
+                    hideLoading();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Lỗi complete quick login:', error);
+                return false;
+            }
+        }
+
+        // ===== TẠO TOKEN =====
         function generateUniqueToken() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let token = '';
@@ -364,8 +423,14 @@
         // ===== RESET TOKEN =====
         async function resetToken() {
             if (!currentUser) {
-                alert('Vui lòng đăng nhập!');
-                return;
+                // Nếu không có user, thử lấy từ quick login
+                const quickUid = localStorage.getItem('quickLoginUid');
+                if (quickUid) {
+                    currentUser = { uid: quickUid };
+                } else {
+                    alert('Vui lòng đăng nhập!');
+                    return;
+                }
             }
             
             const btn = document.getElementById('resetTokenBtn');
@@ -427,7 +492,16 @@
         }
 
         // ===== AUTH STATE =====
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
+            // Nếu đã load data rồi thì không làm gì
+            if (isDataLoaded) return;
+            
+            // Kiểm tra quick login pending
+            if (checkQuickLogin()) {
+                const success = await completeQuickLogin();
+                if (success) return;
+            }
+            
             if (!user) { 
                 window.location.replace('../Authenticator/login.html'); 
                 return; 
@@ -464,7 +538,10 @@
                         document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
                     }
                 }
-                hideLoading();
+                if (!isDataLoaded) {
+                    isDataLoaded = true;
+                    hideLoading();
+                }
             });
 
             db.ref('notifications').on('value', snap => {
@@ -546,7 +623,8 @@
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginEmail');
-                    localStorage.removeItem('quickLoginSuccess');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
                     window.location.replace('../Authenticator/login.html');
                 });
             }
@@ -563,7 +641,9 @@
 
         // Ẩn loading sau 5s nếu không có gì xảy ra
         setTimeout(() => {
-            hideLoading();
+            if (!isDataLoaded) {
+                hideLoading();
+            }
         }, 5000);
     </script>
 </body>
