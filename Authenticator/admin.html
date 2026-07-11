@@ -26,7 +26,7 @@
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
         
-        /* === MENU ICON - GIÃN ĐỀU === */
+        /* Menu icon - thanh trên xuống dưới 1 nấc, thanh dưới lên trên 1 nấc */
         .menu-icon { 
             cursor: pointer; 
             padding: 8px 12px; 
@@ -51,8 +51,10 @@
             border-radius: 4px; 
             transition: 0.3s;
         }
-        .menu-icon .bar:nth-child(1) { transform: translateY(-3px); }
-        .menu-icon .bar:nth-child(3) { transform: translateY(3px); }
+        /* Thanh trên xuống dưới 1 nấc */
+        .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
+        /* Thanh dưới lên trên 1 nấc */
+        .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -176,7 +178,7 @@
         .status-dot.offline { background: #95a5a6; }
         .status-dot.blocked { background: #f39c12; }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } }
     </style>
 </head>
 <body>
@@ -198,7 +200,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">KuanZ<span>Game</span></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -290,7 +292,6 @@
         let isAdmin = false;
         let lang = localStorage.getItem('lang') || 'vi';
         let loadingUsers = false;
-        // Lưu trạng thái online của users
         let onlineUsersMap = {};
 
         const translations = {
@@ -354,69 +355,20 @@
             document.getElementById('notifForm').style.display = show ? 'none' : 'block';
         }
 
-        // === CHECK ONLINE ===
         function isUserOnline(lastLogin) {
             if (!lastLogin) return false;
             const now = Date.now();
             const diff = now - lastLogin;
-            return diff < 5 * 60 * 1000; // 5 phút
+            return diff < 5 * 60 * 1000;
         }
 
-        // Cập nhật online status từ Firebase Presence
-        function updateOnlineStatus(userId, isOnline) {
-            onlineUsersMap[userId] = isOnline;
-            // Cập nhật giao diện nếu đang hiển thị
-            updateUserStatusDisplay(userId);
-        }
-
-        function updateUserStatusDisplay(userId) {
-            // Tìm row của user và cập nhật status
-            const rows = document.querySelectorAll('#userTableBody tr');
-            rows.forEach(row => {
-                const uidCell = row.querySelector('.user-uid-hidden');
-                if (uidCell && uidCell.textContent === userId) {
-                    const statusCell = row.querySelector('.status-cell');
-                    if (statusCell) {
-                        const isOnline = onlineUsersMap[userId] || false;
-                        const isBlocked = statusCell.dataset.blocked === 'true';
-                        const isAdminUser = statusCell.dataset.admin === 'true';
-                        
-                        let statusText, statusClass, statusDot;
-                        if (isAdminUser) {
-                            statusText = '👑 Admin';
-                            statusClass = 'admin';
-                            statusDot = '';
-                        } else if (isBlocked) {
-                            statusText = '🔒 Đã khóa';
-                            statusClass = 'blocked';
-                            statusDot = '<span class="status-dot blocked"></span>';
-                        } else if (isOnline) {
-                            statusText = '🟢 Online';
-                            statusClass = 'active';
-                            statusDot = '<span class="status-dot online"></span>';
-                        } else {
-                            statusText = '⚪ Offline';
-                            statusClass = 'inactive';
-                            statusDot = '<span class="status-dot offline"></span>';
-                        }
-                        statusCell.innerHTML = statusDot + '<span class="badge ' + statusClass + '">' + statusText + '</span>';
-                    }
-                }
-            });
-        }
-
-        // Theo dõi trạng thái online của tất cả users
         function watchOnlineStatus() {
-            // Sử dụng presence của Firebase Realtime Database
-            // Mỗi user khi online sẽ update /presence/{uid} = true
             const presenceRef = db.ref('presence');
             presenceRef.on('value', (snapshot) => {
                 const data = snapshot.val() || {};
-                // Cập nhật map online
                 Object.keys(data).forEach(uid => {
                     onlineUsersMap[uid] = data[uid] === true;
                 });
-                // Refresh UI
                 if (!loadingUsers) {
                     Object.keys(onlineUsersMap).forEach(uid => {
                         updateUserStatusDisplay(uid);
@@ -425,15 +377,11 @@
             });
         }
 
-        // Bắt đầu theo dõi online
         watchOnlineStatus();
 
-        // Khi user đăng nhập, update presence
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Set online
                 db.ref('presence/' + user.uid).set(true);
-                // Khi disconnect, set offline
                 db.ref('presence/' + user.uid).onDisconnect().set(false);
             }
         });
@@ -507,7 +455,6 @@
                         const bal = u.balance || 0;
                         totalBal += bal;
                         
-                        // Kiểm tra online từ presence
                         const isOnline = onlineUsersMap[key] || false;
                         if (isOnline && !isBlocked && !isAdminUser) online++;
                         
@@ -714,7 +661,6 @@
 
         function logout() {
             if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
-                // Khi logout, set offline
                 const user = auth.currentUser;
                 if (user) {
                     db.ref('presence/' + user.uid).set(false);
