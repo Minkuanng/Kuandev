@@ -10,7 +10,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-        /* ===== THEME VARIABLES ===== */
         :root {
             --bg-body: #f0f7ff;
             --bg-card: rgba(255,255,255,0.95);
@@ -26,133 +25,15 @@
             --link-color: #007bff;
         }
 
-        /* ===== 10 THEMES ===== */
-        .theme-galaxy {
-            --bg-body: #0a0a1a;
-            --bg-card: rgba(18,18,42,0.95);
-            --text-primary: #c8b8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #6a5a9a;
-            --border-color: rgba(42,42,90,0.5);
-            --input-bg: #1a1a3e;
-            --input-border: #2a2a5a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #6a5a9a, #8a7aff);
-            --btn-hover: linear-gradient(135deg, #8a7aff, #a89aff);
-            --link-color: #8a7aff;
-        }
-        .theme-ocean {
-            --bg-body: #0a1628;
-            --bg-card: rgba(15,42,74,0.95);
-            --text-primary: #7fc8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a6a8a;
-            --border-color: rgba(26,58,106,0.5);
-            --input-bg: #0d2847;
-            --input-border: #1a3a6a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a6a8a, #4a9aff);
-            --btn-hover: linear-gradient(135deg, #4a9aff, #5aaaff);
-            --link-color: #4a9aff;
-        }
-        .theme-forest {
-            --bg-body: #0a1a0a;
-            --bg-card: rgba(15,42,15,0.95);
-            --text-primary: #7fdf7f;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a7a3a;
-            --border-color: rgba(26,74,26,0.5);
-            --input-bg: #0d2a0d;
-            --input-border: #1a4a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a7a3a, #4abf4a);
-            --btn-hover: linear-gradient(135deg, #4abf4a, #5adf5a);
-            --link-color: #4abf4a;
-        }
-        .theme-sunset {
-            --bg-body: #1a0a0a;
-            --bg-card: rgba(42,18,10,0.95);
-            --text-primary: #ffb87f;
-            --text-secondary: #e8e8e8;
-            --text-muted: #9a6a3a;
-            --border-color: rgba(90,42,26,0.5);
-            --input-bg: #3e1a0a;
-            --input-border: #5a2a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #9a6a3a, #ff8a4a);
-            --btn-hover: linear-gradient(135deg, #ff8a4a, #ff9a5a);
-            --link-color: #ff8a4a;
-        }
-        .theme-cherry {
-            --bg-body: #1a0a12;
-            --bg-card: rgba(42,10,22,0.95);
-            --text-primary: #ff7fa8;
-            --text-secondary: #e8e8e8;
-            --text-muted: #9a3a5a;
-            --border-color: rgba(90,26,42,0.5);
-            --input-bg: #3e0a1a;
-            --input-border: #5a1a2a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #9a3a5a, #ff4a7a);
-            --btn-hover: linear-gradient(135deg, #ff4a7a, #ff5a8a);
-            --link-color: #ff4a7a;
-        }
-        .theme-neon {
-            --bg-body: #0a0a0a;
-            --bg-card: rgba(18,18,18,0.95);
-            --text-primary: #00ff88;
-            --text-secondary: #e8e8e8;
-            --text-muted: #666666;
-            --border-color: rgba(51,51,51,0.5);
-            --input-bg: #1a1a1a;
-            --input-border: #333333;
-            --shadow: 0 10px 40px rgba(0,0,0,0.6);
-            --btn-bg: linear-gradient(135deg, #00cc66, #00ff88);
-            --btn-hover: linear-gradient(135deg, #00ff88, #00ccff);
-            --link-color: #00ff88;
-        }
-        .theme-lavender {
-            --bg-body: #1a0a2a;
-            --bg-card: rgba(34,26,58,0.95);
-            --text-primary: #d4a8ff;
-            --text-secondary: #e8e8e8;
-            --text-muted: #7a5a9a;
-            --border-color: rgba(58,42,90,0.5);
-            --input-bg: #2a1a3e;
-            --input-border: #3a2a5a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #7a5a9a, #b87aff);
-            --btn-hover: linear-gradient(135deg, #b87aff, #d4a8ff);
-            --link-color: #b87aff;
-        }
-        .theme-mint {
-            --bg-body: #0a1a12;
-            --bg-card: rgba(15,42,26,0.95);
-            --text-primary: #7fffd4;
-            --text-secondary: #e8e8e8;
-            --text-muted: #3a7a6a;
-            --border-color: rgba(26,74,58,0.5);
-            --input-bg: #0d2a1a;
-            --input-border: #1a4a3a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #3a7a6a, #4abfa0);
-            --btn-hover: linear-gradient(135deg, #4abfa0, #7fffd4);
-            --link-color: #4abfa0;
-        }
-        .theme-coffee {
-            --bg-body: #1a0f0a;
-            --bg-card: rgba(34,26,18,0.95);
-            --text-primary: #d4b896;
-            --text-secondary: #e8e8e8;
-            --text-muted: #7a6a5a;
-            --border-color: rgba(58,42,26,0.5);
-            --input-bg: #2a1a12;
-            --input-border: #3a2a1a;
-            --shadow: 0 10px 40px rgba(0,0,0,0.4);
-            --btn-bg: linear-gradient(135deg, #7a6a5a, #b8987a);
-            --btn-hover: linear-gradient(135deg, #b8987a, #d4b896);
-            --link-color: #b8987a;
-        }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: rgba(18,18,42,0.95); --text-primary: #c8b8ff; --text-secondary: #e8e8e8; --text-muted: #6a5a9a; --border-color: rgba(42,42,90,0.5); --input-bg: #1a1a3e; --input-border: #2a2a5a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #6a5a9a, #8a7aff); --btn-hover: linear-gradient(135deg, #8a7aff, #a89aff); --link-color: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: rgba(15,42,74,0.95); --text-primary: #7fc8ff; --text-secondary: #e8e8e8; --text-muted: #3a6a8a; --border-color: rgba(26,58,106,0.5); --input-bg: #0d2847; --input-border: #1a3a6a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a6a8a, #4a9aff); --btn-hover: linear-gradient(135deg, #4a9aff, #5aaaff); --link-color: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: rgba(15,42,15,0.95); --text-primary: #7fdf7f; --text-secondary: #e8e8e8; --text-muted: #3a7a3a; --border-color: rgba(26,74,26,0.5); --input-bg: #0d2a0d; --input-border: #1a4a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a7a3a, #4abf4a); --btn-hover: linear-gradient(135deg, #4abf4a, #5adf5a); --link-color: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: rgba(42,18,10,0.95); --text-primary: #ffb87f; --text-secondary: #e8e8e8; --text-muted: #9a6a3a; --border-color: rgba(90,42,26,0.5); --input-bg: #3e1a0a; --input-border: #5a2a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #9a6a3a, #ff8a4a); --btn-hover: linear-gradient(135deg, #ff8a4a, #ff9a5a); --link-color: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: rgba(42,10,22,0.95); --text-primary: #ff7fa8; --text-secondary: #e8e8e8; --text-muted: #9a3a5a; --border-color: rgba(90,26,42,0.5); --input-bg: #3e0a1a; --input-border: #5a1a2a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #9a3a5a, #ff4a7a); --btn-hover: linear-gradient(135deg, #ff4a7a, #ff5a8a); --link-color: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: rgba(18,18,18,0.95); --text-primary: #00ff88; --text-secondary: #e8e8e8; --text-muted: #666666; --border-color: rgba(51,51,51,0.5); --input-bg: #1a1a1a; --input-border: #333333; --shadow: 0 10px 40px rgba(0,0,0,0.6); --btn-bg: linear-gradient(135deg, #00cc66, #00ff88); --btn-hover: linear-gradient(135deg, #00ff88, #00ccff); --link-color: #00ff88; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: rgba(34,26,58,0.95); --text-primary: #d4a8ff; --text-secondary: #e8e8e8; --text-muted: #7a5a9a; --border-color: rgba(58,42,90,0.5); --input-bg: #2a1a3e; --input-border: #3a2a5a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #7a5a9a, #b87aff); --btn-hover: linear-gradient(135deg, #b87aff, #d4a8ff); --link-color: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: rgba(15,42,26,0.95); --text-primary: #7fffd4; --text-secondary: #e8e8e8; --text-muted: #3a7a6a; --border-color: rgba(26,74,58,0.5); --input-bg: #0d2a1a; --input-border: #1a4a3a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #3a7a6a, #4abfa0); --btn-hover: linear-gradient(135deg, #4abfa0, #7fffd4); --link-color: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: rgba(34,26,18,0.95); --text-primary: #d4b896; --text-secondary: #e8e8e8; --text-muted: #7a6a5a; --border-color: rgba(58,42,26,0.5); --input-bg: #2a1a12; --input-border: #3a2a1a; --shadow: 0 10px 40px rgba(0,0,0,0.4); --btn-bg: linear-gradient(135deg, #7a6a5a, #b8987a); --btn-hover: linear-gradient(135deg, #b8987a, #d4b896); --link-color: #b8987a; }
 
         body.dark-mode {
             --bg-body: #1a1a2e;
@@ -276,6 +157,7 @@
         .links { text-align: center; margin-top: 18px; }
         .links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s; font-weight: 500; cursor: pointer; }
         .links a:hover { color: var(--text-primary); text-decoration: underline; }
+        .links .sep { color: var(--text-muted); margin: 0 8px; }
 
         .message {
             padding: 12px 16px;
@@ -314,7 +196,6 @@
         .divider::before { left: 0; }
         .divider::after { right: 0; }
 
-        /* ===== ĐIỀU KHOẢN & CHÍNH SÁCH ===== */
         .terms-section {
             margin-top: 20px;
             padding-top: 16px;
@@ -428,15 +309,14 @@
                 <div class="password-hint">* Mật khẩu phải có ít nhất 6 ký tự</div>
             </div>
 
-            <!-- ===== ĐIỀU KHOẢN & CHÍNH SÁCH ===== -->
             <div class="terms-section">
                 <label class="terms-checkbox">
                     <input type="checkbox" id="termsCheckbox">
                     <span class="terms-text">
                         Tôi đồng ý với 
-                        <span class="link" onclick="event.preventDefault(); window.location.href='clause.html'">Điều khoản</span>
+                        <span class="link" onclick="event.preventDefault(); window.location.href='../Assets/Terms-of-Service.html'">Điều khoản</span>
                         và 
-                        <span class="link-policy" onclick="event.preventDefault(); window.location.href='policy.html'">Chính sách</span>
+                        <span class="link-policy" onclick="event.preventDefault(); window.location.href='../Assets/Privacy-Policy.html'">Chính sách</span>
                         của chúng tôi
                     </span>
                 </label>
@@ -460,6 +340,8 @@
 
         <div class="links">
             <a onclick="window.location.href='login.html'">← Quay lại đăng nhập</a>
+            <span class="sep">|</span>
+            <a onclick="window.location.href='quick-login.html'">⚡ Đăng nhập nhanh</a>
         </div>
     </div>
 
@@ -471,24 +353,19 @@
             projectId: "shop-c6777",
             storageBucket: "shop-c6777.firebasestorage.app",
             messagingSenderId: "43186563268",
-            appId: "1:43186563268:web:0d392ba57039a919670191",
-            measurementId: "G-445DCB6NV0"
+            appId: "1:43186563268:web:0d392ba57039a919670191"
         };
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // ===== KHÔI PHỤC THEME =====
         function applyTheme() {
-            // Dark mode
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             } else {
                 document.body.classList.remove('dark-mode');
             }
-            
-            // Theme color (10 themes)
             const savedTheme = localStorage.getItem('theme_name') || 'default';
             document.body.classList.remove(
                 'theme-galaxy', 'theme-ocean', 'theme-forest', 
@@ -500,17 +377,14 @@
             }
         }
 
-        // Áp dụng theme ngay khi load
         applyTheme();
 
-        // Lắng nghe thay đổi theme từ localStorage (khi settings thay đổi)
         window.addEventListener('storage', function(e) {
             if (e.key === 'theme' || e.key === 'theme_name') {
                 applyTheme();
             }
         });
 
-        // ===== DOM ELEMENTS =====
         const signupForm = document.getElementById('signupForm');
         const fullNameInput = document.getElementById('fullName');
         const emailInput = document.getElementById('email');
@@ -543,11 +417,9 @@
             setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
         }
 
-        // ===== ĐĂNG KÝ EMAIL =====
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // ===== KIỂM TRA ĐIỀU KHOẢN =====
             if (!termsCheckbox.checked) {
                 termsError.classList.add('show');
                 termsCheckbox.style.borderColor = '#e74c6f';
@@ -613,9 +485,7 @@
             }
         });
 
-        // ===== ĐĂNG KÝ GOOGLE =====
         googleSignupBtn.addEventListener('click', async () => {
-            // ===== KIỂM TRA ĐIỀU KHOẢN =====
             if (!termsCheckbox.checked) {
                 termsError.classList.add('show');
                 termsCheckbox.style.borderColor = '#e74c6f';
@@ -659,7 +529,6 @@
             }
         });
 
-        // Focus vào ô Họ tên
         fullNameInput.focus();
         
     </script>
