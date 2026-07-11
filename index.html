@@ -128,7 +128,6 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        /* Loading overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -185,7 +184,6 @@
 </head>
 <body>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text">⏳ Đang tải dữ liệu...</div>
@@ -315,6 +313,7 @@
 
         let lang = localStorage.getItem('lang') || 'vi';
         let isRedirecting = false;
+        let isDataLoaded = false;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -351,8 +350,63 @@
         // ===== KIỂM TRA QUICK LOGIN =====
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
-            const quickSuccess = localStorage.getItem('quickLoginSuccess');
-            return !!(quickUid && quickSuccess === 'true');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            const quickPending = localStorage.getItem('quickLoginPending');
+            return !!(quickUid && quickToken && quickPending === 'true');
+        }
+
+        // ===== COMPLETE QUICK LOGIN =====
+        async function completeQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            
+            if (!quickUid || !quickToken) return false;
+            
+            try {
+                // Xóa pending flag
+                localStorage.removeItem('quickLoginPending');
+                
+                // Cập nhật presence
+                await db.ref('presence/' + quickUid).set(true);
+                db.ref('presence/' + quickUid).onDisconnect().set(false);
+                
+                // Lấy dữ liệu user
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const data = snap.val();
+                if (data) {
+                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
+                }
+                
+                // Load notifications
+                db.ref('notifications').on('value', snap => {
+                    const notifs = snap.val();
+                    const list = document.getElementById('notifList');
+                    const dot = document.getElementById('notifDot');
+                    if (notifs) {
+                        const keys = Object.keys(notifs).reverse();
+                        let html = '',
+                            hasUnread = false;
+                        keys.forEach(key => {
+                            const n = notifs[key];
+                            const isUnread = !n.readBy || !n.readBy[quickUid];
+                            if (isUnread) hasUnread = true;
+                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        });
+                        list.innerHTML = html;
+                        dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                    } else { 
+                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        dot.classList.remove('show'); 
+                    }
+                });
+                
+                isDataLoaded = true;
+                hideLoading();
+                return true;
+            } catch (error) {
+                console.error('Lỗi complete quick login:', error);
+                return false;
+            }
         }
 
         // ===== XỬ LÝ AUTH STATE =====
@@ -360,11 +414,18 @@
             // Nếu đang chuyển hướng thì không làm gì
             if (isRedirecting) return;
             
-            // Nếu đã đăng nhập bằng quick login
+            // Nếu đã load data rồi thì không làm gì
+            if (isDataLoaded) return;
+            
+            // Kiểm tra quick login pending
             if (checkQuickLogin()) {
-                // Xóa flag để không bị lặp
-                localStorage.removeItem('quickLoginSuccess');
-                hideLoading();
+                const success = await completeQuickLogin();
+                if (success) return;
+                // Nếu fail thì xóa và chuyển về login
+                localStorage.removeItem('quickLoginUid');
+                localStorage.removeItem('quickLoginToken');
+                localStorage.removeItem('quickLoginPending');
+                window.location.replace('Authenticator/login.html');
                 return;
             }
             
@@ -394,7 +455,10 @@
                     if (data) {
                         document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     }
-                    hideLoading();
+                    if (!isDataLoaded) {
+                        isDataLoaded = true;
+                        hideLoading();
+                    }
                 });
 
                 // Lấy thông báo
@@ -425,6 +489,7 @@
             }
         });
 
+        // ===== MENU FUNCTIONS =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -486,7 +551,8 @@
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginEmail');
-                    localStorage.removeItem('quickLoginSuccess');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
                     window.location.replace('Authenticator/login.html');
                 });
             }
@@ -503,7 +569,9 @@
 
         // Ẩn loading sau 5s nếu không có gì xảy ra (phòng trường hợp lỗi)
         setTimeout(() => {
-            hideLoading();
+            if (!isDataLoaded) {
+                hideLoading();
+            }
         }, 5000);
     </script>
 </body>
