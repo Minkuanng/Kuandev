@@ -290,7 +290,24 @@
         applyTheme();
         applyLang();
 
+        // ===== KIỂM TRA QUICK LOGIN =====
+        function checkQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickSuccess = localStorage.getItem('quickLoginSuccess');
+            if (quickUid && quickSuccess === 'true') {
+                // Xóa flag để không bị lặp
+                // localStorage.removeItem('quickLoginSuccess');
+                return true;
+            }
+            return false;
+        }
+
         auth.onAuthStateChanged((user) => {
+            // Nếu đã đăng nhập bằng quick login
+            if (checkQuickLogin()) {
+                return;
+            }
+            
             if (!user) { 
                 window.location.replace('Authenticator/login.html'); 
                 return; 
@@ -383,6 +400,7 @@
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginEmail');
+                    localStorage.removeItem('quickLoginSuccess');
                     window.location.replace('Authenticator/login.html');
                 });
             }
