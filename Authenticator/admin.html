@@ -9,17 +9,17 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; }
-        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; }
-        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; }
-        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; }
-        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; }
-        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; }
-        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; }
-        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; }
-        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; }
-        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; }
-        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --accent: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --accent: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --accent: #00ccff; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --accent: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
+        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
         .header-left { display: flex; align-items: center; gap: 16px; }
@@ -30,10 +30,63 @@
         .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
         .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .wallet { background: var(--wallet-bg); padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: flex-end; line-height: 1.4; transition: 0.3s; }
-        .wallet .vnd { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-        .wallet .usd { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-        .wallet .usd span { color: var(--text-secondary); font-weight: 600; }
+
+        /* Wallet mới - hình chữ nhật với ví bên trong */
+        .wallet-container {
+            background: var(--wallet-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px 16px 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            cursor: default;
+            min-height: 44px;
+        }
+        .wallet-container:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 143, 214, 0.1);
+        }
+        .wallet-icon-box {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .wallet-icon-box svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+        }
+        .wallet-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+        .wallet-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .wallet-balance {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .wallet-balance span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-left: 2px;
+        }
+
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
         .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
@@ -89,6 +142,8 @@
         .btn-action.block:hover { background: #e74c6f; color: #fff; }
         .btn-action.unblock { background: #d4edda; color: #27ae60; border: 1px solid #c8e6d0; }
         .btn-action.unblock:hover { background: #27ae60; color: #fff; }
+        .btn-action.delete { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
+        .btn-action.delete:hover { background: #c0392b; color: #fff; }
         .notif-form { margin-top: 16px; padding: 16px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); display: flex; gap: 10px; flex-wrap: wrap; }
         .notif-form input { flex: 1; padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 150px; transition: 0.3s; }
         .notif-form input:focus { outline: none; border-color: var(--text-secondary); }
@@ -96,7 +151,7 @@
         .notif-form .btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 360px; width: 90%; border: 1px solid var(--border-color); }
+        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 380px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
         .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 12px; }
         .modal .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; }
         .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 60px; }
@@ -112,11 +167,15 @@
         .modal .actions .lock:hover { transform: translateY(-2px); }
         .modal .actions .unlock { background: #3498db; color: #fff; }
         .modal .actions .unlock:hover { transform: translateY(-2px); }
+        .modal .actions .delete { background: #c0392b; color: #fff; }
+        .modal .actions .delete:hover { transform: translateY(-2px); }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
         .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
         .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .wallet { font-size: 11px; padding: 3px 10px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } }
+        .refresh-btn { background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: 0.3s; }
+        .refresh-btn:hover { background: var(--hover-bg); }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } }
     </style>
 </head>
 <body>
@@ -133,13 +192,22 @@
     <header class="header">
         <div class="header-left">
             <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
-            <div class="logo">KuanZ<span>Game</span></div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
-            <div class="wallet">
-                <span class="vnd">💰 <span id="balanceAmount">0</span> VND</span>
-                <span class="usd">💵 <span id="balanceUSD">0.00</span> USD</span>
+            <!-- Wallet mới - hình chữ nhật với ví bên trong -->
+            <div class="wallet-container">
+                <div class="wallet-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                    </svg>
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-label">Số dư</span>
+                    <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
+                </div>
             </div>
+
             <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
@@ -161,7 +229,7 @@
 
     <div class="content">
         <div class="admin-card">
-            <h1>👑 <span data-key="admin_title">Quản trị</span></h1>
+            <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshUsers()">🔄 Làm mới</button></h1>
             <p class="sub" data-key="admin_sub">Quản lý người dùng và hệ thống</p>
             <div id="loadingIndicator" class="loading" data-key="loading">Đang tải...</div>
             <div class="stats" id="stats" style="display:none;">
@@ -184,13 +252,15 @@
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h3 id="modalTitle" data-key="modal_title">Quản lý user</h3>
-            <div class="row"><label data-key="user_label">User:</label><span id="modalUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label data-key="user_label">User:</label><span id="modalUserName" style="color:var(--text-primary);font-weight:600;word-break:break-all;"></span></div>
+            <div class="row"><label data-key="uid_label">UID:</label><span id="modalUserUid" style="color:var(--text-muted);font-size:11px;word-break:break-all;"></span></div>
             <div class="row"><label data-key="amount_label">Số tiền:</label><input type="number" id="modalAmount" placeholder="Nhập số tiền..." /></div>
             <div class="actions">
                 <button class="add" onclick="modalAction('add')" data-key="add_btn">➕ Cộng</button>
                 <button class="sub" onclick="modalAction('sub')" data-key="sub_btn">➖ Trừ</button>
                 <button class="lock" onclick="modalAction('lock')" data-key="lock_btn">🔒 Khóa</button>
                 <button class="unlock" onclick="modalAction('unlock')" data-key="unlock_btn">🔓 Mở</button>
+                <button class="delete" onclick="modalAction('delete')" data-key="delete_btn">🗑️ Xóa</button>
                 <button class="cancel" onclick="closeModal()" data-key="close_btn">Đóng</button>
             </div>
         </div>
@@ -210,7 +280,6 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        const EXCHANGE_RATE = 25000;
         let selectedUid = null;
         let isAdmin = false;
         let lang = localStorage.getItem('lang') || 'vi';
@@ -225,8 +294,9 @@
                 blocked_users: 'Đã khóa', total_balance: 'Tổng số dư',
                 stt: 'STT', name: 'Tên', email: 'Email', balance: 'Số dư', status: 'Trạng thái', action: 'Thao tác',
                 no_data: 'Không có dữ liệu', send_btn: '📢 Gửi', back: '← Quay lại',
-                modal_title: 'Quản lý user', user_label: 'User:', amount_label: 'Số tiền:',
-                add_btn: '➕ Cộng', sub_btn: '➖ Trừ', lock_btn: '🔒 Khóa', unlock_btn: '🔓 Mở', close_btn: 'Đóng'
+                modal_title: 'Quản lý user', user_label: 'User:', uid_label: 'UID:', amount_label: 'Số tiền:',
+                add_btn: '➕ Cộng', sub_btn: '➖ Trừ', lock_btn: '🔒 Khóa', unlock_btn: '🔓 Mở', 
+                delete_btn: '🗑️ Xóa', close_btn: 'Đóng'
             },
             en: {
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
@@ -237,8 +307,9 @@
                 blocked_users: 'Blocked', total_balance: 'Total balance',
                 stt: 'No.', name: 'Name', email: 'Email', balance: 'Balance', status: 'Status', action: 'Action',
                 no_data: 'No data', send_btn: '📢 Send', back: '← Back',
-                modal_title: 'Manage User', user_label: 'User:', amount_label: 'Amount:',
-                add_btn: '➕ Add', sub_btn: '➖ Sub', lock_btn: '🔒 Lock', unlock_btn: '🔓 Unlock', close_btn: 'Close'
+                modal_title: 'Manage User', user_label: 'User:', uid_label: 'UID:', amount_label: 'Amount:',
+                add_btn: '➕ Add', sub_btn: '➖ Sub', lock_btn: '🔒 Lock', unlock_btn: '🔓 Unlock',
+                delete_btn: '🗑️ Delete', close_btn: 'Close'
             }
         };
 
@@ -267,6 +338,14 @@
             document.getElementById('notifForm').style.display = show ? 'none' : 'block';
         }
 
+        function refreshUsers() {
+            showLoading(true);
+            setTimeout(() => {
+                loadUsers();
+                setTimeout(() => showLoading(false), 800);
+            }, 300);
+        }
+
         auth.onAuthStateChanged((user) => {
             if (!user) { window.location.replace('login.html'); return; }
             db.ref('users/' + user.uid).once('value', snap => {
@@ -284,7 +363,6 @@
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 const balance = snap.val() || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
-                document.getElementById('balanceUSD').textContent = (balance / EXCHANGE_RATE).toFixed(2);
             });
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
@@ -309,6 +387,7 @@
         });
 
         function loadUsers() {
+            db.ref('users').off();
             db.ref('users').on('value', snap => {
                 const users = snap.val();
                 const tbody = document.getElementById('userTableBody');
@@ -330,10 +409,22 @@
                         else active++;
                         const bal = u.balance || 0;
                         totalBal += bal;
-                        html += `<tr><td>${count}</td><td>${u.displayName || 'Chưa đặt tên'}</td><td>${u.email || 'Không có email'}</td><td>${bal.toLocaleString('vi-VN')} VND</td>
+                        const name = u.displayName || u.email || 'Chưa đặt tên';
+                        const email = u.email || 'Không có email';
+                        const displayName = name.length > 20 ? name.substring(0, 20) + '...' : name;
+                        const displayEmail = email.length > 25 ? email.substring(0, 25) + '...' : email;
+                        html += `<tr>
+                            <td>${count}</td>
+                            <td title="${name}">${displayName}</td>
+                            <td title="${email}">${displayEmail}</td>
+                            <td>${bal.toLocaleString('vi-VN')} VND</td>
                             <td><span class="badge ${isBlocked?'blocked':'active'}">${isBlocked?'🔒 Đã khóa':'✅ Hoạt động'}</span></td>
-                            <td><button class="btn-action edit" onclick="openModal('${key}','${(u.displayName||u.email||'User').replace(/'/g,"\\'")}')">✏️</button>
-                            <button class="btn-action ${isBlocked?'unblock':'block'}" onclick="toggleBlock('${key}',${isBlocked})">${isBlocked?'🔓 Mở':'🔒 Khóa'}</button></td></tr>`;
+                            <td>
+                                <button class="btn-action edit" onclick="openModal('${key}','${name.replace(/'/g,"\\'")}')" title="Quản lý">✏️</button>
+                                <button class="btn-action ${isBlocked?'unblock':'block'}" onclick="toggleBlock('${key}',${isBlocked})" title="${isBlocked?'Mở khóa':'Khóa'}">${isBlocked?'🔓':'🔒'}</button>
+                                <button class="btn-action delete" onclick="deleteUser('${key}','${name.replace(/'/g,"\\'")}')" title="Xóa">🗑️</button>
+                            </td>
+                        </tr>`;
                     });
                 }
                 if (!html) html =
@@ -350,6 +441,7 @@
             if (!isAdmin) return;
             selectedUid = uid;
             document.getElementById('modalUserName').textContent = name;
+            document.getElementById('modalUserUid').textContent = uid;
             document.getElementById('modalAmount').value = '';
             document.getElementById('modalOverlay').classList.add('active');
         }
@@ -359,6 +451,7 @@
 
         function modalAction(action) {
             if (!selectedUid || !isAdmin) return;
+            
             if (action === 'add' || action === 'sub') {
                 const amount = parseInt(document.getElementById('modalAmount').value);
                 if (!amount || amount <= 0) {
@@ -367,18 +460,31 @@
                 }
                 const ref = db.ref('users/' + selectedUid + '/balance');
                 ref.transaction(current => { const c = current || 0; return action === 'add' ? c + amount : c - amount; })
-                    .then(() => { alert(
-                            `${action==='add'?'✅ Cộng':'✅ Trừ'} ${amount.toLocaleString()} VND`);
-                        closeModal(); })
+                    .then(() => { 
+                        alert(`${action==='add'?'✅ Cộng':'✅ Trừ'} ${amount.toLocaleString()} VND thành công!`);
+                        closeModal(); 
+                    })
                     .catch(err => alert('❌ ' + err.message));
             } else if (action === 'lock') {
                 if (confirm(lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?'))
-                    db.ref('users/' + selectedUid + '/blocked').set(true).then(() => alert(
-                    '✅ Đã khóa!')).catch(err => alert('❌ ' + err.message));
+                    db.ref('users/' + selectedUid + '/blocked').set(true)
+                        .then(() => { alert('✅ Đã khóa!'); closeModal(); })
+                        .catch(err => alert('❌ ' + err.message));
             } else if (action === 'unlock') {
                 if (confirm(lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?'))
-                    db.ref('users/' + selectedUid + '/blocked').set(false).then(() => alert(
-                    '✅ Đã mở khóa!')).catch(err => alert('❌ ' + err.message));
+                    db.ref('users/' + selectedUid + '/blocked').set(false)
+                        .then(() => { alert('✅ Đã mở khóa!'); closeModal(); })
+                        .catch(err => alert('❌ ' + err.message));
+            } else if (action === 'delete') {
+                if (confirm(lang === 'vi' ? '🗑️ Xóa user này? (Không thể hoàn tác!)' : '🗑️ Delete this user? (Cannot undo!)')) {
+                    db.ref('users/' + selectedUid).remove()
+                        .then(() => { 
+                            alert(lang === 'vi' ? '✅ Đã xóa user!' : '✅ User deleted!');
+                            closeModal();
+                            refreshUsers();
+                        })
+                        .catch(err => alert('❌ ' + err.message));
+                }
             }
         }
 
@@ -387,8 +493,21 @@
             const newStatus = !current;
             if (confirm(newStatus ? (lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?') : (lang === 'vi' ?
                     '🔓 Mở khóa user này?' : '🔓 Unlock this user?'))) {
-                db.ref('users/' + uid + '/blocked').set(newStatus).then(() => alert(newStatus ? '✅ Đã khóa!' :
-                    '✅ Đã mở khóa!')).catch(err => alert('❌ ' + err.message));
+                db.ref('users/' + uid + '/blocked').set(newStatus)
+                    .then(() => { alert(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!'); })
+                    .catch(err => alert('❌ ' + err.message));
+            }
+        }
+
+        function deleteUser(uid, name) {
+            if (!isAdmin) return;
+            if (confirm(lang === 'vi' ? `🗑️ Xóa user "${name}"? (Không thể hoàn tác!)` : `🗑️ Delete user "${name}"? (Cannot undo!)`)) {
+                db.ref('users/' + uid).remove()
+                    .then(() => {
+                        alert(lang === 'vi' ? '✅ Đã xóa user!' : '✅ User deleted!');
+                        refreshUsers();
+                    })
+                    .catch(err => alert('❌ ' + err.message));
             }
         }
 
