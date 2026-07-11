@@ -63,7 +63,6 @@
         .subtitle-small { text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 28px; transition: color 0.3s; }
         .form-group { margin-bottom: 18px; }
         label { display: block; color: var(--text-muted); font-size: 14px; font-weight: 500; margin-bottom: 6px; transition: color 0.3s; }
-        .password-wrapper { position: relative; width: 100%; }
 
         input {
             width: 100%;
@@ -76,7 +75,6 @@
             color: var(--text-secondary);
         }
 
-        .password-wrapper input { padding-right: 45px; }
         input:focus { outline: none; border-color: #8fc1e0; box-shadow: 0 0 0 4px rgba(143,193,224,0.15); background: #ffffff; }
         body.dark-mode input:focus { border-color: #5a8fb5; box-shadow: 0 0 0 4px rgba(90,143,181,0.15); background: #1a2a4a; }
         input::placeholder { color: var(--text-muted); }
@@ -99,25 +97,10 @@
         .btn-primary:active { transform: translateY(0); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        .btn-secondary {
-            width: 100%;
-            padding: 12px;
-            background: transparent;
-            color: var(--text-muted);
-            border: 2px solid var(--input-border);
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 12px;
-        }
-
-        .btn-secondary:hover { background: var(--input-bg); border-color: #8fc1e0; }
-
         .links { text-align: center; margin-top: 18px; }
         .links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.3s; font-weight: 500; cursor: pointer; }
         .links a:hover { color: var(--text-primary); text-decoration: underline; }
+        .links .sep { color: var(--text-muted); margin: 0 8px; }
 
         .message {
             padding: 12px 16px;
@@ -156,81 +139,10 @@
         .divider::before { left: 0; }
         .divider::after { right: 0; }
 
-        .token-box {
-            background: var(--input-bg);
-            border: 2px solid var(--input-border);
-            border-radius: 12px;
-            padding: 14px 18px;
-            margin-top: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            transition: 0.3s;
-            word-break: break-all;
-        }
-        .token-box .token-key {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: 1px;
-        }
-        .token-box .copy-btn {
-            padding: 6px 16px;
-            background: var(--text-secondary);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            flex-shrink: 0;
-        }
-        .token-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
-        .token-box .copy-btn.copied { background: #27ae60; }
-
-        .token-info {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
-
-        .token-list {
-            margin-top: 16px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .token-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 13px;
-            color: var(--text-primary);
-        }
-        .token-item .token-id { font-family: monospace; font-size: 12px; color: var(--text-muted); }
-        .token-item .token-delete {
-            background: none;
-            border: none;
-            color: #e74c6f;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-        .token-item .token-delete:hover { background: #fef0f2; }
-
         @media (max-width: 480px) {
             .container { padding: 30px 20px; max-width: 100%; }
             h2 { font-size: 24px; }
-            .btn-primary, .btn-secondary { font-size: 15px; padding: 13px; }
-            .token-box { flex-direction: column; align-items: stretch; }
-            .token-box .copy-btn { margin-top: 6px; }
+            .btn-primary { font-size: 15px; padding: 13px; }
         }
     </style>
 </head>
@@ -251,27 +163,9 @@
 
         <div class="divider">hoặc</div>
 
-        <!-- Token Management -->
-        <div id="tokenSection" style="display:none;">
-            <div class="form-group">
-                <label>📋 Token của bạn</label>
-                <div class="token-box">
-                    <span class="token-key" id="currentToken">Chưa có token</span>
-                    <button class="copy-btn" id="copyTokenBtn" onclick="copyToken()">📋 Sao chép</button>
-                </div>
-                <div class="token-info">🔄 <span id="tokenStatus">Chưa tạo token</span></div>
-            </div>
-            <button class="btn-secondary" onclick="generateToken()">🔄 Tạo/Reset Token</button>
-
-            <div class="token-list" id="tokenHistoryList" style="display:none;">
-                <div style="font-size:12px;font-weight:600;color:var(--text-muted);padding:8px 0;">📜 Lịch sử Token</div>
-                <div id="tokenHistory"></div>
-            </div>
-        </div>
-
         <div class="links">
             <a onclick="window.location.href='login.html'">← Quay lại đăng nhập</a>
-            <span style="color:var(--text-muted);margin:0 8px;">|</span>
+            <span class="sep">|</span>
             <a onclick="window.location.href='signup.html'">📝 Đăng ký</a>
         </div>
     </div>
@@ -291,7 +185,6 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // ===== KHÔI PHỤC THEME =====
         function applyTheme() {
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -316,16 +209,8 @@
             }
         });
 
-        // ===== DOM ELEMENTS =====
         const tokenInput = document.getElementById('tokenInput');
         const messageDiv = document.getElementById('message');
-        const tokenSection = document.getElementById('tokenSection');
-        const currentTokenSpan = document.getElementById('currentToken');
-        const tokenStatus = document.getElementById('tokenStatus');
-        const tokenHistoryDiv = document.getElementById('tokenHistory');
-
-        let currentUser = null;
-        let currentToken = null;
 
         function showMessage(text, type) {
             messageDiv.textContent = text;
@@ -334,135 +219,6 @@
             setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
         }
 
-        // ===== TẠO TOKEN NGẪU NHIÊN =====
-        function generateRandomToken() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let token = '';
-            for (let i = 0; i < 24; i++) {
-                token += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return token;
-        }
-
-        // ===== LƯU TOKEN VÀO DATABASE =====
-        async function saveUserToken(uid, token) {
-            try {
-                // Lưu token mới
-                await db.ref('users/' + uid + '/quickToken').set(token);
-                // Lưu vào lịch sử token
-                const historyRef = db.ref('users/' + uid + '/tokenHistory');
-                const snapshot = await historyRef.once('value');
-                let history = snapshot.val() || [];
-                if (!Array.isArray(history)) history = [];
-                history.push({
-                    token: token,
-                    createdAt: new Date().toISOString(),
-                    used: false
-                });
-                // Giữ tối đa 10 token
-                if (history.length > 10) history = history.slice(-10);
-                await historyRef.set(history);
-                return true;
-            } catch (error) {
-                console.error('Lỗi lưu token:', error);
-                return false;
-            }
-        }
-
-        // ===== TẠO TOKEN MỚI =====
-        async function generateToken() {
-            if (!currentUser) {
-                showMessage('⚠️ Vui lòng đăng nhập để tạo token!', 'error');
-                return;
-            }
-
-            const btn = document.querySelector('.btn-secondary');
-            btn.disabled = true;
-            btn.textContent = '⏳ Đang tạo...';
-
-            try {
-                const newToken = generateRandomToken();
-                const success = await saveUserToken(currentUser.uid, newToken);
-                if (success) {
-                    currentToken = newToken;
-                    currentTokenSpan.textContent = newToken;
-                    tokenStatus.textContent = '✅ Token đã được tạo thành công!';
-                    tokenStatus.style.color = 'var(--success)';
-                    showMessage('✅ Token mới đã được tạo!', 'success');
-                    loadTokenHistory();
-                } else {
-                    showMessage('❌ Lỗi tạo token!', 'error');
-                }
-            } catch (error) {
-                showMessage('❌ Lỗi: ' + error.message, 'error');
-            }
-
-            btn.disabled = false;
-            btn.textContent = '🔄 Tạo/Reset Token';
-        }
-
-        // ===== COPY TOKEN =====
-        function copyToken() {
-            const token = currentTokenSpan.textContent;
-            if (token === 'Chưa có token') {
-                showMessage('⚠️ Chưa có token để sao chép!', 'error');
-                return;
-            }
-            const btn = document.getElementById('copyTokenBtn');
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(token).then(() => {
-                    btn.textContent = '✅ Đã sao chép!';
-                    btn.classList.add('copied');
-                    setTimeout(() => { btn.textContent = '📋 Sao chép';
-                        btn.classList.remove('copied'); }, 2000);
-                });
-            } else {
-                const textarea = document.createElement('textarea');
-                textarea.value = token;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                btn.textContent = '✅ Đã sao chép!';
-                btn.classList.add('copied');
-                setTimeout(() => { btn.textContent = '📋 Sao chép';
-                    btn.classList.remove('copied'); }, 2000);
-            }
-        }
-
-        // ===== LOAD TOKEN HISTORY =====
-        async function loadTokenHistory() {
-            if (!currentUser) return;
-            try {
-                const snapshot = await db.ref('users/' + currentUser.uid + '/tokenHistory').once('value');
-                const history = snapshot.val() || [];
-                const historyList = document.getElementById('tokenHistory');
-                const historyContainer = document.getElementById('tokenHistoryList');
-                
-                if (Array.isArray(history) && history.length > 0) {
-                    historyContainer.style.display = 'block';
-                    let html = '';
-                    history.slice().reverse().forEach((item, index) => {
-                        const isUsed = item.used || false;
-                        html += `
-                            <div class="token-item">
-                                <span class="token-id">${item.token.substring(0, 8)}...${item.token.substring(16)}</span>
-                                <span style="font-size:11px;color:${isUsed ? 'var(--text-muted)' : 'var(--success)'}">
-                                    ${isUsed ? '✅ Đã dùng' : '🟢 Chưa dùng'}
-                                </span>
-                            </div>
-                        `;
-                    });
-                    historyList.innerHTML = html;
-                } else {
-                    historyContainer.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Lỗi load lịch sử token:', error);
-            }
-        }
-
-        // ===== LOGIN WITH TOKEN =====
         document.getElementById('quickLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const token = tokenInput.value.trim();
@@ -477,19 +233,17 @@
             btn.textContent = '⏳ Đang xử lý...';
 
             try {
-                // Tìm user có token này
-                const usersSnap = await db.ref('users').once('value');
+                // Dùng query thay vì đọc toàn bộ users để tránh permission_denied
+                const usersSnap = await db.ref('users').orderByChild('quickToken').equalTo(token).once('value');
                 const users = usersSnap.val();
                 let foundUid = null;
                 let foundUser = null;
 
                 if (users) {
-                    for (const [uid, data] of Object.entries(users)) {
-                        if (data.quickToken === token) {
-                            foundUid = uid;
-                            foundUser = data;
-                            break;
-                        }
+                    const keys = Object.keys(users);
+                    if (keys.length > 0) {
+                        foundUid = keys[0];
+                        foundUser = users[keys[0]];
                     }
                 }
 
@@ -500,7 +254,6 @@
                     return;
                 }
 
-                // Kiểm tra nếu user bị khóa
                 if (foundUser.blocked === true) {
                     showMessage('🚫 Tài khoản này đã bị khóa!', 'error');
                     btn.disabled = false;
@@ -508,32 +261,10 @@
                     return;
                 }
 
-                // Đăng nhập bằng email/password (cần lấy email và password từ user)
-                // Vì không có password, ta sẽ sử dụng phương thức đăng nhập bằng custom token
-                // Hoặc dùng phương thức signInWithCustomToken (cần admin SDK)
-                // Cách đơn giản: lưu session và chuyển hướng
-                // Ở đây ta sẽ dùng phương thức lưu vào localStorage và chuyển hướng
-
-                // Đánh dấu token đã được sử dụng (nếu cần)
-                // await db.ref('users/' + foundUid + '/tokenHistory').once('value', snap => {
-                //     const history = snap.val() || [];
-                //     if (Array.isArray(history)) {
-                //         const idx = history.findIndex(h => h.token === token);
-                //         if (idx !== -1) {
-                //             history[idx].used = true;
-                //             db.ref('users/' + foundUid + '/tokenHistory').set(history);
-                //         }
-                //     }
-                // });
-
-                // Lưu thông tin đăng nhập vào session
                 localStorage.setItem('quickLoginUid', foundUid);
                 localStorage.setItem('quickLoginEmail', foundUser.email || '');
                 
-                // Cập nhật lastLogin
                 await db.ref('users/' + foundUid + '/lastLogin').set(Date.now());
-                
-                // Update presence online
                 await db.ref('presence/' + foundUid).set(true);
                 db.ref('presence/' + foundUid).onDisconnect().set(false);
 
@@ -543,45 +274,19 @@
                 }, 1500);
 
             } catch (error) {
-                showMessage('❌ Lỗi: ' + error.message, 'error');
+                let errorMsg = '❌ Lỗi: ';
+                if (error.code === 'PERMISSION_DENIED') {
+                    errorMsg += 'Vui lòng kiểm tra Firebase Rules. Cần bật quyền đọc users.';
+                } else {
+                    errorMsg += error.message;
+                }
+                showMessage(errorMsg, 'error');
             }
 
             btn.disabled = false;
             btn.textContent = '🚀 Đăng nhập nhanh';
         });
 
-        // ===== KIỂM TRA USER ĐĂNG NHẬP =====
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                tokenSection.style.display = 'block';
-                
-                // Lấy token hiện tại
-                const snap = await db.ref('users/' + user.uid + '/quickToken').once('value');
-                const token = snap.val();
-                if (token) {
-                    currentToken = token;
-                    currentTokenSpan.textContent = token;
-                    tokenStatus.textContent = '✅ Token đã có sẵn!';
-                    tokenStatus.style.color = 'var(--success)';
-                } else {
-                    currentTokenSpan.textContent = 'Chưa có token';
-                    tokenStatus.textContent = '⚠️ Bạn chưa tạo token. Nhấn "Tạo/Reset Token" để tạo!';
-                    tokenStatus.style.color = 'var(--text-muted)';
-                }
-                loadTokenHistory();
-            } else {
-                tokenSection.style.display = 'none';
-                // Kiểm tra quick login từ localStorage
-                const quickUid = localStorage.getItem('quickLoginUid');
-                if (quickUid) {
-                    // Đã có session quick login, chuyển hướng
-                    window.location.href = '../index.html';
-                }
-            }
-        });
-
-        // ===== KIỂM TRA NHANH NẾU CÓ TOKEN TRONG URL =====
         const urlParams = new URLSearchParams(window.location.search);
         const tokenParam = urlParams.get('token');
         if (tokenParam) {
@@ -590,7 +295,6 @@
         }
 
         tokenInput.focus();
-        console.log('✅ Quick Login loaded!');
     </script>
 </body>
 </html>
