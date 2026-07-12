@@ -8,9 +8,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        /* (giữ nguyên các style từ file admin.html trước đó, chỉ thêm style cho brand management) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -27,48 +26,16 @@
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
         
-        .menu-icon { 
-            cursor: pointer; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            background: var(--wallet-bg); 
-            border: 1px solid var(--border-color); 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            gap: 5px; 
-            transition: 0.3s; 
-            width: 40px;
-            height: 40px;
-            justify-content: center;
-        }
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; width: 40px; height: 40px; justify-content: center; }
         .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { 
-            display: block; 
-            width: 22px; 
-            height: 2.5px; 
-            background: var(--text-secondary); 
-            border-radius: 4px; 
-            transition: 0.3s;
-        }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: 0.3s; }
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .wallet-container {
-            background: var(--wallet-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px 16px 6px 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            cursor: default;
-            min-height: 44px;
-        }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: default; min-height: 44px; }
         .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
         .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
@@ -115,10 +82,17 @@
         .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; margin-bottom: 16px; }
         .admin-card h1 { color: var(--text-primary); font-size: 22px; transition: 0.3s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .admin-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
-        .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-        .stats .stat { background: var(--wallet-bg); padding: 12px 18px; border-radius: 10px; border: 1px solid var(--border-color); flex: 1; min-width: 80px; transition: 0.3s; }
-        .stats .stat .num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
-        .stats .stat .label { font-size: 11px; color: var(--text-muted); }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .stat-card { background: var(--wallet-bg); padding: 14px 18px; border-radius: 10px; border: 1px solid var(--border-color); transition: 0.3s; }
+        .stat-card:hover { border-color: var(--accent); }
+        .stat-card .num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+        .stat-card .label { font-size: 11px; color: var(--text-muted); }
+        .stat-card .num.green { color: var(--success); }
+        .stat-card .num.red { color: var(--danger); }
+        .stat-card .num.orange { color: var(--warning); }
+        .stat-card .num.blue { color: var(--accent); }
+
         .user-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .user-table th { text-align: left; padding: 8px 10px; color: var(--text-muted); font-weight: 600; border-bottom: 2px solid var(--border-color); font-size: 12px; }
         .user-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
@@ -145,6 +119,8 @@
         .notif-form .btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
         .notif-form .btn-danger { background: linear-gradient(135deg, #e74c6f, #c0392b); }
         .notif-form .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+        .notif-form .btn-success { background: linear-gradient(135deg, #27ae60, #1e8449); }
+        .notif-form .btn-success:hover { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
@@ -186,7 +162,6 @@
         .status-dot.blocked { background: #f39c12; }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         
-        /* Brand management styles */
         .brand-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
         .brand-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 160px; }
         .brand-item:hover { border-color: var(--accent); }
@@ -210,6 +185,7 @@
         .product-card-admin .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
         .product-card-admin .price { color: var(--accent); font-weight: 600; font-size: 14px; }
         .product-card-admin .stock { font-size: 11px; color: var(--text-muted); }
+        .product-card-admin .sold { font-size: 11px; color: var(--text-muted); }
         .product-card-admin .cat { font-size: 10px; background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin: 4px 0; }
         .product-card-admin .actions { display: flex; gap: 4px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
         .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
@@ -224,8 +200,15 @@
         .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        .order-item-admin { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
+        .order-item-admin .order-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
+        .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .order-item-admin .order-info { flex: 1; }
+        .order-item-admin .order-info .name { font-weight: 600; color: var(--text-primary); }
+        .order-item-admin .order-info .meta { font-size: 11px; color: var(--text-muted); }
         
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .product-grid-admin { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .brand-item { min-width: 120px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .product-grid-admin { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .brand-item { min-width: 120px; } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } }
     </style>
 </head>
 <body>
@@ -246,7 +229,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">🛒 <span>Admin</span></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -281,23 +264,40 @@
 
     <div class="content">
         <div class="admin-card">
-            <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshUsers()">🔄 Làm mới</button></h1>
-            <p class="sub" data-key="admin_sub">Quản lý người dùng, sản phẩm và hãng</p>
+            <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshAll()">🔄 Làm mới</button></h1>
+            <p class="sub" data-key="admin_sub">Quản lý người dùng, sản phẩm, hãng và đơn hàng</p>
             
             <div class="tabs">
-                <button class="tab active" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
+                <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+                <button class="tab" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
                 <button class="tab" data-tab="brands" onclick="switchTab('brands')">🏷️ Hãng</button>
                 <button class="tab" data-tab="products" onclick="switchTab('products')">🛍️ Sản phẩm</button>
+                <button class="tab" data-tab="orders" onclick="switchTab('orders')">📦 Đơn hàng</button>
+            </div>
+            
+            <!-- Tab Dashboard -->
+            <div class="tab-content active" id="tab-dashboard">
+                <div class="stats-grid" id="dashboardStats">
+                    <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label">👥 Tổng người dùng</div></div>
+                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label">📦 Tổng đơn hàng</div></div>
+                    <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label">💰 Doanh thu hôm nay</div></div>
+                    <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label">🛍️ Tổng sản phẩm</div></div>
+                    <div class="stat-card"><div class="num" id="dashBrands">0</div><div class="label">🏷️ Tổng hãng</div></div>
+                </div>
+                <div id="recentOrders" style="margin-top:12px;">
+                    <h4 style="color:var(--text-primary);margin-bottom:8px;">📋 Đơn hàng gần đây</h4>
+                    <div id="recentOrdersList"><div class="loading">Đang tải...</div></div>
+                </div>
             </div>
             
             <!-- Tab Users -->
-            <div class="tab-content active" id="tab-users">
+            <div class="tab-content" id="tab-users">
                 <div id="loadingIndicator" class="loading">⏳ Đang tải dữ liệu...</div>
-                <div class="stats" id="stats" style="display:none;">
-                    <div class="stat"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
-                    <div class="stat"><div class="num" id="onlineUsers">0</div><div class="label">🟢 Online</div></div>
-                    <div class="stat"><div class="num" id="blockedUsers">0</div><div class="label" data-key="blocked_users">Đã khóa</div></div>
-                    <div class="stat"><div class="num" id="totalBalance">0</div><div class="label" data-key="total_balance">Tổng số dư</div></div>
+                <div class="stats-grid" id="stats" style="display:none;">
+                    <div class="stat-card"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
+                    <div class="stat-card"><div class="num green" id="onlineUsers">0</div><div class="label">🟢 Online</div></div>
+                    <div class="stat-card"><div class="num red" id="blockedUsers">0</div><div class="label" data-key="blocked_users">Đã khóa</div></div>
+                    <div class="stat-card"><div class="num blue" id="totalBalance">0</div><div class="label" data-key="total_balance">Tổng số dư</div></div>
                 </div>
                 <div id="tableContainer" style="overflow-x:auto; display:none;">
                     <table class="user-table" id="userTable"><thead><tr><th data-key="stt">STT</th><th data-key="name">Tên</th><th data-key="email">Email</th><th data-key="balance">Số dư</th><th data-key="status">Trạng thái</th><th data-key="action">Thao tác</th></tr></thead><tbody id="userTableBody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);" data-key="no_data">Không có dữ liệu</td></tr></tbody></table>
@@ -312,6 +312,7 @@
             <div class="tab-content" id="tab-brands">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openBrandModal()">➕ Thêm hãng</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllBrands()">🗑️ Xóa tất cả</button>
                 </div>
                 <div id="brandList" class="brand-list">
                     <div class="loading">⏳ Đang tải danh sách hãng...</div>
@@ -326,6 +327,16 @@
                 </div>
                 <div id="productGridAdmin" class="product-grid-admin">
                     <div class="loading">⏳ Đang tải sản phẩm...</div>
+                </div>
+            </div>
+            
+            <!-- Tab Orders -->
+            <div class="tab-content" id="tab-orders">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()">🗑️ Xóa tất cả đơn hàng</button>
+                </div>
+                <div id="ordersList">
+                    <div class="loading">⏳ Đang tải đơn hàng...</div>
                 </div>
             </div>
             
@@ -417,6 +428,7 @@
         let isDataLoaded = false;
         let brandsData = {};
         let productsData = {};
+        let ordersData = {};
 
         const translations = {
             vi: {
@@ -474,9 +486,9 @@
 
         function showLoading(show) {
             document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
-            document.getElementById('stats').style.display = show ? 'none' : 'flex';
+            document.getElementById('stats').style.display = show ? 'none' : 'grid';
             document.getElementById('tableContainer').style.display = show ? 'none' : 'block';
-            document.getElementById('notifForm').style.display = show ? 'none' : 'block';
+            document.getElementById('notifForm').style.display = show ? 'none' : 'flex';
         }
 
         function switchTab(tab) {
@@ -485,8 +497,10 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             
+            if (tab === 'dashboard') updateDashboard();
             if (tab === 'brands') loadBrandsAdmin();
             if (tab === 'products') loadProductsAdmin();
+            if (tab === 'orders') loadOrdersAdmin();
         }
 
         function watchOnlineStatus() {
@@ -496,11 +510,6 @@
                 Object.keys(data).forEach(uid => {
                     onlineUsersMap[uid] = data[uid] === true;
                 });
-                if (!loadingUsers) {
-                    Object.keys(onlineUsersMap).forEach(uid => {
-                        updateUserStatusDisplay(uid);
-                    });
-                }
             });
         }
         watchOnlineStatus();
@@ -524,11 +533,11 @@
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     if (data.isAdmin === true) {
                         isAdmin = true;
-                        showLoading(true);
                         loadUsers();
                         loadBrandsAdmin();
                         loadProductsAdmin();
-                        setTimeout(() => showLoading(false), 300);
+                        loadOrdersAdmin();
+                        updateDashboard();
                     } else {
                         alert(lang === 'vi' ? '⚠️ Không có quyền truy cập!' : '⚠️ Access denied!');
                         window.location.replace('../index.html');
@@ -541,6 +550,62 @@
                 console.error('Lỗi complete quick login:', error);
                 return false;
             }
+        }
+
+        // ===== DASHBOARD =====
+        function updateDashboard() {
+            db.ref('users').once('value', snap => {
+                const users = snap.val() || {};
+                document.getElementById('dashUsers').textContent = Object.keys(users).length;
+                document.getElementById('dashBrands').textContent = Object.keys(brandsData).length;
+            });
+            db.ref('products').once('value', snap => {
+                const products = snap.val() || {};
+                document.getElementById('dashProducts').textContent = Object.keys(products).length;
+            });
+            db.ref('orders').once('value', snap => {
+                const orders = snap.val() || {};
+                const keys = Object.keys(orders);
+                document.getElementById('dashOrders').textContent = keys.length;
+                
+                // Tính doanh thu hôm nay
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                let revenue = 0;
+                keys.forEach(key => {
+                    const order = orders[key];
+                    if (order.timestamp >= today.getTime()) {
+                        revenue += order.price || 0;
+                    }
+                });
+                document.getElementById('dashRevenue').textContent = revenue.toLocaleString('vi-VN') + ' VND';
+                
+                // Hiển thị đơn hàng gần đây
+                const recentList = document.getElementById('recentOrdersList');
+                const sorted = keys.sort((a,b) => (orders[b]?.timestamp || 0) - (orders[a]?.timestamp || 0)).slice(0, 10);
+                if (sorted.length === 0) {
+                    recentList.innerHTML = '<div style="color:var(--text-muted);padding:12px;text-align:center;">Chưa có đơn hàng</div>';
+                } else {
+                    let html = '';
+                    sorted.forEach(key => {
+                        const o = orders[key];
+                        const image = o.productImage || o.productIcon || '📦';
+                        html += `
+                            <div class="order-item-admin">
+                                <div class="order-image">
+                                    ${o.productImage ? `<img src="${o.productImage}" onerror="this.style.display='none';this.parentElement.textContent='${o.productIcon || '📦'}'" />` : (o.productIcon || '📦')}
+                                </div>
+                                <div class="order-info">
+                                    <div class="name">${o.productName || 'Sản phẩm'}</div>
+                                    <div class="meta">${(o.price || 0).toLocaleString('vi-VN')} VND • ${o.userName || 'Khách'}</div>
+                                    <div class="meta">${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    recentList.innerHTML = html;
+                }
+            });
         }
 
         // ===== BRANDS MANAGEMENT =====
@@ -562,7 +627,7 @@
             let html = '';
             keys.forEach(key => {
                 const brand = data[key];
-                const productCount = Object.keys(productsData).filter(pid => productsData[pid].category === key).length;
+                const productCount = Object.keys(productsData).filter(pid => productsData[pid]?.category === key).length;
                 const imageUrl = brand.image || '';
                 const icon = brand.icon || '🏷️';
                 
@@ -603,7 +668,6 @@
             document.getElementById('brandEditId').value = '';
             document.getElementById('brandModal').classList.add('active');
             
-            // Preview image
             document.getElementById('brandImage').oninput = function() {
                 const preview = document.getElementById('brandImagePreview');
                 const val = this.value.trim();
@@ -657,9 +721,17 @@
         }
 
         function deleteBrand(key) {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa hãng này? (Sản phẩm thuộc hãng sẽ mất danh mục)' : 'Delete this brand? (Products will lose category)')) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa hãng này?' : 'Delete this brand?')) {
                 db.ref('categories/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        function confirmDeleteAllBrands() {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ hãng?' : 'Delete ALL brands?')) {
+                db.ref('categories').remove().then(() => {
+                    showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
@@ -670,7 +742,6 @@
                 productsData = snapshot.val() || {};
                 renderProductsAdmin(productsData);
                 updateBrandSelect();
-                // Cập nhật lại brand list để hiện số lượng
                 renderBrandsAdmin(brandsData);
             });
         }
@@ -695,7 +766,8 @@
                         </div>
                         <div class="name">${p.name || 'Sản phẩm'}</div>
                         <div class="price">${(p.price || 0).toLocaleString('vi-VN')} VND</div>
-                        <div class="stock">📊 ${p.stock || 0} còn lại</div>
+                        <div class="stock">📦 Còn: ${p.stock || 0}</div>
+                        <div class="sold">📈 Đã bán: ${p.sold || 0}</div>
                         <div class="cat">${p.category && brandsData[p.category] ? (brandsData[p.category].icon || '🏷️') + ' ' + brandsData[p.category].name : 'Không có hãng'}</div>
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
@@ -776,6 +848,7 @@
             const data = { name, price, stock, category, icon };
             if (image) data.image = image;
             if (description) data.description = description;
+            if (!editId) data.sold = 0;
             
             const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
             ref.set(data).then(() => {
@@ -793,14 +866,68 @@
         }
 
         function confirmDeleteAllProducts() {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ sản phẩm? (Không thể hoàn tác!)' : 'Delete ALL products? (Cannot undo!)')) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ sản phẩm?' : 'Delete ALL products?')) {
                 db.ref('products').remove().then(() => {
                     showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
-        // ===== USER MANAGEMENT (giữ nguyên từ file cũ) =====
+        // ===== ORDERS MANAGEMENT =====
+        function loadOrdersAdmin() {
+            db.ref('orders').on('value', (snapshot) => {
+                ordersData = snapshot.val() || {};
+                renderOrdersAdmin(ordersData);
+            });
+        }
+
+        function renderOrdersAdmin(data) {
+            const container = document.getElementById('ordersList');
+            const keys = Object.keys(data);
+            if (keys.length === 0) {
+                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có đơn hàng' : 'No orders'}</div>`;
+                return;
+            }
+            let html = '';
+            const sorted = keys.sort((a,b) => (data[b]?.timestamp || 0) - (data[a]?.timestamp || 0));
+            sorted.forEach(key => {
+                const o = data[key];
+                const image = o.productImage || o.productIcon || '📦';
+                html += `
+                    <div class="order-item-admin">
+                        <div class="order-image">
+                            ${o.productImage ? `<img src="${o.productImage}" onerror="this.style.display='none';this.parentElement.textContent='${o.productIcon || '📦'}'" />` : (o.productIcon || '📦')}
+                        </div>
+                        <div class="order-info">
+                            <div class="name">${o.productName || 'Sản phẩm'}</div>
+                            <div class="meta">💰 ${(o.price || 0).toLocaleString('vi-VN')} VND</div>
+                            <div class="meta">👤 ${o.userName || 'Khách hàng'}</div>
+                            <div class="meta">📅 ${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
+                        </div>
+                        <button class="btn-action delete" onclick="deleteOrder('${key}')" style="font-size:11px;">🗑️</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function deleteOrder(key) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa đơn hàng này?' : 'Delete this order?')) {
+                db.ref('orders/' + key).remove().then(() => {
+                    showToast('✅ Đã xóa!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        function confirmDeleteAllOrders() {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ đơn hàng?' : 'Delete ALL orders?')) {
+                db.ref('orders').remove().then(() => {
+                    showToast('✅ Đã xóa tất cả!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        // ===== USER MANAGEMENT =====
         auth.onAuthStateChanged(async (user) => {
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
@@ -827,11 +954,11 @@
                     return;
                 }
                 isAdmin = true;
-                showLoading(true);
                 loadUsers();
                 loadBrandsAdmin();
                 loadProductsAdmin();
-                setTimeout(() => showLoading(false), 300);
+                loadOrdersAdmin();
+                updateDashboard();
             });
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
@@ -974,20 +1101,20 @@
                 }).then(() => {
                     showToast(`✅ ${action==='add'?'Cộng':'Trừ'} ${amount.toLocaleString()} VND thành công!`, 'success');
                     closeModal();
-                    refreshUsers();
+                    refreshAll();
                 }).catch(err => {
                     showToast('❌ ' + err.message, 'error');
                 });
             } else if (action === 'lock') {
                 if (confirm(lang === 'vi' ? '🔒 Khóa user này?' : '🔒 Lock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(true)
-                        .then(() => { showToast('✅ Đã khóa!', 'success'); closeModal(); refreshUsers(); })
+                        .then(() => { showToast('✅ Đã khóa!', 'success'); closeModal(); refreshAll(); })
                         .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
             } else if (action === 'unlock') {
                 if (confirm(lang === 'vi' ? '🔓 Mở khóa user này?' : '🔓 Unlock this user?')) {
                     db.ref('users/' + selectedUid + '/blocked').set(false)
-                        .then(() => { showToast('✅ Đã mở khóa!', 'success'); closeModal(); refreshUsers(); })
+                        .then(() => { showToast('✅ Đã mở khóa!', 'success'); closeModal(); refreshAll(); })
                         .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
             } else if (action === 'delete') {
@@ -996,7 +1123,7 @@
                         .then(() => {
                             showToast('✅ Đã xóa user!', 'success');
                             closeModal();
-                            refreshUsers();
+                            refreshAll();
                         })
                         .catch(err => showToast('❌ ' + err.message, 'error'));
                 }
@@ -1011,7 +1138,7 @@
                 db.ref('users/' + uid + '/blocked').set(newStatus)
                     .then(() => {
                         showToast(newStatus ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
-                        refreshUsers();
+                        refreshAll();
                     })
                     .catch(err => showToast('❌ ' + err.message, 'error'));
             }
@@ -1023,19 +1150,19 @@
                 db.ref('users/' + uid).remove()
                     .then(() => {
                         showToast('✅ Đã xóa user!', 'success');
-                        refreshUsers();
+                        refreshAll();
                     })
                     .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
-        function refreshUsers() {
-            if (loadingUsers) return;
-            showLoading(true);
-            setTimeout(() => {
-                loadUsers();
-                setTimeout(() => showLoading(false), 300);
-            }, 200);
+        function refreshAll() {
+            loadUsers();
+            loadBrandsAdmin();
+            loadProductsAdmin();
+            loadOrdersAdmin();
+            updateDashboard();
+            showToast('🔄 Đã làm mới!', 'success');
         }
 
         function sendNotification() {
@@ -1109,7 +1236,6 @@
             }
         }
 
-        // Close modals when clicking overlay
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
@@ -1125,7 +1251,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Brand & Product management!');
+        console.log('✅ Admin panel loaded with Dashboard, Orders, Brands & Products!');
     </script>
 </body>
 </html>
