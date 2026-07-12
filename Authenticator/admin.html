@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+        /* Giữ nguyên style từ file admin cũ */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
@@ -100,7 +101,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Category - Mục sản phẩm */
         .category-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
         .category-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 160px; }
         .category-item-admin:hover { border-color: var(--accent); }
@@ -116,9 +116,8 @@
         .category-item-admin .cat-actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .category-item-admin .cat-actions .del:hover { background: #e74c6f; color: #fff; }
 
-        /* Products */
         .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
-        .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; }
+        .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; }
         .product-card-admin:hover { border-color: var(--accent); }
         .product-card-admin .product-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 6px; border: 1px solid var(--border-color); }
         .product-card-admin .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
@@ -126,6 +125,7 @@
         .product-card-admin .price { color: var(--accent); font-weight: 600; font-size: 14px; }
         .product-card-admin .stock { font-size: 11px; color: var(--text-muted); }
         .product-card-admin .sold { font-size: 11px; color: var(--text-muted); }
+        .product-card-admin .desc-preview { font-size: 10px; color: var(--text-muted); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; display: inline-block; margin: 2px 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .product-card-admin .cat { font-size: 10px; background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin: 4px 0; }
         .product-card-admin .actions { display: flex; gap: 4px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
         .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
@@ -133,8 +133,10 @@
         .product-card-admin .actions .edit:hover { background: var(--text-secondary); color: #fff; }
         .product-card-admin .actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .product-card-admin .actions .del:hover { background: #e74c6f; color: #fff; }
+        .product-card-admin .actions .duplicate { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+        .product-card-admin .actions .duplicate:hover { background: #ffc107; color: #fff; }
+        .product-card-admin .badge-copy { position: absolute; top: 4px; right: 4px; background: var(--warning); color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 4px; }
 
-        /* Orders */
         .order-item-admin { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
         .order-item-admin .order-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
@@ -143,7 +145,6 @@
         .order-item-admin .order-info .meta { font-size: 11px; color: var(--text-muted); }
         .order-item-admin .order-info .order-code { font-size: 11px; color: var(--accent); font-weight: 600; }
 
-        /* Vouchers */
         .voucher-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
         .voucher-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px 16px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 180px; }
         .voucher-item:hover { border-color: var(--accent); }
@@ -163,6 +164,8 @@
         .notif-form .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
         .notif-form .btn-success { background: linear-gradient(135deg, #27ae60, #1e8449); }
         .notif-form .btn-success:hover { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        .notif-form .btn-warning { background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; }
+        .notif-form .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
@@ -193,6 +196,7 @@
     </style>
 </head>
 <body>
+    <!-- Giữ nguyên phần header, side menu, notif popup như file admin cũ -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
@@ -256,7 +260,7 @@
                 <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')">🎫 Mã giảm giá</button>
             </div>
             
-            <!-- Tab Dashboard -->
+            <!-- Tab Dashboard (giữ nguyên) -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="stats-grid" id="dashboardStats">
                     <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label">📂 Mục sản phẩm</div></div>
@@ -271,7 +275,7 @@
                 </div>
             </div>
             
-            <!-- Tab Categories - Mục sản phẩm -->
+            <!-- Tab Categories (giữ nguyên) -->
             <div class="tab-content" id="tab-categories">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openCategoryModal()">➕ Thêm mục</button>
@@ -282,10 +286,11 @@
                 </div>
             </div>
             
-            <!-- Tab Products -->
+            <!-- Tab Products - Thêm nút Nhân bản -->
             <div class="tab-content" id="tab-products">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openProductModal()">➕ Thêm sản phẩm</button>
+                    <button class="btn-send btn-warning" onclick="openDuplicateModal()">📋 Nhân bản sản phẩm</button>
                     <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()">🗑️ Xóa tất cả</button>
                 </div>
                 <div id="productGridAdmin" class="product-grid-admin">
@@ -293,7 +298,7 @@
                 </div>
             </div>
             
-            <!-- Tab Orders -->
+            <!-- Tab Orders (giữ nguyên) -->
             <div class="tab-content" id="tab-orders">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()">🗑️ Xóa tất cả đơn hàng</button>
@@ -303,7 +308,7 @@
                 </div>
             </div>
             
-            <!-- Tab Vouchers -->
+            <!-- Tab Vouchers (giữ nguyên) -->
             <div class="tab-content" id="tab-vouchers">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openVoucherModal()">➕ Tạo mã giảm giá</button>
@@ -318,7 +323,7 @@
         </div>
     </div>
 
-    <!-- Modal Category -->
+    <!-- Modal Category (giữ nguyên) -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
             <h3 id="categoryModalTitle">📂 Thêm mục sản phẩm</h3>
@@ -336,7 +341,7 @@
         </div>
     </div>
 
-    <!-- Modal Product -->
+    <!-- Modal Product (giữ nguyên) -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3 id="productModalTitle">🛍️ Thêm sản phẩm</h3>
@@ -360,7 +365,39 @@
         </div>
     </div>
 
-    <!-- Modal Voucher -->
+    <!-- Modal Duplicate - Nhân bản sản phẩm -->
+    <div class="modal-overlay" id="duplicateModal">
+        <div class="modal">
+            <h3>📋 Nhân bản sản phẩm</h3>
+            <div class="row"><label>Chọn mục:</label>
+                <select id="duplicateCategory">
+                    <option value="">Chọn mục</option>
+                </select>
+            </div>
+            <div class="row"><label>Số lượng:</label>
+                <input type="number" id="duplicateCount" value="1" min="1" max="20" />
+                <span style="font-size:11px;color:var(--text-muted);">(tối đa 20)</span>
+            </div>
+            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                <label style="min-width:auto;">Nội dung mô tả (mỗi dòng 1 sản phẩm):</label>
+                <textarea id="duplicateDescriptions" rows="5" placeholder="Mô tả sản phẩm 1&#10;Mô tả sản phẩm 2&#10;Mô tả sản phẩm 3" style="flex:1;padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);min-height:100px;resize:vertical;"></textarea>
+            </div>
+            <div class="row"><label>Tên chung:</label><input type="text" id="duplicateName" placeholder="Tên chung cho các sản phẩm" /></div>
+            <div class="row"><label>Giá:</label><input type="number" id="duplicatePrice" placeholder="Giá VND" /></div>
+            <div class="row"><label>Số lượng:</label><input type="number" id="duplicateStock" placeholder="Số lượng" value="1" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="duplicateIcon" placeholder="📦" value="📦" /></div>
+            <div class="row"><label>Hình ảnh:</label>
+                <input type="text" id="duplicateImage" placeholder="URL hình ảnh" />
+                <div class="image-preview" id="duplicateImagePreview">🖼️</div>
+            </div>
+            <div class="actions">
+                <button class="save" onclick="saveDuplicateProducts()">📋 Nhân bản</button>
+                <button class="cancel" onclick="closeDuplicateModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Voucher (giữ nguyên) -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
             <h3>🎫 Tạo mã giảm giá</h3>
@@ -556,12 +593,13 @@
             });
         }
 
-        // ===== CATEGORIES MANAGEMENT =====
+        // ===== CATEGORIES MANAGEMENT (giữ nguyên) =====
         function loadCategoriesAdmin() {
             db.ref('categories').on('value', (snapshot) => {
                 categoriesData = snapshot.val() || {};
                 renderCategoriesAdmin(categoriesData);
                 updateCategorySelect();
+                updateDuplicateCategorySelect();
             });
         }
 
@@ -600,6 +638,15 @@
 
         function updateCategorySelect() {
             const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Chọn mục</option>';
+            Object.keys(categoriesData).forEach(key => {
+                const cat = categoriesData[key];
+                select.innerHTML += `<option value="${key}">${cat.icon || '📁'} ${cat.name}</option>`;
+            });
+        }
+
+        function updateDuplicateCategorySelect() {
+            const select = document.getElementById('duplicateCategory');
             select.innerHTML = '<option value="">Chọn mục</option>';
             Object.keys(categoriesData).forEach(key => {
                 const cat = categoriesData[key];
@@ -690,6 +737,7 @@
                 productsData = snapshot.val() || {};
                 renderProductsAdmin(productsData);
                 updateCategorySelect();
+                updateDuplicateCategorySelect();
                 renderCategoriesAdmin(categoriesData);
             });
         }
@@ -706,9 +754,11 @@
                 const p = data[key];
                 const imageUrl = p.image || '';
                 const icon = p.icon || '📦';
+                const desc = p.description || '';
                 
                 html += `
                     <div class="product-card-admin">
+                        ${desc ? `<div class="badge-copy">📝</div>` : ''}
                         <div class="product-image">
                             ${imageUrl ? `<img src="${imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
@@ -716,9 +766,11 @@
                         <div class="price">${(p.price || 0).toLocaleString('vi-VN')}đ</div>
                         <div class="stock">📦 Còn: ${p.stock || 0}</div>
                         <div class="sold">📈 Đã bán: ${p.sold || 0}</div>
+                        ${desc ? `<div class="desc-preview">📝 ${desc}</div>` : ''}
                         <div class="cat">${p.category && categoriesData[p.category] ? (categoriesData[p.category].icon || '📁') + ' ' + categoriesData[p.category].name : 'Không có mục'}</div>
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
+                            <button class="duplicate" onclick="duplicateSingleProduct('${key}')">📋 Nhân bản</button>
                             <button class="del" onclick="deleteProduct('${key}')">🗑️ Xóa</button>
                         </div>
                     </div>
@@ -727,6 +779,102 @@
             container.innerHTML = html;
         }
 
+        // ===== DUPLICATE PRODUCT =====
+        function openDuplicateModal() {
+            document.getElementById('duplicateCategory').value = '';
+            document.getElementById('duplicateCount').value = '1';
+            document.getElementById('duplicateDescriptions').value = '';
+            document.getElementById('duplicateName').value = '';
+            document.getElementById('duplicatePrice').value = '';
+            document.getElementById('duplicateStock').value = '1';
+            document.getElementById('duplicateIcon').value = '📦';
+            document.getElementById('duplicateImage').value = '';
+            document.getElementById('duplicateImagePreview').textContent = '🖼️';
+            updateDuplicateCategorySelect();
+            document.getElementById('duplicateModal').classList.add('active');
+            
+            document.getElementById('duplicateImage').oninput = function() {
+                const preview = document.getElementById('duplicateImagePreview');
+                const val = this.value.trim();
+                if (val) {
+                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                } else {
+                    preview.textContent = '🖼️';
+                }
+            };
+        }
+
+        function closeDuplicateModal() {
+            document.getElementById('duplicateModal').classList.remove('active');
+        }
+
+        function duplicateSingleProduct(key) {
+            const p = productsData[key];
+            if (!p) return;
+            
+            // Mở modal với dữ liệu từ sản phẩm hiện tại
+            document.getElementById('duplicateCategory').value = p.category || '';
+            document.getElementById('duplicateCount').value = '1';
+            document.getElementById('duplicateDescriptions').value = p.description || '';
+            document.getElementById('duplicateName').value = p.name || '';
+            document.getElementById('duplicatePrice').value = p.price || '';
+            document.getElementById('duplicateStock').value = p.stock || 1;
+            document.getElementById('duplicateIcon').value = p.icon || '📦';
+            document.getElementById('duplicateImage').value = p.image || '';
+            
+            const preview = document.getElementById('duplicateImagePreview');
+            if (p.image) {
+                preview.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+            } else {
+                preview.textContent = '🖼️';
+            }
+            
+            updateDuplicateCategorySelect();
+            document.getElementById('duplicateModal').classList.add('active');
+        }
+
+        function saveDuplicateProducts() {
+            const category = document.getElementById('duplicateCategory').value;
+            const count = parseInt(document.getElementById('duplicateCount').value) || 1;
+            const descriptions = document.getElementById('duplicateDescriptions').value.split('\n').filter(d => d.trim() !== '');
+            const name = document.getElementById('duplicateName').value.trim();
+            const price = parseInt(document.getElementById('duplicatePrice').value);
+            const stock = parseInt(document.getElementById('duplicateStock').value) || 1;
+            const icon = document.getElementById('duplicateIcon').value.trim() || '📦';
+            const image = document.getElementById('duplicateImage').value.trim();
+            
+            if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
+            if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
+            if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
+            if (count < 1 || count > 20) { showToast('❌ Số lượng từ 1-20!', 'error'); return; }
+            
+            // Nếu có mô tả, dùng mô tả từ textarea, nếu không thì dùng mô tả mặc định
+            const descList = descriptions.length > 0 ? descriptions : Array(count).fill('');
+            
+            const updates = {};
+            for (let i = 0; i < count; i++) {
+                const desc = descList[i] || (descriptions.length === 1 ? descriptions[0] : '');
+                const productId = 'prod_' + Date.now() + '_' + i;
+                const data = {
+                    name: name + (count > 1 ? ' #' + (i + 1) : ''),
+                    price: price,
+                    stock: stock,
+                    category: category,
+                    icon: icon,
+                    sold: 0
+                };
+                if (image) data.image = image;
+                if (desc) data.description = desc;
+                updates['products/' + productId] = data;
+            }
+            
+            db.ref().update(updates).then(() => {
+                showToast(`✅ Đã nhân bản ${count} sản phẩm!`, 'success');
+                closeDuplicateModal();
+            }).catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        // ===== PRODUCT CRUD (giữ nguyên) =====
         function openProductModal() {
             document.getElementById('productModalTitle').textContent = '🛍️ Thêm sản phẩm';
             document.getElementById('productName').value = '';
@@ -821,7 +969,7 @@
             }
         }
 
-        // ===== ORDERS MANAGEMENT =====
+        // ===== ORDERS MANAGEMENT (giữ nguyên) =====
         function loadOrdersAdmin() {
             db.ref('orders').on('value', (snapshot) => {
                 ordersData = snapshot.val() || {};
@@ -852,6 +1000,7 @@
                             <div class="meta">👤 ${o.userName || 'Khách hàng'}</div>
                             <div class="order-code">🔑 ${o.orderCode || '#' + key.substring(0,6)}</div>
                             ${o.voucher ? `<div class="meta">🎫 Mã: ${o.voucher}</div>` : ''}
+                            ${o.productDesc ? `<div class="meta">📝 ${o.productDesc}</div>` : ''}
                             <div class="meta">📅 ${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
                         </div>
                         <button class="btn-action delete" onclick="deleteOrder('${key}')" style="font-size:11px;background:#fef0f2;color:#e74c6f;border:1px solid #fdd5d9;padding:3px 10px;border-radius:6px;cursor:pointer;">🗑️</button>
@@ -877,7 +1026,7 @@
             }
         }
 
-        // ===== VOUCHERS MANAGEMENT =====
+        // ===== VOUCHERS MANAGEMENT (giữ nguyên) =====
         function loadVouchersAdmin() {
             db.ref('vouchers').on('value', (snapshot) => {
                 vouchersData = snapshot.val() || {};
@@ -1103,6 +1252,9 @@
         document.getElementById('productModal').addEventListener('click', function(e) {
             if (e.target === this) closeProductModal();
         });
+        document.getElementById('duplicateModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDuplicateModal();
+        });
         document.getElementById('voucherModal').addEventListener('click', function(e) {
             if (e.target === this) closeVoucherModal();
         });
@@ -1112,7 +1264,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Categories, Products, Orders & Vouchers!');
+        console.log('✅ Admin panel loaded with Categories, Products, Orders, Vouchers & Duplicate feature!');
     </script>
 </body>
 </html>
