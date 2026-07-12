@@ -8,8 +8,139 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
-    <!-- ===== OTP LIB - CDN ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/otplib@12.0.1/otplib-browser.min.js"></script>
+    <script>
+        // ===== FIREBASE CONFIG =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
+            authDomain: "shop-c6777.firebaseapp.com",
+            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "shop-c6777",
+            storageBucket: "shop-c6777.firebasestorage.app",
+            messagingSenderId: "43186563268",
+            appId: "1:43186563268:web:0d392ba57039a919670191"
+        };
+        
+        // Initialize Firebase
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase error:', error);
+        }
+        const auth = firebase.auth();
+        const db = firebase.database();
+        
+        // Declare global variables
+        let currentUser = null;
+        let lang = localStorage.getItem('lang') || 'vi';
+        let isDataLoaded = false;
+        
+        console.log('✅ Firebase auth and database ready');
+        
+        class SimpleOTP {
+            constructor() {
+                this.authenticator = {
+                    check: (token, secret) => {
+                        return this.verifyTOTP(token, secret);
+                    },
+                    generate: (secret) => {
+                        return this.generateTOTP(secret);
+                    }
+                };
+            }
+
+            base32Decode(base32) {
+                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                const bytes = [];
+                let bits = 0;
+                let value = 0;
+                for (let i = 0; i < base32.length; i++) {
+                    const char = base32[i].toUpperCase();
+                    const idx = alphabet.indexOf(char);
+                    if (idx === -1) continue;
+                    value = (value << 5) | idx;
+                    bits += 5;
+                    if (bits >= 8) {
+                        bytes.push((value >> (bits - 8)) & 0xFF);
+                        bits -= 8;
+                    }
+                }
+                return new Uint8Array(bytes);
+            }
+
+            async hmacSha1(key, data) {
+                const keyData = typeof key === 'string' ? this.base32Decode(key) : key;
+                const cryptoKey = await crypto.subtle.importKey(
+                    'raw',
+                    keyData,
+                    { name: 'HMAC', hash: 'SHA-1' },
+                    false,
+                    ['sign']
+                );
+                const signature = await crypto.subtle.sign(
+                    'HMAC',
+                    cryptoKey,
+                    data
+                );
+                return new Uint8Array(signature);
+            }
+
+            dynamicTruncation(hmac) {
+                const offset = hmac[hmac.length - 1] & 0xF;
+                const binary = ((hmac[offset] & 0x7F) << 24) |
+                              ((hmac[offset + 1] & 0xFF) << 16) |
+                              ((hmac[offset + 2] & 0xFF) << 8) |
+                              (hmac[offset + 3] & 0xFF);
+                return binary % 1000000;
+            }
+
+            async generateHOTP(secret, counter) {
+                const counterBytes = new Uint8Array(8);
+                for (let i = 7; i >= 0; i--) {
+                    counterBytes[i] = counter & 0xFF;
+                    counter = counter >> 8;
+                }
+                const hmac = await this.hmacSha1(secret, counterBytes);
+                const otp = this.dynamicTruncation(hmac);
+                return String(otp).padStart(6, '0');
+            }
+
+            async generateTOTP(secret, window = 0) {
+                const time = Math.floor(Date.now() / 30000) + window;
+                return await this.generateHOTP(secret, time);
+            }
+
+            async verifyTOTP(token, secret) {
+                if (!token || token.length !== 6) return false;
+                if (!secret || secret.length < 10) return false;
+                try {
+                    const windows = [0, -1, 1];
+                    for (const w of windows) {
+                        const generated = await this.generateTOTP(secret, w);
+                        if (generated === token) {
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('OTP verification error:', error);
+                    return false;
+                }
+            }
+
+            generateSecret() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                let secret = '';
+                for (let i = 0; i < 16; i++) {
+                    secret += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return secret;
+            }
+        }
+
+        const otp = new SimpleOTP();
+        const authenticator = otp.authenticator;
+    </script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -25,19 +156,41 @@
         .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --toggle-bg: #3a2a1a; --accent: #b8987a; }
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --toggle-bg: #2a3a5a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
+        
+        .menu-icon { 
+            cursor: pointer; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            background: var(--wallet-bg); 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            gap: 5px; 
+            transition: 0.3s; 
+            width: 40px;
+            height: 40px;
+            justify-content: center;
+        }
+        .menu-icon:hover { background: var(--hover-bg); }
+        .menu-icon .bar { 
+            display: block; 
+            width: 22px; 
+            height: 2.5px; 
+            background: var(--text-secondary); 
+            border-radius: 4px; 
+            transition: 0.3s;
+        }
+        .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
+        .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
+        .menu-icon:hover .bar { background: var(--text-primary); }
 
-        /* ===== HEADER ===== */
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
-        .menu-icon { cursor: pointer; padding: 6px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; transition: 0.3s; }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 20px; height: 2px; background: var(--text-secondary); border-radius: 2px; margin: 2px 0; }
-        .menu-icon .menu-text { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        /* Wallet mới - hình chữ nhật với ví bên trong */
         .wallet-container {
             background: var(--wallet-bg);
             border: 2px solid var(--border-color);
@@ -50,48 +203,13 @@
             cursor: default;
             min-height: 44px;
         }
-        .wallet-container:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 143, 214, 0.1);
-        }
-        .wallet-icon-box {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .wallet-icon-box svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
-        .wallet-info {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.3;
-        }
-        .wallet-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .wallet-balance {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .wallet-balance span {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-left: 2px;
-        }
+        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
+        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
         .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
         .bell-icon:hover { background: var(--hover-bg); }
@@ -126,8 +244,6 @@
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-
-        /* ===== CONTENT ===== */
         .content { padding: 30px 24px; max-width: 520px; margin: 0 auto; }
         .security-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
         .security-card .shield-icon { text-align: center; font-size: 48px; margin-bottom: 4px; }
@@ -162,97 +278,20 @@
         body.dark-mode .twofa-status.on { background: #1a3a2a; }
         body.dark-mode .twofa-status.off { background: #3a1a2a; }
 
-        .secret-box {
-            background: var(--wallet-bg);
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            margin: 10px 0 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            transition: 0.3s;
-        }
-        .secret-box .secret-key {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: var(--text-primary);
-            word-break: break-all;
-        }
-        .secret-box .copy-btn {
-            padding: 6px 16px;
-            background: var(--text-secondary);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .secret-box { background: var(--wallet-bg); padding: 14px 18px; border-radius: 12px; border: 2px solid var(--border-color); margin: 10px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: 0.3s; }
+        .secret-box .secret-key { font-family: 'Courier New', monospace; font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--text-primary); word-break: break-all; }
+        .secret-box .copy-btn { padding: 6px 16px; background: var(--text-secondary); color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
         .secret-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
         .secret-box .copy-btn.copied { background: var(--success); }
 
-        .otp-section {
-            background: var(--wallet-bg);
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            margin: 8px 0;
-            transition: 0.3s;
-        }
-        .otp-section .otp-label {
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .otp-input-row {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .otp-input-row input {
-            padding: 10px 14px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 22px;
-            font-weight: 700;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            text-align: center;
-            letter-spacing: 8px;
-            width: 180px;
-            height: 52px;
-            transition: 0.3s;
-        }
+        .otp-section { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); margin: 8px 0; transition: 0.3s; }
+        .otp-section .otp-label { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 8px; display: block; }
+        .otp-input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .otp-input-row input { padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 22px; font-weight: 700; background: var(--bg-card); color: var(--text-primary); text-align: center; letter-spacing: 8px; width: 180px; height: 52px; transition: 0.3s; }
         .otp-input-row input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
         .otp-input-row input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(231,76,111,0.15); }
         .otp-input-row input.success { border-color: var(--success); box-shadow: 0 0 0 3px rgba(39,174,96,0.15); }
-        .otp-input-row .paste-btn {
-            padding: 8px 16px;
-            background: var(--wallet-bg);
-            color: var(--text-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .otp-input-row .paste-btn { padding: 8px 16px; background: var(--wallet-bg); color: var(--text-secondary); border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
         .otp-input-row .paste-btn:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
         .otp-input-row .paste-btn:active { transform: scale(0.95); }
 
@@ -279,54 +318,59 @@
         .btn-back { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; margin-top: 16px; }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 28px 30px;
-            max-width: 420px;
-            width: 92%;
-            box-shadow: var(--shadow-popup);
-            border: 1px solid var(--border-color);
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { transform: scale(0.95) translateY(-20px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px 30px; max-width: 420px; width: 92%; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
         .modal h3 { color: var(--text-primary); text-align: center; font-size: 22px; margin-bottom: 4px; transition: 0.3s; }
         .modal .modal-desc { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 16px; transition: 0.3s; }
 
-        @media (max-width: 600px) {
-            .header { padding: 10px 12px; }
-            .logo { font-size: 16px; }
-            .content { padding: 12px; }
-            .security-card { padding: 16px; }
-            .secret-box { flex-direction: column; align-items: stretch; text-align: center; padding: 12px; }
-            .secret-box .copy-btn { margin-top: 6px; justify-content: center; }
-            .otp-input-row input { width: 140px; height: 44px; font-size: 18px; letter-spacing: 6px; }
-            .menu-text { display: none; }
-            .notif-popup { right: 8px; left: 8px; min-width: auto; }
-            .modal { padding: 20px; }
-            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; }
-            .wallet-icon-box { width: 28px; height: 28px; }
-            .wallet-icon-box svg { width: 15px; height: 15px; }
-            .wallet-balance { font-size: 13px; }
-            .wallet-label { font-size: 9px; }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-body);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            transition: 0.5s;
         }
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none !important;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .security-card { padding: 16px; } .secret-box { flex-direction: column; align-items: stretch; text-align: center; padding: 12px; } .secret-box .copy-btn { margin-top: 6px; justify-content: center; } .otp-input-row input { width: 140px; height: 44px; font-size: 18px; letter-spacing: 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .modal { padding: 20px; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } }
     </style>
 </head>
 <body>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">⏳ Đang tải dữ liệu...</div>
+    </div>
 
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
@@ -340,11 +384,14 @@
 
     <header class="header">
         <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()"><div><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><span class="menu-text">MENU</span></div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <div class="logo"></div>
         </div>
         <div class="header-right">
-            <!-- Wallet mới - hình chữ nhật với ví bên trong -->
             <div class="wallet-container">
                 <div class="wallet-icon-box">
                     <svg viewBox="0 0 24 24">
@@ -383,7 +430,6 @@
             <p class="sub" data-key="security_sub">Quản lý bảo mật tài khoản của bạn</p>
             <div id="message" class="message"></div>
 
-            <!-- ===== ĐỔI MẬT KHẨU ===== -->
             <div class="section-title">🔑 <span data-key="change_pass">Đổi mật khẩu</span></div>
             <form id="changePasswordForm">
                 <div class="form-group">
@@ -401,7 +447,6 @@
                 <button type="submit" class="btn-change" data-key="update_btn">🔄 Cập nhật</button>
             </form>
 
-            <!-- ===== 2FA ===== -->
             <div class="section-title">🔒 <span data-key="twofa_title">Xác thực 2 lớp</span></div>
             <div class="twofa-row" onclick="toggleTwoFA()">
                 <div class="left">
@@ -419,17 +464,14 @@
                 </div>
             </div>
 
-            <!-- ===== 2FA MODAL ===== -->
             <div class="modal-overlay" id="twofaModal">
                 <div class="modal">
                     <h3 id="modalTitle">🔐 Xác thực 2 lớp</h3>
                     <p class="modal-desc" id="modalDesc">Quét mã với Google Authenticator hoặc nhập thủ công</p>
-                    
                     <div class="secret-box">
                         <span class="secret-key" id="secretKeyDisplay">Đang tạo...</span>
                         <button class="copy-btn" id="copyBtn" onclick="copySecret()">📋 Sao chép</button>
                     </div>
-
                     <div class="otp-section">
                         <span class="otp-label">📱 Nhập mã OTP 6 số</span>
                         <div class="otp-input-row">
@@ -437,10 +479,8 @@
                             <button class="paste-btn" onclick="pasteOTP()">📋 Dán</button>
                         </div>
                     </div>
-
                     <div class="error-msg" id="otpError">❌ Mã OTP không đúng! Vui lòng thử lại.</div>
                     <div class="attempts">Còn <span id="attemptCount">3</span> lần thử</div>
-
                     <div class="modal-actions">
                         <button class="btn-confirm" id="btnVerifyOTP" onclick="verifyOTP()">✅ Xác nhận</button>
                         <button class="btn-cancel" onclick="closeOTPModal()">❌ Hủy</button>
@@ -448,7 +488,6 @@
                 </div>
             </div>
 
-            <!-- ===== TẮT 2FA MODAL ===== -->
             <div class="modal-overlay" id="twofaOffModal">
                 <div class="modal">
                     <h3>🔓 Tắt xác thực 2 lớp</h3>
@@ -469,7 +508,6 @@
                 </div>
             </div>
 
-            <!-- ===== THIẾT BỊ ===== -->
             <div class="section-title">📱 <span data-key="device_title">Thiết bị đăng nhập</span></div>
             <div class="device-box">
                 <div class="device-item"><span class="label">🌐 IP Address</span><span class="value" id="userIP">Đang lấy...</span></div>
@@ -481,26 +519,10 @@
         </div>
     </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
-            authDomain: "shop-c6777.firebaseapp.com",
-            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "shop-c6777",
-            storageBucket: "shop-c6777.firebasestorage.app",
-            messagingSenderId: "43186563268",
-            appId: "1:43186563268:web:0d392ba57039a919670191"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-
-        const EXCHANGE_RATE = 25000;
-
         const translations = {
-            vi: {
-                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ',
-                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
+            vi: { 
+                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
+                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
                 notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
                 security_title: 'Bảo mật', security_sub: 'Quản lý bảo mật tài khoản của bạn',
                 change_pass: 'Đổi mật khẩu', current_pass: 'Mật khẩu hiện tại', new_pass: 'Mật khẩu mới',
@@ -523,89 +545,8 @@
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
-        let twofaSecret = '';
-        let isVerifying = false;
-        let isTurningOff = false;
-        let verifyAttempts = 3;
-        let offAttempts = 3;
-
-        // ===== GET OTP HELPER - FIXED =====
-        function getOTPHelper() {
-            try {
-                if (typeof otplib !== 'undefined' && otplib.authenticator) {
-                    return otplib.authenticator;
-                }
-                if (typeof window.otplib !== 'undefined' && window.otplib.authenticator) {
-                    return window.otplib.authenticator;
-                }
-            } catch(e) {}
-            
-            console.warn('⚠️ Using fallback OTP');
-            return {
-                check: async function(otp, secret) {
-                    if (!secret || secret.length < 10) return false;
-                    if (!/^\d{6}$/.test(otp)) return false;
-                    
-                    try {
-                        // Decode base32 secret
-                        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-                        const bytes = [];
-                        let bits = 0;
-                        let value = 0;
-                        for (let i = 0; i < secret.length; i++) {
-                            const idx = alphabet.indexOf(secret[i].toUpperCase());
-                            if (idx === -1) continue;
-                            value = (value << 5) | idx;
-                            bits += 5;
-                            if (bits >= 8) {
-                                bits -= 8;
-                                bytes.push((value >> bits) & 0xFF);
-                            }
-                        }
-                        const keyBytes = new Uint8Array(bytes);
-                        
-                        // Get current time counter (30s windows)
-                        let counter = Math.floor(Date.now() / 30000);
-                        const counterBytes = new Uint8Array(8);
-                        for (let i = 7; i >= 0; i--) {
-                            counterBytes[i] = counter & 0xFF;
-                            counter = counter >> 8;
-                        }
-                        
-                        // Import key
-                        const cryptoKey = await crypto.subtle.importKey(
-                            'raw',
-                            keyBytes,
-                            { name: 'HMAC', hash: 'SHA-1' },
-                            false,
-                            ['sign']
-                        );
-                        
-                        // Sign
-                        const signature = await crypto.subtle.sign(
-                            'HMAC',
-                            cryptoKey,
-                            counterBytes
-                        );
-                        
-                        const hmac = new Uint8Array(signature);
-                        const offset = hmac[hmac.length - 1] & 0xF;
-                        const binary = ((hmac[offset] & 0x7F) << 24) |
-                                      ((hmac[offset + 1] & 0xFF) << 16) |
-                                      ((hmac[offset + 2] & 0xFF) << 8) |
-                                      (hmac[offset + 3] & 0xFF);
-                        const expected = String(binary % 1000000).padStart(6, '0');
-                        
-                        return otp === expected;
-                    } catch(e) {
-                        console.error('OTP check error:', e);
-                        return false;
-                    }
-                }
-            };
-        }
-
-        const authenticator = getOTPHelper();
+        let isDataLoaded = false;
+        let currentUser = null;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -641,99 +582,165 @@
             document.body.className = document.body.className.replace(/theme-\w+/g, '');
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
+        
+        // GỌI NGAY KHI LOAD
         applyTheme();
         applyLang();
 
-        // ===== AUTH =====
-        auth.onAuthStateChanged((user) => {
-            if (!user) { window.location.replace('../Authenticator/login.html'); return; }
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('hidden');
+        }
 
-            db.ref('users/' + user.uid + '/balance').on('value', snap => {
-                const balance = snap.val() || 0;
+        function showLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+        }
+
+        // ===== KIỂM TRA QUICK LOGIN =====
+        function checkQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            const quickPending = localStorage.getItem('quickLoginPending');
+            return !!(quickUid && quickToken && quickPending === 'true');
+        }
+
+        // ===== COMPLETE QUICK LOGIN =====
+        async function completeQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            
+            if (!quickUid || !quickToken) return false;
+            
+            try {
+                // Lấy thông tin user từ database
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const userData = snap.val();
+                
+                if (!userData || userData.blocked === true) {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
+                    return false;
+                }
+                
+                // Cập nhật presence
+                await db.ref('presence/' + quickUid).set(true);
+                db.ref('presence/' + quickUid).onDisconnect().set(false);
+                
+                // Cập nhật số dư
+                const balance = userData.balance || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
-            });
-
-            db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
-                const enabled = snap.val() === true;
-                const toggle = document.getElementById('twofaToggle');
-                if (enabled) {
-                    toggle.classList.add('active');
+                
+                // Cập nhật last login
+                document.getElementById('lastLogin').textContent = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
+                
+                // Cập nhật 2FA status
+                if (userData.twofaEnabled === true) {
+                    document.getElementById('twofaToggle').classList.add('active');
                 } else {
-                    toggle.classList.remove('active');
+                    document.getElementById('twofaToggle').classList.remove('active');
                 }
                 updateTwoFAStatus();
-            });
-
-            db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
-                const last = snap.val();
-                document.getElementById('lastLogin').textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
-            });
-
-            db.ref('notifications').on('value', snap => {
-                const notifs = snap.val();
-                const list = document.getElementById('notifList');
-                const dot = document.getElementById('notifDot');
-                if (notifs) {
-                    const keys = Object.keys(notifs).reverse();
-                    let html = '',
-                        hasUnread = false;
-                    keys.forEach(key => {
-                        const n = notifs[key];
-                        const isUnread = !n.readBy || !n.readBy[user.uid];
-                        if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
-                    });
-                    list.innerHTML = html;
-                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else {
-                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
-                    dot.classList.remove('show');
-                }
-            });
-        });
-
-        // ===== CHANGE PASSWORD =====
-        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const current = document.getElementById('currentPassword').value;
-            const newPass = document.getElementById('newPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            const msg = document.getElementById('message');
-            if (newPass.length < 6) {
-                msg.textContent = '❌ Mật khẩu tối thiểu 6 ký tự!';
-                msg.className = 'message error';
-                return;
-            }
-            if (newPass !== confirm) {
-                msg.textContent = '❌ Mật khẩu không khớp!';
-                msg.className = 'message error';
-                return;
-            }
-            const btn = document.querySelector('.btn-change');
-            btn.disabled = true;
-            btn.textContent = 'Đang xử lý...';
-            try {
-                const user = auth.currentUser;
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
-                await user.reauthenticateWithCredential(credential);
-                await user.updatePassword(newPass);
-                msg.textContent = '✅ Đổi mật khẩu thành công!';
-                msg.className = 'message success';
-                document.getElementById('currentPassword').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
+                
+                // Lắng nghe thông báo
+                db.ref('notifications').on('value', snap => {
+                    const notifs = snap.val();
+                    const list = document.getElementById('notifList');
+                    const dot = document.getElementById('notifDot');
+                    if (notifs) {
+                        const keys = Object.keys(notifs).reverse();
+                        let html = '',
+                            hasUnread = false;
+                        keys.forEach(key => {
+                            const n = notifs[key];
+                            const isUnread = !n.readBy || !n.readBy[quickUid];
+                            if (isUnread) hasUnread = true;
+                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        });
+                        list.innerHTML = html;
+                        dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                    } else {
+                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        dot.classList.remove('show');
+                    }
+                });
+                
+                // Đánh dấu đã load xong
+                isDataLoaded = true;
+                hideLoading();
+                return true;
+                
             } catch (error) {
-                let err = '❌ Lỗi: ';
-                if (error.code === 'auth/wrong-password') err += 'Mật khẩu hiện tại sai!';
-                else err += error.message;
-                msg.textContent = err;
-                msg.className = 'message error';
+                console.error('Lỗi complete quick login:', error);
+                return false;
             }
-            btn.disabled = false;
-            btn.textContent = '🔄 Cập nhật';
-        });
+        }
 
-        // ===== GENERATE SECRET =====
+        // ===== 2FA FUNCTIONS =====
+        let twofaSecret = '';
+        let isVerifying = false;
+        let isTurningOff = false;
+        let verifyAttempts = 3;
+        let offAttempts = 3;
+
+        function getOTPHelper() {
+            return {
+                check: async function(otp, secret) {
+                    if (!secret || secret.length < 10) return false;
+                    if (!/^\d{6}$/.test(otp)) return false;
+                    try {
+                        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+                        const bytes = [];
+                        let bits = 0;
+                        let value = 0;
+                        for (let i = 0; i < secret.length; i++) {
+                            const idx = alphabet.indexOf(secret[i].toUpperCase());
+                            if (idx === -1) continue;
+                            value = (value << 5) | idx;
+                            bits += 5;
+                            if (bits >= 8) {
+                                bits -= 8;
+                                bytes.push((value >> bits) & 0xFF);
+                            }
+                        }
+                        const keyBytes = new Uint8Array(bytes);
+                        let counter = Math.floor(Date.now() / 30000);
+                        const counterBytes = new Uint8Array(8);
+                        for (let i = 7; i >= 0; i--) {
+                            counterBytes[i] = counter & 0xFF;
+                            counter = counter >> 8;
+                        }
+                        const cryptoKey = await crypto.subtle.importKey(
+                            'raw',
+                            keyBytes,
+                            { name: 'HMAC', hash: 'SHA-1' },
+                            false,
+                            ['sign']
+                        );
+                        const signature = await crypto.subtle.sign(
+                            'HMAC',
+                            cryptoKey,
+                            counterBytes
+                        );
+                        const hmac = new Uint8Array(signature);
+                        const offset = hmac[hmac.length - 1] & 0xF;
+                        const binary = ((hmac[offset] & 0x7F) << 24) |
+                                      ((hmac[offset + 1] & 0xFF) << 16) |
+                                      ((hmac[offset + 2] & 0xFF) << 8) |
+                                      (hmac[offset + 3] & 0xFF);
+                        const expected = String(binary % 1000000).padStart(6, '0');
+                        return otp === expected;
+                    } catch(e) {
+                        console.error('OTP check error:', e);
+                        return false;
+                    }
+                }
+            };
+        }
+
+        const authenticator = getOTPHelper();
+
         function generateSecret() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
             let secret = '';
@@ -743,12 +750,35 @@
             return secret;
         }
 
-        // ===== TOGGLE 2FA =====
         function toggleTwoFA() {
             const user = auth.currentUser;
-            if (!user) return;
-            const toggle = document.getElementById('twofaToggle');
+            if (!user) {
+                const quickUid = localStorage.getItem('quickLoginUid');
+                if (!quickUid) {
+                    alert('Vui lòng đăng nhập!');
+                    return;
+                }
+                // Nếu đang quick login, vẫn cho phép bật 2FA
+                db.ref('users/' + quickUid + '/twofaEnabled').once('value').then((snap) => {
+                    if (snap.val() === true) {
+                        document.getElementById('twofaToggle').classList.add('active');
+                        updateTwoFAStatus();
+                        return;
+                    }
+                    twofaSecret = generateSecret();
+                    document.getElementById('secretKeyDisplay').textContent = twofaSecret;
+                    document.getElementById('otpInput').value = '';
+                    document.getElementById('otpError').classList.remove('show');
+                    document.getElementById('otpInput').classList.remove('error', 'success');
+                    verifyAttempts = 3;
+                    document.getElementById('attemptCount').textContent = verifyAttempts;
+                    document.getElementById('twofaModal').classList.add('active');
+                    setTimeout(() => document.getElementById('otpInput').focus(), 200);
+                });
+                return;
+            }
 
+            const toggle = document.getElementById('twofaToggle');
             if (toggle.classList.contains('active')) {
                 offAttempts = 3;
                 document.getElementById('otpOffInput').value = '';
@@ -777,7 +807,6 @@
             }
         }
 
-        // ===== COPY SECRET =====
         function copySecret() {
             const secret = document.getElementById('secretKeyDisplay').textContent;
             const btn = document.getElementById('copyBtn');
@@ -802,7 +831,6 @@
             }
         }
 
-        // ===== PASTE OTP =====
         function pasteOTP() {
             if (navigator.clipboard) {
                 navigator.clipboard.readText().then(text => {
@@ -841,10 +869,8 @@
             }
         }
 
-        // ===== VERIFY OTP - FIXED =====
         async function verifyOTP() {
             if (isVerifying) return;
-
             const otp = document.getElementById('otpInput').value.trim();
             if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
                 document.getElementById('otpError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
@@ -852,14 +878,14 @@
                 document.getElementById('otpInput').classList.add('error');
                 return;
             }
-
             isVerifying = true;
             document.getElementById('btnVerifyOTP').disabled = true;
             document.getElementById('btnVerifyOTP').textContent = '⏳ Đang xác thực...';
 
             try {
                 const user = auth.currentUser;
-                if (!user) {
+                let uid = user ? user.uid : localStorage.getItem('quickLoginUid');
+                if (!uid) {
                     alert('❌ Vui lòng đăng nhập lại!');
                     isVerifying = false;
                     document.getElementById('btnVerifyOTP').disabled = false;
@@ -867,10 +893,9 @@
                     return;
                 }
 
-                // Lấy secret từ database hoặc dùng secret đã tạo
                 let secret = twofaSecret;
                 if (!secret) {
-                    const snap = await db.ref('users/' + user.uid + '/twofaSecret').once('value');
+                    const snap = await db.ref('users/' + uid + '/twofaSecret').once('value');
                     secret = snap.val();
                 }
 
@@ -883,22 +908,10 @@
                     return;
                 }
 
-                // Kiểm tra OTP với thư viện
-                let isValid = false;
-                try {
-                    const result = authenticator.check(otp, secret);
-                    if (result && typeof result.then === 'function') {
-                        isValid = await result;
-                    } else {
-                        isValid = result;
-                    }
-                } catch(e) {
-                    console.error('OTP check error:', e);
-                    isValid = false;
-                }
+                const isValid = await authenticator.check(otp, secret);
 
                 if (isValid) {
-                    await db.ref('users/' + user.uid).update({
+                    await db.ref('users/' + uid).update({
                         twofaEnabled: true,
                         twofaSecret: secret
                     });
@@ -940,10 +953,8 @@
             document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
         }
 
-        // ===== TURN OFF 2FA - FIXED =====
         async function turnOff2FA() {
             if (isTurningOff) return;
-
             const otp = document.getElementById('otpOffInput').value.trim();
             if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
                 document.getElementById('otpOffError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
@@ -958,7 +969,8 @@
 
             try {
                 const user = auth.currentUser;
-                if (!user) {
+                let uid = user ? user.uid : localStorage.getItem('quickLoginUid');
+                if (!uid) {
                     alert('❌ Vui lòng đăng nhập lại!');
                     isTurningOff = false;
                     document.getElementById('btnTurnOff').disabled = false;
@@ -966,8 +978,7 @@
                     return;
                 }
 
-                // Lấy secret từ database
-                const snap = await db.ref('users/' + user.uid + '/twofaSecret').once('value');
+                const snap = await db.ref('users/' + uid + '/twofaSecret').once('value');
                 const secret = snap.val();
 
                 if (!secret) {
@@ -979,22 +990,10 @@
                     return;
                 }
 
-                // Kiểm tra OTP
-                let isValid = false;
-                try {
-                    const result = authenticator.check(otp, secret);
-                    if (result && typeof result.then === 'function') {
-                        isValid = await result;
-                    } else {
-                        isValid = result;
-                    }
-                } catch(e) {
-                    console.error('OTP check error:', e);
-                    isValid = false;
-                }
+                const isValid = await authenticator.check(otp, secret);
 
                 if (isValid) {
-                    await db.ref('users/' + user.uid).update({
+                    await db.ref('users/' + uid).update({
                         twofaEnabled: false,
                         twofaSecret: null
                     });
@@ -1036,7 +1035,6 @@
             document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
         }
 
-        // ===== CLOSE MODALS =====
         function closeOTPModal() {
             document.getElementById('twofaModal').classList.remove('active');
             document.getElementById('otpInput').value = '';
@@ -1055,10 +1053,166 @@
             document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
         }
 
+        // ===== AUTH STATE =====
+        auth.onAuthStateChanged(async (user) => {
+            console.log('🔐 Auth state changed, user:', user?.uid || 'none');
+            
+            // Nếu đã load data rồi thì không làm gì
+            if (isDataLoaded) {
+                console.log('✅ Data already loaded, skipping');
+                return;
+            }
+            
+            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
+            if (checkQuickLogin()) {
+                console.log('🔑 Quick login detected, attempting...');
+                const success = await completeQuickLogin();
+                if (success) {
+                    console.log('✅ Quick login success');
+                    return;
+                }
+                console.warn('⚠️ Quick login failed, redirecting to login');
+                // Nếu fail thì xóa và chuyển về login
+                hideLoading();
+                localStorage.removeItem('quickLoginUid');
+                localStorage.removeItem('quickLoginToken');
+                localStorage.removeItem('quickLoginPending');
+                window.location.replace('../Authenticator/login.html');
+                return;
+            }
+            
+            if (!user) { 
+                console.warn('⚠️ No user logged in, redirecting to login');
+                hideLoading();
+                window.location.replace('../Authenticator/login.html'); 
+                return; 
+            }
+            
+            currentUser = user;
+            
+            // Cập nhật presence
+            db.ref('presence/' + user.uid).set(true);
+            db.ref('presence/' + user.uid).onDisconnect().set(false);
+            
+            // Lấy số dư
+            db.ref('users/' + user.uid + '/balance').on('value', snap => {
+                const balance = snap.val() || 0;
+                document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
+            });
+
+            // Lấy 2FA status
+            db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
+                const enabled = snap.val() === true;
+                const toggle = document.getElementById('twofaToggle');
+                if (enabled) {
+                    toggle.classList.add('active');
+                } else {
+                    toggle.classList.remove('active');
+                }
+                updateTwoFAStatus();
+            });
+
+            // Lấy last login
+            db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
+                const last = snap.val();
+                document.getElementById('lastLogin').textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
+            });
+
+            // Lấy thông báo
+            db.ref('notifications').on('value', snap => {
+                const notifs = snap.val();
+                const list = document.getElementById('notifList');
+                const dot = document.getElementById('notifDot');
+                if (notifs) {
+                    const keys = Object.keys(notifs).reverse();
+                    let html = '',
+                        hasUnread = false;
+                    keys.forEach(key => {
+                        const n = notifs[key];
+                        const isUnread = !n.readBy || !n.readBy[user.uid];
+                        if (isUnread) hasUnread = true;
+                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                    });
+                    list.innerHTML = html;
+                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                } else {
+                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    dot.classList.remove('show');
+                }
+            });
+
+            if (!isDataLoaded) {
+                isDataLoaded = true;
+                hideLoading();
+            }
+        });
+
+        // ===== CHANGE PASSWORD =====
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const msg = document.getElementById('message');
+            if (newPass.length < 6) {
+                msg.textContent = '❌ Mật khẩu tối thiểu 6 ký tự!';
+                msg.className = 'message error';
+                return;
+            }
+            if (newPass !== confirm) {
+                msg.textContent = '❌ Mật khẩu không khớp!';
+                msg.className = 'message error';
+                return;
+            }
+            const btn = document.querySelector('.btn-change');
+            btn.disabled = true;
+            btn.textContent = 'Đang xử lý...';
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    const quickUid = localStorage.getItem('quickLoginUid');
+                    if (quickUid) {
+                        alert('⚠️ Bạn đang đăng nhập nhanh. Vui lòng đăng nhập bằng email để đổi mật khẩu.');
+                        btn.disabled = false;
+                        btn.textContent = '🔄 Cập nhật';
+                        return;
+                    }
+                    alert('❌ Vui lòng đăng nhập lại!');
+                    btn.disabled = false;
+                    btn.textContent = '🔄 Cập nhật';
+                    return;
+                }
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
+                await user.reauthenticateWithCredential(credential);
+                await user.updatePassword(newPass);
+                msg.textContent = '✅ Đổi mật khẩu thành công!';
+                msg.className = 'message success';
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            } catch (error) {
+                let err = '❌ Lỗi: ';
+                if (error.code === 'auth/wrong-password') err += 'Mật khẩu hiện tại sai!';
+                else err += error.message;
+                msg.textContent = err;
+                msg.className = 'message error';
+            }
+            btn.disabled = false;
+            btn.textContent = '🔄 Cập nhật';
+        });
+
         // ===== DEVICE INFO =====
-        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+        // Fetch IP với timeout 1.5 giây (không chặn loading)
+        Promise.race([
+            fetch('https://api.ipify.org?format=json').then(r => r.json()),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1500))
+        ]).then(d => {
+            console.log('✅ IP fetched:', d.ip);
             document.getElementById('userIP').textContent = d.ip || 'Không xác định';
-        }).catch(() => document.getElementById('userIP').textContent = 'Không thể lấy');
+        }).catch((err) => {
+            console.warn('⚠️ Failed to fetch IP:', err.message);
+            document.getElementById('userIP').textContent = 'Không thể lấy';
+        });
 
         const ua = navigator.userAgent;
         let browser = 'Không xác định';
@@ -1116,8 +1270,19 @@
         function goToSettings() { window.location.href = 'settings.html'; }
 
         function logout() {
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) auth.signOut().then(() => window.location.replace(
-                '../Authenticator/login.html'));
+            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+                const user = auth.currentUser;
+                if (user) {
+                    db.ref('presence/' + user.uid).set(false);
+                }
+                auth.signOut().then(() => {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginEmail');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
+                    window.location.replace('../Authenticator/login.html');
+                });
+            }
         }
 
         // ===== KEYBOARD EVENTS =====
@@ -1128,7 +1293,6 @@
             if (e.key === 'Enter') turnOff2FA();
         });
 
-        // ===== AUTO CLEAR ERROR =====
         document.getElementById('otpInput').addEventListener('input', function(e) {
             this.value = this.value.replace(/\D/g, '');
             if (this.value.length === 6) {
@@ -1144,7 +1308,6 @@
             }
         });
 
-        // ===== CLOSE MODALS ON OVERLAY CLICK =====
         document.getElementById('twofaModal').addEventListener('click', function(e) {
             if (e.target === this) closeOTPModal();
         });
@@ -1152,16 +1315,26 @@
             if (e.target === this) closeTwoFAOff();
         });
 
-        // ===== STORAGE LISTENER =====
         window.addEventListener('storage', function(e) {
             if (e.key === 'lang') { lang = e.newValue || 'vi';
                 applyLang(); }
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Security page loaded with fixed OTP verification!');
-        console.log('🔒 Fixed: Assignment to constant variable error');
-        console.log('📋 Copy & Paste OTP support added!');
+        // Hiển thị loading ngay khi trang load
+        showLoading();
+        console.log('⏳ Loading overlay shown');
+
+        // Ẩn loading sau 1s nếu không có gì xảy ra (fallback)
+        setTimeout(() => {
+            if (!isDataLoaded) {
+                console.warn('⚠️ Loading timeout - hiding spinner');
+                isDataLoaded = true;
+                hideLoading();
+            }
+        }, 1000);
+
+        console.log('✅ Security page loaded with quick login support!');
     </script>
 </body>
 </html>
