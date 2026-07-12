@@ -137,6 +137,30 @@
         .product-card-admin .actions .duplicate { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
         .product-card-admin .actions .duplicate:hover { background: #ffc107; color: #fff; }
 
+        /* User management */
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+        .user-card { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; }
+        .user-card:hover { border-color: var(--accent); }
+        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .user-card .user-header .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+        .user-card .user-header .user-name { font-weight: 600; color: var(--text-primary); }
+        .user-card .user-header .user-email { font-size: 11px; color: var(--text-muted); }
+        .user-card .user-balance { font-size: 18px; font-weight: 700; color: var(--accent); padding: 6px 0; }
+        .user-card .user-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+        .user-card .user-actions button { padding: 4px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .user-card .user-actions .add-money { background: var(--success); color: #fff; }
+        .user-card .user-actions .add-money:hover { opacity: 0.8; }
+        .user-card .user-actions .sub-money { background: var(--danger); color: #fff; }
+        .user-card .user-actions .sub-money:hover { opacity: 0.8; }
+        .user-card .user-actions .block-btn { background: var(--warning); color: #fff; }
+        .user-card .user-actions .block-btn:hover { opacity: 0.8; }
+        .user-card .user-actions .unblock-btn { background: var(--accent); color: #fff; }
+        .user-card .user-actions .unblock-btn:hover { opacity: 0.8; }
+        .user-card .user-status { font-size: 11px; padding: 2px 10px; border-radius: 10px; display: inline-block; }
+        .user-card .user-status.online { background: #d4edda; color: #155724; }
+        .user-card .user-status.offline { background: #f8d7da; color: #721c24; }
+        .user-card .user-status.blocked { background: #fff3cd; color: #856404; }
+
         .order-item-admin { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
         .order-item-admin .order-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
@@ -144,6 +168,7 @@
         .order-item-admin .order-info .name { font-weight: 600; color: var(--text-primary); }
         .order-item-admin .order-info .meta { font-size: 11px; color: var(--text-muted); }
         .order-item-admin .order-info .order-code { font-size: 11px; color: var(--accent); font-weight: 600; }
+        .order-item-admin .order-info .order-note { font-size: 11px; color: var(--text-primary); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; border-left: 3px solid var(--warning); margin-top: 2px; }
 
         .voucher-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
         .voucher-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px 16px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 180px; }
@@ -176,13 +201,17 @@
         .modal .row input, .modal .row select { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 100px; }
         .modal .row input:focus, .modal .row select:focus { outline: none; border-color: var(--text-secondary); }
         .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-height: 100px; resize: vertical; font-family: inherit; }
+        .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-height: 80px; resize: vertical; font-family: inherit; }
         .modal .row textarea:focus { outline: none; border-color: var(--text-secondary); }
         .modal .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; min-width: 60px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
         .modal .actions .save { background: var(--accent); color: #fff; }
         .modal .actions .save:hover { transform: translateY(-2px); }
+        .modal .actions .danger { background: var(--danger); color: #fff; }
+        .modal .actions .danger:hover { transform: translateY(-2px); }
+        .modal .actions .success { background: var(--success); color: #fff; }
+        .modal .actions .success:hover { transform: translateY(-2px); }
         
         .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
@@ -194,7 +223,7 @@
         .toast.error { border-color: #e74c6f; color: #e74c6f; }
         .toast.success { border-color: #27ae60; color: #27ae60; }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .category-item-admin { min-width: 120px; } .voucher-item { min-width: 140px; } .modal { padding: 16px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .category-item-admin { min-width: 120px; } .voucher-item { min-width: 140px; } .user-grid { grid-template-columns: 1fr; } .modal { padding: 16px; } }
     </style>
 </head>
 <body>
@@ -252,10 +281,11 @@
     <div class="content">
         <div class="admin-card">
             <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshAll()">🔄 Làm mới</button></h1>
-            <p class="sub" data-key="admin_sub">Quản lý mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá</p>
+            <p class="sub" data-key="admin_sub">Quản lý người dùng, mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá</p>
             
             <div class="tabs">
                 <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+                <button class="tab" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
                 <button class="tab" data-tab="categories" onclick="switchTab('categories')">📂 Mục SP</button>
                 <button class="tab" data-tab="products" onclick="switchTab('products')">🛍️ Sản phẩm</button>
                 <button class="tab" data-tab="orders" onclick="switchTab('orders')">📦 Đơn hàng</button>
@@ -265,15 +295,26 @@
             <!-- Tab Dashboard -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="stats-grid" id="dashboardStats">
-                    <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label">📂 Mục sản phẩm</div></div>
+                    <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label">👥 Người dùng</div></div>
+                    <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label">📂 Mục SP</div></div>
                     <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label">🛍️ Sản phẩm</div></div>
-                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label">📦 Tổng đơn hàng</div></div>
+                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label">📦 Đơn hàng</div></div>
                     <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label">💰 Doanh thu hôm nay</div></div>
                     <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label">🎫 Mã giảm giá</div></div>
                 </div>
                 <div id="recentOrders" style="margin-top:12px;">
                     <h4 style="color:var(--text-primary);margin-bottom:8px;">📋 Đơn hàng gần đây</h4>
                     <div id="recentOrdersList"><div class="loading">Đang tải...</div></div>
+                </div>
+            </div>
+            
+            <!-- Tab Users - Quản lý người dùng và tiền -->
+            <div class="tab-content" id="tab-users">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                    <button class="btn-send" onclick="refreshUsers()">🔄 Làm mới</button>
+                </div>
+                <div id="userGrid" class="user-grid">
+                    <div class="loading">⏳ Đang tải danh sách người dùng...</div>
                 </div>
             </div>
             
@@ -288,7 +329,7 @@
                 </div>
             </div>
             
-            <!-- Tab Products - Cập nhật nút Nhân bản -->
+            <!-- Tab Products -->
             <div class="tab-content" id="tab-products">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openProductModal()">➕ Thêm sản phẩm</button>
@@ -325,7 +366,7 @@
         </div>
     </div>
 
-    <!-- Modal Category (giữ nguyên) -->
+    <!-- Modal Category -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
             <h3 id="categoryModalTitle">📂 Thêm mục sản phẩm</h3>
@@ -343,7 +384,7 @@
         </div>
     </div>
 
-    <!-- Modal Product (giữ nguyên) -->
+    <!-- Modal Product -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3 id="productModalTitle">🛍️ Thêm sản phẩm</h3>
@@ -367,7 +408,7 @@
         </div>
     </div>
 
-    <!-- Modal Variant - Tạo biến thể cho 1 sản phẩm -->
+    <!-- Modal Variant -->
     <div class="modal-overlay" id="variantModal">
         <div class="modal">
             <h3>📋 Tạo biến thể sản phẩm</h3>
@@ -392,7 +433,27 @@
         </div>
     </div>
 
-    <!-- Modal Voucher (giữ nguyên) -->
+    <!-- Modal Add/Sub Money -->
+    <div class="modal-overlay" id="moneyModal">
+        <div class="modal">
+            <h3 id="moneyModalTitle">💰 Điều chỉnh số dư</h3>
+            <div class="row"><label>Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label>Số dư hiện tại:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
+            <div class="row"><label>Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
+            <div class="row"><label>Ghi chú:</label>
+                <input type="text" id="moneyNote" placeholder="Lý do điều chỉnh" />
+            </div>
+            <input type="hidden" id="moneyUserId" value="" />
+            <input type="hidden" id="moneyAction" value="add" />
+            <div class="actions">
+                <button class="success" onclick="moneyAction('add')">➕ Cộng tiền</button>
+                <button class="danger" onclick="moneyAction('sub')">➖ Trừ tiền</button>
+                <button class="cancel" onclick="closeMoneyModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Voucher -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
             <h3>🎫 Tạo mã giảm giá</h3>
@@ -435,20 +496,22 @@
         let productsData = {};
         let ordersData = {};
         let vouchersData = {};
+        let usersData = {};
+        let onlineUsersMap = {};
 
         const translations = {
             vi: {
                 home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ',
                 profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
                 notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
-                admin_title: 'Quản trị', admin_sub: 'Quản lý mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá',
+                admin_title: 'Quản trị', admin_sub: 'Quản lý người dùng, mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá',
                 send_btn: '📢 Gửi', back: '← Quay lại'
             },
             en: {
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
                 profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
                 notif_title: '📢 Notifications', notif_empty: 'No notifications',
-                admin_title: 'Admin', admin_sub: 'Manage categories, products, orders and vouchers',
+                admin_title: 'Admin', admin_sub: 'Manage users, categories, products, orders and vouchers',
                 send_btn: '📢 Send', back: '← Back'
             }
         };
@@ -487,6 +550,7 @@
             document.getElementById('tab-' + tab).classList.add('active');
             
             if (tab === 'dashboard') updateDashboard();
+            if (tab === 'users') loadUsersAdmin();
             if (tab === 'categories') loadCategoriesAdmin();
             if (tab === 'products') loadProductsAdmin();
             if (tab === 'orders') loadOrdersAdmin();
@@ -512,6 +576,7 @@
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     if (data.isAdmin === true) {
                         isAdmin = true;
+                        loadUsersAdmin();
                         loadCategoriesAdmin();
                         loadProductsAdmin();
                         loadOrdersAdmin();
@@ -533,6 +598,10 @@
 
         // ===== DASHBOARD =====
         function updateDashboard() {
+            db.ref('users').once('value', snap => {
+                const data = snap.val() || {};
+                document.getElementById('dashUsers').textContent = Object.keys(data).length;
+            });
             db.ref('categories').once('value', snap => {
                 const data = snap.val() || {};
                 document.getElementById('dashCategories').textContent = Object.keys(data).length;
@@ -575,6 +644,7 @@
                                     <div class="name">${o.productName || 'Sản phẩm'}</div>
                                     <div class="meta">${(o.price || 0).toLocaleString('vi-VN')}đ • ${o.userName || 'Khách'}</div>
                                     <div class="order-code">${o.orderCode || '#' + key.substring(0,6)}</div>
+                                    ${o.orderNote ? `<div class="order-note">📝 ${o.orderNote}</div>` : ''}
                                 </div>
                             </div>
                         `;
@@ -586,6 +656,127 @@
                 const data = snap.val() || {};
                 document.getElementById('dashVouchers').textContent = Object.keys(data).length;
             });
+        }
+
+        // ===== USERS MANAGEMENT =====
+        function loadUsersAdmin() {
+            db.ref('users').on('value', (snapshot) => {
+                usersData = snapshot.val() || {};
+                renderUsersAdmin(usersData);
+            });
+            db.ref('presence').on('value', (snapshot) => {
+                onlineUsersMap = snapshot.val() || {};
+                renderUsersAdmin(usersData);
+            });
+        }
+
+        function renderUsersAdmin(data) {
+            const container = document.getElementById('userGrid');
+            const keys = Object.keys(data);
+            if (keys.length === 0) {
+                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có người dùng' : 'No users'}</div>`;
+                return;
+            }
+            let html = '';
+            keys.forEach(key => {
+                const user = data[key];
+                if (user.isAdmin === true) return; // Ẩn admin
+                
+                const isOnline = onlineUsersMap[key] === true;
+                const isBlocked = user.blocked === true;
+                const balance = user.balance || 0;
+                const name = user.displayName || user.email || 'Chưa đặt tên';
+                const email = user.email || 'Không có email';
+                const initial = name.charAt(0).toUpperCase() || '?';
+                
+                let statusClass = isBlocked ? 'blocked' : (isOnline ? 'online' : 'offline');
+                let statusText = isBlocked ? '🔒 Đã khóa' : (isOnline ? '🟢 Online' : '⚪ Offline');
+                
+                html += `
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-avatar">${initial}</div>
+                            <div>
+                                <div class="user-name">${name}</div>
+                                <div class="user-email">${email}</div>
+                            </div>
+                        </div>
+                        <div class="user-balance">💰 ${balance.toLocaleString('vi-VN')} VND</div>
+                        <div><span class="user-status ${statusClass}">${statusText}</span></div>
+                        <div class="user-actions">
+                            <button class="add-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'add')">➕ Cộng tiền</button>
+                            <button class="sub-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'sub')">➖ Trừ tiền</button>
+                            ${isBlocked ? 
+                                `<button class="unblock-btn" onclick="toggleBlockUser('${key}',false)">🔓 Mở khóa</button>` :
+                                `<button class="block-btn" onclick="toggleBlockUser('${key}',true)">🔒 Khóa</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function refreshUsers() {
+            loadUsersAdmin();
+            showToast('🔄 Đã làm mới danh sách!', 'success');
+        }
+
+        // ===== MONEY MANAGEMENT =====
+        function openMoneyModal(uid, name, balance, action) {
+            document.getElementById('moneyModalTitle').textContent = action === 'add' ? '💰 Cộng tiền' : '💰 Trừ tiền';
+            document.getElementById('moneyUserName').textContent = name;
+            document.getElementById('moneyCurrentBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
+            document.getElementById('moneyAmount').value = '';
+            document.getElementById('moneyNote').value = '';
+            document.getElementById('moneyUserId').value = uid;
+            document.getElementById('moneyAction').value = action;
+            document.getElementById('moneyModal').classList.add('active');
+        }
+
+        function closeMoneyModal() {
+            document.getElementById('moneyModal').classList.remove('active');
+        }
+
+        function moneyAction(action) {
+            const uid = document.getElementById('moneyUserId').value;
+            const amount = parseInt(document.getElementById('moneyAmount').value);
+            const note = document.getElementById('moneyNote').value.trim() || 'Admin điều chỉnh';
+            
+            if (!uid) { showToast('❌ Lỗi: Không tìm thấy người dùng!', 'error'); return; }
+            if (!amount || amount <= 0) { showToast('❌ Nhập số tiền hợp lệ!', 'error'); return; }
+            
+            const isAdd = action === 'add';
+            const ref = db.ref('users/' + uid + '/balance');
+            ref.transaction(current => {
+                const c = current || 0;
+                return isAdd ? c + amount : Math.max(0, c - amount);
+            }).then(result => {
+                const newBalance = result.snapshot.val() || 0;
+                showToast(`✅ ${isAdd ? 'Cộng' : 'Trừ'} ${amount.toLocaleString('vi-VN')} VND thành công! Số dư mới: ${newBalance.toLocaleString('vi-VN')} VND`, 'success');
+                closeMoneyModal();
+                // Gửi thông báo cho user
+                const msg = isAdd ? `💳 Tài khoản của bạn được cộng ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}` : `💳 Tài khoản của bạn bị trừ ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}`;
+                db.ref('notifications').push({
+                    message: msg,
+                    timestamp: Date.now(),
+                    from: 'Admin',
+                    readBy: {}
+                });
+                refreshUsers();
+            }).catch(err => {
+                showToast('❌ ' + err.message, 'error');
+            });
+        }
+
+        function toggleBlockUser(uid, blocked) {
+            const msg = blocked ? (lang === 'vi' ? '🔒 Khóa người dùng này?' : 'Block this user?') : (lang === 'vi' ? '🔓 Mở khóa người dùng này?' : 'Unblock this user?');
+            if (confirm(msg)) {
+                db.ref('users/' + uid + '/blocked').set(blocked).then(() => {
+                    showToast(blocked ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
+                    refreshUsers();
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
         }
 
         // ===== CATEGORIES MANAGEMENT =====
@@ -776,7 +967,7 @@
             container.innerHTML = html;
         }
 
-        // ===== VARIANT - Tạo biến thể cho 1 sản phẩm =====
+        // ===== VARIANT =====
         function openVariantModal() {
             document.getElementById('variantCategory').value = '';
             document.getElementById('variantName').value = '';
@@ -841,7 +1032,6 @@
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
             if (descriptions.length === 0) { showToast('❌ Nhập ít nhất 1 biến thể!', 'error'); return; }
             
-            // Tạo 1 sản phẩm duy nhất với nhiều biến thể
             const productId = 'prod_' + Date.now();
             const data = {
                 name: name,
@@ -988,6 +1178,7 @@
                             <div class="order-code">🔑 ${o.orderCode || '#' + key.substring(0,6)}</div>
                             ${o.voucher ? `<div class="meta">🎫 Mã: ${o.voucher}</div>` : ''}
                             ${o.productDesc ? `<div class="meta">📝 ${o.productDesc}</div>` : ''}
+                            ${o.orderNote ? `<div class="order-note">📝 Ghi chú: ${o.orderNote}</div>` : ''}
                             <div class="meta">📅 ${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
                         </div>
                         <button class="btn-action delete" onclick="deleteOrder('${key}')" style="font-size:11px;background:#fef0f2;color:#e74c6f;border:1px solid #fdd5d9;padding:3px 10px;border-radius:6px;cursor:pointer;">🗑️</button>
@@ -1119,6 +1310,7 @@
                     return;
                 }
                 isAdmin = true;
+                loadUsersAdmin();
                 loadCategoriesAdmin();
                 loadProductsAdmin();
                 loadOrdersAdmin();
@@ -1174,6 +1366,7 @@
         }
 
         function refreshAll() {
+            loadUsersAdmin();
             loadCategoriesAdmin();
             loadProductsAdmin();
             loadOrdersAdmin();
@@ -1242,6 +1435,9 @@
         document.getElementById('variantModal').addEventListener('click', function(e) {
             if (e.target === this) closeVariantModal();
         });
+        document.getElementById('moneyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeMoneyModal();
+        });
         document.getElementById('voucherModal').addEventListener('click', function(e) {
             if (e.target === this) closeVoucherModal();
         });
@@ -1251,7 +1447,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Categories, Products, Orders, Vouchers & Variant feature!');
+        console.log('✅ Admin panel loaded with Users, Categories, Products, Orders, Vouchers & Money management!');
     </script>
 </body>
-</html>0
+</html>
