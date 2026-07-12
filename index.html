@@ -180,7 +180,6 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* Order Popup */
         .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .order-popup-overlay.active { display: flex; }
         .order-popup { 
@@ -367,7 +366,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">KuanZGame.Store</div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -718,7 +717,6 @@
             
             let html = '';
             filtered.forEach(product => {
-                // Lấy số lượng tồn kho từ data (mảng dữ liệu)
                 const stock = product.data ? product.data.length : 0;
                 const isOutOfStock = stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
@@ -914,7 +912,6 @@
             
             showLoading();
             
-            // Lấy dữ liệu sản phẩm cần bán (lấy currentQuantity phần tử đầu tiên)
             const dataList = currentProduct.data || [];
             const soldData = dataList.slice(0, currentQuantity);
             const remainingData = dataList.slice(currentQuantity);
@@ -979,7 +976,6 @@
                     document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                     currentUser.balance = bal;
                 });
-                // Cập nhật lại productsData local
                 productsData[currentProduct.id].data = remainingData;
                 productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
                 renderProducts();
@@ -1054,11 +1050,12 @@
 
         // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
-            if (isDataLoaded) return;
-            
             if (checkQuickLogin()) {
                 const success = await autoLoginWithQuickToken();
-                if (success) return;
+                if (success) {
+                    // Nếu quick login thành công, không làm gì thêm
+                    return;
+                }
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
@@ -1116,6 +1113,13 @@
                 });
                 
                 loadData();
+                // Đảm bảo ẩn loading sau khi load data
+                setTimeout(() => {
+                    if (!isDataLoaded) {
+                        isDataLoaded = true;
+                        hideLoading();
+                    }
+                }, 3000);
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
@@ -1195,7 +1199,9 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
+        // Hiển thị loading khi trang load
         showLoading();
+        // Ẩn loading sau 5s nếu không có gì xảy ra
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
