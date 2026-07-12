@@ -71,7 +71,6 @@
 
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        /* Wallet mới - hình chữ nhật với ví bên trong */
         .wallet-container {
             background: var(--wallet-bg);
             border: 2px solid var(--border-color);
@@ -314,7 +313,6 @@
             <div class="logo"></div>
         </div>
         <div class="header-right">
-            <!-- Wallet mới - hình chữ nhật với ví bên trong -->
             <div class="wallet-container">
                 <div class="wallet-icon-box">
                     <svg viewBox="0 0 24 24">
@@ -521,6 +519,42 @@
 
         let lang = localStorage.getItem('lang') || 'vi';
         let currentTheme = localStorage.getItem('theme_name') || 'default';
+        let isDataLoaded = false;
+
+        // ===== KIỂM TRA QUICK LOGIN =====
+        function checkQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            const quickPending = localStorage.getItem('quickLoginPending');
+            return !!(quickUid && quickToken && quickPending === 'true');
+        }
+
+        // ===== COMPLETE QUICK LOGIN =====
+        async function completeQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            if (!quickUid) return false;
+            
+            try {
+                await db.ref('presence/' + quickUid).set(true);
+                db.ref('presence/' + quickUid).onDisconnect().set(false);
+                
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const data = snap.val();
+                if (data) {
+                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
+                    
+                    // Kiểm tra admin
+                    if (data.isAdmin === true) {
+                        document.getElementById('adminSection').style.display = 'block';
+                    }
+                }
+                isDataLoaded = true;
+                return true;
+            } catch (error) {
+                console.error('Lỗi complete quick login:', error);
+                return false;
+            }
+        }
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -658,8 +692,22 @@
             showToast(lang === 'vi' ? '✅ Đã chuyển sang Tiếng Việt!' : '✅ Switched to English!');
         }
 
+        // ===== AUTH STATE =====
         auth.onAuthStateChanged((user) => {
-            if (!user) { window.location.replace('../Authenticator/login.html'); return; }
+            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
+            if (checkQuickLogin()) {
+                completeQuickLogin();
+                // Không redirect vì quick login đã xử lý
+                return;
+            }
+            
+            if (!user) { 
+                // Chỉ redirect khi không có user và không phải quick login
+                if (!localStorage.getItem('quickLoginUid') || !localStorage.getItem('quickLoginToken')) {
+                    window.location.replace('../Authenticator/login.html');
+                }
+                return; 
+            }
 
             db.ref('users/' + user.uid + '/isAdmin').once('value', snap => {
                 if (snap.val() === true) document.getElementById('adminSection').style.display = 'block';
@@ -691,6 +739,10 @@
                     dot.classList.remove('show');
                 }
             });
+            
+            if (!isDataLoaded) {
+                isDataLoaded = true;
+            }
         });
 
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
@@ -742,8 +794,19 @@
         function goToAdmin() { window.location.href = '../Authenticator/admin.html'; }
 
         function logout() {
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) auth.signOut().then(() => window.location.replace(
-                '../Authenticator/login.html'));
+            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+                const user = auth.currentUser;
+                if (user) {
+                    db.ref('presence/' + user.uid).set(false);
+                }
+                auth.signOut().then(() => {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginEmail');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
+                    window.location.replace('../Authenticator/login.html');
+                });
+            }
         }
 
         document.getElementById('themeModal').addEventListener('click', function(e) {
