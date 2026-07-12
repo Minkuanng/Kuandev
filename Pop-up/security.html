@@ -605,6 +605,15 @@
                 if (data) {
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     document.getElementById('lastLogin').textContent = data.lastLogin ? new Date(data.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
+                    
+                    // Kiểm tra 2FA status
+                    if (data.twofaEnabled) {
+                        document.getElementById('twofaToggle').classList.add('active');
+                        updateTwoFAStatus();
+                    } else {
+                        document.getElementById('twofaToggle').classList.remove('active');
+                        updateTwoFAStatus();
+                    }
                 }
                 isDataLoaded = true;
                 hideLoading();
@@ -995,9 +1004,19 @@
         auth.onAuthStateChanged(async (user) => {
             if (isDataLoaded) return;
             
+            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
-                if (success) return;
+                if (success) {
+                    // Đã login thành công bằng quick token
+                    return;
+                }
+                // Nếu fail thì xóa và chuyển về login
+                localStorage.removeItem('quickLoginUid');
+                localStorage.removeItem('quickLoginToken');
+                localStorage.removeItem('quickLoginPending');
+                window.location.replace('../Authenticator/login.html');
+                return;
             }
             
             if (!user) { 
