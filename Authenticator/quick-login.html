@@ -303,7 +303,7 @@
             }
         }
 
-        // ===== ĐĂNG NHẬP BẰNG TOKEN - TẠO SESSION THỰC =====
+        // ===== ĐĂNG NHẬP BẰNG TOKEN =====
         document.getElementById('quickLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -323,7 +323,6 @@
             showLoading(true);
 
             try {
-                // Tìm user theo token
                 const result = await findUserByToken(token);
                 
                 if (!result) {
@@ -356,7 +355,6 @@
                     return;
                 }
 
-                // Kiểm tra user hiện tại
                 const currentUser = auth.currentUser;
                 if (currentUser && currentUser.uid === uid) {
                     showMessage('✅ Bạn đã đăng nhập!', 'success');
@@ -370,38 +368,25 @@
                     return;
                 }
 
-                // Đăng xuất user hiện tại nếu có
                 if (currentUser) {
                     await auth.signOut();
                 }
 
-                // ===== QUAN TRỌNG: TẠO SESSION BẰNG CÁCH ĐĂNG NHẬP THỰC TẾ =====
-                // Lấy password từ database (nếu có lưu) hoặc yêu cầu nhập
-                // Cách an toàn: Tạo token đăng nhập 1 lần (custom token)
-                // Hoặc: Lưu password đã mã hóa, nhưng không an toàn
-                // Giải pháp: Sử dụng signInWithCustomToken từ Admin SDK
-                
-                // Vì không có password, ta sẽ dùng phương pháp:
-                // 1. Tạo custom token từ server (cần backend)
-                // 2. Hoặc dùng phương pháp lưu session trong localStorage + auto login
-                
-                // Cách đơn giản nhất: Lưu vào localStorage và index sẽ tự động đăng nhập
-                // bằng cách gọi auth.signInWithCustomToken hoặc auth.signInWithEmailAndPassword
-                
-                // Lưu thông tin vào localStorage để index biết
+                // Lưu thông tin vào localStorage
                 localStorage.setItem('quickLoginUid', uid);
                 localStorage.setItem('quickLoginEmail', email);
                 localStorage.setItem('quickLoginToken', token);
                 localStorage.setItem('quickLoginPending', 'true');
                 
-                // Cập nhật lastLogin và presence
+                // Cập nhật lastLogin
                 await db.ref('users/' + uid + '/lastLogin').set(Date.now());
-                await db.ref('presence/' + uid + '.online').set(true);
-                db.ref('presence/' + uid + '.online').onDisconnect().set(false);
+                
+                // Cập nhật presence - KHÔNG DÙNG DẤU "." trong path
+                await db.ref('presence/' + uid).set(true);
+                db.ref('presence/' + uid).onDisconnect().set(false);
 
                 showMessage('✅ Đăng nhập thành công! Đang chuyển hướng...', 'success');
                 
-                // Chuyển hướng đến index
                 setTimeout(() => {
                     window.location.href = '../index.html';
                 }, 1500);
@@ -422,7 +407,6 @@
             }
         });
 
-        // ===== KIỂM TRA URL CÓ TOKEN KHÔNG =====
         const urlParams = new URLSearchParams(window.location.search);
         const tokenParam = urlParams.get('token');
         if (tokenParam) {
