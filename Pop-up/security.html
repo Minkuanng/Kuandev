@@ -315,6 +315,7 @@
         .loading-overlay.hidden {
             opacity: 0;
             pointer-events: none;
+            display: none !important;
         }
         .loading-spinner {
             width: 50px;
@@ -567,20 +568,18 @@
             document.body.className = document.body.className.replace(/theme-\w+/g, '');
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
+        
+        // GỌI NGAY KHI LOAD
         applyTheme();
         applyLang();
 
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('hidden');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 500);
         }
 
         function showLoading() {
             const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'flex';
             overlay.classList.remove('hidden');
         }
 
@@ -616,7 +615,8 @@
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
                 
                 // Cập nhật số dư
-                document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
+                const balance = userData.balance || 0;
+                document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                 
                 // Cập nhật last login
                 document.getElementById('lastLogin').textContent = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
@@ -1289,10 +1289,10 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // Hiển thị loading
+        // Hiển thị loading ngay khi trang load
         showLoading();
-        
-        // Ẩn loading sau 5s nếu không có gì xảy ra
+
+        // Ẩn loading sau 5s nếu không có gì xảy ra (fallback)
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
