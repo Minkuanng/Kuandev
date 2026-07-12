@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Chủ</title>
+    <title>Trang Chủ - KuanZGame.Store</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; --warning: #f39c12; }
+        :root { 
+            --bg-body: #f0f7ff; 
+            --bg-card: #fff; 
+            --bg-header: #fff; 
+            --text-primary: #2c5a7a; 
+            --text-secondary: #5a8fb5; 
+            --text-muted: #8ab3d4; 
+            --border-color: #e3eef9; 
+            --shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); 
+            --wallet-bg: #f0f7ff; 
+            --hover-bg: #f0f7ff; 
+            --accent: #3b8fd6; 
+            --success: #27ae60; 
+            --danger: #e74c6f; 
+            --warning: #f39c12; 
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -20,66 +38,76 @@
         .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
         .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
-        body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
+        
+        /* Header Styles */
+        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
         .logo span { color: var(--text-secondary); }
         
-        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; width: 40px; height: 40px; justify-content: center; }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: 0.3s; }
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: var(--transition); width: 40px; height: 40px; justify-content: center; }
+        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: var(--transition); }
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: default; min-height: 44px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
         .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
         .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-icon-box i { color: #fff; font-size: 16px; }
         .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
         .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
-        .bell-icon:hover { background: var(--hover-bg); }
+        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; }
+        .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
         .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
         .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: 0.3s; padding: 6px; }
-        .dot-menu:hover { background: var(--hover-bg); }
+        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; }
+        .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; z-index: 200; }
-        .popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); }
+        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; }
-        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        /* Notifications */
+        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
-        .notif-popup .notif-header .close { cursor: pointer; }
+        .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
+        .notif-popup .notif-header .close:hover { color: var(--danger); }
         .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
         .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
         .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: 0.3s; padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        
+        /* Side Menu */
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.3s; color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header .close:hover { color: var(--danger); }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
         .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
         .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
-        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
+        
+        /* Content */
         .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
 
-        .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
+        .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: var(--transition); }
         .intro-top { display: flex; align-items: center; gap: 10px; }
         .intro-top-left { display: flex; align-items: center; gap: 10px; }
         .intro-top-left .intro-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
@@ -96,13 +124,13 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        .category-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
+        .category-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: var(--transition); }
         .category-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .category-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
         .category-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
 
         .category-grid { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 20px 0; }
-        .category-item { background: var(--wallet-bg); border-radius: 12px; padding: 10px 18px; border: 2px solid var(--border-color); transition: 0.3s; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 120px; flex: 0 1 auto; }
+        .category-item { background: var(--wallet-bg); border-radius: 12px; padding: 10px 18px; border: 2px solid var(--border-color); transition: var(--transition); cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 120px; flex: 0 1 auto; }
         .category-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
         .category-item.active { border-color: var(--accent); background: var(--accent); color: #fff; }
         .category-item.active .cat-name { color: #fff; }
@@ -110,11 +138,11 @@
         .category-item .cat-image { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
         .category-item .cat-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .category-item .cat-info { display: flex; flex-direction: column; }
-        .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: 0.3s; }
+        .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: var(--transition); }
         .category-item .cat-count { font-size: 10px; color: var(--text-muted); }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
-        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; gap: 14px; align-items: flex-start; }
+        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 14px; align-items: flex-start; }
         .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
         .product-card .product-image { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
@@ -124,7 +152,7 @@
         .product-card .product-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .product-card .product-stats { display: flex; gap: 12px; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
         .product-card .product-stats .stat { display: flex; align-items: center; gap: 4px; }
-        .product-card .btn-buy { margin-top: 6px; padding: 5px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 13px; }
+        .product-card .btn-buy { margin-top: 6px; padding: 5px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; }
         .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .product-card .btn-buy .discount-badge { background: var(--warning); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
@@ -135,27 +163,39 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
+        /* Order Popup - SMART */
+        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .order-popup-overlay.active { display: flex; }
-        .order-popup { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 420px; width: 92%; border: 2px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; }
-        .order-popup .close-btn { position: absolute; top: 12px; right: 16px; font-size: 24px; cursor: pointer; color: var(--text-muted); transition: 0.3s; background: none; border: none; }
-        .order-popup .close-btn:hover { color: var(--danger); }
-        .order-popup h3 { color: var(--success); text-align: center; margin-bottom: 12px; }
-        .order-popup .order-item { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
-        .order-popup .order-item .item-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; }
-        .order-popup .order-item .item-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-        .order-popup .order-item .item-info { flex: 1; }
-        .order-popup .order-item .item-info .item-name { font-weight: 600; color: var(--text-primary); }
-        .order-popup .order-item .item-info .item-price { color: var(--accent); font-weight: 600; }
-        .order-popup .order-item .item-info .item-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        .order-popup .order-item .item-info .item-note { font-size: 12px; color: var(--text-primary); background: var(--wallet-bg); padding: 4px 8px; border-radius: 4px; margin-top: 4px; border-left: 3px solid var(--warning); }
-        .order-popup .order-total { text-align: right; padding: 12px 0; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 2px solid var(--border-color); margin-top: 8px; }
-        .order-popup .order-total span { color: var(--accent); }
-        .order-popup .order-code { background: var(--wallet-bg); padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--text-muted); margin: 8px 0; display: flex; justify-content: space-between; align-items: center; border: 1px dashed var(--border-color); }
-        .order-popup .order-code .copy-btn { background: var(--accent); color: #fff; border: none; padding: 2px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; }
-        .order-popup .order-code .copy-btn:hover { opacity: 0.8; }
-        .order-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 12px; }
-        .order-popup .btn-done:hover { transform: scale(1.02); }
+        .order-popup { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 480px; width: 92%; border: 2px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; animation: popupIn 0.3s ease; }
+        @keyframes popupIn { from { transform: scale(0.9) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .order-popup .close-btn { position: sticky; top: 0; float: right; font-size: 24px; cursor: pointer; color: var(--text-muted); transition: var(--transition); background: none; border: none; z-index: 1; }
+        .order-popup .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
+        .order-popup .popup-header { text-align: center; margin-bottom: 16px; }
+        .order-popup .popup-header .status-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+        .order-popup .popup-header h3 { color: var(--success); font-size: 20px; }
+        .order-popup .popup-header .order-code { color: var(--text-muted); font-size: 13px; font-family: monospace; background: var(--wallet-bg); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
+        
+        .order-popup .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+        .order-popup .info-grid .info-item { background: var(--wallet-bg); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); }
+        .order-popup .info-grid .info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .order-popup .info-grid .info-item .value { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-top: 2px; word-break: break-word; }
+        .order-popup .info-grid .info-item .value.status-success { color: var(--success); }
+        .order-popup .info-grid .info-item .value.status-failed { color: var(--danger); }
+        .order-popup .info-grid .info-item.full { grid-column: 1 / -1; }
+        
+        .order-popup .product-detail { display: flex; gap: 12px; padding: 12px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); margin: 8px 0; align-items: center; }
+        .order-popup .product-detail .pd-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; }
+        .order-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .order-popup .product-detail .pd-info { flex: 1; }
+        .order-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); }
+        .order-popup .product-detail .pd-info .pd-desc { font-size: 12px; color: var(--text-muted); }
+        .order-popup .product-detail .pd-info .pd-note { font-size: 12px; color: var(--text-primary); background: var(--bg-card); padding: 3px 10px; border-radius: 4px; border-left: 3px solid var(--warning); margin-top: 4px; display: inline-block; }
+        
+        .order-popup .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--border-color); margin-top: 8px; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .order-popup .total-row span { color: var(--accent); }
+        
+        .order-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 12px; }
+        .order-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
@@ -163,19 +203,12 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
 
-        .voucher-input { display: flex; gap: 8px; margin-top: 6px; }
-        .voucher-input input { flex: 1; padding: 4px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); }
-        .voucher-input input:focus { outline: none; border-color: var(--accent); }
-        .voucher-input button { padding: 4px 12px; background: var(--warning); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .voucher-input button:hover { opacity: 0.8; }
-        .voucher-applied { color: var(--success); font-size: 12px; font-weight: 600; }
-
         @media (max-width: 600px) { 
             .header { padding: 10px 12px; } 
             .logo { font-size: 16px; } 
             .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; }
             .wallet-icon-box { width: 28px; height: 28px; }
-            .wallet-icon-box svg { width: 15px; height: 15px; }
+            .wallet-icon-box i { font-size: 13px; }
             .wallet-balance { font-size: 13px; }
             .wallet-label { font-size: 9px; }
             .content { padding: 16px; } 
@@ -191,6 +224,7 @@
             .product-grid { grid-template-columns: 1fr; }
             .product-card .product-image { width: 55px; height: 55px; font-size: 24px; }
             .order-popup { padding: 16px; }
+            .order-popup .info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -223,9 +257,7 @@
         <div class="header-right">
             <div class="wallet-container">
                 <div class="wallet-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
+                    <i class="fas fa-wallet"></i>
                 </div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
@@ -235,7 +267,7 @@
 
             <div class="bell-icon" onclick="toggleNotif()">
                 <div class="bell-dot" id="notifDot"></div>
-                🔔
+                <i class="fas fa-bell"></i>
             </div>
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)">
@@ -244,18 +276,18 @@
                     <span class="dot"></span>
                 </div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()">⚙️ <span data-key="settings">Cài đặt</span></button>
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> <span data-key="profile">Thông tin</span></button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> <span data-key="security">Bảo mật</span></button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> <span data-key="settings">Cài đặt</span></button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()">🚪 <span data-key="logout">Đăng xuất</span></button>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-key="logout">Đăng xuất</span></button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span data-key="notif_title">📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div class="notif-header"><span data-key="notif_title"><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
         <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
     </div>
 
@@ -263,14 +295,15 @@
     <div class="order-popup-overlay" id="orderPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeOrderPopup()">✕</button>
-            <h3>✅ Đặt hàng thành công!</h3>
-            <div id="orderItems"></div>
-            <div class="order-total">Tổng tiền: <span id="orderTotal">0</span> VND</div>
-            <div class="order-code" id="orderCodeDisplay">
-                <span>🔑 Mã đơn hàng: <strong id="orderCodeText">******</strong></span>
-                <button class="copy-btn" onclick="copyOrderCode()">📋 Copy</button>
+            <div class="popup-header">
+                <span class="status-icon" id="orderStatusIcon">✅</span>
+                <h3 id="orderStatusTitle">Đặt hàng thành công!</h3>
+                <div class="order-code" id="orderCodeDisplay">🔑 Mã đơn: <strong id="orderCodeText">******</strong></div>
             </div>
-            <button class="btn-done" onclick="closeOrderPopup()">📋 Đóng</button>
+            <div class="info-grid" id="orderInfoGrid"></div>
+            <div id="orderProductDetail"></div>
+            <div class="total-row">Tổng tiền: <span id="orderTotal">0</span> VND</div>
+            <button class="btn-done" onclick="closeOrderPopup()"><i class="fas fa-check"></i> Đóng</button>
         </div>
     </div>
 
@@ -290,7 +323,7 @@
                 <p class="intro-lead">Chọn một mục sản phẩm bên dưới để xem danh sách sản phẩm.</p>
                 
                 <div class="intro-section">
-                    <div class="intro-section-title">📦 Hướng dẫn quy trình mua hàng</div>
+                    <div class="intro-section-title"><i class="fas fa-box"></i> Hướng dẫn quy trình mua hàng</div>
                     <ul class="intro-list">
                         <li>Quay lại toàn bộ quá trình mua hàng để làm bằng chứng đối chiếu sản phẩm.</li>
                         <li>Nếu phát hiện sai sót hoặc lỗi kỹ thuật, hãy liên hệ ngay Admin để được hỗ trợ xử lý đổi/trả sớm nhất.</li>
@@ -298,7 +331,7 @@
                 </div>
 
                 <div class="intro-section">
-                    <div class="intro-section-title">⚠️ Lưu ý quan trọng</div>
+                    <div class="intro-section-title"><i class="fas fa-exclamation-triangle"></i> Lưu ý quan trọng</div>
                     <ul class="intro-list">
                         <li>Tuyệt đối không chia sẻ thông tin tài khoản shop cho bất kỳ ai dưới mọi hình thức.</li>
                         <li>Đọc kỹ mô tả sản phẩm và các điều khoản trước khi giao dịch để đảm bảo quyền lợi của bạn.</li>
@@ -312,7 +345,7 @@
         <!-- MỤC SẢN PHẨM -->
         <div class="category-section" id="categorySection">
             <div class="category-section-header">
-                <h2>📂 Mục sản phẩm <span id="categoryCount"></span></h2>
+                <h2><i class="fas fa-folder"></i> Mục sản phẩm <span id="categoryCount"></span></h2>
             </div>
             <div class="category-grid" id="categoryGrid">
                 <div class="product-empty" style="grid-column:1/-1;padding:20px;">
@@ -448,12 +481,12 @@
                             const n = notifs[key];
                             const isUnread = !n.readBy || !n.readBy[quickUid];
                             if (isUnread) hasUnread = true;
-                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                            html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                         });
                         list.innerHTML = html;
                         dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                     } else { 
-                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
                         dot.classList.remove('show'); 
                     }
                 });
@@ -663,7 +696,6 @@
                 return;
             }
             
-            // Lấy ghi chú từ textarea
             const noteInput = document.getElementById('note_' + productId);
             const orderNote = noteInput ? noteInput.value.trim() : '';
             
@@ -708,13 +740,15 @@
                     productImage: product.image || '',
                     productIcon: product.icon || '📦',
                     productDesc: product.description || '',
+                    productCategory: product.category || '',
                     orderNote: orderNote || '',
                     originalPrice: product.price || 0,
                     price: price,
+                    quantity: 1,
                     voucher: voucherUsed,
                     orderCode: orderCode,
                     timestamp: Date.now(),
-                    status: 'completed'
+                    status: 'success'
                 };
                 updates[orderRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = orderData;
                 
@@ -723,17 +757,22 @@
                     orderCode: orderCode,
                     productName: product.name,
                     productDesc: product.description || '',
+                    productCategory: product.category || '',
                     orderNote: orderNote || '',
                     price: price,
+                    quantity: 1,
+                    status: 'success',
                     timestamp: Date.now(),
                     type: 'purchase',
                     encrypted: btoa(JSON.stringify({ 
                         productId: productId,
                         productName: product.name,
                         productDesc: product.description || '',
+                        productCategory: product.category || '',
                         orderNote: orderNote || '',
                         price: price,
-                        voucher: voucherUsed,
+                        quantity: 1,
+                        status: 'success',
                         timestamp: Date.now()
                     }))
                 };
@@ -759,60 +798,63 @@
             }
         }
 
-        // ===== ORDER POPUP =====
+        // ===== SMART ORDER POPUP =====
         let currentOrderCode = '';
 
         function showOrderPopup(orderData) {
             const popup = document.getElementById('orderPopup');
-            const container = document.getElementById('orderItems');
+            const grid = document.getElementById('orderInfoGrid');
+            const productDetail = document.getElementById('orderProductDetail');
             const totalEl = document.getElementById('orderTotal');
             const codeText = document.getElementById('orderCodeText');
+            const statusIcon = document.getElementById('orderStatusIcon');
+            const statusTitle = document.getElementById('orderStatusTitle');
             
-            const image = orderData.productImage || orderData.productIcon || '📦';
+            const isSuccess = orderData.status === 'success';
+            statusIcon.textContent = isSuccess ? '✅' : '❌';
+            statusTitle.textContent = isSuccess ? 'Đặt hàng thành công!' : 'Đặt hàng thất bại!';
+            statusTitle.style.color = isSuccess ? 'var(--success)' : 'var(--danger)';
+            
             const price = orderData.price.toLocaleString('vi-VN');
             currentOrderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            codeText.textContent = currentOrderCode;
             
-            let noteHtml = '';
-            if (orderData.orderNote) {
-                noteHtml = `<div class="item-note">📝 Ghi chú: ${orderData.orderNote}</div>`;
-            }
+            // Info Grid
+            const categoryName = categoriesData[orderData.productCategory]?.name || orderData.productCategory || 'Không có';
+            grid.innerHTML = `
+                <div class="info-item"><div class="label"><i class="fas fa-user"></i> Người mua</div><div class="value">${orderData.userName || 'Khách hàng'}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-id-card"></i> Mã người dùng</div><div class="value" style="font-size:12px;font-family:monospace;">${orderData.userId || 'N/A'}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-tag"></i> Loại mục</div><div class="value">${categoryName}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-clock"></i> Thời gian</div><div class="value" style="font-size:12px;">${new Date(orderData.timestamp).toLocaleString('vi-VN')}</div></div>
+                <div class="info-item full"><div class="label"><i class="fas fa-info-circle"></i> Mô tả sản phẩm</div><div class="value" style="font-weight:400;font-size:13px;">${orderData.productDesc || 'Không có mô tả'}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-boxes"></i> Số lượng</div><div class="value">${orderData.quantity || 1}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-dollar-sign"></i> Giá</div><div class="value" style="color:var(--accent);">${price} VND</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-check-circle"></i> Trạng thái</div><div class="value ${isSuccess ? 'status-success' : 'status-failed'}">${isSuccess ? '✅ Thành công' : '❌ Thất bại'}</div></div>
+                ${orderData.voucher ? `<div class="info-item full"><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div><div class="value" style="color:var(--success);">${orderData.voucher}</div></div>` : ''}
+                ${orderData.orderNote ? `<div class="info-item full"><div class="label"><i class="fas fa-sticky-note"></i> Ghi chú</div><div class="value" style="font-weight:400;font-size:13px;background:var(--bg-card);padding:4px 10px;border-radius:4px;border-left:3px solid var(--warning);">${orderData.orderNote}</div></div>` : ''}
+            `;
             
-            container.innerHTML = `
-                <div class="order-item">
-                    <div class="item-image">
-                        ${orderData.productImage ? `<img src="${orderData.productImage}" alt="${orderData.productName}" onerror="this.style.display='none';this.parentElement.textContent='${orderData.productIcon || '📦'}'" />` : (orderData.productIcon || '📦')}
+            // Product Detail
+            const image = orderData.productImage || orderData.productIcon || '📦';
+            productDetail.innerHTML = `
+                <div class="product-detail">
+                    <div class="pd-image">
+                        ${orderData.productImage ? `<img src="${orderData.productImage}" onerror="this.style.display='none';this.parentElement.textContent='${orderData.productIcon || '📦'}'" />` : (orderData.productIcon || '📦')}
                     </div>
-                    <div class="item-info">
-                        <div class="item-name">${orderData.productName}</div>
-                        <div class="item-price">${price} VND</div>
-                        ${orderData.productDesc ? `<div class="item-desc">📝 ${orderData.productDesc}</div>` : ''}
-                        ${noteHtml}
+                    <div class="pd-info">
+                        <div class="pd-name">${orderData.productName || 'Sản phẩm'}</div>
+                        ${orderData.productDesc ? `<div class="pd-desc">📝 ${orderData.productDesc}</div>` : ''}
+                        ${orderData.orderNote ? `<div class="pd-note">📌 Ghi chú: ${orderData.orderNote}</div>` : ''}
                     </div>
-                </div>
-                ${orderData.voucher ? `<div style="padding:4px 0;color:var(--success);font-size:13px;">🎫 Đã áp mã: ${orderData.voucher}</div>` : ''}
-                <div style="padding:8px 0;color:var(--text-muted);font-size:13px;">
-                    👤 ${orderData.userName}
-                </div>
-                <div style="padding:8px 0;color:var(--text-muted);font-size:13px;">
-                    📅 ${new Date(orderData.timestamp).toLocaleString('vi-VN')}
                 </div>
             `;
             
             totalEl.textContent = price;
-            codeText.textContent = currentOrderCode;
             popup.classList.add('active');
         }
 
         function closeOrderPopup() {
             document.getElementById('orderPopup').classList.remove('active');
-        }
-
-        function copyOrderCode() {
-            navigator.clipboard.writeText(currentOrderCode).then(() => {
-                alert(lang === 'vi' ? '✅ Đã copy mã đơn hàng!' : '✅ Order code copied!');
-            }).catch(() => {
-                alert(lang === 'vi' ? '❌ Không thể copy, vui lòng copy thủ công' : '❌ Cannot copy, please copy manually');
-            });
         }
 
         // ===== AUTH STATE =====
@@ -868,12 +910,12 @@
                             const n = notifs[key];
                             const isUnread = !n.readBy || !n.readBy[user.uid];
                             if (isUnread) hasUnread = true;
-                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                            html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                         });
                         list.innerHTML = html;
                         dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                     } else { 
-                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
                         dot.classList.remove('show'); 
                     }
                 });
