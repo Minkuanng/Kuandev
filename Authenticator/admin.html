@@ -3,14 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị</title>
+    <title>Quản trị - KuanZGame.Store</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Giữ nguyên style từ file admin cũ - đã có ở trên */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12; }
+        :root { 
+            --bg-body: #f0f7ff; 
+            --bg-card: #fff; 
+            --bg-header: #fff; 
+            --text-primary: #2c5a7a; 
+            --text-secondary: #5a8fb5; 
+            --text-muted: #8ab3d4; 
+            --border-color: #e3eef9; 
+            --shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); 
+            --wallet-bg: #f0f7ff; 
+            --hover-bg: #f0f7ff; 
+            --danger: #e74c6f; 
+            --success: #27ae60; 
+            --accent: #3b8fd6; 
+            --warning: #f39c12; 
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -21,72 +38,75 @@
         .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
         .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
-        body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
+        
+        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
         .logo span { color: var(--text-secondary); }
         
-        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; width: 40px; height: 40px; justify-content: center; }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: 0.3s; }
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: var(--transition); width: 40px; height: 40px; justify-content: center; }
+        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: var(--transition); }
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: default; min-height: 44px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
         .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
         .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-icon-box i { color: #fff; font-size: 16px; }
         .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
         .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
-        .bell-icon:hover { background: var(--hover-bg); }
+        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; }
+        .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
         .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
         .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: 0.3s; padding: 6px; }
-        .dot-menu:hover { background: var(--hover-bg); }
+        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; }
+        .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; z-index: 200; }
-        .popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); }
+        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; }
-        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
-        .notif-popup .notif-header .close { cursor: pointer; }
+        .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
+        .notif-popup .notif-header .close:hover { color: var(--danger); }
         .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
         .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
         .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: 0.3s; padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.3s; color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header .close:hover { color: var(--danger); }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
         .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
         .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
-        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
         
-        .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; margin-bottom: 16px; }
-        .admin-card h1 { color: var(--text-primary); font-size: 22px; transition: 0.3s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); margin-bottom: 16px; }
+        .admin-card h1 { color: var(--text-primary); font-size: 22px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .admin-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
-        .stat-card { background: var(--wallet-bg); padding: 14px 18px; border-radius: 10px; border: 1px solid var(--border-color); transition: 0.3s; }
-        .stat-card:hover { border-color: var(--accent); }
+        .stat-card { background: var(--wallet-bg); padding: 14px 18px; border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); }
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
         .stat-card .num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
         .stat-card .label { font-size: 11px; color: var(--text-muted); }
         .stat-card .num.green { color: var(--success); }
@@ -95,147 +115,96 @@
         .stat-card .num.blue { color: var(--accent); }
 
         .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
-        .tabs .tab { padding: 8px 20px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 14px; border-bottom: 3px solid transparent; }
+        .tabs .tab { padding: 8px 20px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 14px; border-bottom: 3px solid transparent; }
         .tabs .tab:hover { color: var(--text-primary); }
         .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 520px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.9) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 80px; font-weight: 500; }
+        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 100px; }
+        .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); }
+        .modal .row textarea { min-height: 60px; resize: vertical; font-family: inherit; }
+        .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; }
+        .modal .row .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .modal .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .modal .actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 80px; }
+        .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .modal .actions .cancel:hover { background: var(--hover-bg); }
+        .modal .actions .save { background: var(--accent); color: #fff; }
+        .modal .actions .save:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
+        .modal .actions .danger { background: var(--danger); color: #fff; }
+        .modal .actions .danger:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+        .modal .actions .success { background: var(--success); color: #fff; }
+        .modal .actions .success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+
+        .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; }
+        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+        .refresh-btn { background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: var(--transition); }
+        .refresh-btn:hover { background: var(--hover-bg); transform: scale(1.05); }
+        
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .toast.show { opacity: 1; }
+        .toast.error { border-color: var(--danger); color: var(--danger); }
+        .toast.success { border-color: var(--success); color: var(--success); }
+
+        /* Category List */
         .category-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-        .category-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 160px; }
-        .category-item-admin:hover { border-color: var(--accent); }
+        .category-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: var(--transition); min-width: 160px; }
+        .category-item-admin:hover { border-color: var(--accent); transform: translateY(-2px); }
         .category-item-admin .cat-image { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
         .category-item-admin .cat-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .category-item-admin .cat-info { flex: 1; }
         .category-item-admin .cat-info .name { font-weight: 600; color: var(--text-primary); }
         .category-item-admin .cat-info .count { font-size: 11px; color: var(--text-muted); }
         .category-item-admin .cat-actions { display: flex; gap: 4px; }
-        .category-item-admin .cat-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .category-item-admin .cat-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: var(--transition); }
         .category-item-admin .cat-actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .category-item-admin .cat-actions .edit:hover { background: var(--text-secondary); color: #fff; }
         .category-item-admin .cat-actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .category-item-admin .cat-actions .del:hover { background: #e74c6f; color: #fff; }
 
+        /* Product Grid */
         .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
-        .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; }
-        .product-card-admin:hover { border-color: var(--accent); }
-        .product-card-admin .product-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 6px; border: 1px solid var(--border-color); }
-        .product-card-admin .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
+        .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: var(--transition); position: relative; }
+        .product-card-admin:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .product-card-admin .product-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 6px; border: 1px solid var(--border-color); overflow: hidden; }
+        .product-card-admin .product-image img { width: 100%; height: 100%; object-fit: cover; }
         .product-card-admin .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
         .product-card-admin .price { color: var(--accent); font-weight: 600; font-size: 14px; }
         .product-card-admin .stock { font-size: 11px; color: var(--text-muted); }
         .product-card-admin .sold { font-size: 11px; color: var(--text-muted); }
         .product-card-admin .desc-preview { font-size: 10px; color: var(--text-muted); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; display: inline-block; margin: 2px 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .product-card-admin .cat { font-size: 10px; background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin: 4px 0; }
-        .product-card-admin .variants-badge { position: absolute; top: 4px; right: 4px; background: var(--accent); color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 10px; }
         .product-card-admin .actions { display: flex; gap: 4px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
-        .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: var(--transition); }
         .product-card-admin .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .product-card-admin .actions .edit:hover { background: var(--text-secondary); color: #fff; }
         .product-card-admin .actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .product-card-admin .actions .del:hover { background: #e74c6f; color: #fff; }
-        .product-card-admin .actions .duplicate { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
-        .product-card-admin .actions .duplicate:hover { background: #ffc107; color: #fff; }
 
-        /* User management */
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
-        .user-card { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; }
-        .user-card:hover { border-color: var(--accent); }
-        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .user-card .user-header .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
-        .user-card .user-header .user-name { font-weight: 600; color: var(--text-primary); }
-        .user-card .user-header .user-email { font-size: 11px; color: var(--text-muted); }
-        .user-card .user-balance { font-size: 18px; font-weight: 700; color: var(--accent); padding: 6px 0; }
-        .user-card .user-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
-        .user-card .user-actions button { padding: 4px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .user-card .user-actions .add-money { background: var(--success); color: #fff; }
-        .user-card .user-actions .add-money:hover { opacity: 0.8; }
-        .user-card .user-actions .sub-money { background: var(--danger); color: #fff; }
-        .user-card .user-actions .sub-money:hover { opacity: 0.8; }
-        .user-card .user-actions .block-btn { background: var(--warning); color: #fff; }
-        .user-card .user-actions .block-btn:hover { opacity: 0.8; }
-        .user-card .user-actions .unblock-btn { background: var(--accent); color: #fff; }
-        .user-card .user-actions .unblock-btn:hover { opacity: 0.8; }
-        .user-card .user-status { font-size: 11px; padding: 2px 10px; border-radius: 10px; display: inline-block; }
-        .user-card .user-status.online { background: #d4edda; color: #155724; }
-        .user-card .user-status.offline { background: #f8d7da; color: #721c24; }
-        .user-card .user-status.blocked { background: #fff3cd; color: #856404; }
-
-        .order-item-admin { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
-        .order-item-admin .order-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
-        .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-        .order-item-admin .order-info { flex: 1; }
-        .order-item-admin .order-info .name { font-weight: 600; color: var(--text-primary); }
-        .order-item-admin .order-info .meta { font-size: 11px; color: var(--text-muted); }
-        .order-item-admin .order-info .order-code { font-size: 11px; color: var(--accent); font-weight: 600; }
-        .order-item-admin .order-info .order-note { font-size: 11px; color: var(--text-primary); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; border-left: 3px solid var(--warning); margin-top: 2px; }
-
-        .voucher-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-        .voucher-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px 16px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 180px; }
-        .voucher-item:hover { border-color: var(--accent); }
-        .voucher-item .voucher-code { font-weight: 700; color: var(--accent); font-size: 14px; }
-        .voucher-item .voucher-info { flex: 1; font-size: 12px; color: var(--text-muted); }
-        .voucher-item .voucher-actions { display: flex; gap: 4px; }
-        .voucher-item .voucher-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
-        .voucher-item .voucher-actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
-        .voucher-item .voucher-actions .del:hover { background: #e74c6f; color: #fff; }
-
-        .notif-form { margin-top: 16px; padding: 16px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); display: flex; gap: 10px; flex-wrap: wrap; }
-        .notif-form input, .notif-form select { flex: 1; padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 120px; transition: 0.3s; }
-        .notif-form input:focus, .notif-form select:focus { outline: none; border-color: var(--text-secondary); }
-        .notif-form .btn-send { padding: 8px 20px; background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .notif-form .btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
-        .notif-form .btn-danger { background: linear-gradient(135deg, #e74c6f, #c0392b); }
-        .notif-form .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
-        .notif-form .btn-success { background: linear-gradient(135deg, #27ae60, #1e8449); }
-        .notif-form .btn-success:hover { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
-        .notif-form .btn-warning { background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; }
-        .notif-form .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 460px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
-        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 12px; }
-        .modal .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 70px; }
-        .modal .row input, .modal .row select { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 100px; }
-        .modal .row input:focus, .modal .row select:focus { outline: none; border-color: var(--text-secondary); }
-        .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-height: 80px; resize: vertical; font-family: inherit; }
-        .modal .row textarea:focus { outline: none; border-color: var(--text-secondary); }
-        .modal .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-        .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; min-width: 60px; }
-        .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
-        .modal .actions .save { background: var(--accent); color: #fff; }
-        .modal .actions .save:hover { transform: translateY(-2px); }
-        .modal .actions .danger { background: var(--danger); color: #fff; }
-        .modal .actions .danger:hover { transform: translateY(-2px); }
-        .modal .actions .success { background: var(--success); color: #fff; }
-        .modal .actions .success:hover { transform: translateY(-2px); }
-        
-        .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; }
-        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
         .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
-        .refresh-btn { background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: 0.3s; }
-        .refresh-btn:hover { background: var(--hover-bg); }
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
-        .toast.show { opacity: 1; }
-        .toast.error { border-color: #e74c6f; color: #e74c6f; }
-        .toast.success { border-color: #27ae60; color: #27ae60; }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .category-item-admin { min-width: 120px; } .voucher-item { min-width: 140px; } .user-grid { grid-template-columns: 1fr; } .modal { padding: 16px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box i { font-size: 13px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .modal { padding: 16px; } .modal .row { flex-direction: column; align-items: stretch; } .modal .row label { min-width: auto; } }
     </style>
 </head>
 <body>
-    <!-- Giữ nguyên header, side menu, notif popup -->
+
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
-        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span>Trang chủ</button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span>Lịch sử</button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span>Nạp tiền</button>
         <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
+        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span>Hỗ trợ</button>
     </div>
 
     <header class="header">
@@ -250,68 +219,62 @@
         <div class="header-right">
             <div class="wallet-container">
                 <div class="wallet-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
+                    <i class="fas fa-wallet"></i>
                 </div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
                     <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
                 </div>
             </div>
-            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
+            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()">⚙️ <span data-key="settings">Cài đặt</span></button>
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> Thông tin</button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> Bảo mật</button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> Cài đặt</button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()">🚪 <span data-key="logout">Đăng xuất</span></button>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span data-key="notif_title">📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
-        <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
+        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
     <div class="content">
         <div class="admin-card">
-            <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshAll()">🔄 Làm mới</button></h1>
-            <p class="sub" data-key="admin_sub">Quản lý người dùng, mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá</p>
+            <h1><i class="fas fa-crown"></i> Quản trị <button class="refresh-btn" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button></h1>
+            <p class="sub">Quản lý người dùng, mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá</p>
             
             <div class="tabs">
-                <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
-                <button class="tab" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
-                <button class="tab" data-tab="categories" onclick="switchTab('categories')">📂 Mục SP</button>
-                <button class="tab" data-tab="products" onclick="switchTab('products')">🛍️ Sản phẩm</button>
-                <button class="tab" data-tab="orders" onclick="switchTab('orders')">📦 Đơn hàng</button>
-                <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')">🎫 Mã giảm giá</button>
+                <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
+                <button class="tab" data-tab="users" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
+                <button class="tab" data-tab="categories" onclick="switchTab('categories')"><i class="fas fa-folder"></i> Mục SP</button>
+                <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-box"></i> Sản phẩm</button>
+                <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
+                <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
             </div>
             
             <!-- Tab Dashboard -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="stats-grid" id="dashboardStats">
-                    <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label">👥 Người dùng</div></div>
-                    <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label">📂 Mục SP</div></div>
-                    <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label">🛍️ Sản phẩm</div></div>
-                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label">📦 Đơn hàng</div></div>
-                    <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label">💰 Doanh thu hôm nay</div></div>
-                    <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label">🎫 Mã giảm giá</div></div>
-                </div>
-                <div id="recentOrders" style="margin-top:12px;">
-                    <h4 style="color:var(--text-primary);margin-bottom:8px;">📋 Đơn hàng gần đây</h4>
-                    <div id="recentOrdersList"><div class="loading">Đang tải...</div></div>
+                    <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label"><i class="fas fa-users"></i> Người dùng</div></div>
+                    <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label"><i class="fas fa-folder"></i> Mục SP</div></div>
+                    <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label"><i class="fas fa-box"></i> Sản phẩm</div></div>
+                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label"><i class="fas fa-truck"></i> Đơn hàng</div></div>
+                    <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label"><i class="fas fa-coins"></i> Doanh thu hôm nay</div></div>
+                    <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div></div>
                 </div>
             </div>
             
-            <!-- Tab Users - Quản lý người dùng và tiền -->
+            <!-- Tab Users -->
             <div class="tab-content" id="tab-users">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="refreshUsers()">🔄 Làm mới</button>
+                    <button class="btn-send" onclick="refreshUsers()"><i class="fas fa-sync"></i> Làm mới</button>
                 </div>
                 <div id="userGrid" class="user-grid">
                     <div class="loading">⏳ Đang tải danh sách người dùng...</div>
@@ -321,8 +284,8 @@
             <!-- Tab Categories -->
             <div class="tab-content" id="tab-categories">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openCategoryModal()">➕ Thêm mục</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllCategories()">🗑️ Xóa tất cả</button>
+                    <button class="btn-send" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm mục</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllCategories()"><i class="fas fa-trash"></i> Xóa tất cả</button>
                 </div>
                 <div id="categoryList" class="category-list">
                     <div class="loading">⏳ Đang tải danh sách mục...</div>
@@ -332,9 +295,8 @@
             <!-- Tab Products -->
             <div class="tab-content" id="tab-products">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openProductModal()">➕ Thêm sản phẩm</button>
-                    <button class="btn-send btn-warning" onclick="openVariantModal()">📋 Tạo biến thể</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()">🗑️ Xóa tất cả</button>
+                    <button class="btn-send" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()"><i class="fas fa-trash"></i> Xóa tất cả</button>
                 </div>
                 <div id="productGridAdmin" class="product-grid-admin">
                     <div class="loading">⏳ Đang tải sản phẩm...</div>
@@ -344,7 +306,7 @@
             <!-- Tab Orders -->
             <div class="tab-content" id="tab-orders">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()">🗑️ Xóa tất cả đơn hàng</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()"><i class="fas fa-trash"></i> Xóa tất cả đơn hàng</button>
                 </div>
                 <div id="ordersList">
                     <div class="loading">⏳ Đang tải đơn hàng...</div>
@@ -354,32 +316,33 @@
             <!-- Tab Vouchers -->
             <div class="tab-content" id="tab-vouchers">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openVoucherModal()">➕ Tạo mã giảm giá</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllVouchers()">🗑️ Xóa tất cả</button>
+                    <button class="btn-send" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã giảm giá</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
                 </div>
                 <div id="voucherList" class="voucher-list">
                     <div class="loading">⏳ Đang tải mã giảm giá...</div>
                 </div>
             </div>
             
-            <button class="btn-back" onclick="goHome()"><span data-key="back">← Quay lại</span></button>
+            <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại</button>
         </div>
     </div>
 
     <!-- Modal Category -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
-            <h3 id="categoryModalTitle">📂 Thêm mục sản phẩm</h3>
-            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên mục" /></div>
-            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
-            <div class="row"><label>Hình ảnh:</label>
+            <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm mục sản phẩm</span></h3>
+            <div class="row"><label><i class="fas fa-tag"></i> Tên:</label><input type="text" id="categoryName" placeholder="Tên mục" /></div>
+            <div class="row"><label><i class="fas fa-emoji"></i> Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
+            <div class="row">
+                <label><i class="fas fa-image"></i> Hình ảnh:</label>
                 <input type="text" id="categoryImage" placeholder="URL hình ảnh (png/jpg)" />
                 <div class="image-preview" id="categoryImagePreview">🖼️</div>
             </div>
             <input type="hidden" id="categoryEditId" value="" />
             <div class="actions">
-                <button class="save" onclick="saveCategory()">💾 Lưu</button>
-                <button class="cancel" onclick="closeCategoryModal()">Đóng</button>
+                <button class="save" onclick="saveCategory()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="cancel" onclick="closeCategoryModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
@@ -387,68 +350,26 @@
     <!-- Modal Product -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
-            <h3 id="productModalTitle">🛍️ Thêm sản phẩm</h3>
-            <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
-            <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
-            <div class="row"><label>Số lượng:</label><input type="number" id="productStock" placeholder="Số lượng" value="1" /></div>
-            <div class="row"><label>Mục:</label><select id="productCategory"><option value="">Chọn mục</option></select></div>
-            <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
-            <div class="row"><label>Hình ảnh:</label>
+            <h3><i class="fas fa-box"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
+            <div class="row"><label><i class="fas fa-tag"></i> Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
+            <div class="row"><label><i class="fas fa-coins"></i> Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
+            <div class="row"><label><i class="fas fa-boxes"></i> Số lượng:</label><input type="number" id="productStock" placeholder="Số lượng" value="1" /></div>
+            <div class="row"><label><i class="fas fa-folder"></i> Mục:</label>
+                <select id="productCategory"><option value="">Chọn mục</option></select>
+            </div>
+            <div class="row"><label><i class="fas fa-emoji"></i> Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
+            <div class="row">
+                <label><i class="fas fa-image"></i> Hình ảnh:</label>
                 <input type="text" id="productImage" placeholder="URL hình ảnh" />
                 <div class="image-preview" id="productImagePreview">🖼️</div>
             </div>
-            <div class="row"><label>Mô tả:</label>
-                <input type="text" id="productDesc" placeholder="Mô tả sản phẩm" />
+            <div class="row"><label><i class="fas fa-info-circle"></i> Mô tả:</label>
+                <textarea id="productDesc" placeholder="Mô tả sản phẩm" rows="3"></textarea>
             </div>
             <input type="hidden" id="productEditId" value="" />
             <div class="actions">
-                <button class="save" onclick="saveProduct()">💾 Lưu</button>
-                <button class="cancel" onclick="closeProductModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Variant -->
-    <div class="modal-overlay" id="variantModal">
-        <div class="modal">
-            <h3>📋 Tạo biến thể sản phẩm</h3>
-            <div class="row"><label>Mục:</label><select id="variantCategory"><option value="">Chọn mục</option></select></div>
-            <div class="row"><label>Tên SP:</label><input type="text" id="variantName" placeholder="Tên sản phẩm chính" /></div>
-            <div class="row"><label>Giá:</label><input type="number" id="variantPrice" placeholder="Giá VND" /></div>
-            <div class="row"><label>Số lượng:</label><input type="number" id="variantStock" placeholder="Số lượng" value="1" /></div>
-            <div class="row"><label>Icon:</label><input type="text" id="variantIcon" placeholder="📦" value="📦" /></div>
-            <div class="row"><label>Hình ảnh:</label>
-                <input type="text" id="variantImage" placeholder="URL hình ảnh" />
-                <div class="image-preview" id="variantImagePreview">🖼️</div>
-            </div>
-            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;">📝 Danh sách mô tả biến thể (mỗi dòng 1 biến thể):</label>
-                <textarea id="variantDescriptions" rows="6" placeholder="Ví dụ:&#10;Màu đen, Size M&#10;Màu trắng, Size L&#10;Màu xanh, Size XL" style="flex:1;padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);min-height:120px;resize:vertical;font-family:inherit;"></textarea>
-                <span style="font-size:11px;color:var(--text-muted);">Mỗi dòng là 1 biến thể với mô tả riêng</span>
-            </div>
-            <div class="actions">
-                <button class="save" onclick="saveVariantProducts()">📋 Tạo biến thể</button>
-                <button class="cancel" onclick="closeVariantModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Add/Sub Money -->
-    <div class="modal-overlay" id="moneyModal">
-        <div class="modal">
-            <h3 id="moneyModalTitle">💰 Điều chỉnh số dư</h3>
-            <div class="row"><label>Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label>Số dư hiện tại:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
-            <div class="row"><label>Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
-            <div class="row"><label>Ghi chú:</label>
-                <input type="text" id="moneyNote" placeholder="Lý do điều chỉnh" />
-            </div>
-            <input type="hidden" id="moneyUserId" value="" />
-            <input type="hidden" id="moneyAction" value="add" />
-            <div class="actions">
-                <button class="success" onclick="moneyAction('add')">➕ Cộng tiền</button>
-                <button class="danger" onclick="moneyAction('sub')">➖ Trừ tiền</button>
-                <button class="cancel" onclick="closeMoneyModal()">Đóng</button>
+                <button class="save" onclick="saveProduct()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="cancel" onclick="closeProductModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
@@ -456,19 +377,39 @@
     <!-- Modal Voucher -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
-            <h3>🎫 Tạo mã giảm giá</h3>
-            <div class="row"><label>Mã:</label><input type="text" id="voucherCode" placeholder="VD: SALE10" style="text-transform:uppercase;" /></div>
-            <div class="row"><label>Loại:</label>
+            <h3><i class="fas fa-ticket-alt"></i> Tạo mã giảm giá</h3>
+            <div class="row"><label><i class="fas fa-key"></i> Mã:</label><input type="text" id="voucherCode" placeholder="VD: SALE10" style="text-transform:uppercase;" /></div>
+            <div class="row"><label><i class="fas fa-tag"></i> Loại:</label>
                 <select id="voucherType">
                     <option value="percent">Giảm theo %</option>
                     <option value="fixed">Giảm theo số tiền</option>
                 </select>
             </div>
-            <div class="row"><label>Giá trị:</label><input type="number" id="voucherValue" placeholder="VD: 10 hoặc 50000" /></div>
-            <div class="row"><label>Số lượt:</label><input type="number" id="voucherMaxUses" placeholder="Số lần sử dụng" value="10" /></div>
+            <div class="row"><label><i class="fas fa-percent"></i> Giá trị:</label><input type="number" id="voucherValue" placeholder="VD: 10 hoặc 50000" /></div>
+            <div class="row"><label><i class="fas fa-users"></i> Số lượt:</label><input type="number" id="voucherMaxUses" placeholder="Số lần sử dụng" value="10" /></div>
             <div class="actions">
-                <button class="save" onclick="saveVoucher()">💾 Lưu</button>
-                <button class="cancel" onclick="closeVoucherModal()">Đóng</button>
+                <button class="save" onclick="saveVoucher()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="cancel" onclick="closeVoucherModal()"><i class="fas fa-times"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Money -->
+    <div class="modal-overlay" id="moneyModal">
+        <div class="modal">
+            <h3><i class="fas fa-coins"></i> <span id="moneyModalTitle">Điều chỉnh số dư</span></h3>
+            <div class="row"><label><i class="fas fa-user"></i> Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label><i class="fas fa-wallet"></i> Số dư hiện tại:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
+            <div class="row"><label><i class="fas fa-coins"></i> Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
+            <div class="row"><label><i class="fas fa-sticky-note"></i> Ghi chú:</label>
+                <input type="text" id="moneyNote" placeholder="Lý do điều chỉnh" />
+            </div>
+            <input type="hidden" id="moneyUserId" value="" />
+            <input type="hidden" id="moneyAction" value="add" />
+            <div class="actions">
+                <button class="success" onclick="moneyAction('add')"><i class="fas fa-plus"></i> Cộng tiền</button>
+                <button class="danger" onclick="moneyAction('sub')"><i class="fas fa-minus"></i> Trừ tiền</button>
+                <button class="cancel" onclick="closeMoneyModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
@@ -499,23 +440,6 @@
         let usersData = {};
         let onlineUsersMap = {};
 
-        const translations = {
-            vi: {
-                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ',
-                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất',
-                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
-                admin_title: 'Quản trị', admin_sub: 'Quản lý người dùng, mục sản phẩm, sản phẩm, đơn hàng và mã giảm giá',
-                send_btn: '📢 Gửi', back: '← Quay lại'
-            },
-            en: {
-                home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
-                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
-                notif_title: '📢 Notifications', notif_empty: 'No notifications',
-                admin_title: 'Admin', admin_sub: 'Manage users, categories, products, orders and vouchers',
-                send_btn: '📢 Send', back: '← Back'
-            }
-        };
-
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
             el.textContent = msg;
@@ -523,14 +447,6 @@
             el.classList.add('show');
             clearTimeout(el.timeout);
             el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
-        }
-
-        function applyLang() {
-            const data = translations[lang] || translations.vi;
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (data[key] !== undefined) el.textContent = data[key];
-            });
         }
 
         function applyTheme() {
@@ -541,7 +457,6 @@
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
         applyTheme();
-        applyLang();
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -583,7 +498,7 @@
                         loadVouchersAdmin();
                         updateDashboard();
                     } else {
-                        alert(lang === 'vi' ? '⚠️ Không có quyền truy cập!' : '⚠️ Access denied!');
+                        alert('⚠️ Không có quyền truy cập!');
                         window.location.replace('../index.html');
                         return false;
                     }
@@ -625,32 +540,6 @@
                     }
                 });
                 document.getElementById('dashRevenue').textContent = revenue.toLocaleString('vi-VN') + 'đ';
-                
-                const recentList = document.getElementById('recentOrdersList');
-                const sorted = keys.sort((a,b) => (orders[b]?.timestamp || 0) - (orders[a]?.timestamp || 0)).slice(0, 10);
-                if (sorted.length === 0) {
-                    recentList.innerHTML = '<div style="color:var(--text-muted);padding:12px;text-align:center;">Chưa có đơn hàng</div>';
-                } else {
-                    let html = '';
-                    sorted.forEach(key => {
-                        const o = orders[key];
-                        const image = o.productImage || o.productIcon || '📦';
-                        html += `
-                            <div class="order-item-admin">
-                                <div class="order-image">
-                                    ${o.productImage ? `<img src="${o.productImage}" onerror="this.style.display='none';this.parentElement.textContent='${o.productIcon || '📦'}'" />` : (o.productIcon || '📦')}
-                                </div>
-                                <div class="order-info">
-                                    <div class="name">${o.productName || 'Sản phẩm'}</div>
-                                    <div class="meta">${(o.price || 0).toLocaleString('vi-VN')}đ • ${o.userName || 'Khách'}</div>
-                                    <div class="order-code">${o.orderCode || '#' + key.substring(0,6)}</div>
-                                    ${o.orderNote ? `<div class="order-note">📝 ${o.orderNote}</div>` : ''}
-                                </div>
-                            </div>
-                        `;
-                    });
-                    recentList.innerHTML = html;
-                }
             });
             db.ref('vouchers').once('value', snap => {
                 const data = snap.val() || {};
@@ -674,13 +563,13 @@
             const container = document.getElementById('userGrid');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có người dùng' : 'No users'}</div>`;
+                container.innerHTML = `<div class="loading">Chưa có người dùng</div>`;
                 return;
             }
             let html = '';
             keys.forEach(key => {
                 const user = data[key];
-                if (user.isAdmin === true) return; // Ẩn admin
+                if (user.isAdmin === true) return;
                 
                 const isOnline = onlineUsersMap[key] === true;
                 const isBlocked = user.blocked === true;
@@ -704,11 +593,11 @@
                         <div class="user-balance">💰 ${balance.toLocaleString('vi-VN')} VND</div>
                         <div><span class="user-status ${statusClass}">${statusText}</span></div>
                         <div class="user-actions">
-                            <button class="add-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'add')">➕ Cộng tiền</button>
-                            <button class="sub-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'sub')">➖ Trừ tiền</button>
+                            <button class="add-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'add')"><i class="fas fa-plus"></i> Cộng tiền</button>
+                            <button class="sub-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'sub')"><i class="fas fa-minus"></i> Trừ tiền</button>
                             ${isBlocked ? 
-                                `<button class="unblock-btn" onclick="toggleBlockUser('${key}',false)">🔓 Mở khóa</button>` :
-                                `<button class="block-btn" onclick="toggleBlockUser('${key}',true)">🔒 Khóa</button>`
+                                `<button class="unblock-btn" onclick="toggleBlockUser('${key}',false)"><i class="fas fa-unlock"></i> Mở khóa</button>` :
+                                `<button class="block-btn" onclick="toggleBlockUser('${key}',true)"><i class="fas fa-lock"></i> Khóa</button>`
                             }
                         </div>
                     </div>
@@ -755,7 +644,6 @@
                 const newBalance = result.snapshot.val() || 0;
                 showToast(`✅ ${isAdd ? 'Cộng' : 'Trừ'} ${amount.toLocaleString('vi-VN')} VND thành công! Số dư mới: ${newBalance.toLocaleString('vi-VN')} VND`, 'success');
                 closeMoneyModal();
-                // Gửi thông báo cho user
                 const msg = isAdd ? `💳 Tài khoản của bạn được cộng ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}` : `💳 Tài khoản của bạn bị trừ ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}`;
                 db.ref('notifications').push({
                     message: msg,
@@ -770,7 +658,7 @@
         }
 
         function toggleBlockUser(uid, blocked) {
-            const msg = blocked ? (lang === 'vi' ? '🔒 Khóa người dùng này?' : 'Block this user?') : (lang === 'vi' ? '🔓 Mở khóa người dùng này?' : 'Unblock this user?');
+            const msg = blocked ? '🔒 Khóa người dùng này?' : '🔓 Mở khóa người dùng này?';
             if (confirm(msg)) {
                 db.ref('users/' + uid + '/blocked').set(blocked).then(() => {
                     showToast(blocked ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
@@ -785,7 +673,6 @@
                 categoriesData = snapshot.val() || {};
                 renderCategoriesAdmin(categoriesData);
                 updateCategorySelect();
-                updateVariantCategorySelect();
             });
         }
 
@@ -793,7 +680,7 @@
             const container = document.getElementById('categoryList');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có mục sản phẩm' : 'No categories'}</div>`;
+                container.innerHTML = `<div class="loading">Chưa có mục sản phẩm</div>`;
                 return;
             }
             let html = '';
@@ -813,8 +700,8 @@
                             <div class="count">${productCount} sản phẩm</div>
                         </div>
                         <div class="cat-actions">
-                            <button class="edit" onclick="editCategory('${key}')">✏️</button>
-                            <button class="del" onclick="deleteCategory('${key}')">🗑️</button>
+                            <button class="edit" onclick="editCategory('${key}')"><i class="fas fa-edit"></i></button>
+                            <button class="del" onclick="deleteCategory('${key}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -831,17 +718,8 @@
             });
         }
 
-        function updateVariantCategorySelect() {
-            const select = document.getElementById('variantCategory');
-            select.innerHTML = '<option value="">Chọn mục</option>';
-            Object.keys(categoriesData).forEach(key => {
-                const cat = categoriesData[key];
-                select.innerHTML += `<option value="${key}">${cat.icon || '📁'} ${cat.name}</option>`;
-            });
-        }
-
         function openCategoryModal() {
-            document.getElementById('categoryModalTitle').textContent = '📂 Thêm mục sản phẩm';
+            document.getElementById('categoryModalTitle').textContent = 'Thêm mục sản phẩm';
             document.getElementById('categoryName').value = '';
             document.getElementById('categoryIcon').value = '📁';
             document.getElementById('categoryImage').value = '';
@@ -853,7 +731,7 @@
                 const preview = document.getElementById('categoryImagePreview');
                 const val = this.value.trim();
                 if (val) {
-                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                    preview.innerHTML = `<img src="${val}" onerror="this.parentElement.textContent='❌'" />`;
                 } else {
                     preview.textContent = '🖼️';
                 }
@@ -867,7 +745,7 @@
         function editCategory(key) {
             const cat = categoriesData[key];
             if (!cat) return;
-            document.getElementById('categoryModalTitle').textContent = '✏️ Sửa mục sản phẩm';
+            document.getElementById('categoryModalTitle').textContent = 'Sửa mục sản phẩm';
             document.getElementById('categoryName').value = cat.name || '';
             document.getElementById('categoryIcon').value = cat.icon || '📁';
             document.getElementById('categoryImage').value = cat.image || '';
@@ -875,7 +753,7 @@
             
             const preview = document.getElementById('categoryImagePreview');
             if (cat.image) {
-                preview.innerHTML = `<img src="${cat.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                preview.innerHTML = `<img src="${cat.image}" onerror="this.parentElement.textContent='❌'" />`;
             } else {
                 preview.textContent = '🖼️';
             }
@@ -902,7 +780,7 @@
         }
 
         function deleteCategory(key) {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa mục này?' : 'Delete this category?')) {
+            if (confirm('🗑️ Xóa mục này?')) {
                 db.ref('categories/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -910,7 +788,7 @@
         }
 
         function confirmDeleteAllCategories() {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ mục?' : 'Delete ALL categories?')) {
+            if (confirm('🗑️ Xóa TẤT CẢ mục?')) {
                 db.ref('categories').remove().then(() => {
                     showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -923,7 +801,6 @@
                 productsData = snapshot.val() || {};
                 renderProductsAdmin(productsData);
                 updateCategorySelect();
-                updateVariantCategorySelect();
                 renderCategoriesAdmin(categoriesData);
             });
         }
@@ -932,7 +809,7 @@
             const container = document.getElementById('productGridAdmin');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có sản phẩm' : 'No products'}</div>`;
+                container.innerHTML = `<div class="loading">Chưa có sản phẩm</div>`;
                 return;
             }
             let html = '';
@@ -941,25 +818,21 @@
                 const imageUrl = p.image || '';
                 const icon = p.icon || '📦';
                 const desc = p.description || '';
-                const variants = p.variants || [];
                 
                 html += `
                     <div class="product-card-admin">
-                        ${variants.length > 0 ? `<div class="variants-badge">${variants.length} biến thể</div>` : ''}
                         <div class="product-image">
                             ${imageUrl ? `<img src="${imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
                         <div class="name">${p.name || 'Sản phẩm'}</div>
                         <div class="price">${(p.price || 0).toLocaleString('vi-VN')}đ</div>
-                        <div class="stock">📦 Còn: ${p.stock || 0}</div>
-                        <div class="sold">📈 Đã bán: ${p.sold || 0}</div>
-                        ${desc ? `<div class="desc-preview">📝 ${desc}</div>` : ''}
-                        ${variants.length > 0 ? `<div style="font-size:9px;color:var(--text-muted);max-height:40px;overflow:hidden;">${variants.slice(0,3).map(v => '📌' + v).join(' ')}${variants.length > 3 ? ` +${variants.length-3}` : ''}</div>` : ''}
+                        <div class="stock"><i class="fas fa-boxes"></i> Còn: ${p.stock || 0}</div>
+                        <div class="sold"><i class="fas fa-chart-line"></i> Đã bán: ${p.sold || 0}</div>
+                        ${desc ? `<div class="desc-preview"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
                         <div class="cat">${p.category && categoriesData[p.category] ? (categoriesData[p.category].icon || '📁') + ' ' + categoriesData[p.category].name : 'Không có mục'}</div>
                         <div class="actions">
-                            <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
-                            <button class="duplicate" onclick="duplicateSingleProduct('${key}')">📋 Nhân bản</button>
-                            <button class="del" onclick="deleteProduct('${key}')">🗑️ Xóa</button>
+                            <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
+                            <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -967,93 +840,8 @@
             container.innerHTML = html;
         }
 
-        // ===== VARIANT =====
-        function openVariantModal() {
-            document.getElementById('variantCategory').value = '';
-            document.getElementById('variantName').value = '';
-            document.getElementById('variantPrice').value = '';
-            document.getElementById('variantStock').value = '1';
-            document.getElementById('variantIcon').value = '📦';
-            document.getElementById('variantImage').value = '';
-            document.getElementById('variantDescriptions').value = '';
-            document.getElementById('variantImagePreview').textContent = '🖼️';
-            updateVariantCategorySelect();
-            document.getElementById('variantModal').classList.add('active');
-            
-            document.getElementById('variantImage').oninput = function() {
-                const preview = document.getElementById('variantImagePreview');
-                const val = this.value.trim();
-                if (val) {
-                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
-                } else {
-                    preview.textContent = '🖼️';
-                }
-            };
-        }
-
-        function closeVariantModal() {
-            document.getElementById('variantModal').classList.remove('active');
-        }
-
-        function duplicateSingleProduct(key) {
-            const p = productsData[key];
-            if (!p) return;
-            
-            document.getElementById('variantCategory').value = p.category || '';
-            document.getElementById('variantName').value = p.name || '';
-            document.getElementById('variantPrice').value = p.price || '';
-            document.getElementById('variantStock').value = p.stock || 1;
-            document.getElementById('variantIcon').value = p.icon || '📦';
-            document.getElementById('variantImage').value = p.image || '';
-            document.getElementById('variantDescriptions').value = (p.variants || []).join('\n') || p.description || '';
-            
-            const preview = document.getElementById('variantImagePreview');
-            if (p.image) {
-                preview.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
-            } else {
-                preview.textContent = '🖼️';
-            }
-            
-            updateVariantCategorySelect();
-            document.getElementById('variantModal').classList.add('active');
-        }
-
-        function saveVariantProducts() {
-            const category = document.getElementById('variantCategory').value;
-            const name = document.getElementById('variantName').value.trim();
-            const price = parseInt(document.getElementById('variantPrice').value);
-            const stock = parseInt(document.getElementById('variantStock').value) || 1;
-            const icon = document.getElementById('variantIcon').value.trim() || '📦';
-            const image = document.getElementById('variantImage').value.trim();
-            const descriptions = document.getElementById('variantDescriptions').value.split('\n').filter(d => d.trim() !== '');
-            
-            if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
-            if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
-            if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
-            if (descriptions.length === 0) { showToast('❌ Nhập ít nhất 1 biến thể!', 'error'); return; }
-            
-            const productId = 'prod_' + Date.now();
-            const data = {
-                name: name,
-                price: price,
-                stock: stock,
-                category: category,
-                icon: icon,
-                sold: 0,
-                variants: descriptions,
-                description: descriptions.join(' | ')
-            };
-            if (image) data.image = image;
-            
-            db.ref('products/' + productId).set(data).then(() => {
-                showToast(`✅ Đã tạo 1 sản phẩm với ${descriptions.length} biến thể!`, 'success');
-                closeVariantModal();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        // ===== PRODUCT CRUD =====
         function openProductModal() {
-            document.getElementById('productModalTitle').textContent = '🛍️ Thêm sản phẩm';
+            document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
             document.getElementById('productStock').value = '1';
@@ -1070,7 +858,7 @@
                 const preview = document.getElementById('productImagePreview');
                 const val = this.value.trim();
                 if (val) {
-                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                    preview.innerHTML = `<img src="${val}" onerror="this.parentElement.textContent='❌'" />`;
                 } else {
                     preview.textContent = '🖼️';
                 }
@@ -1084,19 +872,19 @@
         function editProduct(key) {
             const p = productsData[key];
             if (!p) return;
-            document.getElementById('productModalTitle').textContent = '✏️ Sửa sản phẩm';
+            document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
             document.getElementById('productName').value = p.name || '';
             document.getElementById('productPrice').value = p.price || '';
             document.getElementById('productStock').value = p.stock || 1;
             document.getElementById('productCategory').value = p.category || '';
             document.getElementById('productIcon').value = p.icon || '📦';
             document.getElementById('productImage').value = p.image || '';
-            document.getElementById('productDesc').value = (p.variants || []).join('\n') || p.description || '';
+            document.getElementById('productDesc').value = p.description || '';
             document.getElementById('productEditId').value = key;
             
             const preview = document.getElementById('productImagePreview');
             if (p.image) {
-                preview.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                preview.innerHTML = `<img src="${p.image}" onerror="this.parentElement.textContent='❌'" />`;
             } else {
                 preview.textContent = '🖼️';
             }
@@ -1117,6 +905,7 @@
             
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
+            if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
             
             const data = { name, price, stock, category, icon };
             if (image) data.image = image;
@@ -1131,7 +920,7 @@
         }
 
         function deleteProduct(key) {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa sản phẩm này?' : 'Delete this product?')) {
+            if (confirm('🗑️ Xóa sản phẩm này?')) {
                 db.ref('products/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -1139,7 +928,7 @@
         }
 
         function confirmDeleteAllProducts() {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ sản phẩm?' : 'Delete ALL products?')) {
+            if (confirm('🗑️ Xóa TẤT CẢ sản phẩm?')) {
                 db.ref('products').remove().then(() => {
                     showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -1158,7 +947,7 @@
             const container = document.getElementById('ordersList');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có đơn hàng' : 'No orders'}</div>`;
+                container.innerHTML = `<div class="loading">Chưa có đơn hàng</div>`;
                 return;
             }
             let html = '';
@@ -1166,6 +955,10 @@
             sorted.forEach(key => {
                 const o = data[key];
                 const image = o.productImage || o.productIcon || '📦';
+                const status = o.status || 'success';
+                const statusText = status === 'success' ? '✅ Thành công' : '❌ Thất bại';
+                const statusClass = status === 'success' ? 'success' : 'failed';
+                
                 html += `
                     <div class="order-item-admin">
                         <div class="order-image">
@@ -1173,15 +966,15 @@
                         </div>
                         <div class="order-info">
                             <div class="name">${o.productName || 'Sản phẩm'}</div>
-                            <div class="meta">💰 ${(o.price || 0).toLocaleString('vi-VN')}đ</div>
-                            <div class="meta">👤 ${o.userName || 'Khách hàng'}</div>
-                            <div class="order-code">🔑 ${o.orderCode || '#' + key.substring(0,6)}</div>
-                            ${o.voucher ? `<div class="meta">🎫 Mã: ${o.voucher}</div>` : ''}
-                            ${o.productDesc ? `<div class="meta">📝 ${o.productDesc}</div>` : ''}
-                            ${o.orderNote ? `<div class="order-note">📝 Ghi chú: ${o.orderNote}</div>` : ''}
-                            <div class="meta">📅 ${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
+                            <div class="meta"><i class="fas fa-coins"></i> ${(o.price || 0).toLocaleString('vi-VN')}đ</div>
+                            <div class="meta"><i class="fas fa-user"></i> ${o.userName || 'Khách hàng'}</div>
+                            <div class="order-code"><i class="fas fa-key"></i> ${o.orderCode || '#' + key.substring(0,6)}</div>
+                            ${o.productDesc ? `<div class="meta"><i class="fas fa-info-circle"></i> ${o.productDesc}</div>` : ''}
+                            ${o.orderNote ? `<div class="order-note"><i class="fas fa-sticky-note"></i> ${o.orderNote}</div>` : ''}
+                            <div class="meta"><i class="fas fa-clock"></i> ${new Date(o.timestamp).toLocaleString('vi-VN')}</div>
+                            <div class="meta"><span class="order-status ${statusClass}">${statusText}</span></div>
                         </div>
-                        <button class="btn-action delete" onclick="deleteOrder('${key}')" style="font-size:11px;background:#fef0f2;color:#e74c6f;border:1px solid #fdd5d9;padding:3px 10px;border-radius:6px;cursor:pointer;">🗑️</button>
+                        <button class="btn-action delete" onclick="deleteOrder('${key}')" style="font-size:11px;background:#fef0f2;color:#e74c6f;border:1px solid #fdd5d9;padding:3px 10px;border-radius:6px;cursor:pointer;transition:var(--transition);"><i class="fas fa-trash"></i></button>
                     </div>
                 `;
             });
@@ -1189,7 +982,7 @@
         }
 
         function deleteOrder(key) {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa đơn hàng này?' : 'Delete this order?')) {
+            if (confirm('🗑️ Xóa đơn hàng này?')) {
                 db.ref('orders/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -1197,7 +990,7 @@
         }
 
         function confirmDeleteAllOrders() {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ đơn hàng?' : 'Delete ALL orders?')) {
+            if (confirm('🗑️ Xóa TẤT CẢ đơn hàng?')) {
                 db.ref('orders').remove().then(() => {
                     showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -1216,7 +1009,7 @@
             const container = document.getElementById('voucherList');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có mã giảm giá' : 'No vouchers'}</div>`;
+                container.innerHTML = `<div class="loading">Chưa có mã giảm giá</div>`;
                 return;
             }
             let html = '';
@@ -1226,11 +1019,9 @@
                 html += `
                     <div class="voucher-item">
                         <div class="voucher-code">${key}</div>
-                        <div class="voucher-info">
-                            Giảm ${typeText} • ${v.usedCount || 0}/${v.maxUses || 0} lượt
-                        </div>
+                        <div class="voucher-info">Giảm ${typeText} • ${v.usedCount || 0}/${v.maxUses || 0} lượt</div>
                         <div class="voucher-actions">
-                            <button class="del" onclick="deleteVoucher('${key}')">🗑️</button>
+                            <button class="del" onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -1268,7 +1059,7 @@
         }
 
         function deleteVoucher(key) {
-            if (confirm(lang === 'vi' ? `🗑️ Xóa mã "${key}"?` : `Delete voucher "${key}"?`)) {
+            if (confirm(`🗑️ Xóa mã "${key}"?`)) {
                 db.ref('vouchers/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -1276,11 +1067,21 @@
         }
 
         function confirmDeleteAllVouchers() {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ mã giảm giá?' : 'Delete ALL vouchers?')) {
+            if (confirm('🗑️ Xóa TẤT CẢ mã giảm giá?')) {
                 db.ref('vouchers').remove().then(() => {
                     showToast('✅ Đã xóa tất cả!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
             }
+        }
+
+        function refreshAll() {
+            loadUsersAdmin();
+            loadCategoriesAdmin();
+            loadProductsAdmin();
+            loadOrdersAdmin();
+            loadVouchersAdmin();
+            updateDashboard();
+            showToast('🔄 Đã làm mới!', 'success');
         }
 
         // ===== AUTH =====
@@ -1305,7 +1106,7 @@
             db.ref('users/' + user.uid).once('value', snap => {
                 const data = snap.val();
                 if (!data || data.isAdmin !== true) {
-                    alert(lang === 'vi' ? '⚠️ Không có quyền truy cập!' : '⚠️ Access denied!');
+                    alert('⚠️ Không có quyền truy cập!');
                     window.location.replace('../index.html');
                     return;
                 }
@@ -1331,12 +1132,12 @@
                         const n = notifs[key];
                         const isUnread = !n.readBy || !n.readBy[user.uid];
                         if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else {
-                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                     dot.classList.remove('show');
                 }
             });
@@ -1344,36 +1145,6 @@
                 isDataLoaded = true;
             }
         });
-
-        function sendNotification() {
-            const msg = document.getElementById('notifInput').value.trim();
-            if (!msg) { showToast('❌ Nhập nội dung!', 'error'); return; }
-            const btn = document.querySelector('.btn-send');
-            btn.disabled = true;
-            btn.textContent = lang === 'vi' ? '⏳ Đang gửi...' : '⏳ Sending...';
-            db.ref('notifications').push({ message: msg, timestamp: Date.now(), from: 'Admin', readBy: {} })
-                .then(() => {
-                    showToast('✅ Đã gửi thông báo!', 'success');
-                    document.getElementById('notifInput').value = '';
-                    btn.disabled = false;
-                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
-                })
-                .catch(err => {
-                    showToast('❌ ' + err.message, 'error');
-                    btn.disabled = false;
-                    btn.textContent = lang === 'vi' ? '📢 Gửi' : '📢 Send';
-                });
-        }
-
-        function refreshAll() {
-            loadUsersAdmin();
-            loadCategoriesAdmin();
-            loadProductsAdmin();
-            loadOrdersAdmin();
-            loadVouchersAdmin();
-            updateDashboard();
-            showToast('🔄 Đã làm mới!', 'success');
-        }
 
         // ===== MENU FUNCTIONS =====
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
@@ -1404,14 +1175,14 @@
 
         function goHome() { closeMenu(); window.location.href = '../index.html'; }
         function goHistory() { closeMenu(); window.location.href = '../Pages/history.html'; }
-        function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
-        function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
+        function goTopup() { closeMenu(); alert('💰 Đang phát triển!'); }
+        function goSupport() { closeMenu(); alert('🆘 Đang phát triển!'); }
         function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
         function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
         function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
 
         function logout() {
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+            if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
                 if (user) {
                     db.ref('presence/' + user.uid).set(false);
@@ -1426,28 +1197,19 @@
             }
         }
 
-        document.getElementById('categoryModal').addEventListener('click', function(e) {
-            if (e.target === this) closeCategoryModal();
-        });
-        document.getElementById('productModal').addEventListener('click', function(e) {
-            if (e.target === this) closeProductModal();
-        });
-        document.getElementById('variantModal').addEventListener('click', function(e) {
-            if (e.target === this) closeVariantModal();
-        });
-        document.getElementById('moneyModal').addEventListener('click', function(e) {
-            if (e.target === this) closeMoneyModal();
-        });
-        document.getElementById('voucherModal').addEventListener('click', function(e) {
-            if (e.target === this) closeVoucherModal();
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
         });
 
         window.addEventListener('storage', function(e) {
-            if (e.key === 'lang') { lang = e.newValue || 'vi'; applyLang(); }
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Users, Categories, Products, Orders, Vouchers & Money management!');
+        console.log('✅ Admin panel loaded with full features!');
     </script>
 </body>
 </html>
