@@ -1178,9 +1178,19 @@
         });
 
         // ===== DEVICE INFO =====
-        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
+        // Fetch IP với timeout 3 giây
+        Promise.race([
+            fetch('https://api.ipify.org?format=json').then(r => r.json()),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000))
+        ]).then(d => {
             document.getElementById('userIP').textContent = d.ip || 'Không xác định';
-        }).catch(() => document.getElementById('userIP').textContent = 'Không thể lấy');
+        }).catch(() => {
+            document.getElementById('userIP').textContent = 'Không thể lấy';
+        }).finally(() => {
+            // Đảm bảo loading được ẩn
+            isDataLoaded = true;
+            hideLoading();
+        });
 
         const ua = navigator.userAgent;
         let browser = 'Không xác định';
@@ -1289,15 +1299,20 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
+        // Khai báo biến tracking
+        let isDataLoaded = false;
+
         // Hiển thị loading ngay khi trang load
         showLoading();
 
-        // Ẩn loading sau 5s nếu không có gì xảy ra (fallback)
+        // Ẩn loading sau 3s nếu không có gì xảy ra (fallback)
         setTimeout(() => {
             if (!isDataLoaded) {
+                console.warn('⚠️ Loading timeout - hiding spinner');
+                isDataLoaded = true;
                 hideLoading();
             }
-        }, 5000);
+        }, 3000);
 
         console.log('✅ Security page loaded with quick login support!');
     </script>
