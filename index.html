@@ -402,8 +402,8 @@
                     }
                 });
                 
-                // Xóa pending flag sau khi đã login thành công
-                localStorage.removeItem('quickLoginPending');
+                // Không xóa quickLoginPending để giữ trạng thái qua các lần F5
+                // Chỉ xóa khi logout hoặc token hết hạn
                 
                 isDataLoaded = true;
                 hideLoading();
@@ -419,7 +419,7 @@
             // Nếu đã load data rồi thì không làm gì
             if (isDataLoaded) return;
             
-            // Kiểm tra quick login pending
+            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
             if (checkQuickLogin()) {
                 const success = await autoLoginWithQuickToken();
                 if (success) {
