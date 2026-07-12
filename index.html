@@ -166,54 +166,154 @@
         .product-card .product-stats .stat.in-stock { color: var(--success); }
         .product-card .product-stats .stat.sold { color: var(--text-secondary); }
 
-        .product-card .product-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-        .product-card .product-actions .voucher-input { flex: 1; display: flex; gap: 6px; }
-        .product-card .product-actions .voucher-input input { flex: 1; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); min-width: 80px; }
-        .product-card .product-actions .voucher-input input:focus { outline: none; border-color: var(--accent); }
-        .product-card .product-actions .voucher-input input::placeholder { color: var(--text-muted); font-size: 11px; }
-        .product-card .product-actions .voucher-input button { padding: 4px 12px; background: var(--warning); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; }
-        .product-card .product-actions .voucher-input button:hover { opacity: 0.8; transform: scale(1.05); }
-        .product-card .product-actions .btn-buy { padding: 6px 20px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; white-space: nowrap; flex-shrink: 0; }
-        .product-card .product-actions .btn-buy:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
-        .product-card .product-actions .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .product-card .product-actions .btn-buy .discount-badge { background: var(--warning); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
-
-        .product-card .voucher-applied { color: var(--success); font-size: 12px; font-weight: 600; margin-top: 6px; padding: 4px 10px; background: #d4edda; border-radius: 4px; display: inline-block; }
+        /* ===== NÚT MUA HÀNG ===== */
+        .product-card .btn-buy { 
+            margin-top: 10px; 
+            padding: 8px 20px; 
+            background: var(--accent); 
+            color: #fff; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-size: 14px; 
+            width: 100%;
+        }
+        .product-card .btn-buy:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
+        .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* ===== ORDER POPUP ===== */
-        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        /* ===== ORDER POPUP (GIAO DIỆN MUA HÀNG) ===== */
+        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .order-popup-overlay.active { display: flex; }
-        .order-popup { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 480px; width: 92%; border: 2px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; animation: popupIn 0.3s ease; }
-        @keyframes popupIn { from { transform: scale(0.9) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .order-popup .close-btn { position: sticky; top: 0; float: right; font-size: 24px; cursor: pointer; color: var(--text-muted); transition: var(--transition); background: none; border: none; z-index: 1; }
+        .order-popup { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            padding: 28px; 
+            max-width: 460px; 
+            width: 92%; 
+            border: 2px solid var(--border-color); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+            animation: popupIn 0.3s ease; 
+        }
+        @keyframes popupIn { from { transform: scale(0.92) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        
+        .order-popup .close-btn { 
+            position: absolute; 
+            top: 12px; 
+            right: 16px; 
+            font-size: 22px; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            transition: var(--transition); 
+            background: none; 
+            border: none; 
+            z-index: 1; 
+        }
         .order-popup .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
+        
         .order-popup .popup-header { text-align: center; margin-bottom: 16px; }
-        .order-popup .popup-header .status-icon { font-size: 48px; display: block; margin-bottom: 8px; }
-        .order-popup .popup-header h3 { color: var(--success); font-size: 20px; }
-        .order-popup .popup-header .order-code { color: var(--text-muted); font-size: 13px; font-family: monospace; background: var(--wallet-bg); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
+        .order-popup .popup-header .product-icon { font-size: 48px; display: block; margin-bottom: 6px; }
+        .order-popup .popup-header h3 { color: var(--text-primary); font-size: 20px; }
+        .order-popup .popup-header .product-price-display { color: var(--accent); font-size: 18px; font-weight: 700; }
         
-        .order-popup .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
-        .order-popup .info-grid .info-item { background: var(--wallet-bg); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); }
-        .order-popup .info-grid .info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .order-popup .info-grid .info-item .value { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-top: 2px; word-break: break-word; }
-        .order-popup .info-grid .info-item .value.status-success { color: var(--success); }
-        .order-popup .info-grid .info-item .value.status-failed { color: var(--danger); }
-        .order-popup .info-grid .info-item.full { grid-column: 1 / -1; }
+        .order-popup .popup-body { margin: 12px 0; }
+        .order-popup .popup-body .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
+        .order-popup .popup-body .info-row .label { color: var(--text-muted); }
         
-        .order-popup .product-detail { display: flex; gap: 12px; padding: 12px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); margin: 8px 0; align-items: center; }
-        .order-popup .product-detail .pd-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
-        .order-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-        .order-popup .product-detail .pd-info { flex: 1; }
-        .order-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); }
-        .order-popup .product-detail .pd-info .pd-desc { font-size: 12px; color: var(--text-muted); }
+        /* ===== TĂNG/GIẢM SỐ LƯỢNG ===== */
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 12px 0; }
+        .quantity-control .qty-btn { 
+            width: 40px; height: 40px; 
+            border-radius: 50%; 
+            border: 2px solid var(--border-color); 
+            background: var(--wallet-bg); 
+            font-size: 20px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--text-primary);
+        }
+        .quantity-control .qty-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.05); }
+        .quantity-control .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+        .quantity-control .qty-btn:disabled:hover { background: var(--wallet-bg); color: var(--text-primary); border-color: var(--border-color); }
+        .quantity-control .qty-number { font-size: 24px; font-weight: 700; color: var(--text-primary); min-width: 40px; text-align: center; }
         
-        .order-popup .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--border-color); margin-top: 8px; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        /* ===== MÃ GIẢM GIÁ TRONG POPUP ===== */
+        .voucher-popup-section { display: flex; gap: 8px; margin: 8px 0 12px; }
+        .voucher-popup-section input { 
+            flex: 1; 
+            padding: 8px 12px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 13px; 
+            background: var(--bg-card); 
+            color: var(--text-primary); 
+            transition: var(--transition); 
+            text-transform: uppercase;
+        }
+        .voucher-popup-section input:focus { outline: none; border-color: var(--accent); }
+        .voucher-popup-section input::placeholder { text-transform: none; color: var(--text-muted); font-size: 12px; }
+        .voucher-popup-section .apply-voucher-btn { 
+            padding: 8px 16px; 
+            background: var(--warning); 
+            color: #fff; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            white-space: nowrap; 
+        }
+        .voucher-popup-section .apply-voucher-btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .voucher-popup-section .applied-voucher { color: var(--success); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        
+        /* ===== TỔNG TIỀN ===== */
+        .order-popup .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--border-color); margin-top: 8px; font-size: 18px; font-weight: 700; color: var(--text-primary); }
         .order-popup .total-row span { color: var(--accent); }
-        .order-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 12px; }
-        .order-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        
+        .order-popup .btn-confirm { 
+            width: 100%; 
+            padding: 12px; 
+            background: var(--success); 
+            color: #fff; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            margin-top: 8px; 
+        }
+        .order-popup .btn-confirm:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        .order-popup .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ===== RESULT POPUP ===== */
+        .result-popup .popup-header .status-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+        .result-popup .popup-header h3 { color: var(--success); font-size: 20px; }
+        .result-popup .popup-header .order-code { color: var(--text-muted); font-size: 13px; font-family: monospace; background: var(--wallet-bg); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
+        .result-popup .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+        .result-popup .info-grid .info-item { background: var(--wallet-bg); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); }
+        .result-popup .info-grid .info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .result-popup .info-grid .info-item .value { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-top: 2px; word-break: break-word; }
+        .result-popup .info-grid .info-item.full { grid-column: 1 / -1; }
+        .result-popup .product-detail { display: flex; gap: 12px; padding: 12px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); margin: 8px 0; align-items: center; }
+        .result-popup .product-detail .pd-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
+        .result-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .result-popup .product-detail .pd-info { flex: 1; }
+        .result-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); }
+        .result-popup .product-detail .pd-info .pd-desc { font-size: 12px; color: var(--text-muted); }
+        .result-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 12px; }
+        .result-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
         /* ===== LOADING ===== */
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
@@ -248,11 +348,10 @@
             .category-item .cat-name { font-size: 11px; }
             .product-grid { grid-template-columns: 1fr; }
             .product-card .product-image { width: 55px; height: 55px; font-size: 24px; }
-            .product-card .product-actions { flex-wrap: wrap; }
-            .product-card .product-actions .voucher-input { flex: 1 1 100%; }
-            .product-card .product-actions .btn-buy { flex: 1; }
             .order-popup { padding: 16px; }
-            .order-popup .info-grid { grid-template-columns: 1fr; }
+            .result-popup .info-grid { grid-template-columns: 1fr; }
+            .quantity-control .qty-btn { width: 34px; height: 34px; font-size: 16px; }
+            .quantity-control .qty-number { font-size: 20px; min-width: 30px; }
         }
     </style>
 </head>
@@ -319,19 +418,58 @@
         <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
-    <!-- Order Popup -->
+    <!-- Order Popup (MUA HÀNG) -->
     <div class="order-popup-overlay" id="orderPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeOrderPopup()"><i class="fas fa-times"></i></button>
             <div class="popup-header">
-                <span class="status-icon" id="orderStatusIcon">✅</span>
-                <h3 id="orderStatusTitle">Đặt hàng thành công!</h3>
-                <div class="order-code" id="orderCodeDisplay"><i class="fas fa-key"></i> Mã đơn: <strong id="orderCodeText">******</strong></div>
+                <span class="product-icon" id="popupProductIcon">📦</span>
+                <h3 id="popupProductName">Sản phẩm</h3>
+                <div class="product-price-display" id="popupProductPrice">0 VND</div>
             </div>
-            <div class="info-grid" id="orderInfoGrid"></div>
-            <div id="orderProductDetail"></div>
-            <div class="total-row">Tổng tiền: <span id="orderTotal">0</span> VND</div>
-            <button class="btn-done" onclick="closeOrderPopup()"><i class="fas fa-check"></i> Đóng</button>
+            
+            <div class="popup-body">
+                <div class="info-row"><span class="label"><i class="fas fa-boxes"></i> Số lượng tồn</span><span id="popupStock">0</span></div>
+                <div class="info-row"><span class="label"><i class="fas fa-user"></i> Số dư của bạn</span><span id="popupBalance">0 VND</span></div>
+            </div>
+            
+            <!-- Tăng/Giảm số lượng -->
+            <div class="quantity-control">
+                <button class="qty-btn" id="qtyMinus" onclick="changeQuantity(-1)"><i class="fas fa-minus"></i></button>
+                <span class="qty-number" id="qtyNumber">1</span>
+                <button class="qty-btn" id="qtyPlus" onclick="changeQuantity(1)"><i class="fas fa-plus"></i></button>
+            </div>
+            
+            <!-- Mã giảm giá trong popup -->
+            <div class="voucher-popup-section">
+                <input type="text" id="popupVoucherInput" placeholder="Nhập mã giảm giá" />
+                <button class="apply-voucher-btn" onclick="applyPopupVoucher()"><i class="fas fa-ticket-alt"></i> Áp</button>
+                <span id="popupVoucherStatus"></span>
+            </div>
+            
+            <!-- Tổng tiền -->
+            <div class="total-row">
+                <span>Tổng tiền</span>
+                <span id="popupTotalPrice">0 VND</span>
+            </div>
+            
+            <button class="btn-confirm" id="btnConfirmOrder" onclick="confirmOrder()"><i class="fas fa-shopping-cart"></i> Xác nhận mua</button>
+        </div>
+    </div>
+
+    <!-- Result Popup (KẾT QUẢ SAU KHI MUA) -->
+    <div class="order-popup-overlay result-popup" id="resultPopup">
+        <div class="order-popup">
+            <button class="close-btn" onclick="closeResultPopup()"><i class="fas fa-times"></i></button>
+            <div class="popup-header">
+                <span class="status-icon" id="resultStatusIcon">✅</span>
+                <h3 id="resultStatusTitle">Đặt hàng thành công!</h3>
+                <div class="order-code" id="resultOrderCode"><i class="fas fa-key"></i> Mã đơn: <strong id="resultOrderCodeText">******</strong></div>
+            </div>
+            <div class="info-grid" id="resultInfoGrid"></div>
+            <div id="resultProductDetail"></div>
+            <div class="total-row">Tổng tiền: <span id="resultTotal">0</span> VND</div>
+            <button class="btn-done" onclick="closeResultPopup()"><i class="fas fa-check"></i> Đóng</button>
         </div>
     </div>
 
@@ -416,7 +554,12 @@
         let categoriesData = {};
         let productsData = {};
         let vouchersData = {};
-        let currentVoucher = null;
+        
+        // Biến cho popup mua hàng
+        let currentProduct = null;
+        let currentQuantity = 1;
+        let currentVoucherCode = null;
+        let currentVoucherDiscount = 0;
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -558,7 +701,6 @@
 
         function selectCategory(categoryId) {
             selectedCategory = categoryId;
-            currentVoucher = null;
             renderCategories();
             renderProducts();
         }
@@ -596,23 +738,11 @@
             filtered.forEach(product => {
                 const isOutOfStock = product.stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
-                const originalPrice = product.price || 0;
                 const image = product.image || '';
                 const icon = product.icon || '📦';
                 const desc = product.description || '';
                 const sold = product.sold || 0;
                 const stock = product.stock || 0;
-                
-                let discountPrice = originalPrice;
-                let discountText = '';
-                if (currentVoucher && currentVoucher.type === 'percent') {
-                    discountPrice = originalPrice * (1 - currentVoucher.value / 100);
-                    discountText = `-${currentVoucher.value}%`;
-                } else if (currentVoucher && currentVoucher.type === 'fixed') {
-                    discountPrice = Math.max(0, originalPrice - currentVoucher.value);
-                    discountText = `-${currentVoucher.value.toLocaleString('vi-VN')}đ`;
-                }
-                const displayPrice = discountPrice.toLocaleString('vi-VN');
                 
                 html += `
                     <div class="product-card">
@@ -622,11 +752,7 @@
                             </div>
                             <div class="product-info">
                                 <div class="product-name">${product.name || 'Sản phẩm'}</div>
-                                <div class="product-price">
-                                    ${discountPrice < originalPrice ? `<span style="text-decoration:line-through;font-size:14px;color:var(--text-muted);">${originalPrice.toLocaleString('vi-VN')}đ</span> ` : ''}
-                                    ${displayPrice} VND
-                                    ${discountText ? `<span class="discount-badge" style="background:var(--warning);color:#fff;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:4px;">${discountText}</span>` : ''}
-                                </div>
+                                <div class="product-price">${price} VND</div>
                                 ${desc ? `<div class="product-desc"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
                                 <div class="product-stats">
                                     <span class="stat in-stock"><i class="fas fa-boxes"></i> Còn: ${stock}</span>
@@ -634,16 +760,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="product-actions">
-                            <div class="voucher-input">
-                                <input type="text" id="voucher_${product.id}" placeholder="Nhập mã giảm giá" />
-                                <button onclick="applyVoucher('${product.id}')"><i class="fas fa-ticket-alt"></i> Áp</button>
-                            </div>
-                            <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
-                                ${isOutOfStock ? 'Hết hàng' : '<i class="fas fa-shopping-cart"></i> Mua ngay'}
-                            </button>
-                        </div>
-                        ${currentVoucher ? `<div class="voucher-applied"><i class="fas fa-check-circle"></i> Đã áp mã: ${currentVoucher.code}</div>` : ''}
+                        <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="openBuyPopup('${product.id}')">
+                            ${isOutOfStock ? 'Hết hàng' : '<i class="fas fa-shopping-cart"></i> Mua ngay'}
+                        </button>
                     </div>
                 `;
             });
@@ -651,38 +770,8 @@
             grid.innerHTML = html;
         }
 
-        // ===== VOUCHER =====
-        function applyVoucher(productId) {
-            const input = document.getElementById('voucher_' + productId);
-            const code = input.value.trim().toUpperCase();
-            if (!code) {
-                showToast('Vui lòng nhập mã giảm giá!', 'error');
-                return;
-            }
-            
-            const voucher = vouchersData[code];
-            if (!voucher) {
-                showToast('❌ Mã giảm giá không hợp lệ!', 'error');
-                return;
-            }
-            
-            if (voucher.usedCount >= voucher.maxUses) {
-                showToast('❌ Mã giảm giá đã hết lượt sử dụng!', 'error');
-                return;
-            }
-            
-            currentVoucher = { code, ...voucher };
-            renderProducts();
-            showToast('✅ Đã áp mã giảm giá thành công!', 'success');
-        }
-
-        // ===== BUY PRODUCT =====
-        function buyProduct(productId) {
-            if (!currentUser) {
-                showToast('Vui lòng đăng nhập!', 'error');
-                return;
-            }
-            
+        // ===== MỞ POPUP MUA HÀNG =====
+        function openBuyPopup(productId) {
             const product = productsData[productId];
             if (!product) {
                 showToast('Sản phẩm không tồn tại!', 'error');
@@ -694,110 +783,233 @@
                 return;
             }
             
-            let price = product.price || 0;
+            currentProduct = product;
+            currentQuantity = 1;
+            currentVoucherCode = null;
+            currentVoucherDiscount = 0;
+            
+            // Cập nhật UI popup
+            const icon = product.image ? `<img src="${product.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;" onerror="this.parentElement.textContent='${product.icon || '📦'}'" />` : (product.icon || '📦');
+            document.getElementById('popupProductIcon').innerHTML = icon;
+            document.getElementById('popupProductName').textContent = product.name || 'Sản phẩm';
+            document.getElementById('popupProductPrice').textContent = (product.price || 0).toLocaleString('vi-VN') + ' VND';
+            document.getElementById('popupStock').textContent = product.stock || 0;
+            document.getElementById('popupBalance').textContent = (currentUser?.balance || 0).toLocaleString('vi-VN') + ' VND';
+            document.getElementById('qtyNumber').textContent = '1';
+            document.getElementById('popupVoucherInput').value = '';
+            document.getElementById('popupVoucherStatus').textContent = '';
+            document.getElementById('popupVoucherStatus').className = '';
+            
+            updateTotalPrice();
+            document.getElementById('orderPopup').classList.add('active');
+        }
+
+        // ===== TĂNG/GIẢM SỐ LƯỢNG =====
+        function changeQuantity(delta) {
+            if (!currentProduct) return;
+            const newQty = currentQuantity + delta;
+            if (newQty < 1) return;
+            if (newQty > currentProduct.stock) {
+                showToast('Số lượng vượt quá tồn kho!', 'error');
+                return;
+            }
+            currentQuantity = newQty;
+            document.getElementById('qtyNumber').textContent = currentQuantity;
+            updateTotalPrice();
+        }
+
+        // ===== ÁP MÃ GIẢM GIÁ TRONG POPUP =====
+        function applyPopupVoucher() {
+            const input = document.getElementById('popupVoucherInput');
+            const code = input.value.trim().toUpperCase();
+            const statusEl = document.getElementById('popupVoucherStatus');
+            
+            if (!code) {
+                statusEl.textContent = '⚠️ Nhập mã giảm giá!';
+                statusEl.className = 'voucher-applied';
+                statusEl.style.color = 'var(--danger)';
+                return;
+            }
+            
+            const voucher = vouchersData[code];
+            if (!voucher) {
+                statusEl.textContent = '❌ Mã không hợp lệ!';
+                statusEl.className = 'voucher-applied';
+                statusEl.style.color = 'var(--danger)';
+                return;
+            }
+            
+            if (voucher.usedCount >= voucher.maxUses) {
+                statusEl.textContent = '❌ Mã đã hết lượt!';
+                statusEl.className = 'voucher-applied';
+                statusEl.style.color = 'var(--danger)';
+                return;
+            }
+            
+            currentVoucherCode = code;
+            if (voucher.type === 'percent') {
+                currentVoucherDiscount = voucher.value / 100;
+                statusEl.textContent = `✅ Giảm ${voucher.value}%`;
+            } else {
+                currentVoucherDiscount = voucher.value;
+                statusEl.textContent = `✅ Giảm ${voucher.value.toLocaleString('vi-VN')}đ`;
+            }
+            statusEl.className = 'voucher-applied';
+            statusEl.style.color = 'var(--success)';
+            
+            updateTotalPrice();
+            showToast('✅ Đã áp mã giảm giá!', 'success');
+        }
+
+        // ===== CẬP NHẬT TỔNG TIỀN =====
+        function updateTotalPrice() {
+            if (!currentProduct) return;
+            const basePrice = currentProduct.price || 0;
+            let total = basePrice * currentQuantity;
+            
+            if (currentVoucherCode) {
+                const voucher = vouchersData[currentVoucherCode];
+                if (voucher) {
+                    if (voucher.type === 'percent') {
+                        total = total * (1 - voucher.value / 100);
+                    } else {
+                        total = Math.max(0, total - voucher.value);
+                    }
+                }
+            }
+            
+            document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
+        }
+
+        // ===== XÁC NHẬN MUA HÀNG =====
+        function confirmOrder() {
+            if (!currentUser) {
+                showToast('Vui lòng đăng nhập!', 'error');
+                return;
+            }
+            
+            if (!currentProduct) {
+                showToast('Sản phẩm không tồn tại!', 'error');
+                return;
+            }
+            
+            if (currentProduct.stock < currentQuantity) {
+                showToast('Số lượng vượt quá tồn kho!', 'error');
+                return;
+            }
+            
+            let price = (currentProduct.price || 0) * currentQuantity;
             let voucherUsed = null;
             let discountText = '';
             
-            if (currentVoucher) {
-                const voucher = vouchersData[currentVoucher.code];
+            if (currentVoucherCode) {
+                const voucher = vouchersData[currentVoucherCode];
                 if (voucher && voucher.usedCount < voucher.maxUses) {
                     if (voucher.type === 'percent') {
-                        price = price * (1 - voucher.value / 100);
+                        const discount = price * voucher.value / 100;
+                        price = price - discount;
                         discountText = `-${voucher.value}%`;
-                    } else if (voucher.type === 'fixed') {
+                    } else {
                         price = Math.max(0, price - voucher.value);
                         discountText = `-${voucher.value.toLocaleString('vi-VN')}đ`;
                     }
-                    voucherUsed = currentVoucher.code;
+                    voucherUsed = currentVoucherCode;
                 }
             }
             
             price = Math.round(price);
             
             if (currentUser.balance < price) {
-                showToast('Số dư không đủ để mua sản phẩm này!', 'error');
+                showToast('Số dư không đủ để mua!', 'error');
                 return;
             }
             
-            const confirmMsg = `Bạn có chắc muốn mua "${product.name}" với giá ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 Mã giảm giá: ' + voucherUsed : ''}`;
-            if (confirm(confirmMsg)) {
-                showLoading();
-                
-                const updates = {};
-                updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
-                updates[`products/${productId}/stock`] = (product.stock || 1) - 1;
-                updates[`products/${productId}/sold`] = (product.sold || 0) + 1;
-                
-                const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
-                
-                const orderRef = db.ref('orders').push();
-                const orderData = {
-                    userId: currentUser.uid,
-                    userName: currentUser.displayName || currentUser.email || 'Khách hàng',
-                    productId: productId,
-                    productName: product.name,
-                    productImage: product.image || '',
-                    productIcon: product.icon || '📦',
-                    productDesc: product.description || '',
-                    productCategory: product.category || '',
-                    originalPrice: product.price || 0,
-                    price: price,
-                    quantity: 1,
-                    voucher: voucherUsed,
-                    discountText: discountText,
-                    orderCode: orderCode,
-                    timestamp: Date.now(),
-                    status: 'success'
-                };
-                updates[orderRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = orderData;
-                
-                const historyRef = db.ref('history/' + currentUser.uid).push();
-                const historyData = {
-                    orderCode: orderCode,
-                    productName: product.name,
-                    productDesc: product.description || '',
-                    productCategory: product.category || '',
-                    price: price,
-                    quantity: 1,
-                    voucher: voucherUsed,
-                    discountText: discountText,
-                    status: 'success',
-                    timestamp: Date.now(),
-                    type: 'purchase'
-                };
-                updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = historyData;
-                
-                if (voucherUsed) {
-                    updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
-                }
-                
-                db.ref().update(updates).then(() => {
-                    hideLoading();
-                    showOrderPopup(orderData);
-                    db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
-                        const bal = snap.val() || 0;
-                        document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
-                        currentUser.balance = bal;
-                    });
-                    currentVoucher = null;
-                }).catch(err => {
-                    hideLoading();
-                    showToast('❌ ' + err.message, 'error');
-                });
+            const confirmMsg = `Bạn có chắc muốn mua ${currentQuantity} "${currentProduct.name}" với tổng ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 Mã giảm giá: ' + voucherUsed : ''}`;
+            if (!confirm(confirmMsg)) return;
+            
+            showLoading();
+            
+            const updates = {};
+            updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
+            updates[`products/${currentProduct.id}/stock`] = (currentProduct.stock || 0) - currentQuantity;
+            updates[`products/${currentProduct.id}/sold`] = (currentProduct.sold || 0) + currentQuantity;
+            
+            const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            
+            const orderRef = db.ref('orders').push();
+            const orderData = {
+                userId: currentUser.uid,
+                userName: currentUser.displayName || currentUser.email || 'Khách hàng',
+                productId: currentProduct.id,
+                productName: currentProduct.name,
+                productImage: currentProduct.image || '',
+                productIcon: currentProduct.icon || '📦',
+                productDesc: currentProduct.description || '',
+                productCategory: currentProduct.category || '',
+                originalPrice: currentProduct.price || 0,
+                price: price,
+                quantity: currentQuantity,
+                voucher: voucherUsed,
+                discountText: discountText,
+                orderCode: orderCode,
+                timestamp: Date.now(),
+                status: 'success'
+            };
+            updates[orderRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = orderData;
+            
+            const historyRef = db.ref('history/' + currentUser.uid).push();
+            const historyData = {
+                orderCode: orderCode,
+                productName: currentProduct.name,
+                productDesc: currentProduct.description || '',
+                productCategory: currentProduct.category || '',
+                price: price,
+                quantity: currentQuantity,
+                voucher: voucherUsed,
+                discountText: discountText,
+                status: 'success',
+                timestamp: Date.now(),
+                type: 'purchase'
+            };
+            updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = historyData;
+            
+            if (voucherUsed) {
+                updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
+            
+            db.ref().update(updates).then(() => {
+                hideLoading();
+                closeOrderPopup();
+                showResultPopup(orderData);
+                db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
+                    const bal = snap.val() || 0;
+                    document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
+                    currentUser.balance = bal;
+                });
+            }).catch(err => {
+                hideLoading();
+                showToast('❌ ' + err.message, 'error');
+            });
         }
 
-        // ===== SMART ORDER POPUP =====
-        let currentOrderCode = '';
+        // ===== CLOSE ORDER POPUP =====
+        function closeOrderPopup() {
+            document.getElementById('orderPopup').classList.remove('active');
+            currentProduct = null;
+            currentQuantity = 1;
+            currentVoucherCode = null;
+            currentVoucherDiscount = 0;
+        }
 
-        function showOrderPopup(orderData) {
-            const popup = document.getElementById('orderPopup');
-            const grid = document.getElementById('orderInfoGrid');
-            const productDetail = document.getElementById('orderProductDetail');
-            const totalEl = document.getElementById('orderTotal');
-            const codeText = document.getElementById('orderCodeText');
-            const statusIcon = document.getElementById('orderStatusIcon');
-            const statusTitle = document.getElementById('orderStatusTitle');
+        // ===== RESULT POPUP =====
+        function showResultPopup(orderData) {
+            const popup = document.getElementById('resultPopup');
+            const grid = document.getElementById('resultInfoGrid');
+            const productDetail = document.getElementById('resultProductDetail');
+            const totalEl = document.getElementById('resultTotal');
+            const codeText = document.getElementById('resultOrderCodeText');
+            const statusIcon = document.getElementById('resultStatusIcon');
+            const statusTitle = document.getElementById('resultStatusTitle');
             
             const isSuccess = orderData.status === 'success';
             statusIcon.textContent = isSuccess ? '✅' : '❌';
@@ -805,8 +1017,8 @@
             statusTitle.style.color = isSuccess ? 'var(--success)' : 'var(--danger)';
             
             const price = orderData.price.toLocaleString('vi-VN');
-            currentOrderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
-            codeText.textContent = currentOrderCode;
+            const orderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            codeText.textContent = orderCode;
             
             const categoryName = categoriesData[orderData.productCategory]?.name || orderData.productCategory || 'Không có';
             
@@ -839,8 +1051,8 @@
             popup.classList.add('active');
         }
 
-        function closeOrderPopup() {
-            document.getElementById('orderPopup').classList.remove('active');
+        function closeResultPopup() {
+            document.getElementById('resultPopup').classList.remove('active');
         }
 
         // ===== AUTH STATE =====
@@ -970,6 +1182,22 @@
                 });
             }
         }
+
+        // ===== KEYBOARD EVENTS =====
+        document.getElementById('popupVoucherInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') applyPopupVoucher();
+        });
+
+        document.getElementById('qtyMinus').addEventListener('click', function() { changeQuantity(-1); });
+        document.getElementById('qtyPlus').addEventListener('click', function() { changeQuantity(1); });
+
+        // Đóng popup khi click overlay
+        document.getElementById('orderPopup').addEventListener('click', function(e) {
+            if (e.target === this) closeOrderPopup();
+        });
+        document.getElementById('resultPopup').addEventListener('click', function(e) {
+            if (e.target === this) closeResultPopup();
+        });
 
         window.addEventListener('storage', function(e) {
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
