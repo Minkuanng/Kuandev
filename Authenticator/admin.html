@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        /* Giữ nguyên style từ file admin cũ */
+        /* Giữ nguyên style từ file admin cũ - đã có ở trên */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
@@ -116,7 +116,7 @@
         .category-item-admin .cat-actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .category-item-admin .cat-actions .del:hover { background: #e74c6f; color: #fff; }
 
-        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
         .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; position: relative; }
         .product-card-admin:hover { border-color: var(--accent); }
         .product-card-admin .product-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 6px; border: 1px solid var(--border-color); }
@@ -127,6 +127,7 @@
         .product-card-admin .sold { font-size: 11px; color: var(--text-muted); }
         .product-card-admin .desc-preview { font-size: 10px; color: var(--text-muted); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; display: inline-block; margin: 2px 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .product-card-admin .cat { font-size: 10px; background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin: 4px 0; }
+        .product-card-admin .variants-badge { position: absolute; top: 4px; right: 4px; background: var(--accent); color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 10px; }
         .product-card-admin .actions { display: flex; gap: 4px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
         .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
         .product-card-admin .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
@@ -135,7 +136,6 @@
         .product-card-admin .actions .del:hover { background: #e74c6f; color: #fff; }
         .product-card-admin .actions .duplicate { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
         .product-card-admin .actions .duplicate:hover { background: #ffc107; color: #fff; }
-        .product-card-admin .badge-copy { position: absolute; top: 4px; right: 4px; background: var(--warning); color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 4px; }
 
         .order-item-admin { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
         .order-item-admin .order-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); flex-shrink: 0; }
@@ -169,13 +169,15 @@
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 420px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
+        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 460px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
         .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 12px; }
         .modal .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
         .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 70px; }
         .modal .row input, .modal .row select { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 100px; }
         .modal .row input:focus, .modal .row select:focus { outline: none; border-color: var(--text-secondary); }
         .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-height: 100px; resize: vertical; font-family: inherit; }
+        .modal .row textarea:focus { outline: none; border-color: var(--text-secondary); }
         .modal .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; min-width: 60px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
@@ -192,11 +194,11 @@
         .toast.error { border-color: #e74c6f; color: #e74c6f; }
         .toast.success { border-color: #27ae60; color: #27ae60; }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .category-item-admin { min-width: 120px; } .voucher-item { min-width: 140px; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } .category-item-admin { min-width: 120px; } .voucher-item { min-width: 140px; } .modal { padding: 16px; } }
     </style>
 </head>
 <body>
-    <!-- Giữ nguyên phần header, side menu, notif popup như file admin cũ -->
+    <!-- Giữ nguyên header, side menu, notif popup -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
@@ -260,7 +262,7 @@
                 <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')">🎫 Mã giảm giá</button>
             </div>
             
-            <!-- Tab Dashboard (giữ nguyên) -->
+            <!-- Tab Dashboard -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="stats-grid" id="dashboardStats">
                     <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label">📂 Mục sản phẩm</div></div>
@@ -275,7 +277,7 @@
                 </div>
             </div>
             
-            <!-- Tab Categories (giữ nguyên) -->
+            <!-- Tab Categories -->
             <div class="tab-content" id="tab-categories">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openCategoryModal()">➕ Thêm mục</button>
@@ -286,11 +288,11 @@
                 </div>
             </div>
             
-            <!-- Tab Products - Thêm nút Nhân bản -->
+            <!-- Tab Products - Cập nhật nút Nhân bản -->
             <div class="tab-content" id="tab-products">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openProductModal()">➕ Thêm sản phẩm</button>
-                    <button class="btn-send btn-warning" onclick="openDuplicateModal()">📋 Nhân bản sản phẩm</button>
+                    <button class="btn-send btn-warning" onclick="openVariantModal()">📋 Tạo biến thể</button>
                     <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()">🗑️ Xóa tất cả</button>
                 </div>
                 <div id="productGridAdmin" class="product-grid-admin">
@@ -298,7 +300,7 @@
                 </div>
             </div>
             
-            <!-- Tab Orders (giữ nguyên) -->
+            <!-- Tab Orders -->
             <div class="tab-content" id="tab-orders">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()">🗑️ Xóa tất cả đơn hàng</button>
@@ -308,7 +310,7 @@
                 </div>
             </div>
             
-            <!-- Tab Vouchers (giữ nguyên) -->
+            <!-- Tab Vouchers -->
             <div class="tab-content" id="tab-vouchers">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
                     <button class="btn-send" onclick="openVoucherModal()">➕ Tạo mã giảm giá</button>
@@ -365,34 +367,27 @@
         </div>
     </div>
 
-    <!-- Modal Duplicate - Nhân bản sản phẩm -->
-    <div class="modal-overlay" id="duplicateModal">
+    <!-- Modal Variant - Tạo biến thể cho 1 sản phẩm -->
+    <div class="modal-overlay" id="variantModal">
         <div class="modal">
-            <h3>📋 Nhân bản sản phẩm</h3>
-            <div class="row"><label>Chọn mục:</label>
-                <select id="duplicateCategory">
-                    <option value="">Chọn mục</option>
-                </select>
-            </div>
-            <div class="row"><label>Số lượng:</label>
-                <input type="number" id="duplicateCount" value="1" min="1" max="20" />
-                <span style="font-size:11px;color:var(--text-muted);">(tối đa 20)</span>
+            <h3>📋 Tạo biến thể sản phẩm</h3>
+            <div class="row"><label>Mục:</label><select id="variantCategory"><option value="">Chọn mục</option></select></div>
+            <div class="row"><label>Tên SP:</label><input type="text" id="variantName" placeholder="Tên sản phẩm chính" /></div>
+            <div class="row"><label>Giá:</label><input type="number" id="variantPrice" placeholder="Giá VND" /></div>
+            <div class="row"><label>Số lượng:</label><input type="number" id="variantStock" placeholder="Số lượng" value="1" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="variantIcon" placeholder="📦" value="📦" /></div>
+            <div class="row"><label>Hình ảnh:</label>
+                <input type="text" id="variantImage" placeholder="URL hình ảnh" />
+                <div class="image-preview" id="variantImagePreview">🖼️</div>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;">Nội dung mô tả (mỗi dòng 1 sản phẩm):</label>
-                <textarea id="duplicateDescriptions" rows="5" placeholder="Mô tả sản phẩm 1&#10;Mô tả sản phẩm 2&#10;Mô tả sản phẩm 3" style="flex:1;padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);min-height:100px;resize:vertical;"></textarea>
-            </div>
-            <div class="row"><label>Tên chung:</label><input type="text" id="duplicateName" placeholder="Tên chung cho các sản phẩm" /></div>
-            <div class="row"><label>Giá:</label><input type="number" id="duplicatePrice" placeholder="Giá VND" /></div>
-            <div class="row"><label>Số lượng:</label><input type="number" id="duplicateStock" placeholder="Số lượng" value="1" /></div>
-            <div class="row"><label>Icon:</label><input type="text" id="duplicateIcon" placeholder="📦" value="📦" /></div>
-            <div class="row"><label>Hình ảnh:</label>
-                <input type="text" id="duplicateImage" placeholder="URL hình ảnh" />
-                <div class="image-preview" id="duplicateImagePreview">🖼️</div>
+                <label style="min-width:auto;">📝 Danh sách mô tả biến thể (mỗi dòng 1 biến thể):</label>
+                <textarea id="variantDescriptions" rows="6" placeholder="Ví dụ:&#10;Màu đen, Size M&#10;Màu trắng, Size L&#10;Màu xanh, Size XL" style="flex:1;padding:8px 12px;border:2px solid var(--border-color);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);min-height:120px;resize:vertical;font-family:inherit;"></textarea>
+                <span style="font-size:11px;color:var(--text-muted);">Mỗi dòng là 1 biến thể với mô tả riêng</span>
             </div>
             <div class="actions">
-                <button class="save" onclick="saveDuplicateProducts()">📋 Nhân bản</button>
-                <button class="cancel" onclick="closeDuplicateModal()">Đóng</button>
+                <button class="save" onclick="saveVariantProducts()">📋 Tạo biến thể</button>
+                <button class="cancel" onclick="closeVariantModal()">Đóng</button>
             </div>
         </div>
     </div>
@@ -593,13 +588,13 @@
             });
         }
 
-        // ===== CATEGORIES MANAGEMENT (giữ nguyên) =====
+        // ===== CATEGORIES MANAGEMENT =====
         function loadCategoriesAdmin() {
             db.ref('categories').on('value', (snapshot) => {
                 categoriesData = snapshot.val() || {};
                 renderCategoriesAdmin(categoriesData);
                 updateCategorySelect();
-                updateDuplicateCategorySelect();
+                updateVariantCategorySelect();
             });
         }
 
@@ -645,8 +640,8 @@
             });
         }
 
-        function updateDuplicateCategorySelect() {
-            const select = document.getElementById('duplicateCategory');
+        function updateVariantCategorySelect() {
+            const select = document.getElementById('variantCategory');
             select.innerHTML = '<option value="">Chọn mục</option>';
             Object.keys(categoriesData).forEach(key => {
                 const cat = categoriesData[key];
@@ -737,7 +732,7 @@
                 productsData = snapshot.val() || {};
                 renderProductsAdmin(productsData);
                 updateCategorySelect();
-                updateDuplicateCategorySelect();
+                updateVariantCategorySelect();
                 renderCategoriesAdmin(categoriesData);
             });
         }
@@ -755,10 +750,11 @@
                 const imageUrl = p.image || '';
                 const icon = p.icon || '📦';
                 const desc = p.description || '';
+                const variants = p.variants || [];
                 
                 html += `
                     <div class="product-card-admin">
-                        ${desc ? `<div class="badge-copy">📝</div>` : ''}
+                        ${variants.length > 0 ? `<div class="variants-badge">${variants.length} biến thể</div>` : ''}
                         <div class="product-image">
                             ${imageUrl ? `<img src="${imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
@@ -767,6 +763,7 @@
                         <div class="stock">📦 Còn: ${p.stock || 0}</div>
                         <div class="sold">📈 Đã bán: ${p.sold || 0}</div>
                         ${desc ? `<div class="desc-preview">📝 ${desc}</div>` : ''}
+                        ${variants.length > 0 ? `<div style="font-size:9px;color:var(--text-muted);max-height:40px;overflow:hidden;">${variants.slice(0,3).map(v => '📌' + v).join(' ')}${variants.length > 3 ? ` +${variants.length-3}` : ''}</div>` : ''}
                         <div class="cat">${p.category && categoriesData[p.category] ? (categoriesData[p.category].icon || '📁') + ' ' + categoriesData[p.category].name : 'Không có mục'}</div>
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
@@ -779,22 +776,21 @@
             container.innerHTML = html;
         }
 
-        // ===== DUPLICATE PRODUCT =====
-        function openDuplicateModal() {
-            document.getElementById('duplicateCategory').value = '';
-            document.getElementById('duplicateCount').value = '1';
-            document.getElementById('duplicateDescriptions').value = '';
-            document.getElementById('duplicateName').value = '';
-            document.getElementById('duplicatePrice').value = '';
-            document.getElementById('duplicateStock').value = '1';
-            document.getElementById('duplicateIcon').value = '📦';
-            document.getElementById('duplicateImage').value = '';
-            document.getElementById('duplicateImagePreview').textContent = '🖼️';
-            updateDuplicateCategorySelect();
-            document.getElementById('duplicateModal').classList.add('active');
+        // ===== VARIANT - Tạo biến thể cho 1 sản phẩm =====
+        function openVariantModal() {
+            document.getElementById('variantCategory').value = '';
+            document.getElementById('variantName').value = '';
+            document.getElementById('variantPrice').value = '';
+            document.getElementById('variantStock').value = '1';
+            document.getElementById('variantIcon').value = '📦';
+            document.getElementById('variantImage').value = '';
+            document.getElementById('variantDescriptions').value = '';
+            document.getElementById('variantImagePreview').textContent = '🖼️';
+            updateVariantCategorySelect();
+            document.getElementById('variantModal').classList.add('active');
             
-            document.getElementById('duplicateImage').oninput = function() {
-                const preview = document.getElementById('duplicateImagePreview');
+            document.getElementById('variantImage').oninput = function() {
+                const preview = document.getElementById('variantImagePreview');
                 const val = this.value.trim();
                 if (val) {
                     preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
@@ -804,77 +800,68 @@
             };
         }
 
-        function closeDuplicateModal() {
-            document.getElementById('duplicateModal').classList.remove('active');
+        function closeVariantModal() {
+            document.getElementById('variantModal').classList.remove('active');
         }
 
         function duplicateSingleProduct(key) {
             const p = productsData[key];
             if (!p) return;
             
-            // Mở modal với dữ liệu từ sản phẩm hiện tại
-            document.getElementById('duplicateCategory').value = p.category || '';
-            document.getElementById('duplicateCount').value = '1';
-            document.getElementById('duplicateDescriptions').value = p.description || '';
-            document.getElementById('duplicateName').value = p.name || '';
-            document.getElementById('duplicatePrice').value = p.price || '';
-            document.getElementById('duplicateStock').value = p.stock || 1;
-            document.getElementById('duplicateIcon').value = p.icon || '📦';
-            document.getElementById('duplicateImage').value = p.image || '';
+            document.getElementById('variantCategory').value = p.category || '';
+            document.getElementById('variantName').value = p.name || '';
+            document.getElementById('variantPrice').value = p.price || '';
+            document.getElementById('variantStock').value = p.stock || 1;
+            document.getElementById('variantIcon').value = p.icon || '📦';
+            document.getElementById('variantImage').value = p.image || '';
+            document.getElementById('variantDescriptions').value = (p.variants || []).join('\n') || p.description || '';
             
-            const preview = document.getElementById('duplicateImagePreview');
+            const preview = document.getElementById('variantImagePreview');
             if (p.image) {
                 preview.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
             } else {
                 preview.textContent = '🖼️';
             }
             
-            updateDuplicateCategorySelect();
-            document.getElementById('duplicateModal').classList.add('active');
+            updateVariantCategorySelect();
+            document.getElementById('variantModal').classList.add('active');
         }
 
-        function saveDuplicateProducts() {
-            const category = document.getElementById('duplicateCategory').value;
-            const count = parseInt(document.getElementById('duplicateCount').value) || 1;
-            const descriptions = document.getElementById('duplicateDescriptions').value.split('\n').filter(d => d.trim() !== '');
-            const name = document.getElementById('duplicateName').value.trim();
-            const price = parseInt(document.getElementById('duplicatePrice').value);
-            const stock = parseInt(document.getElementById('duplicateStock').value) || 1;
-            const icon = document.getElementById('duplicateIcon').value.trim() || '📦';
-            const image = document.getElementById('duplicateImage').value.trim();
+        function saveVariantProducts() {
+            const category = document.getElementById('variantCategory').value;
+            const name = document.getElementById('variantName').value.trim();
+            const price = parseInt(document.getElementById('variantPrice').value);
+            const stock = parseInt(document.getElementById('variantStock').value) || 1;
+            const icon = document.getElementById('variantIcon').value.trim() || '📦';
+            const image = document.getElementById('variantImage').value.trim();
+            const descriptions = document.getElementById('variantDescriptions').value.split('\n').filter(d => d.trim() !== '');
             
             if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
-            if (count < 1 || count > 20) { showToast('❌ Số lượng từ 1-20!', 'error'); return; }
+            if (descriptions.length === 0) { showToast('❌ Nhập ít nhất 1 biến thể!', 'error'); return; }
             
-            // Nếu có mô tả, dùng mô tả từ textarea, nếu không thì dùng mô tả mặc định
-            const descList = descriptions.length > 0 ? descriptions : Array(count).fill('');
+            // Tạo 1 sản phẩm duy nhất với nhiều biến thể
+            const productId = 'prod_' + Date.now();
+            const data = {
+                name: name,
+                price: price,
+                stock: stock,
+                category: category,
+                icon: icon,
+                sold: 0,
+                variants: descriptions,
+                description: descriptions.join(' | ')
+            };
+            if (image) data.image = image;
             
-            const updates = {};
-            for (let i = 0; i < count; i++) {
-                const desc = descList[i] || (descriptions.length === 1 ? descriptions[0] : '');
-                const productId = 'prod_' + Date.now() + '_' + i;
-                const data = {
-                    name: name + (count > 1 ? ' #' + (i + 1) : ''),
-                    price: price,
-                    stock: stock,
-                    category: category,
-                    icon: icon,
-                    sold: 0
-                };
-                if (image) data.image = image;
-                if (desc) data.description = desc;
-                updates['products/' + productId] = data;
-            }
-            
-            db.ref().update(updates).then(() => {
-                showToast(`✅ Đã nhân bản ${count} sản phẩm!`, 'success');
-                closeDuplicateModal();
+            db.ref('products/' + productId).set(data).then(() => {
+                showToast(`✅ Đã tạo 1 sản phẩm với ${descriptions.length} biến thể!`, 'success');
+                closeVariantModal();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
-        // ===== PRODUCT CRUD (giữ nguyên) =====
+        // ===== PRODUCT CRUD =====
         function openProductModal() {
             document.getElementById('productModalTitle').textContent = '🛍️ Thêm sản phẩm';
             document.getElementById('productName').value = '';
@@ -914,7 +901,7 @@
             document.getElementById('productCategory').value = p.category || '';
             document.getElementById('productIcon').value = p.icon || '📦';
             document.getElementById('productImage').value = p.image || '';
-            document.getElementById('productDesc').value = p.description || '';
+            document.getElementById('productDesc').value = (p.variants || []).join('\n') || p.description || '';
             document.getElementById('productEditId').value = key;
             
             const preview = document.getElementById('productImagePreview');
@@ -969,7 +956,7 @@
             }
         }
 
-        // ===== ORDERS MANAGEMENT (giữ nguyên) =====
+        // ===== ORDERS MANAGEMENT =====
         function loadOrdersAdmin() {
             db.ref('orders').on('value', (snapshot) => {
                 ordersData = snapshot.val() || {};
@@ -1026,7 +1013,7 @@
             }
         }
 
-        // ===== VOUCHERS MANAGEMENT (giữ nguyên) =====
+        // ===== VOUCHERS MANAGEMENT =====
         function loadVouchersAdmin() {
             db.ref('vouchers').on('value', (snapshot) => {
                 vouchersData = snapshot.val() || {};
@@ -1252,8 +1239,8 @@
         document.getElementById('productModal').addEventListener('click', function(e) {
             if (e.target === this) closeProductModal();
         });
-        document.getElementById('duplicateModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDuplicateModal();
+        document.getElementById('variantModal').addEventListener('click', function(e) {
+            if (e.target === this) closeVariantModal();
         });
         document.getElementById('voucherModal').addEventListener('click', function(e) {
             if (e.target === this) closeVoucherModal();
@@ -1264,7 +1251,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Categories, Products, Orders, Vouchers & Duplicate feature!');
+        console.log('✅ Admin panel loaded with Categories, Products, Orders, Vouchers & Variant feature!');
     </script>
 </body>
-</html>
+</html>0
