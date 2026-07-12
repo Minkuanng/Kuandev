@@ -398,6 +398,29 @@
                     await db.ref('presence/' + quickUid).set(true);
                     db.ref('presence/' + quickUid).onDisconnect().set(false);
                     
+                    // Load notifications
+                    db.ref('notifications').on('value', snap => {
+                        const notifs = snap.val();
+                        const list = document.getElementById('notifList');
+                        const dot = document.getElementById('notifDot');
+                        if (notifs) {
+                            const keys = Object.keys(notifs).reverse();
+                            let html = '',
+                                hasUnread = false;
+                            keys.forEach(key => {
+                                const n = notifs[key];
+                                const isUnread = !n.readBy || !n.readBy[quickUid];
+                                if (isUnread) hasUnread = true;
+                                html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                            });
+                            list.innerHTML = html;
+                            dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                        } else {
+                            list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                            dot.classList.remove('show');
+                        }
+                    });
+                    
                     isDataLoaded = true;
                     hideLoading();
                     return true;
@@ -496,10 +519,19 @@
             // Nếu đã load data rồi thì không làm gì
             if (isDataLoaded) return;
             
-            // Kiểm tra quick login pending
+            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
-                if (success) return;
+                if (success) {
+                    // Đã login thành công bằng quick token
+                    return;
+                }
+                // Nếu fail thì xóa và chuyển về login
+                localStorage.removeItem('quickLoginUid');
+                localStorage.removeItem('quickLoginToken');
+                localStorage.removeItem('quickLoginPending');
+                window.location.replace('../Authenticator/login.html');
+                return;
             }
             
             if (!user) { 
