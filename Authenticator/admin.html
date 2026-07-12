@@ -219,17 +219,20 @@
         /* ===== MODAL ===== */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 560px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 620px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
         @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
         .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 20px; }
         .modal .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 90px; font-weight: 500; }
+        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 100px; font-weight: 500; }
         .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 100px; }
         .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .modal .row textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+        .modal .row textarea { min-height: 100px; resize: vertical; font-family: inherit; }
         .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; }
         .modal .row .image-preview img { width: 100%; height: 100%; object-fit: cover; }
         .modal .row .count-badge { background: var(--accent); color: #fff; padding: 2px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+        .modal .row .word-count { font-size: 12px; color: var(--text-muted); }
+        .modal .row .word-count.warning { color: var(--warning); }
+        .modal .row .word-count.danger { color: var(--danger); }
         .modal .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 80px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
@@ -434,39 +437,54 @@
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3><i class="fas fa-box"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
+            
+            <!-- Tên sản phẩm -->
             <div class="row">
-                <label><i class="fas fa-tag"></i> Tên:</label>
+                <label><i class="fas fa-tag"></i> Tên SP:</label>
                 <input type="text" id="productName" placeholder="Tên sản phẩm" />
             </div>
+            
+            <!-- Giá sản phẩm -->
             <div class="row">
                 <label><i class="fas fa-coins"></i> Giá:</label>
                 <input type="number" id="productPrice" placeholder="Giá VND" />
             </div>
+            
+            <!-- Chọn mục -->
             <div class="row">
                 <label><i class="fas fa-folder"></i> Mục:</label>
                 <select id="productCategory"><option value="">Chọn mục</option></select>
             </div>
+            
+            <!-- Icon -->
             <div class="row">
                 <label><i class="fas fa-emoji"></i> Icon:</label>
                 <input type="text" id="productIcon" placeholder="📦" value="📦" />
             </div>
+            
+            <!-- Hình ảnh -->
             <div class="row">
                 <label><i class="fas fa-image"></i> Hình ảnh:</label>
                 <input type="text" id="productImage" placeholder="URL hình ảnh" />
                 <div class="image-preview" id="productImagePreview">🖼️</div>
             </div>
-            <div class="row">
-                <label><i class="fas fa-align-left"></i> Nội dung SP:</label>
-                <textarea id="productDesc" placeholder="Mô tả sản phẩm (tối đa 240 từ)" rows="6" maxlength="1500"></textarea>
+            
+            <!-- Dữ liệu sản phẩm (mô tả dài 240 từ) -->
+            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                <label style="min-width:auto;"><i class="fas fa-align-left"></i> Dữ liệu sản phẩm:</label>
+                <textarea id="productDesc" placeholder="Nhập mô tả chi tiết sản phẩm (tối đa 240 từ)" rows="6" maxlength="1500"></textarea>
+                <div style="display:flex;justify-content:flex-end;gap:10px;font-size:12px;">
+                    <span class="word-count" id="wordCount">0/240 từ</span>
+                </div>
             </div>
-            <div class="row" style="justify-content:flex-end;">
-                <span style="font-size:12px;color:var(--text-muted);">Số từ: <span id="wordCount">0</span>/240</span>
-            </div>
+            
+            <!-- Số lượng sản phẩm cần tạo -->
             <div class="row">
-                <label><i class="fas fa-boxes"></i> Số lượng SP:</label>
+                <label><i class="fas fa-boxes"></i> Số lượng:</label>
                 <input type="number" id="productQuantity" placeholder="Số lượng cần tạo" value="1" min="1" max="1000" />
                 <span class="count-badge">Tối đa 1000</span>
             </div>
+            
             <input type="hidden" id="productEditId" value="" />
             <div class="actions">
                 <button class="save" onclick="saveProduct()"><i class="fas fa-save"></i> Lưu</button>
@@ -928,7 +946,7 @@
                         <div class="product-price"><i class="fas fa-tag"></i> ${(p.price || 0).toLocaleString('vi-VN')}đ</div>
                         <div class="product-stock"><i class="fas fa-boxes"></i> Còn: ${p.stock || 0}</div>
                         <div class="product-sold"><i class="fas fa-chart-line"></i> Đã bán: ${p.sold || 0}</div>
-                        ${desc ? `<div class="product-desc-preview"><i class="fas fa-info-circle"></i> ${desc.substring(0, 50)}${desc.length > 50 ? '...' : ''}</div>` : ''}
+                        ${desc ? `<div class="product-desc-preview"><i class="fas fa-info-circle"></i> ${desc.substring(0, 60)}${desc.length > 60 ? '...' : ''}</div>` : ''}
                         <div class="product-category">${p.category && categoriesData[p.category] ? (categoriesData[p.category].icon || '📁') + ' ' + categoriesData[p.category].name : 'Không có mục'}</div>
                         <div class="product-actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
@@ -944,10 +962,17 @@
         document.getElementById('productDesc').addEventListener('input', function() {
             const text = this.value;
             const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-            document.getElementById('wordCount').textContent = words;
+            const wordCountEl = document.getElementById('wordCount');
+            wordCountEl.textContent = `${words}/240 từ`;
+            
             if (words > 240) {
+                wordCountEl.className = 'word-count danger';
                 this.style.borderColor = 'var(--danger)';
+            } else if (words > 200) {
+                wordCountEl.className = 'word-count warning';
+                this.style.borderColor = 'var(--warning)';
             } else {
+                wordCountEl.className = 'word-count';
                 this.style.borderColor = 'var(--border-color)';
             }
         });
@@ -961,7 +986,8 @@
             document.getElementById('productImage').value = '';
             document.getElementById('productDesc').value = '';
             document.getElementById('productQuantity').value = '1';
-            document.getElementById('wordCount').textContent = '0';
+            document.getElementById('wordCount').textContent = '0/240 từ';
+            document.getElementById('wordCount').className = 'word-count';
             document.getElementById('productEditId').value = '';
             document.getElementById('productImagePreview').textContent = '🖼️';
             updateCategorySelect();
@@ -996,7 +1022,15 @@
             document.getElementById('productEditId').value = key;
             
             const words = p.description ? p.description.trim().split(/\s+/).length : 0;
-            document.getElementById('wordCount').textContent = words;
+            const wordCountEl = document.getElementById('wordCount');
+            wordCountEl.textContent = `${words}/240 từ`;
+            if (words > 240) {
+                wordCountEl.className = 'word-count danger';
+            } else if (words > 200) {
+                wordCountEl.className = 'word-count warning';
+            } else {
+                wordCountEl.className = 'word-count';
+            }
             
             const preview = document.getElementById('productImagePreview');
             if (p.image) {
@@ -1022,7 +1056,7 @@
             // Kiểm tra số từ
             const words = description ? description.trim().split(/\s+/).length : 0;
             if (words > 240) {
-                showToast('❌ Nội dung sản phẩm vượt quá 240 từ!', 'error');
+                showToast('❌ Dữ liệu sản phẩm vượt quá 240 từ!', 'error');
                 return;
             }
             
@@ -1036,6 +1070,7 @@
                 price, 
                 category, 
                 icon,
+                stock: 1,
                 sold: 0
             };
             if (image) baseData.image = image;
@@ -1054,7 +1089,7 @@
             const promises = [];
             for (let i = 0; i < quantity; i++) {
                 const newRef = db.ref('products').push();
-                const data = { ...baseData, stock: 1 };
+                const data = { ...baseData };
                 promises.push(newRef.set(data));
             }
             
