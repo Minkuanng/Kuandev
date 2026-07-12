@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; --warning: #f39c12; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -79,6 +79,7 @@
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
 
+        /* INTRO CARD - GIỮ NGUYÊN */
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
         .intro-top { display: flex; align-items: center; gap: 10px; }
         .intro-top-left { display: flex; align-items: center; gap: 10px; }
@@ -87,28 +88,39 @@
         .intro-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
         .intro-body { margin-top: 16px; }
         .intro-lead { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); }
+        .intro-section { padding-top: 12px; }
+        .intro-section + .intro-section { margin-top: 4px; }
+        .intro-section-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+        .intro-list { list-style: none; }
+        .intro-list li { position: relative; padding-left: 16px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 4px; }
+        .intro-list li::before { content: "›"; position: absolute; left: 0; color: var(--text-secondary); font-weight: 700; }
+        .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
+        .intro-footer span { color: var(--accent); }
 
-        /* Brand Grid */
-        .brand-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
-        .brand-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .brand-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        .brand-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
-        .brand-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 12px 0 20px 0; }
-        .brand-card { background: var(--wallet-bg); border-radius: 12px; padding: 12px 20px; border: 2px solid var(--border-color); transition: 0.3s; text-align: center; cursor: pointer; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .brand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .brand-card.active { border-color: var(--accent); background: var(--accent); color: #fff; }
-        .brand-card.active .brand-name { color: #fff; }
-        .brand-card.active .brand-count { color: rgba(255,255,255,0.8); }
-        .brand-card .brand-image { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); margin-bottom: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .brand-card .brand-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .brand-card .brand-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: 0.3s; }
-        .brand-card .brand-count { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+        /* Mục sản phẩm - hình chữ nhật */
+        .category-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
+        .category-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .category-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .category-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
+
+        /* Category Grid - hình chữ nhật ngang, logo trái, tên phải */
+        .category-grid { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 20px 0; }
+        .category-item { background: var(--wallet-bg); border-radius: 12px; padding: 10px 18px; border: 2px solid var(--border-color); transition: 0.3s; cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 120px; flex: 0 1 auto; }
+        .category-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .category-item.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+        .category-item.active .cat-name { color: #fff; }
+        .category-item.active .cat-count { color: rgba(255,255,255,0.8); }
+        .category-item .cat-image { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .category-item .cat-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .category-item .cat-info { display: flex; flex-direction: column; }
+        .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: 0.3s; }
+        .category-item .cat-count { font-size: 10px; color: var(--text-muted); }
 
         /* Product Grid */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
         .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; gap: 14px; align-items: center; }
         .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .product-card .product-image { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid var(--border-color); flex-shrink: 0; }
+        .product-card .product-image { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
         .product-card .product-info { flex: 1; min-width: 0; }
         .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 15px; }
@@ -119,6 +131,7 @@
         .product-card .btn-buy { margin-top: 6px; padding: 5px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 13px; }
         .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .product-card .btn-buy .discount-badge { background: var(--warning); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
 
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
@@ -138,14 +151,26 @@
         .order-popup .order-item .item-info .item-price { color: var(--accent); font-weight: 600; }
         .order-popup .order-total { text-align: right; padding: 12px 0; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 2px solid var(--border-color); margin-top: 8px; }
         .order-popup .order-total span { color: var(--accent); }
+        .order-popup .order-code { background: var(--wallet-bg); padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--text-muted); margin: 8px 0; display: flex; justify-content: space-between; align-items: center; border: 1px dashed var(--border-color); }
+        .order-popup .order-code .copy-btn { background: var(--accent); color: #fff; border: none; padding: 2px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .order-popup .order-code .copy-btn:hover { opacity: 0.8; }
         .order-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 12px; }
         .order-popup .btn-done:hover { transform: scale(1.02); }
 
+        /* Loading */
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
         .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
+
+        /* Voucher input */
+        .voucher-input { display: flex; gap: 8px; margin-top: 6px; }
+        .voucher-input input { flex: 1; padding: 4px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); }
+        .voucher-input input:focus { outline: none; border-color: var(--accent); }
+        .voucher-input button { padding: 4px 12px; background: var(--warning); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .voucher-input button:hover { opacity: 0.8; }
+        .voucher-applied { color: var(--success); font-size: 12px; font-weight: 600; }
 
         @media (max-width: 600px) { 
             .header { padding: 10px 12px; } 
@@ -162,11 +187,11 @@
             .menu-icon .bar { width: 18px; height: 2px; }
             .menu-icon .bar:nth-child(1) { transform: translateY(3px); }
             .menu-icon .bar:nth-child(3) { transform: translateY(-3px); }
-            .brand-card { padding: 8px 14px; min-width: 60px; }
-            .brand-card .brand-image { width: 35px; height: 35px; font-size: 18px; }
-            .brand-card .brand-name { font-size: 11px; }
+            .category-item { padding: 8px 12px; min-width: 80px; flex: 1 0 auto; }
+            .category-item .cat-image { width: 30px; height: 30px; font-size: 14px; }
+            .category-item .cat-name { font-size: 11px; }
             .product-grid { grid-template-columns: 1fr; }
-            .product-card .product-image { width: 60px; height: 60px; font-size: 28px; }
+            .product-card .product-image { width: 55px; height: 55px; font-size: 24px; }
             .order-popup { padding: 16px; }
         }
     </style>
@@ -243,34 +268,58 @@
             <h3>✅ Đặt hàng thành công!</h3>
             <div id="orderItems"></div>
             <div class="order-total">Tổng tiền: <span id="orderTotal">0</span> VND</div>
+            <div class="order-code" id="orderCodeDisplay">
+                <span>🔑 Mã đơn hàng: <strong id="orderCodeText">******</strong></span>
+                <button class="copy-btn" onclick="copyOrderCode()">📋 Copy</button>
+            </div>
             <button class="btn-done" onclick="closeOrderPopup()">📋 Đóng</button>
         </div>
     </div>
 
     <div class="content">
 
+        <!-- INTRO CARD - GIỮ NGUYÊN -->
         <div class="intro-card">
             <div class="intro-top">
                 <div class="intro-top-left">
                     <div class="intro-icon">🎮</div>
                     <div>
                         <div class="intro-title">Chào mừng bạn đến với trang chủ</div>
-                        <div class="intro-sub">Chọn hãng để xem sản phẩm</div>
+                        <div class="intro-sub">Chọn mục sản phẩm để xem sản phẩm</div>
                     </div>
                 </div>
             </div>
             <div class="intro-body">
-                <p class="intro-lead">Chọn một hãng bên dưới để xem danh sách sản phẩm.</p>
+                <p class="intro-lead">Chọn một mục sản phẩm bên dưới để xem danh sách sản phẩm.</p>
+                
+                <div class="intro-section">
+                    <div class="intro-section-title">📦 Hướng dẫn quy trình mua hàng</div>
+                    <ul class="intro-list">
+                        <li>Quay lại toàn bộ quá trình mua hàng để làm bằng chứng đối chiếu sản phẩm.</li>
+                        <li>Nếu phát hiện sai sót hoặc lỗi kỹ thuật, hãy liên hệ ngay Admin để được hỗ trợ xử lý đổi/trả sớm nhất.</li>
+                    </ul>
+                </div>
+
+                <div class="intro-section">
+                    <div class="intro-section-title">⚠️ Lưu ý quan trọng</div>
+                    <ul class="intro-list">
+                        <li>Tuyệt đối không chia sẻ thông tin tài khoản shop cho bất kỳ ai dưới mọi hình thức.</li>
+                        <li>Đọc kỹ mô tả sản phẩm và các điều khoản trước khi giao dịch để đảm bảo quyền lợi của bạn.</li>
+                    </ul>
+                </div>
+
+                <div class="intro-footer">Cảm ơn bạn đã tin tưởng và đồng hành 🔥</div>
             </div>
         </div>
 
-        <div class="brand-section" id="brandSection">
-            <div class="brand-section-header">
-                <h2>🏷️ Hãng sản phẩm <span id="brandCount"></span></h2>
+        <!-- MỤC SẢN PHẨM -->
+        <div class="category-section" id="categorySection">
+            <div class="category-section-header">
+                <h2>📂 Mục sản phẩm <span id="categoryCount"></span></h2>
             </div>
-            <div class="brand-grid" id="brandGrid">
+            <div class="category-grid" id="categoryGrid">
                 <div class="product-empty" style="grid-column:1/-1;padding:20px;">
-                    <p>Đang tải danh sách hãng...</p>
+                    <p>Đang tải danh sách mục...</p>
                 </div>
             </div>
 
@@ -278,7 +327,7 @@
                 <div class="product-grid" id="productGrid">
                     <div class="product-empty">
                         <span class="big-icon">📦</span>
-                        <p>Chọn một hãng để xem sản phẩm</p>
+                        <p>Chọn một mục để xem sản phẩm</p>
                     </div>
                 </div>
             </div>
@@ -308,9 +357,11 @@
                 no_products: 'Chưa có sản phẩm nào',
                 buy: 'Mua ngay',
                 out_of_stock: 'Hết hàng',
-                all_brands: 'Tất cả',
+                all_categories: 'Tất cả',
                 in_stock: 'Còn',
-                sold: 'Đã bán'
+                sold: 'Đã bán',
+                apply_voucher: 'Áp mã',
+                enter_voucher: 'Nhập mã giảm giá'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
@@ -319,19 +370,22 @@
                 no_products: 'No products available',
                 buy: 'Buy now',
                 out_of_stock: 'Out of stock',
-                all_brands: 'All',
+                all_categories: 'All',
                 in_stock: 'In stock',
-                sold: 'Sold'
+                sold: 'Sold',
+                apply_voucher: 'Apply',
+                enter_voucher: 'Enter voucher code'
             }
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
         let currentUser = null;
-        let selectedBrand = 'all';
-        let brandsData = {};
+        let selectedCategory = 'all';
+        let categoriesData = {};
         let productsData = {};
-        let ordersData = {};
+        let vouchersData = {};
+        let currentVoucher = null;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -339,7 +393,7 @@
                 const key = el.getAttribute('data-key');
                 if (data[key] !== undefined) el.textContent = data[key];
             });
-            renderBrands();
+            renderCategories();
         }
 
         function applyTheme() {
@@ -417,47 +471,54 @@
 
         function loadData() {
             db.ref('categories').on('value', (snapshot) => {
-                brandsData = snapshot.val() || {};
-                renderBrands();
+                categoriesData = snapshot.val() || {};
+                renderCategories();
                 renderProducts();
             });
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
                 renderProducts();
             });
+            db.ref('vouchers').on('value', (snapshot) => {
+                vouchersData = snapshot.val() || {};
+            });
         }
 
-        function renderBrands() {
-            const grid = document.getElementById('brandGrid');
-            const countEl = document.getElementById('brandCount');
-            const keys = Object.keys(brandsData);
-            countEl.textContent = `(${keys.length} hãng)`;
+        function renderCategories() {
+            const grid = document.getElementById('categoryGrid');
+            const countEl = document.getElementById('categoryCount');
+            const keys = Object.keys(categoriesData);
+            countEl.textContent = `(${keys.length} mục)`;
             
             const allLabel = lang === 'vi' ? '📦 Tất cả' : '📦 All';
             const allCount = Object.keys(productsData).length;
             
             let html = `
-                <div class="brand-card ${selectedBrand === 'all' ? 'active' : ''}" onclick="selectBrand('all')">
-                    <div class="brand-image" style="font-size:28px;">📦</div>
-                    <div class="brand-name">${allLabel}</div>
-                    <div class="brand-count">${allCount} sp</div>
+                <div class="category-item ${selectedCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">
+                    <div class="cat-image" style="font-size:20px;">📦</div>
+                    <div class="cat-info">
+                        <div class="cat-name">${allLabel}</div>
+                        <div class="cat-count">${allCount} sp</div>
+                    </div>
                 </div>
             `;
             
             keys.forEach(key => {
-                const brand = brandsData[key];
+                const cat = categoriesData[key];
                 const productCount = Object.keys(productsData).filter(pid => productsData[pid].category === key).length;
-                const isActive = selectedBrand === key ? 'active' : '';
-                const imageUrl = brand.image || '';
-                const icon = brand.icon || '🏷️';
+                const isActive = selectedCategory === key ? 'active' : '';
+                const imageUrl = cat.image || '';
+                const icon = cat.icon || '📁';
                 
                 html += `
-                    <div class="brand-card ${isActive}" onclick="selectBrand('${key}')">
-                        <div class="brand-image">
-                            ${imageUrl ? `<img src="${imageUrl}" alt="${brand.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
+                    <div class="category-item ${isActive}" onclick="selectCategory('${key}')">
+                        <div class="cat-image">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${cat.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
-                        <div class="brand-name">${brand.name || 'Chưa đặt tên'}</div>
-                        <div class="brand-count">${productCount} sp</div>
+                        <div class="cat-info">
+                            <div class="cat-name">${cat.name || 'Chưa đặt tên'}</div>
+                            <div class="cat-count">${productCount} sp</div>
+                        </div>
                     </div>
                 `;
             });
@@ -465,9 +526,10 @@
             grid.innerHTML = html;
         }
 
-        function selectBrand(brandId) {
-            selectedBrand = brandId;
-            renderBrands();
+        function selectCategory(categoryId) {
+            selectedCategory = categoryId;
+            currentVoucher = null;
+            renderCategories();
             renderProducts();
         }
 
@@ -475,22 +537,22 @@
             const grid = document.getElementById('productGrid');
             let filtered = [];
             
-            if (selectedBrand === 'all') {
+            if (selectedCategory === 'all') {
                 Object.keys(productsData).forEach(key => {
                     filtered.push({ id: key, ...productsData[key] });
                 });
             } else {
                 Object.keys(productsData).forEach(key => {
-                    if (productsData[key].category === selectedBrand) {
+                    if (productsData[key].category === selectedCategory) {
                         filtered.push({ id: key, ...productsData[key] });
                     }
                 });
             }
             
             if (filtered.length === 0) {
-                const msg = selectedBrand === 'all' 
+                const msg = selectedCategory === 'all' 
                     ? (lang === 'vi' ? 'Chưa có sản phẩm nào' : 'No products available')
-                    : (lang === 'vi' ? 'Hãng này chưa có sản phẩm' : 'This brand has no products');
+                    : (lang === 'vi' ? 'Mục này chưa có sản phẩm' : 'This category has no products');
                 grid.innerHTML = `
                     <div class="product-empty">
                         <span class="big-icon">📦</span>
@@ -504,6 +566,7 @@
             filtered.forEach(product => {
                 const isOutOfStock = product.stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
+                const originalPrice = product.price || 0;
                 const image = product.image || '';
                 const icon = product.icon || '📦';
                 const desc = product.description || '';
@@ -512,6 +575,18 @@
                 const inStockLabel = lang === 'vi' ? 'Còn' : 'In stock';
                 const soldLabel = lang === 'vi' ? 'Đã bán' : 'Sold';
                 
+                // Kiểm tra voucher
+                let discountPrice = originalPrice;
+                let discountText = '';
+                if (currentVoucher && currentVoucher.type === 'percent') {
+                    discountPrice = originalPrice * (1 - currentVoucher.value / 100);
+                    discountText = `-${currentVoucher.value}%`;
+                } else if (currentVoucher && currentVoucher.type === 'fixed') {
+                    discountPrice = Math.max(0, originalPrice - currentVoucher.value);
+                    discountText = `-${currentVoucher.value.toLocaleString('vi-VN')}đ`;
+                }
+                const displayPrice = discountPrice.toLocaleString('vi-VN');
+                
                 html += `
                     <div class="product-card">
                         <div class="product-image">
@@ -519,21 +594,55 @@
                         </div>
                         <div class="product-info">
                             <div class="product-name">${product.name || 'Sản phẩm'}</div>
-                            <div class="product-price">${price} VND</div>
+                            <div class="product-price">
+                                ${discountPrice < originalPrice ? `<span style="text-decoration:line-through;font-size:14px;color:var(--text-muted);">${originalPrice.toLocaleString('vi-VN')}đ</span> ` : ''}
+                                ${displayPrice} VND
+                                ${discountText ? `<span class="discount-badge">${discountText}</span>` : ''}
+                            </div>
                             ${desc ? `<div class="product-desc">${desc}</div>` : ''}
                             <div class="product-stats">
                                 <span class="stat">📦 ${inStockLabel}: ${stock}</span>
                                 <span class="stat">📈 ${soldLabel}: ${sold}</span>
                             </div>
+                            <div class="voucher-input">
+                                <input type="text" id="voucher_${product.id}" placeholder="${lang === 'vi' ? 'Nhập mã giảm giá' : 'Enter voucher code'}" />
+                                <button onclick="applyVoucher('${product.id}')">${lang === 'vi' ? 'Áp mã' : 'Apply'}</button>
+                            </div>
                             <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
                                 ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? '🛒 Mua ngay' : '🛒 Buy now')}
                             </button>
+                            ${currentVoucher ? `<div class="voucher-applied">✅ Đã áp mã: ${currentVoucher.code}</div>` : ''}
                         </div>
                     </div>
                 `;
             });
             
             grid.innerHTML = html;
+        }
+
+        // ===== VOUCHER =====
+        function applyVoucher(productId) {
+            const input = document.getElementById('voucher_' + productId);
+            const code = input.value.trim().toUpperCase();
+            if (!code) {
+                alert(lang === 'vi' ? 'Vui lòng nhập mã giảm giá!' : 'Please enter voucher code!');
+                return;
+            }
+            
+            const voucher = vouchersData[code];
+            if (!voucher) {
+                alert(lang === 'vi' ? '❌ Mã giảm giá không hợp lệ!' : '❌ Invalid voucher code!');
+                return;
+            }
+            
+            if (voucher.usedCount >= voucher.maxUses) {
+                alert(lang === 'vi' ? '❌ Mã giảm giá đã hết lượt sử dụng!' : '❌ Voucher has been used up!');
+                return;
+            }
+            
+            currentVoucher = { code, ...voucher };
+            renderProducts();
+            alert(lang === 'vi' ? '✅ Đã áp mã giảm giá thành công!' : '✅ Voucher applied successfully!');
         }
 
         // ===== BUY PRODUCT =====
@@ -554,7 +663,24 @@
                 return;
             }
             
-            const price = product.price || 0;
+            let price = product.price || 0;
+            let voucherUsed = null;
+            
+            // Áp dụng voucher
+            if (currentVoucher) {
+                const voucher = vouchersData[currentVoucher.code];
+                if (voucher && voucher.usedCount < voucher.maxUses) {
+                    if (voucher.type === 'percent') {
+                        price = price * (1 - voucher.value / 100);
+                    } else if (voucher.type === 'fixed') {
+                        price = Math.max(0, price - voucher.value);
+                    }
+                    voucherUsed = currentVoucher.code;
+                }
+            }
+            
+            price = Math.round(price);
+            
             if (currentUser.balance < price) {
                 alert(lang === 'vi' ? 'Số dư không đủ để mua sản phẩm này!' : 'Insufficient balance!');
                 return;
@@ -568,6 +694,9 @@
                 updates[`products/${productId}/stock`] = (product.stock || 1) - 1;
                 updates[`products/${productId}/sold`] = (product.sold || 0) + 1;
                 
+                // Tạo mã đơn hàng ngẫu nhiên
+                const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                
                 // Lưu đơn hàng
                 const orderRef = db.ref('orders').push();
                 const orderData = {
@@ -577,32 +706,48 @@
                     productName: product.name,
                     productImage: product.image || '',
                     productIcon: product.icon || '📦',
+                    productDesc: product.description || '',
+                    originalPrice: product.price || 0,
                     price: price,
+                    voucher: voucherUsed,
+                    orderCode: orderCode,
                     timestamp: Date.now(),
                     status: 'completed'
                 };
                 updates[orderRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = orderData;
                 
-                // Lưu lịch sử
+                // Lưu lịch sử (mã hóa)
                 const historyRef = db.ref('history/' + currentUser.uid).push();
-                updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = {
-                    productId: productId,
+                const historyData = {
+                    orderCode: orderCode,
                     productName: product.name,
                     price: price,
                     timestamp: Date.now(),
-                    type: 'purchase'
+                    type: 'purchase',
+                    encrypted: btoa(JSON.stringify({ 
+                        productId: productId,
+                        productName: product.name,
+                        price: price,
+                        voucher: voucherUsed,
+                        timestamp: Date.now()
+                    }))
                 };
+                updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = historyData;
+                
+                // Cập nhật voucher
+                if (voucherUsed) {
+                    updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
+                }
                 
                 db.ref().update(updates).then(() => {
                     hideLoading();
-                    // Hiển thị popup đơn hàng
                     showOrderPopup(orderData);
-                    // Cập nhật balance
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                         currentUser.balance = bal;
                     });
+                    currentVoucher = null;
                 }).catch(err => {
                     hideLoading();
                     alert('❌ ' + err.message);
@@ -611,13 +756,17 @@
         }
 
         // ===== ORDER POPUP =====
+        let currentOrderCode = '';
+
         function showOrderPopup(orderData) {
             const popup = document.getElementById('orderPopup');
             const container = document.getElementById('orderItems');
             const totalEl = document.getElementById('orderTotal');
+            const codeText = document.getElementById('orderCodeText');
             
             const image = orderData.productImage || orderData.productIcon || '📦';
             const price = orderData.price.toLocaleString('vi-VN');
+            currentOrderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
             
             container.innerHTML = `
                 <div class="order-item">
@@ -627,8 +776,10 @@
                     <div class="item-info">
                         <div class="item-name">${orderData.productName}</div>
                         <div class="item-price">${price} VND</div>
+                        ${orderData.productDesc ? `<div style="font-size:12px;color:var(--text-muted);">${orderData.productDesc}</div>` : ''}
                     </div>
                 </div>
+                ${orderData.voucher ? `<div style="padding:4px 0;color:var(--success);font-size:13px;">🎫 Đã áp mã: ${orderData.voucher}</div>` : ''}
                 <div style="padding:8px 0;color:var(--text-muted);font-size:13px;">
                     👤 ${orderData.userName}
                 </div>
@@ -638,11 +789,20 @@
             `;
             
             totalEl.textContent = price;
+            codeText.textContent = currentOrderCode;
             popup.classList.add('active');
         }
 
         function closeOrderPopup() {
             document.getElementById('orderPopup').classList.remove('active');
+        }
+
+        function copyOrderCode() {
+            navigator.clipboard.writeText(currentOrderCode).then(() => {
+                alert(lang === 'vi' ? '✅ Đã copy mã đơn hàng!' : '✅ Order code copied!');
+            }).catch(() => {
+                alert(lang === 'vi' ? '❌ Không thể copy, vui lòng copy thủ công' : '❌ Cannot copy, please copy manually');
+            });
         }
 
         // ===== AUTH STATE =====
@@ -750,7 +910,7 @@
         }
 
         function goHome() { closeMenu(); window.location.href = 'index.html'; }
-        function goHistory() { closeMenu(); alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
+        function goHistory() { closeMenu(); window.location.href = 'history.html'; }
         function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
         function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
         function goToProfile() { window.location.href = 'Pop-up/profile.html'; }
