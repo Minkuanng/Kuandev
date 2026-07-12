@@ -147,6 +147,9 @@
             opacity: 0;
             pointer-events: none;
         }
+        .loading-overlay.hidden {
+            display: none !important;
+        }
         .loading-spinner {
             width: 50px;
             height: 50px;
@@ -312,7 +315,6 @@
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
-        let isRedirecting = false;
         let isDataLoaded = false;
 
         function applyLang() {
@@ -336,14 +338,10 @@
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('hidden');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 500);
         }
 
         function showLoading() {
             const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'flex';
             overlay.classList.remove('hidden');
         }
 
@@ -355,27 +353,31 @@
             return !!(quickUid && quickToken && quickPending === 'true');
         }
 
-        // ===== COMPLETE QUICK LOGIN =====
-        async function completeQuickLogin() {
+        // ===== TỰ ĐỘNG ĐĂNG NHẬP BẰNG QUICK LOGIN =====
+        async function autoLoginWithQuickToken() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
             
             if (!quickUid || !quickToken) return false;
             
             try {
-                // Xóa pending flag
-                localStorage.removeItem('quickLoginPending');
+                // Lấy thông tin user từ database
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const userData = snap.val();
+                
+                if (!userData || userData.blocked === true) {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
+                    return false;
+                }
                 
                 // Cập nhật presence
-                await db.ref('presence/' + quickUid).set(true);
-                db.ref('presence/' + quickUid).onDisconnect().set(false);
+                await db.ref('presence/' + quickUid + '.online').set(true);
+                db.ref('presence/' + quickUid + '.online').onDisconnect().set(false);
                 
                 // Lấy dữ liệu user
-                const snap = await db.ref('users/' + quickUid).once('value');
-                const data = snap.val();
-                if (data) {
-                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                }
+                document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
                 
                 // Load notifications
                 db.ref('notifications').on('value', snap => {
@@ -400,27 +402,30 @@
                     }
                 });
                 
+                // Xóa pending flag sau khi đã login thành công
+                localStorage.removeItem('quickLoginPending');
+                
                 isDataLoaded = true;
                 hideLoading();
                 return true;
             } catch (error) {
-                console.error('Lỗi complete quick login:', error);
+                console.error('Lỗi auto login:', error);
                 return false;
             }
         }
 
         // ===== XỬ LÝ AUTH STATE =====
         auth.onAuthStateChanged(async (user) => {
-            // Nếu đang chuyển hướng thì không làm gì
-            if (isRedirecting) return;
-            
             // Nếu đã load data rồi thì không làm gì
             if (isDataLoaded) return;
             
             // Kiểm tra quick login pending
             if (checkQuickLogin()) {
-                const success = await completeQuickLogin();
-                if (success) return;
+                const success = await autoLoginWithQuickToken();
+                if (success) {
+                    // Đã login thành công bằng quick token
+                    return;
+                }
                 // Nếu fail thì xóa và chuyển về login
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
@@ -429,8 +434,8 @@
                 return;
             }
             
+            // Nếu không có user, chuyển về login
             if (!user) { 
-                isRedirecting = true;
                 window.location.replace('Authenticator/login.html'); 
                 return; 
             }
@@ -439,15 +444,14 @@
                 // Kiểm tra user có bị block không
                 const blockSnap = await db.ref('users/' + user.uid + '/blocked').once('value');
                 if (blockSnap.val() === true) {
-                    isRedirecting = true;
                     await auth.signOut();
                     window.location.replace('Authenticator/login.html');
                     return;
                 }
 
                 // Cập nhật presence
-                await db.ref('presence/' + user.uid).set(true);
-                db.ref('presence/' + user.uid).onDisconnect().set(false);
+                await db.ref('presence/' + user.uid + '.online').set(true);
+                db.ref('presence/' + user.uid + '.online').onDisconnect().set(false);
                 
                 // Lấy dữ liệu user
                 db.ref('users/' + user.uid).on('value', snap => {
@@ -546,7 +550,7 @@
             if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
                 const user = auth.currentUser;
                 if (user) {
-                    db.ref('presence/' + user.uid).set(false);
+                    db.ref('presence/' + user.uid + '.online').set(false);
                 }
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
