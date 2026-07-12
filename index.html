@@ -372,9 +372,9 @@
                     return false;
                 }
                 
-                // Cập nhật presence
-                await db.ref('presence/' + quickUid + '.online').set(true);
-                db.ref('presence/' + quickUid + '.online').onDisconnect().set(false);
+                // Cập nhật presence - KHÔNG DÙNG DẤU "."
+                await db.ref('presence/' + quickUid).set(true);
+                db.ref('presence/' + quickUid).onDisconnect().set(false);
                 
                 // Lấy dữ liệu user
                 document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
@@ -449,9 +449,9 @@
                     return;
                 }
 
-                // Cập nhật presence
-                await db.ref('presence/' + user.uid + '.online').set(true);
-                db.ref('presence/' + user.uid + '.online').onDisconnect().set(false);
+                // Cập nhật presence - KHÔNG DÙNG DẤU "."
+                await db.ref('presence/' + user.uid).set(true);
+                db.ref('presence/' + user.uid).onDisconnect().set(false);
                 
                 // Lấy dữ liệu user
                 db.ref('users/' + user.uid).on('value', snap => {
@@ -550,7 +550,7 @@
             if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
                 const user = auth.currentUser;
                 if (user) {
-                    db.ref('presence/' + user.uid + '.online').set(false);
+                    db.ref('presence/' + user.uid).set(false);
                 }
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
@@ -571,7 +571,7 @@
         // Hiển thị loading khi trang bắt đầu load
         showLoading();
 
-        // Ẩn loading sau 5s nếu không có gì xảy ra (phòng trường hợp lỗi)
+        // Ẩn loading sau 5s nếu không có gì xảy ra
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
