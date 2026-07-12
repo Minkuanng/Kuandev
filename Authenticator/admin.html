@@ -109,8 +109,9 @@
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-        .content { padding: 24px; max-width: 1000px; margin: 0 auto; }
-        .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
+        .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
+        
+        .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; margin-bottom: 16px; }
         .admin-card h1 { color: var(--text-primary); font-size: 22px; transition: 0.3s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .admin-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
         .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -135,19 +136,23 @@
         .btn-action.unblock:hover { background: #27ae60; color: #fff; }
         .btn-action.delete { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
         .btn-action.delete:hover { background: #c0392b; color: #fff; }
+        
         .notif-form { margin-top: 16px; padding: 16px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); display: flex; gap: 10px; flex-wrap: wrap; }
-        .notif-form input { flex: 1; padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 150px; transition: 0.3s; }
-        .notif-form input:focus { outline: none; border-color: var(--text-secondary); }
+        .notif-form input, .notif-form select { flex: 1; padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 120px; transition: 0.3s; }
+        .notif-form input:focus, .notif-form select:focus { outline: none; border-color: var(--text-secondary); }
         .notif-form .btn-send { padding: 8px 20px; background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .notif-form .btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
+        .notif-form .btn-danger { background: linear-gradient(135deg, #e74c6f, #c0392b); }
+        .notif-form .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+        
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 380px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
+        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 420px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; }
         .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 12px; }
-        .modal .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; }
-        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 60px; }
-        .modal .row input { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); }
-        .modal .row input:focus { outline: none; border-color: var(--text-secondary); }
+        .modal .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
+        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 70px; }
+        .modal .row input, .modal .row select { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 100px; }
+        .modal .row input:focus, .modal .row select:focus { outline: none; border-color: var(--text-secondary); }
         .modal .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; min-width: 60px; }
         .modal .actions .add { background: #27ae60; color: #fff; }
@@ -161,6 +166,9 @@
         .modal .actions .delete { background: #c0392b; color: #fff; }
         .modal .actions .delete:hover { transform: translateY(-2px); }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .modal .actions .save { background: var(--accent); color: #fff; }
+        .modal .actions .save:hover { transform: translateY(-2px); }
+        
         .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
         .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
@@ -175,7 +183,31 @@
         .status-dot.offline { background: #95a5a6; }
         .status-dot.blocked { background: #f39c12; }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } }
+        
+        /* ===== PRODUCT MANAGEMENT ===== */
+        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+        .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; }
+        .product-card-admin:hover { border-color: var(--accent); }
+        .product-card-admin .icon { font-size: 32px; display: block; }
+        .product-card-admin .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .product-card-admin .price { color: var(--accent); font-weight: 600; font-size: 14px; }
+        .product-card-admin .stock { font-size: 11px; color: var(--text-muted); }
+        .product-card-admin .cat { font-size: 10px; background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin: 4px 0; }
+        .product-card-admin .actions { display: flex; gap: 4px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
+        .product-card-admin .actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .product-card-admin .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .product-card-admin .actions .edit:hover { background: var(--text-secondary); color: #fff; }
+        .product-card-admin .actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
+        .product-card-admin .actions .del:hover { background: #e74c6f; color: #fff; }
+        
+        .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
+        .tabs .tab { padding: 8px 20px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 14px; border-bottom: 3px solid transparent; }
+        .tabs .tab:hover { color: var(--text-primary); }
+        .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .product-grid-admin { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
     </style>
 </head>
 <body>
@@ -230,27 +262,61 @@
     </div>
 
     <div class="content">
+        <!-- Admin Card -->
         <div class="admin-card">
             <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshUsers()">🔄 Làm mới</button></h1>
             <p class="sub" data-key="admin_sub">Quản lý người dùng và hệ thống</p>
-            <div id="loadingIndicator" class="loading">⏳ Đang tải dữ liệu...</div>
-            <div class="stats" id="stats" style="display:none;">
-                <div class="stat"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
-                <div class="stat"><div class="num" id="onlineUsers">0</div><div class="label">🟢 Online</div></div>
-                <div class="stat"><div class="num" id="blockedUsers">0</div><div class="label" data-key="blocked_users">Đã khóa</div></div>
-                <div class="stat"><div class="num" id="totalBalance">0</div><div class="label" data-key="total_balance">Tổng số dư</div></div>
+            
+            <div class="tabs">
+                <button class="tab active" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
+                <button class="tab" data-tab="products" onclick="switchTab('products')">🛍️ Sản phẩm</button>
+                <button class="tab" data-tab="categories" onclick="switchTab('categories')">📂 Danh mục</button>
             </div>
-            <div id="tableContainer" style="overflow-x:auto; display:none;">
-                <table class="user-table" id="userTable"><thead><tr><th data-key="stt">STT</th><th data-key="name">Tên</th><th data-key="email">Email</th><th data-key="balance">Số dư</th><th data-key="status">Trạng thái</th><th data-key="action">Thao tác</th></tr></thead><tbody id="userTableBody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);" data-key="no_data">Không có dữ liệu</td></tr></tbody></table>
+            
+            <!-- Tab Users -->
+            <div class="tab-content active" id="tab-users">
+                <div id="loadingIndicator" class="loading">⏳ Đang tải dữ liệu...</div>
+                <div class="stats" id="stats" style="display:none;">
+                    <div class="stat"><div class="num" id="totalUsers">0</div><div class="label" data-key="total_users">Tổng người dùng</div></div>
+                    <div class="stat"><div class="num" id="onlineUsers">0</div><div class="label">🟢 Online</div></div>
+                    <div class="stat"><div class="num" id="blockedUsers">0</div><div class="label" data-key="blocked_users">Đã khóa</div></div>
+                    <div class="stat"><div class="num" id="totalBalance">0</div><div class="label" data-key="total_balance">Tổng số dư</div></div>
+                </div>
+                <div id="tableContainer" style="overflow-x:auto; display:none;">
+                    <table class="user-table" id="userTable"><thead><tr><th data-key="stt">STT</th><th data-key="name">Tên</th><th data-key="email">Email</th><th data-key="balance">Số dư</th><th data-key="status">Trạng thái</th><th data-key="action">Thao tác</th></tr></thead><tbody id="userTableBody"><tr><td colspan="6" style="text-align:center;color:var(--text-muted);" data-key="no_data">Không có dữ liệu</td></tr></tbody></table>
+                </div>
+                <div class="notif-form" id="notifForm" style="display:none;">
+                    <input type="text" id="notifInput" placeholder="Nhập thông báo..." />
+                    <button class="btn-send" onclick="sendNotification()" data-key="send_btn">📢 Gửi</button>
+                </div>
             </div>
-            <div class="notif-form" id="notifForm" style="display:none;">
-                <input type="text" id="notifInput" placeholder="Nhập thông báo..." />
-                <button class="btn-send" onclick="sendNotification()" data-key="send_btn">📢 Gửi</button>
+            
+            <!-- Tab Products -->
+            <div class="tab-content" id="tab-products">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                    <button class="btn-send" onclick="openProductModal()">➕ Thêm sản phẩm</button>
+                    <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()">🗑️ Xóa tất cả</button>
+                </div>
+                <div id="productGridAdmin" class="product-grid-admin">
+                    <div class="loading">⏳ Đang tải sản phẩm...</div>
+                </div>
             </div>
+            
+            <!-- Tab Categories -->
+            <div class="tab-content" id="tab-categories">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                    <button class="btn-send" onclick="openCategoryModal()">➕ Thêm danh mục</button>
+                </div>
+                <div id="categoryList" style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <div class="loading">⏳ Đang tải danh mục...</div>
+                </div>
+            </div>
+            
             <button class="btn-back" onclick="goHome()"><span data-key="back">← Quay lại</span></button>
         </div>
     </div>
 
+    <!-- Modal User Management -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <h3 id="modalTitle" data-key="modal_title">Quản lý user</h3>
@@ -264,6 +330,36 @@
                 <button class="unlock" onclick="modalAction('unlock')" data-key="unlock_btn">🔓 Mở</button>
                 <button class="delete" onclick="modalAction('delete')" data-key="delete_btn">🗑️ Xóa</button>
                 <button class="cancel" onclick="closeModal()" data-key="close_btn">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Product -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal">
+            <h3 id="productModalTitle">🛍️ Thêm sản phẩm</h3>
+            <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
+            <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
+            <div class="row"><label>Số lượng:</label><input type="number" id="productStock" placeholder="Số lượng" value="1" /></div>
+            <div class="row"><label>Danh mục:</label><select id="productCategory"><option value="">Chọn danh mục</option></select></div>
+            <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
+            <input type="hidden" id="productEditId" value="" />
+            <div class="actions">
+                <button class="save" onclick="saveProduct()">💾 Lưu</button>
+                <button class="cancel" onclick="closeProductModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Category -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal">
+            <h3>📂 Thêm danh mục</h3>
+            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên danh mục" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
+            <div class="actions">
+                <button class="save" onclick="saveCategory()">💾 Lưu</button>
+                <button class="cancel" onclick="closeCategoryModal()">Đóng</button>
             </div>
         </div>
     </div>
@@ -290,48 +386,8 @@
         let loadingUsers = false;
         let onlineUsersMap = {};
         let isDataLoaded = false;
-
-        // ===== KIỂM TRA QUICK LOGIN =====
-        function checkQuickLogin() {
-            const quickUid = localStorage.getItem('quickLoginUid');
-            const quickToken = localStorage.getItem('quickLoginToken');
-            const quickPending = localStorage.getItem('quickLoginPending');
-            return !!(quickUid && quickToken && quickPending === 'true');
-        }
-
-        // ===== COMPLETE QUICK LOGIN =====
-        async function completeQuickLogin() {
-            const quickUid = localStorage.getItem('quickLoginUid');
-            if (!quickUid) return false;
-            
-            try {
-                await db.ref('presence/' + quickUid).set(true);
-                db.ref('presence/' + quickUid).onDisconnect().set(false);
-                
-                const snap = await db.ref('users/' + quickUid).once('value');
-                const data = snap.val();
-                if (data) {
-                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                    
-                    // Kiểm tra admin
-                    if (data.isAdmin === true) {
-                        isAdmin = true;
-                        showLoading(true);
-                        loadUsers();
-                        setTimeout(() => showLoading(false), 300);
-                    } else {
-                        alert(lang === 'vi' ? '⚠️ Không có quyền truy cập!' : '⚠️ Access denied!');
-                        window.location.replace('../index.html');
-                        return false;
-                    }
-                }
-                isDataLoaded = true;
-                return true;
-            } catch (error) {
-                console.error('Lỗi complete quick login:', error);
-                return false;
-            }
-        }
+        let categoriesData = {};
+        let productsData = {};
 
         const translations = {
             vi: {
@@ -394,6 +450,16 @@
             document.getElementById('notifForm').style.display = show ? 'none' : 'block';
         }
 
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            
+            if (tab === 'products') loadProductsAdmin();
+            if (tab === 'categories') loadCategoriesAdmin();
+        }
+
         function watchOnlineStatus() {
             const presenceRef = db.ref('presence');
             presenceRef.on('value', (snapshot) => {
@@ -408,35 +474,224 @@
                 }
             });
         }
-
         watchOnlineStatus();
 
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                db.ref('presence/' + user.uid).set(true);
-                db.ref('presence/' + user.uid).onDisconnect().set(false);
-            }
-        });
-
-        function refreshUsers() {
-            if (loadingUsers) return;
-            showLoading(true);
-            setTimeout(() => {
-                loadUsers();
-                setTimeout(() => showLoading(false), 300);
-            }, 200);
+        function checkQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            const quickToken = localStorage.getItem('quickLoginToken');
+            const quickPending = localStorage.getItem('quickLoginPending');
+            return !!(quickUid && quickToken && quickPending === 'true');
         }
 
-        // ===== AUTH STATE =====
+        async function completeQuickLogin() {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            if (!quickUid) return false;
+            try {
+                await db.ref('presence/' + quickUid).set(true);
+                db.ref('presence/' + quickUid).onDisconnect().set(false);
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const data = snap.val();
+                if (data) {
+                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
+                    if (data.isAdmin === true) {
+                        isAdmin = true;
+                        showLoading(true);
+                        loadUsers();
+                        loadCategoriesAdmin();
+                        loadProductsAdmin();
+                        setTimeout(() => showLoading(false), 300);
+                    } else {
+                        alert(lang === 'vi' ? '⚠️ Không có quyền truy cập!' : '⚠️ Access denied!');
+                        window.location.replace('../index.html');
+                        return false;
+                    }
+                }
+                isDataLoaded = true;
+                return true;
+            } catch (error) {
+                console.error('Lỗi complete quick login:', error);
+                return false;
+            }
+        }
+
+        // ===== CATEGORIES MANAGEMENT =====
+        function loadCategoriesAdmin() {
+            db.ref('categories').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                categoriesData = data;
+                renderCategories(data);
+            });
+        }
+
+        function renderCategories(data) {
+            const container = document.getElementById('categoryList');
+            const keys = Object.keys(data);
+            if (keys.length === 0) {
+                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có danh mục' : 'No categories'}</div>`;
+                return;
+            }
+            let html = '';
+            keys.forEach(key => {
+                const cat = data[key];
+                html += `
+                    <div style="background:var(--wallet-bg);padding:10px 16px;border-radius:10px;border:1px solid var(--border-color);display:flex;align-items:center;gap:10px;">
+                        <span>${cat.icon || '📁'}</span>
+                        <span style="color:var(--text-primary);font-weight:500;">${cat.name}</span>
+                        <button class="btn-action delete" onclick="deleteCategory('${key}')" style="font-size:11px;">🗑️</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            
+            // Cập nhật select danh mục trong modal
+            updateCategorySelect();
+        }
+
+        function updateCategorySelect() {
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Chọn danh mục</option>';
+            Object.keys(categoriesData).forEach(key => {
+                const cat = categoriesData[key];
+                select.innerHTML += `<option value="${key}">${cat.icon || '📁'} ${cat.name}</option>`;
+            });
+        }
+
+        function openCategoryModal() {
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryIcon').value = '📁';
+            document.getElementById('categoryModal').classList.add('active');
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.remove('active');
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('categoryName').value.trim();
+            const icon = document.getElementById('categoryIcon').value.trim() || '📁';
+            if (!name) { showToast('❌ Nhập tên danh mục!', 'error'); return; }
+            
+            const ref = db.ref('categories').push();
+            ref.set({ name, icon }).then(() => {
+                showToast('✅ Đã thêm danh mục!', 'success');
+                closeCategoryModal();
+            }).catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        function deleteCategory(key) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa danh mục này?' : 'Delete this category?')) {
+                db.ref('categories/' + key).remove().then(() => {
+                    showToast('✅ Đã xóa!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        // ===== PRODUCTS MANAGEMENT =====
+        function loadProductsAdmin() {
+            db.ref('products').on('value', (snapshot) => {
+                const data = snapshot.val() || {};
+                productsData = data;
+                renderProductsAdmin(data);
+            });
+        }
+
+        function renderProductsAdmin(data) {
+            const container = document.getElementById('productGridAdmin');
+            const keys = Object.keys(data);
+            if (keys.length === 0) {
+                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có sản phẩm' : 'No products'}</div>`;
+                return;
+            }
+            let html = '';
+            keys.forEach(key => {
+                const p = data[key];
+                html += `
+                    <div class="product-card-admin">
+                        <span class="icon">${p.icon || '📦'}</span>
+                        <div class="name">${p.name || 'Sản phẩm'}</div>
+                        <div class="price">${(p.price || 0).toLocaleString('vi-VN')} VND</div>
+                        <div class="stock">📊 ${p.stock || 0} còn lại</div>
+                        <div class="cat">${p.category ? (categoriesData[p.category]?.icon || '📁') + ' ' + (categoriesData[p.category]?.name || p.category) : 'Không phân loại'}</div>
+                        <div class="actions">
+                            <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
+                            <button class="del" onclick="deleteProduct('${key}')">🗑️ Xóa</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function openProductModal() {
+            document.getElementById('productModalTitle').textContent = '🛍️ Thêm sản phẩm';
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productStock').value = '1';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productIcon').value = '📦';
+            document.getElementById('productEditId').value = '';
+            updateCategorySelect();
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        function editProduct(key) {
+            const p = productsData[key];
+            if (!p) return;
+            document.getElementById('productModalTitle').textContent = '✏️ Sửa sản phẩm';
+            document.getElementById('productName').value = p.name || '';
+            document.getElementById('productPrice').value = p.price || '';
+            document.getElementById('productStock').value = p.stock || 1;
+            document.getElementById('productCategory').value = p.category || '';
+            document.getElementById('productIcon').value = p.icon || '📦';
+            document.getElementById('productEditId').value = key;
+            updateCategorySelect();
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = parseInt(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const category = document.getElementById('productCategory').value;
+            const icon = document.getElementById('productIcon').value.trim() || '📦';
+            const editId = document.getElementById('productEditId').value;
+            
+            if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
+            if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
+            
+            const data = { name, price, stock, category, icon };
+            const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
+            ref.set(data).then(() => {
+                showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm sản phẩm!', 'success');
+                closeProductModal();
+            }).catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        function deleteProduct(key) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa sản phẩm này?' : 'Delete this product?')) {
+                db.ref('products/' + key).remove().then(() => {
+                    showToast('✅ Đã xóa!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        function confirmDeleteAllProducts() {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa TẤT CẢ sản phẩm? (Không thể hoàn tác!)' : 'Delete ALL products? (Cannot undo!)')) {
+                db.ref('products').remove().then(() => {
+                    showToast('✅ Đã xóa tất cả!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        // ===== USER MANAGEMENT =====
         auth.onAuthStateChanged(async (user) => {
-            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
-                if (success) {
-                    // Đã login thành công bằng quick token
-                    return;
-                }
-                // Nếu fail thì xóa và chuyển về login
+                if (success) return;
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
@@ -445,7 +700,6 @@
             }
             
             if (!user) { 
-                // Chỉ redirect khi không có user và không phải quick login
                 if (!localStorage.getItem('quickLoginUid') || !localStorage.getItem('quickLoginToken')) {
                     window.location.replace('login.html');
                 }
@@ -462,6 +716,8 @@
                 isAdmin = true;
                 showLoading(true);
                 loadUsers();
+                loadCategoriesAdmin();
+                loadProductsAdmin();
                 setTimeout(() => showLoading(false), 300);
             });
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
@@ -487,7 +743,6 @@
                     dot.classList.remove('show');
                 }
             });
-            
             if (!isDataLoaded) {
                 isDataLoaded = true;
             }
@@ -516,7 +771,6 @@
                         
                         const isOnline = onlineUsersMap[key] || false;
                         if (isOnline && !isBlocked && !isAdminUser) online++;
-                        
                         if (isBlocked) blocked++;
                         
                         const name = u.displayName || u.email || 'Chưa đặt tên';
@@ -559,7 +813,6 @@
                                 <button class="btn-action delete" onclick="deleteUser('${key}','${name.replace(/'/g,"\\'")}')" title="Xóa">🗑️</button>
                                 ` : '<span style="color:var(--text-muted);font-size:11px;">—</span>'}
                             </td>
-                            <td class="user-uid-hidden" style="display:none;">${key}</td>
                         </tr>`;
                     });
                 }
@@ -663,6 +916,15 @@
             }
         }
 
+        function refreshUsers() {
+            if (loadingUsers) return;
+            showLoading(true);
+            setTimeout(() => {
+                loadUsers();
+                setTimeout(() => showLoading(false), 300);
+            }, 200);
+        }
+
         function sendNotification() {
             const msg = document.getElementById('notifInput').value.trim();
             if (!msg) { showToast('❌ Nhập nội dung!', 'error'); return; }
@@ -683,6 +945,7 @@
                 });
         }
 
+        // ===== MENU FUNCTIONS =====
         function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); }
         function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
@@ -733,8 +996,15 @@
             }
         }
 
+        // Close modals when clicking overlay
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
+        });
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) closeProductModal();
+        });
+        document.getElementById('categoryModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCategoryModal();
         });
 
         window.addEventListener('storage', function(e) {
@@ -742,7 +1012,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Online status tracking!');
+        console.log('✅ Admin panel loaded with Product & Category management!');
     </script>
 </body>
 </html>
