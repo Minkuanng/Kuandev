@@ -128,28 +128,158 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        /* ===== PRODUCT SECTION ===== */
-        .product-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
-        .product-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .product-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        .product-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
-        .category-filter { display: flex; gap: 8px; flex-wrap: wrap; }
-        .category-filter button { padding: 6px 16px; border-radius: 20px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; }
-        .category-filter button:hover, .category-filter button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        /* ===== BRAND / CATEGORY SECTION ===== */
+        .brand-section { 
+            background: var(--bg-card); 
+            border-radius: 16px; 
+            padding: 20px 22px; 
+            box-shadow: var(--shadow); 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 16px; 
+            transition: 0.3s; 
+        }
+        .brand-section-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 16px; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        .brand-section-header h2 { 
+            font-size: 18px; 
+            color: var(--text-primary); 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        .brand-section-header h2 span { 
+            color: var(--text-secondary); 
+            font-size: 14px; 
+            font-weight: 400; 
+        }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; text-align: center; }
-        .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .product-card .product-icon { font-size: 40px; display: block; margin-bottom: 8px; }
+        /* Brand Grid - hình chữ nhật vuông */
+        .brand-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 16px; 
+            margin-bottom: 20px;
+        }
+        .brand-card { 
+            background: var(--wallet-bg); 
+            border-radius: 12px; 
+            padding: 16px 12px; 
+            border: 2px solid var(--border-color); 
+            transition: 0.3s; 
+            text-align: center; 
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+        .brand-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: var(--shadow-popup); 
+            border-color: var(--accent); 
+        }
+        .brand-card.active { 
+            border-color: var(--accent); 
+            background: var(--accent); 
+            color: #fff;
+        }
+        .brand-card.active .brand-name { color: #fff; }
+        .brand-card.active .brand-count { color: rgba(255,255,255,0.8); }
+        .brand-card .brand-image { 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        .brand-card .brand-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .brand-card .brand-name { 
+            font-weight: 600; 
+            color: var(--text-primary); 
+            font-size: 13px; 
+            transition: 0.3s;
+        }
+        .brand-card .brand-count { 
+            font-size: 11px; 
+            color: var(--text-muted); 
+            margin-top: 2px; 
+        }
+
+        /* Product grid khi chọn brand */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+            gap: 16px; 
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid var(--border-color);
+        }
+        .product-card { 
+            background: var(--wallet-bg); 
+            border-radius: 12px; 
+            padding: 14px; 
+            border: 1px solid var(--border-color); 
+            transition: 0.3s; 
+            text-align: center; 
+        }
+        .product-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: var(--shadow-popup); 
+            border-color: var(--accent); 
+        }
+        .product-card .product-image { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 10px; 
+            object-fit: cover; 
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 8px;
+            border: 1px solid var(--border-color);
+        }
+        .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
         .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 14px; }
         .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 16px; margin: 4px 0; }
-        .product-card .product-category { font-size: 11px; color: var(--text-muted); background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; }
-        .product-card .product-stock { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-        .product-card .btn-buy { margin-top: 10px; padding: 6px 20px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 13px; width: 100%; }
+        .product-card .product-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0; line-height: 1.4; }
+        .product-card .btn-buy { 
+            margin-top: 10px; 
+            padding: 6px 20px; 
+            background: var(--accent); 
+            color: #fff; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 13px; 
+            width: 100%; 
+        }
         .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .product-empty { 
+            text-align: center; 
+            padding: 40px 20px; 
+            color: var(--text-muted); 
+            grid-column: 1/-1;
+        }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
         .loading-overlay {
@@ -204,8 +334,10 @@
             .menu-icon .bar { width: 18px; height: 2px; }
             .menu-icon .bar:nth-child(1) { transform: translateY(3px); }
             .menu-icon .bar:nth-child(3) { transform: translateY(-3px); }
+            .brand-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
             .product-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-            .product-section { padding: 14px; }
+            .brand-card { min-height: 90px; padding: 12px 8px; }
+            .brand-card .brand-image { width: 45px; height: 45px; font-size: 20px; }
         }
     </style>
 </head>
@@ -282,45 +414,34 @@
                     <div class="intro-icon">🎮</div>
                     <div>
                         <div class="intro-title">Chào mừng bạn đến với trang chủ</div>
-                        <div class="intro-sub">Hướng dẫn mua hàng &amp; lưu ý quan trọng</div>
+                        <div class="intro-sub">Chọn hãng để xem sản phẩm</div>
                     </div>
                 </div>
             </div>
             <div class="intro-body">
-                <p class="intro-lead">Đây là trang chủ của bạn. Hãy khám phá các tính năng bên trái menu.</p>
-
-                <div class="intro-section">
-                    <div class="intro-section-title">📦 Hướng dẫn quy trình mua hàng</div>
-                    <ul class="intro-list">
-                        <li>Quay lại toàn bộ quá trình mua hàng để làm bằng chứng đối chiếu sản phẩm.</li>
-                        <li>Nếu phát hiện sai sót hoặc lỗi kỹ thuật, hãy liên hệ ngay Admin để được hỗ trợ xử lý đổi/trả sớm nhất.</li>
-                    </ul>
-                </div>
-
-                <div class="intro-section">
-                    <div class="intro-section-title">⚠️ Lưu ý quan trọng</div>
-                    <ul class="intro-list">
-                        <li>Tuyệt đối không chia sẻ thông tin tài khoản shop cho bất kỳ ai dưới mọi hình thức.</li>
-                        <li>Đọc kỹ mô tả sản phẩm và các điều khoản trước khi giao dịch để đảm bảo quyền lợi của bạn.</li>
-                    </ul>
-                </div>
-
-                <div class="intro-footer">Cảm ơn bạn đã tin tưởng và đồng hành 🔥</div>
+                <p class="intro-lead">Chọn một hãng bên dưới để xem danh sách sản phẩm.</p>
             </div>
         </div>
 
-        <!-- ===== PRODUCT SECTION ===== -->
-        <div class="product-section" id="productSection">
-            <div class="product-section-header">
-                <h2>🛍️ Danh sách sản phẩm <span id="productCount"></span></h2>
-                <div class="category-filter" id="categoryFilter">
-                    <button class="active" data-category="all">📦 Tất cả</button>
-                </div>
+        <!-- ===== BRAND / CATEGORY SECTION ===== -->
+        <div class="brand-section" id="brandSection">
+            <div class="brand-section-header">
+                <h2>🏷️ Hãng sản phẩm <span id="brandCount"></span></h2>
             </div>
-            <div id="productGrid" class="product-grid">
+            <div class="brand-grid" id="brandGrid">
                 <div class="product-empty">
                     <span class="big-icon">📦</span>
-                    <p>Đang tải sản phẩm...</p>
+                    <p>Đang tải danh sách hãng...</p>
+                </div>
+            </div>
+
+            <!-- Product list -->
+            <div id="productContainer">
+                <div class="product-grid" id="productGrid">
+                    <div class="product-empty">
+                        <span class="big-icon">📦</span>
+                        <p>Chọn một hãng để xem sản phẩm</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -348,7 +469,8 @@
                 notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
                 no_products: 'Chưa có sản phẩm nào',
                 buy: 'Mua ngay',
-                out_of_stock: 'Hết hàng'
+                out_of_stock: 'Hết hàng',
+                all_brands: '📦 Tất cả'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
@@ -356,14 +478,16 @@
                 notif_title: '📢 Notifications', notif_empty: 'No notifications',
                 no_products: 'No products available',
                 buy: 'Buy now',
-                out_of_stock: 'Out of stock'
+                out_of_stock: 'Out of stock',
+                all_brands: '📦 All'
             }
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
         let currentUser = null;
-        let currentCategory = 'all';
+        let selectedBrand = 'all';
+        let brandsData = {};
         let productsData = {};
 
         function applyLang() {
@@ -372,6 +496,8 @@
                 const key = el.getAttribute('data-key');
                 if (data[key] !== undefined) el.textContent = data[key];
             });
+            // Cập nhật "Tất cả" trong brand grid
+            renderBrands();
         }
 
         function applyTheme() {
@@ -444,7 +570,7 @@
                     }
                 });
                 
-                loadProducts();
+                loadData();
                 isDataLoaded = true;
                 hideLoading();
                 return true;
@@ -454,65 +580,94 @@
             }
         }
 
-        // ===== LOAD PRODUCTS =====
-        function loadProducts() {
+        // ===== LOAD DATA =====
+        function loadData() {
+            // Load brands (categories)
+            db.ref('categories').on('value', (snapshot) => {
+                brandsData = snapshot.val() || {};
+                renderBrands();
+                renderProducts();
+            });
+            
+            // Load products
             db.ref('products').on('value', (snapshot) => {
-                const data = snapshot.val();
-                productsData = data || {};
-                renderProducts(currentCategory);
-                renderCategoryFilter();
+                productsData = snapshot.val() || {};
+                renderProducts();
             });
         }
 
-        function renderCategoryFilter() {
-            const container = document.getElementById('categoryFilter');
-            const categories = new Set();
-            categories.add('all');
+        // ===== RENDER BRANDS =====
+        function renderBrands() {
+            const grid = document.getElementById('brandGrid');
+            const countEl = document.getElementById('brandCount');
             
-            Object.keys(productsData).forEach(key => {
-                const product = productsData[key];
-                if (product.category) {
-                    categories.add(product.category);
-                }
+            const keys = Object.keys(brandsData);
+            const total = keys.length;
+            countEl.textContent = `(${total} hãng)`;
+            
+            const allLabel = lang === 'vi' ? '📦 Tất cả' : '📦 All';
+            
+            let html = `
+                <div class="brand-card ${selectedBrand === 'all' ? 'active' : ''}" onclick="selectBrand('all')">
+                    <div class="brand-image" style="font-size:32px;">📦</div>
+                    <div class="brand-name">${allLabel}</div>
+                    <div class="brand-count">${Object.keys(productsData).length} sản phẩm</div>
+                </div>
+            `;
+            
+            keys.forEach(key => {
+                const brand = brandsData[key];
+                const productCount = Object.keys(productsData).filter(pid => productsData[pid].category === key).length;
+                const isActive = selectedBrand === key ? 'active' : '';
+                const imageUrl = brand.image || '';
+                const icon = brand.icon || '🏷️';
+                
+                html += `
+                    <div class="brand-card ${isActive}" onclick="selectBrand('${key}')">
+                        <div class="brand-image">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${brand.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
+                        </div>
+                        <div class="brand-name">${brand.name || 'Chưa đặt tên'}</div>
+                        <div class="brand-count">${productCount} sản phẩm</div>
+                    </div>
+                `;
             });
             
-            let html = '';
-            categories.forEach(cat => {
-                const isActive = cat === currentCategory ? 'active' : '';
-                const label = cat === 'all' ? '📦 Tất cả' : cat;
-                html += `<button class="${isActive}" data-category="${cat}" onclick="filterCategory('${cat}')">${label}</button>`;
-            });
-            container.innerHTML = html;
+            grid.innerHTML = html;
         }
 
-        function filterCategory(category) {
-            currentCategory = category;
-            renderCategoryFilter();
-            renderProducts(category);
+        // ===== SELECT BRAND =====
+        function selectBrand(brandId) {
+            selectedBrand = brandId;
+            renderBrands();
+            renderProducts();
         }
 
-        function renderProducts(category) {
+        // ===== RENDER PRODUCTS =====
+        function renderProducts() {
             const grid = document.getElementById('productGrid');
-            const countEl = document.getElementById('productCount');
             
             let filtered = [];
-            let total = 0;
-            
-            Object.keys(productsData).forEach(key => {
-                const product = productsData[key];
-                if (category === 'all' || product.category === category) {
-                    filtered.push({ id: key, ...product });
-                    total++;
-                }
-            });
-            
-            countEl.textContent = `(${total} sản phẩm)`;
+            if (selectedBrand === 'all') {
+                Object.keys(productsData).forEach(key => {
+                    filtered.push({ id: key, ...productsData[key] });
+                });
+            } else {
+                Object.keys(productsData).forEach(key => {
+                    if (productsData[key].category === selectedBrand) {
+                        filtered.push({ id: key, ...productsData[key] });
+                    }
+                });
+            }
             
             if (filtered.length === 0) {
+                const msg = selectedBrand === 'all' 
+                    ? (lang === 'vi' ? 'Chưa có sản phẩm nào' : 'No products available')
+                    : (lang === 'vi' ? 'Hãng này chưa có sản phẩm' : 'This brand has no products');
                 grid.innerHTML = `
-                    <div class="product-empty" style="grid-column:1/-1;">
+                    <div class="product-empty">
                         <span class="big-icon">📦</span>
-                        <p>${lang === 'vi' ? 'Chưa có sản phẩm nào' : 'No products available'}</p>
+                        <p>${msg}</p>
                     </div>
                 `;
                 return;
@@ -522,16 +677,18 @@
             filtered.forEach(product => {
                 const isOutOfStock = product.stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
+                const image = product.image || '';
                 const icon = product.icon || '📦';
-                const stockText = product.stock !== undefined ? `${product.stock} còn lại` : '';
+                const desc = product.description || '';
                 
                 html += `
                     <div class="product-card">
-                        <span class="product-icon">${icon}</span>
+                        <div class="product-image">
+                            ${image ? `<img src="${image}" alt="${product.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
+                        </div>
                         <div class="product-name">${product.name || 'Sản phẩm'}</div>
                         <div class="product-price">${price} VND</div>
-                        <div class="product-category">${product.category || 'Không phân loại'}</div>
-                        <div class="product-stock">${stockText}</div>
+                        ${desc ? `<div class="product-desc">${desc}</div>` : ''}
                         <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
                             ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? 'Mua ngay' : 'Buy now')}
                         </button>
@@ -573,7 +730,6 @@
                 updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
                 updates[`products/${productId}/stock`] = (product.stock || 1) - 1;
                 
-                // Thêm lịch sử mua hàng
                 const historyRef = db.ref('history/' + currentUser.uid).push();
                 updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = {
                     productId: productId,
@@ -586,7 +742,6 @@
                 db.ref().update(updates).then(() => {
                     hideLoading();
                     alert(lang === 'vi' ? '✅ Mua hàng thành công!' : '✅ Purchase successful!');
-                    // Cập nhật lại balance
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
@@ -663,8 +818,7 @@
                     }
                 });
                 
-                // Load products sau khi auth
-                loadProducts();
+                loadData();
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
