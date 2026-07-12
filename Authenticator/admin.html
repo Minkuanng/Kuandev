@@ -181,7 +181,7 @@
         .category-item-admin .cat-actions .del:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
 
         /* ===== PRODUCT GRID (QUẢN LÝ KHO) ===== */
-        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 12px; }
+        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 12px; }
         .product-card-admin { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); }
         .product-card-admin:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow-popup); }
         .product-card-admin .product-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
@@ -204,8 +204,8 @@
         .product-card-admin .product-actions .edit:hover { transform: scale(1.05); }
         .product-card-admin .product-actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .product-card-admin .product-actions .del:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
-        .product-card-admin .product-actions .stock-add { background: var(--success); color: #fff; }
-        .product-card-admin .product-actions .stock-add:hover { transform: scale(1.05); }
+        .product-card-admin .product-actions .data-btn { background: var(--warning); color: #fff; }
+        .product-card-admin .product-actions .data-btn:hover { transform: scale(1.05); }
 
         /* ===== VOUCHER LIST ===== */
         .voucher-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
@@ -240,6 +240,11 @@
         .modal .row .word-count { font-size: 12px; color: var(--text-muted); }
         .modal .row .word-count.warning { color: var(--warning); }
         .modal .row .word-count.danger { color: var(--danger); }
+        .modal .row .data-list { flex: 1; max-height: 200px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-card); }
+        .modal .row .data-list .data-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-primary); }
+        .modal .row .data-list .data-item:last-child { border-bottom: none; }
+        .modal .row .data-list .data-item .remove-data { color: var(--danger); cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: var(--transition); }
+        .modal .row .data-list .data-item .remove-data:hover { background: var(--danger); color: #fff; }
         .modal .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 80px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
@@ -342,7 +347,7 @@
     <div class="content">
         <div class="admin-card">
             <h1><i class="fas fa-crown"></i> Quản trị <button class="refresh-btn" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button></h1>
-            <p class="sub">Quản lý người dùng, mục sản phẩm, kho hàng, đơn hàng và mã giảm giá</p>
+            <p class="sub">Quản lý người dùng, mục sản phẩm, kho dữ liệu, đơn hàng và mã giảm giá</p>
             
             <div class="tabs">
                 <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
@@ -441,7 +446,7 @@
         </div>
     </div>
 
-    <!-- Modal Product (QUẢN LÝ KHO) -->
+    <!-- Modal Product (QUẢN LÝ KHO + DỮ LIỆU) -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3><i class="fas fa-warehouse"></i> <span id="productModalTitle">Thêm sản phẩm vào kho</span></h3>
@@ -480,17 +485,17 @@
             <!-- Mô tả sản phẩm -->
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;"><i class="fas fa-align-left"></i> Mô tả sản phẩm:</label>
-                <textarea id="productDesc" placeholder="Nhập mô tả chi tiết sản phẩm (tối đa 240 từ)" rows="5" maxlength="1500"></textarea>
+                <textarea id="productDesc" placeholder="Nhập mô tả chi tiết sản phẩm (tối đa 240 từ)" rows="4" maxlength="1500"></textarea>
                 <div style="display:flex;justify-content:flex-end;gap:10px;font-size:12px;">
                     <span class="word-count" id="wordCount">0/240 từ</span>
                 </div>
             </div>
             
-            <!-- Số lượng tồn kho -->
-            <div class="row">
-                <label><i class="fas fa-boxes"></i> Số lượng tồn:</label>
-                <input type="number" id="productStock" placeholder="Số lượng trong kho" value="10" min="0" />
-                <span class="count-badge">Còn hàng</span>
+            <!-- DỮ LIỆU SẢN PHẨM (QUAN TRỌNG) -->
+            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                <label style="min-width:auto;"><i class="fas fa-database"></i> Dữ liệu sản phẩm (mỗi dòng 1 món):</label>
+                <textarea id="productData" placeholder="Nhập dữ liệu từng món, mỗi dòng 1 món&#10;VD:&#10;acc1:pass1&#10;acc2:pass2&#10;acc3:pass3" rows="6"></textarea>
+                <span style="font-size:11px;color:var(--text-muted);">📌 Mỗi dòng là 1 sản phẩm trong kho. Khi bán sẽ lấy 1 dòng và xóa nó đi</span>
             </div>
             
             <input type="hidden" id="productEditId" value="" />
@@ -501,19 +506,26 @@
         </div>
     </div>
 
-    <!-- Modal Stock (Cập nhật số lượng) -->
-    <div class="modal-overlay" id="stockModal">
+    <!-- Modal Data (Quản lý dữ liệu từng sản phẩm) -->
+    <div class="modal-overlay" id="dataModal">
         <div class="modal">
-            <h3><i class="fas fa-boxes"></i> Cập nhật tồn kho</h3>
-            <div class="row"><label><i class="fas fa-tag"></i> Sản phẩm:</label><span id="stockProductName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label><i class="fas fa-boxes"></i> Số lượng hiện tại:</label><span id="stockCurrent" style="color:var(--accent);font-weight:700;"></span></div>
-            <div class="row"><label><i class="fas fa-plus-circle"></i> Thêm vào kho:</label><input type="number" id="stockAddAmount" placeholder="Số lượng thêm" value="1" min="1" /></div>
-            <div class="row"><label><i class="fas fa-minus-circle"></i> Giảm tồn kho:</label><input type="number" id="stockSubAmount" placeholder="Số lượng giảm" value="1" min="1" /></div>
-            <input type="hidden" id="stockProductId" value="" />
+            <h3><i class="fas fa-database"></i> Quản lý dữ liệu</h3>
+            <div class="row"><label><i class="fas fa-tag"></i> Sản phẩm:</label><span id="dataProductName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label><i class="fas fa-boxes"></i> Số lượng:</label><span id="dataCount" style="color:var(--accent);font-weight:700;"></span></div>
+            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                <label style="min-width:auto;"><i class="fas fa-list"></i> Danh sách dữ liệu:</label>
+                <div class="data-list" id="dataList"></div>
+            </div>
+            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                <label style="min-width:auto;"><i class="fas fa-plus"></i> Thêm dữ liệu mới:</label>
+                <div style="display:flex;gap:8px;">
+                    <input type="text" id="dataNewItem" placeholder="Nhập dữ liệu mới (VD: acc4:pass4)" style="flex:1;" />
+                    <button class="save" onclick="addDataItem()" style="padding:8px 16px;border:none;border-radius:8px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;"><i class="fas fa-plus"></i> Thêm</button>
+                </div>
+            </div>
+            <input type="hidden" id="dataProductId" value="" />
             <div class="actions">
-                <button class="success" onclick="updateStock('add')"><i class="fas fa-plus"></i> Thêm</button>
-                <button class="danger" onclick="updateStock('sub')"><i class="fas fa-minus"></i> Giảm</button>
-                <button class="cancel" onclick="closeStockModal()"><i class="fas fa-times"></i> Đóng</button>
+                <button class="cancel" onclick="closeDataModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
@@ -938,7 +950,7 @@
             }
         }
 
-        // ===== PRODUCTS (KHO HÀNG) =====
+        // ===== PRODUCTS (QUẢN LÝ KHO + DỮ LIỆU) =====
         function loadProductsAdmin() {
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
@@ -961,11 +973,12 @@
                 const imageUrl = p.image || '';
                 const icon = p.icon || '📦';
                 const desc = p.description || '';
-                const stock = p.stock || 0;
+                const dataList = p.data || [];
                 const sold = p.sold || 0;
                 const price = p.price || 0;
                 const categoryName = categoriesData[p.category]?.name || 'Không có mục';
                 const categoryIcon = categoriesData[p.category]?.icon || '📁';
+                const stock = dataList.length;
                 
                 html += `
                     <div class="product-card-admin">
@@ -984,7 +997,7 @@
                                 <div class="value price">${price.toLocaleString('vi-VN')}đ</div>
                             </div>
                             <div class="detail-item">
-                                <div class="label"><i class="fas fa-boxes"></i> Tồn kho</div>
+                                <div class="label"><i class="fas fa-database"></i> Tồn kho</div>
                                 <div class="value stock">${stock}</div>
                             </div>
                             <div class="detail-item">
@@ -999,7 +1012,7 @@
                         ${desc ? `<div class="product-desc"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
                         <div class="product-actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
-                            <button class="stock-add" onclick="openStockModal('${key}','${p.name.replace(/'/g,"\\'")}',${stock})"><i class="fas fa-boxes"></i> Kho</button>
+                            <button class="data-btn" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Dữ liệu (${stock})</button>
                             <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
@@ -1035,7 +1048,7 @@
             document.getElementById('productIcon').value = '📦';
             document.getElementById('productImage').value = '';
             document.getElementById('productDesc').value = '';
-            document.getElementById('productStock').value = '10';
+            document.getElementById('productData').value = '';
             document.getElementById('wordCount').textContent = '0/240 từ';
             document.getElementById('wordCount').className = 'word-count';
             document.getElementById('productEditId').value = '';
@@ -1068,7 +1081,7 @@
             document.getElementById('productIcon').value = p.icon || '📦';
             document.getElementById('productImage').value = p.image || '';
             document.getElementById('productDesc').value = p.description || '';
-            document.getElementById('productStock').value = p.stock || 0;
+            document.getElementById('productData').value = (p.data || []).join('\n');
             document.getElementById('productEditId').value = key;
             
             const words = p.description ? p.description.trim().split(/\s+/).length : 0;
@@ -1100,10 +1113,10 @@
             const icon = document.getElementById('productIcon').value.trim() || '📦';
             const image = document.getElementById('productImage').value.trim();
             const description = document.getElementById('productDesc').value.trim();
-            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const dataRaw = document.getElementById('productData').value;
+            const dataList = dataRaw.split('\n').map(d => d.trim()).filter(d => d !== '');
             const editId = document.getElementById('productEditId').value;
             
-            // Kiểm tra số từ
             const words = description ? description.trim().split(/\s+/).length : 0;
             if (words > 240) {
                 showToast('❌ Mô tả sản phẩm vượt quá 240 từ!', 'error');
@@ -1113,14 +1126,14 @@
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
             if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
-            if (stock < 0) { showToast('❌ Số lượng tồn không được âm!', 'error'); return; }
+            if (dataList.length === 0) { showToast('❌ Nhập ít nhất 1 dữ liệu sản phẩm!', 'error'); return; }
             
             const data = { 
                 name, 
                 price, 
                 category, 
                 icon,
-                stock: stock,
+                data: dataList,
                 sold: 0
             };
             if (image) data.image = image;
@@ -1128,7 +1141,7 @@
             
             const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
             ref.set(data).then(() => {
-                showToast(editId ? '✅ Đã cập nhật sản phẩm!' : '✅ Đã thêm sản phẩm vào kho!', 'success');
+                showToast(editId ? '✅ Đã cập nhật sản phẩm!' : `✅ Đã thêm ${dataList.length} món vào kho!`, 'success');
                 closeProductModal();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
@@ -1149,39 +1162,83 @@
             }
         }
 
-        // ===== STOCK MANAGEMENT =====
-        function openStockModal(productId, productName, currentStock) {
-            document.getElementById('stockProductName').textContent = productName;
-            document.getElementById('stockCurrent').textContent = currentStock;
-            document.getElementById('stockAddAmount').value = '1';
-            document.getElementById('stockSubAmount').value = '1';
-            document.getElementById('stockProductId').value = productId;
-            document.getElementById('stockModal').classList.add('active');
+        // ===== DATA MANAGEMENT (QUẢN LÝ DỮ LIỆU TỪNG SẢN PHẨM) =====
+        let currentDataProductId = '';
+
+        function openDataModal(productId, productName) {
+            currentDataProductId = productId;
+            const p = productsData[productId];
+            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
+            
+            document.getElementById('dataProductName').textContent = productName;
+            document.getElementById('dataCount').textContent = (p.data || []).length;
+            document.getElementById('dataProductId').value = productId;
+            document.getElementById('dataNewItem').value = '';
+            renderDataList(p.data || []);
+            document.getElementById('dataModal').classList.add('active');
         }
 
-        function closeStockModal() {
-            document.getElementById('stockModal').classList.remove('active');
-        }
-
-        function updateStock(action) {
-            const productId = document.getElementById('stockProductId').value;
-            const amount = parseInt(document.getElementById(action === 'add' ? 'stockAddAmount' : 'stockSubAmount').value);
-            
-            if (!productId) { showToast('❌ Lỗi: Không tìm thấy sản phẩm!', 'error'); return; }
-            if (!amount || amount <= 0) { showToast('❌ Nhập số lượng hợp lệ!', 'error'); return; }
-            
-            const ref = db.ref('products/' + productId + '/stock');
-            ref.transaction(current => {
-                const c = current || 0;
-                if (action === 'add') return c + amount;
-                else return Math.max(0, c - amount);
-            }).then(result => {
-                const newStock = result.snapshot.val() || 0;
-                showToast(`✅ ${action === 'add' ? 'Thêm' : 'Giảm'} ${amount} sản phẩm! Tồn kho: ${newStock}`, 'success');
-                closeStockModal();
-            }).catch(err => {
-                showToast('❌ ' + err.message, 'error');
+        function renderDataList(data) {
+            const container = document.getElementById('dataList');
+            if (data.length === 0) {
+                container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:12px;">Chưa có dữ liệu nào</div>`;
+                return;
+            }
+            let html = '';
+            data.forEach((item, index) => {
+                html += `
+                    <div class="data-item">
+                        <span>${index + 1}. ${item}</span>
+                        <span class="remove-data" onclick="removeDataItem(${index})" title="Xóa"><i class="fas fa-times"></i></span>
+                    </div>
+                `;
             });
+            container.innerHTML = html;
+            document.getElementById('dataCount').textContent = data.length;
+        }
+
+        function addDataItem() {
+            const input = document.getElementById('dataNewItem');
+            const newItem = input.value.trim();
+            if (!newItem) { showToast('❌ Nhập dữ liệu mới!', 'error'); return; }
+            
+            const productId = document.getElementById('dataProductId').value;
+            const p = productsData[productId];
+            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
+            
+            const currentData = p.data || [];
+            currentData.push(newItem);
+            
+            db.ref('products/' + productId + '/data').set(currentData).then(() => {
+                showToast('✅ Đã thêm dữ liệu mới!', 'success');
+                input.value = '';
+                renderDataList(currentData);
+                // Cập nhật productsData local
+                productsData[productId].data = currentData;
+                renderProductsAdmin(productsData);
+            }).catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        function removeDataItem(index) {
+            if (!confirm('🗑️ Xóa dữ liệu này?')) return;
+            
+            const productId = document.getElementById('dataProductId').value;
+            const p = productsData[productId];
+            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
+            
+            const currentData = p.data || [];
+            currentData.splice(index, 1);
+            
+            db.ref('products/' + productId + '/data').set(currentData).then(() => {
+                showToast('✅ Đã xóa!', 'success');
+                renderDataList(currentData);
+                productsData[productId].data = currentData;
+                renderProductsAdmin(productsData);
+            }).catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        function closeDataModal() {
+            document.getElementById('dataModal').classList.remove('active');
         }
 
         // ===== ORDERS =====
@@ -1488,7 +1545,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Warehouse management!');
+        console.log('✅ Admin panel loaded with Data management!');
     </script>
 </body>
 </html>
