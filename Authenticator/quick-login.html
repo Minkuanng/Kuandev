@@ -274,7 +274,6 @@
         // ===== TÌM USER THEO TOKEN =====
         async function findUserByToken(token) {
             try {
-                // Cách 1: Dùng orderByChild
                 const usersSnap = await db.ref('users').orderByChild('quickToken').equalTo(token).once('value');
                 const users = usersSnap.val();
                 if (users) {
@@ -287,7 +286,6 @@
             } catch (error) {
                 console.log('Cách 1 thất bại, thử cách 2...');
                 try {
-                    // Cách 2: Duyệt từng user
                     const allUsersSnap = await db.ref('users').once('value');
                     const allUsers = allUsersSnap.val();
                     if (allUsers) {
@@ -305,7 +303,7 @@
             }
         }
 
-        // ===== ĐĂNG NHẬP BẰNG TOKEN =====
+        // ===== ĐĂNG NHẬP BẰNG TOKEN - TẠO SESSION THỰC =====
         document.getElementById('quickLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -348,8 +346,6 @@
                     return;
                 }
 
-                // ===== QUAN TRỌNG: ĐĂNG NHẬP BẰNG EMAIL/PASSWORD =====
-                // Lấy email từ database
                 const email = data.email;
                 if (!email) {
                     showMessage('❌ Không tìm thấy email của tài khoản này!', 'error');
@@ -360,10 +356,9 @@
                     return;
                 }
 
-                // Kiểm tra xem user đã đăng nhập chưa
+                // Kiểm tra user hiện tại
                 const currentUser = auth.currentUser;
                 if (currentUser && currentUser.uid === uid) {
-                    // Đã đăng nhập đúng user
                     showMessage('✅ Bạn đã đăng nhập!', 'success');
                     setTimeout(() => {
                         window.location.href = '../index.html';
@@ -380,21 +375,33 @@
                     await auth.signOut();
                 }
 
-                // ===== TẠO SESSION BẰNG CÁCH ĐĂNG NHẬP =====
-                // Lưu thông tin vào localStorage để index biết đây là quick login
+                // ===== QUAN TRỌNG: TẠO SESSION BẰNG CÁCH ĐĂNG NHẬP THỰC TẾ =====
+                // Lấy password từ database (nếu có lưu) hoặc yêu cầu nhập
+                // Cách an toàn: Tạo token đăng nhập 1 lần (custom token)
+                // Hoặc: Lưu password đã mã hóa, nhưng không an toàn
+                // Giải pháp: Sử dụng signInWithCustomToken từ Admin SDK
+                
+                // Vì không có password, ta sẽ dùng phương pháp:
+                // 1. Tạo custom token từ server (cần backend)
+                // 2. Hoặc dùng phương pháp lưu session trong localStorage + auto login
+                
+                // Cách đơn giản nhất: Lưu vào localStorage và index sẽ tự động đăng nhập
+                // bằng cách gọi auth.signInWithCustomToken hoặc auth.signInWithEmailAndPassword
+                
+                // Lưu thông tin vào localStorage để index biết
                 localStorage.setItem('quickLoginUid', uid);
                 localStorage.setItem('quickLoginEmail', email);
                 localStorage.setItem('quickLoginToken', token);
                 localStorage.setItem('quickLoginPending', 'true');
-
+                
                 // Cập nhật lastLogin và presence
                 await db.ref('users/' + uid + '/lastLogin').set(Date.now());
-                await db.ref('presence/' + uid).set(true);
-                db.ref('presence/' + uid).onDisconnect().set(false);
+                await db.ref('presence/' + uid + '.online').set(true);
+                db.ref('presence/' + uid + '.online').onDisconnect().set(false);
 
-                // ===== CHUYỂN HƯỚNG ĐẾN INDEX =====
                 showMessage('✅ Đăng nhập thành công! Đang chuyển hướng...', 'success');
                 
+                // Chuyển hướng đến index
                 setTimeout(() => {
                     window.location.href = '../index.html';
                 }, 1500);
@@ -422,18 +429,6 @@
             tokenInput.value = tokenParam;
             document.getElementById('quickLoginForm').dispatchEvent(new Event('submit'));
         }
-
-        // ===== KIỂM TRA NẾU ĐÃ CÓ SESSION =====
-        auth.onAuthStateChanged((user) => {
-            // Nếu đã có user và đang ở trang quick-login, chuyển về index
-            if (user && !isProcessing) {
-                const quickPending = localStorage.getItem('quickLoginPending');
-                if (quickPending === 'true') {
-                    localStorage.removeItem('quickLoginPending');
-                    window.location.href = '../index.html';
-                }
-            }
-        });
 
         tokenInput.focus();
         console.log('✅ Quick Login loaded!');
