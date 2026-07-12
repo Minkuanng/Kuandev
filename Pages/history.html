@@ -7,9 +7,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; --warning: #f39c12; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; --warning: #f39c12; --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -20,67 +21,69 @@
         .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
         .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
-        body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
+        body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
         
-        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; width: 40px; height: 40px; justify-content: center; }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: 0.3s; }
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: var(--transition); width: 40px; height: 40px; justify-content: center; }
+        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: var(--transition); }
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
 
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
+        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
         .logo span { color: var(--text-secondary); }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: default; min-height: 44px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
         .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
         .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
+        .wallet-icon-box i { color: #fff; font-size: 16px; }
         .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
         .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
-        .bell-icon:hover { background: var(--hover-bg); }
+        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; }
+        .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
         .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
         .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: 0.3s; padding: 6px; }
-        .dot-menu:hover { background: var(--hover-bg); }
+        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; }
+        .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; z-index: 200; }
-        .popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); }
+        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; }
-        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
-        .notif-popup .notif-header .close { cursor: pointer; }
+        .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
+        .notif-popup .notif-header .close:hover { color: var(--danger); }
         .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
         .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
         .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: 0.3s; padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.3s; color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header .close:hover { color: var(--danger); }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
         .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
         .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
-        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 24px; max-width: 900px; margin: 0 auto; }
         
-        .history-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
-        .history-card h1 { color: var(--text-primary); font-size: 22px; margin-bottom: 4px; transition: 0.3s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .history-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); }
+        .history-card h1 { color: var(--text-primary); font-size: 22px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .history-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
         
         .stats-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -89,50 +92,58 @@
         .stat-box .label { font-size: 11px; color: var(--text-muted); }
 
         .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
-        .filter-bar input, .filter-bar select { padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: 0.3s; flex: 1; min-width: 120px; }
+        .filter-bar input, .filter-bar select { padding: 8px 14px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); flex: 1; min-width: 120px; }
         .filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: var(--accent); }
-        .filter-bar .btn-clear { padding: 8px 16px; background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 12px; transition: 0.3s; }
+        .filter-bar .btn-clear { padding: 8px 16px; background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 12px; transition: var(--transition); }
         .filter-bar .btn-clear:hover { background: var(--hover-bg); }
 
         .order-list { display: flex; flex-direction: column; gap: 12px; }
-        .order-item { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; flex-direction: column; gap: 8px; }
-        .order-item:hover { border-color: var(--accent); }
+        .order-item { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); }
+        .order-item:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
         .order-item .order-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; }
         .order-item .order-code { font-weight: 700; color: var(--accent); font-size: 15px; font-family: 'Courier New', monospace; }
         .order-item .order-time { font-size: 12px; color: var(--text-muted); }
-        .order-item .order-body { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+        .order-item .order-status { font-size: 12px; padding: 2px 10px; border-radius: 10px; font-weight: 600; }
+        .order-item .order-status.success { background: #d4edda; color: #155724; }
+        .order-item .order-status.failed { background: #f8d7da; color: #721c24; }
+        .order-item .order-body { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; margin-top: 8px; }
         .order-item .order-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 28px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .order-item .order-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
         .order-item .order-details { flex: 1; min-width: 0; }
         .order-item .order-details .name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
         .order-item .order-details .desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .order-item .order-details .category { font-size: 11px; color: var(--text-muted); background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin-top: 2px; }
         .order-item .order-details .note { font-size: 12px; color: var(--text-primary); background: var(--bg-card); padding: 4px 10px; border-radius: 4px; border-left: 3px solid var(--warning); margin-top: 4px; display: inline-block; }
         .order-item .order-details .meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
         .order-item .order-details .meta span { background: var(--bg-card); padding: 2px 10px; border-radius: 10px; }
         .order-item .order-price { font-weight: 700; color: var(--accent); font-size: 18px; white-space: nowrap; }
-        .order-item .order-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-        .order-item .order-actions button { padding: 4px 14px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .order-item .order-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .order-item .order-actions button { padding: 4px 14px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); }
         .order-item .order-actions .view { background: var(--accent); color: #fff; }
-        .order-item .order-actions .view:hover { opacity: 0.8; }
+        .order-item .order-actions .view:hover { opacity: 0.8; transform: scale(1.05); }
         .order-item .order-actions .download { background: var(--success); color: #fff; }
-        .order-item .order-actions .download:hover { opacity: 0.8; }
+        .order-item .order-actions .download:hover { opacity: 0.8; transform: scale(1.05); }
         .order-item .order-actions .delete { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .order-item .order-actions .delete:hover { background: var(--danger); color: #fff; }
 
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
         .empty-state .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        /* Detail Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 480px; width: 92%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); animation: modalIn 0.3s ease; }
-        @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 24px; max-width: 520px; width: 92%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.9) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
         .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 12px; }
-        .modal .order-detail-item { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border-color); align-items: center; }
-        .modal .order-detail-item .label { color: var(--text-muted); font-weight: 500; min-width: 100px; font-size: 13px; }
-        .modal .order-detail-item .value { color: var(--text-primary); font-weight: 600; font-size: 13px; word-break: break-all; }
-        .modal .order-detail-item .value.code { font-family: 'Courier New', monospace; color: var(--accent); }
-        .modal .close-modal { width: 100%; padding: 10px; background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-muted); transition: 0.3s; margin-top: 12px; }
+        .modal .close-modal { width: 100%; padding: 10px; background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-muted); transition: var(--transition); margin-top: 12px; }
         .modal .close-modal:hover { background: var(--hover-bg); }
+        .modal .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .modal .detail-grid .d-item { background: var(--wallet-bg); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); }
+        .modal .detail-grid .d-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal .detail-grid .d-item .value { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 2px; word-break: break-word; }
+        .modal .detail-grid .d-item.full { grid-column: 1 / -1; }
+        .modal .detail-grid .d-item .value.status-success { color: var(--success); }
+        .modal .detail-grid .d-item .value.status-failed { color: var(--danger); }
 
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
@@ -145,7 +156,7 @@
         .toast.success { border-color: var(--success); color: var(--success); }
         .toast.error { border-color: var(--danger); color: var(--danger); }
 
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .history-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .order-item .order-header { flex-direction: column; } .order-item .order-price { font-size: 16px; } .modal { padding: 16px; } .order-item .order-body { flex-direction: column; align-items: stretch; } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .history-card { padding: 16px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box i { font-size: 13px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .modal .detail-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -172,14 +183,12 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">🛒 <span>Shop</span></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
                 <div class="wallet-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
+                    <i class="fas fa-wallet"></i>
                 </div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
@@ -187,33 +196,33 @@
                 </div>
             </div>
 
-            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
+            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()">👤 Thông tin</button>
-                    <button class="popup-item" onclick="goToSecurity()">🛡️ Bảo mật</button>
-                    <button class="popup-item" onclick="goToSettings()">⚙️ Cài đặt</button>
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> Thông tin</button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> Bảo mật</button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> Cài đặt</button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()">🚪 Đăng xuất</button>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span>📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
-        <div id="notifList"><div class="empty">Chưa có thông báo</div></div>
+        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
     <div class="content">
         <div class="history-card">
-            <h1>📜 Lịch sử mua hàng</h1>
+            <h1><i class="fas fa-history"></i> Lịch sử mua hàng</h1>
             <p class="sub">Xem lại các đơn hàng đã mua, tải xuống hoặc xóa</p>
 
             <div class="stats-row">
-                <div class="stat-box"><div class="num" id="totalOrders">0</div><div class="label">📦 Tổng đơn</div></div>
-                <div class="stat-box"><div class="num" id="totalSpent">0</div><div class="label">💰 Tổng chi</div></div>
+                <div class="stat-box"><div class="num" id="totalOrders">0</div><div class="label"><i class="fas fa-box"></i> Tổng đơn</div></div>
+                <div class="stat-box"><div class="num" id="totalSpent">0</div><div class="label"><i class="fas fa-coins"></i> Tổng chi</div></div>
             </div>
 
             <div class="filter-bar">
@@ -224,7 +233,7 @@
                     <option value="high">💰 Giá cao → thấp</option>
                     <option value="low">💰 Giá thấp → cao</option>
                 </select>
-                <button class="btn-clear" onclick="clearFilter()">🔄 Xóa lọc</button>
+                <button class="btn-clear" onclick="clearFilter()"><i class="fas fa-undo"></i> Xóa lọc</button>
             </div>
 
             <div class="order-list" id="orderList">
@@ -236,12 +245,12 @@
         </div>
     </div>
 
-    <!-- Modal xem chi tiết đơn hàng -->
+    <!-- Detail Modal -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal">
-            <h3>📋 Chi tiết đơn hàng</h3>
+            <h3><i class="fas fa-receipt"></i> Chi tiết đơn hàng</h3>
             <div id="detailContent"></div>
-            <button class="close-modal" onclick="closeDetailModal()">Đóng</button>
+            <button class="close-modal" onclick="closeDetailModal()"><i class="fas fa-times"></i> Đóng</button>
         </div>
     </div>
 
@@ -265,6 +274,7 @@
         let currentUser = null;
         let allOrders = [];
         let isDataLoaded = false;
+        let categoriesData = {};
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -310,6 +320,7 @@
                 if (data) {
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     currentUser = { uid: quickUid, ...data };
+                    loadCategories();
                     loadHistory(quickUid);
                     loadNotifications(quickUid);
                 }
@@ -320,6 +331,12 @@
                 console.error('Lỗi quick login:', error);
                 return false;
             }
+        }
+
+        function loadCategories() {
+            db.ref('categories').on('value', snap => {
+                categoriesData = snap.val() || {};
+            });
         }
 
         function loadNotifications(uid) {
@@ -334,12 +351,12 @@
                         const n = notifs[key];
                         const isUnread = !n.readBy || !n.readBy[uid];
                         if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else {
-                    list.innerHTML = `<div class="empty">Chưa có thông báo</div>`;
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                     dot.classList.remove('show');
                 }
             });
@@ -352,6 +369,10 @@
                 renderOrders(allOrders);
                 updateStats(allOrders);
             });
+        }
+
+        function getCategoryName(catId) {
+            return categoriesData[catId]?.name || catId || 'Không có';
         }
 
         function renderOrders(orders) {
@@ -376,15 +397,23 @@
                 const desc = order.productDesc || '';
                 const note = order.orderNote || '';
                 const voucher = order.voucher || '';
+                const quantity = order.quantity || 1;
+                const status = order.status || 'success';
+                const categoryName = getCategoryName(order.productCategory);
+                const statusText = status === 'success' ? 'Thành công' : 'Thất bại';
+                const statusClass = status === 'success' ? 'success' : 'failed';
                 
                 html += `
                     <div class="order-item">
                         <div class="order-header">
                             <div>
-                                <div class="order-code">🔑 ${orderCode}</div>
-                                <div class="order-time">📅 ${time}</div>
+                                <div class="order-code"><i class="fas fa-key"></i> ${orderCode}</div>
+                                <div class="order-time"><i class="far fa-clock"></i> ${time}</div>
                             </div>
-                            <div class="order-price">${price} VND</div>
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <span class="order-status ${statusClass}"><i class="fas ${status === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</span>
+                                <div class="order-price">${price} VND</div>
+                            </div>
                         </div>
                         <div class="order-body">
                             <div class="order-image">
@@ -392,19 +421,21 @@
                             </div>
                             <div class="order-details">
                                 <div class="name">${order.productName || 'Sản phẩm'}</div>
-                                ${desc ? `<div class="desc">📝 ${desc}</div>` : ''}
-                                ${note ? `<div class="note">📌 Ghi chú: ${note}</div>` : ''}
-                                ${voucher ? `<div class="meta"><span>🎫 Mã: ${voucher}</span></div>` : ''}
+                                ${desc ? `<div class="desc"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
+                                <div class="category"><i class="fas fa-tag"></i> ${categoryName}</div>
+                                ${note ? `<div class="note"><i class="fas fa-sticky-note"></i> Ghi chú: ${note}</div>` : ''}
+                                ${voucher ? `<div class="meta"><span><i class="fas fa-ticket-alt"></i> Mã: ${voucher}</span></div>` : ''}
                                 <div class="meta">
-                                    <span>👤 ${order.userName || 'Khách hàng'}</span>
-                                    <span>💰 ${price} VND</span>
+                                    <span><i class="fas fa-user"></i> ${order.userName || 'Khách hàng'}</span>
+                                    <span><i class="fas fa-boxes"></i> SL: ${quantity}</span>
+                                    <span><i class="fas fa-coins"></i> ${price} VND</span>
                                 </div>
                             </div>
                         </div>
                         <div class="order-actions">
-                            <button class="view" onclick="viewOrderDetail('${order.id}')">👁️ Xem</button>
-                            <button class="download" onclick="downloadOrder('${order.id}')">📥 Tải TXT</button>
-                            <button class="delete" onclick="deleteOrder('${order.id}')">🗑️ Xóa</button>
+                            <button class="view" onclick="viewOrderDetail('${order.id}')"><i class="fas fa-eye"></i> Xem</button>
+                            <button class="download" onclick="downloadOrder('${order.id}')"><i class="fas fa-download"></i> Tải TXT</button>
+                            <button class="delete" onclick="deleteOrder('${order.id}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
                 `;
@@ -458,22 +489,27 @@
             const price = (order.price || 0).toLocaleString('vi-VN');
             const originalPrice = (order.originalPrice || order.price || 0).toLocaleString('vi-VN');
             const time = new Date(order.timestamp).toLocaleString('vi-VN');
-            const image = order.productImage || order.productIcon || '📦';
+            const categoryName = getCategoryName(order.productCategory);
+            const status = order.status || 'success';
+            const statusText = status === 'success' ? '✅ Thành công' : '❌ Thất bại';
+            const statusClass = status === 'success' ? 'status-success' : 'status-failed';
             
             container.innerHTML = `
-                <div class="order-detail-item"><span class="label">🔑 Mã đơn</span><span class="value code">${code}</span></div>
-                <div class="order-detail-item"><span class="label">📦 Sản phẩm</span><span class="value">${order.productName || 'Không tên'}</span></div>
-                <div class="order-detail-item"><span class="label">🖼️ Hình ảnh</span><span class="value">
-                    ${order.productImage ? `<img src="${order.productImage}" style="max-width:60px;max-height:60px;border-radius:8px;object-fit:cover;" onerror="this.style.display='none'" />` : (order.productIcon || '📦')}
-                </span></div>
-                <div class="order-detail-item"><span class="label">📝 Mô tả</span><span class="value">${order.productDesc || 'Không có'}</span></div>
-                <div class="order-detail-item"><span class="label">📌 Ghi chú</span><span class="value">${order.orderNote || 'Không có'}</span></div>
-                <div class="order-detail-item"><span class="label">💰 Giá gốc</span><span class="value">${originalPrice} VND</span></div>
-                <div class="order-detail-item"><span class="label">💰 Giá thanh toán</span><span class="value" style="color:var(--accent);font-size:16px;">${price} VND</span></div>
-                ${order.voucher ? `<div class="order-detail-item"><span class="label">🎫 Mã giảm giá</span><span class="value" style="color:var(--success);">${order.voucher}</span></div>` : ''}
-                <div class="order-detail-item"><span class="label">👤 Người mua</span><span class="value">${order.userName || 'Khách hàng'}</span></div>
-                <div class="order-detail-item"><span class="label">📅 Thời gian</span><span class="value">${time}</span></div>
-                <div class="order-detail-item"><span class="label">🆔 User ID</span><span class="value" style="font-size:11px;font-family:monospace;">${order.userId || 'N/A'}</span></div>
+                <div class="detail-grid">
+                    <div class="d-item"><div class="label"><i class="fas fa-key"></i> Mã đơn</div><div class="value" style="font-family:monospace;color:var(--accent);">${code}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-box"></i> Sản phẩm</div><div class="value">${order.productName || 'Không tên'}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-tag"></i> Loại mục</div><div class="value">${categoryName}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-user"></i> Người mua</div><div class="value">${order.userName || 'Khách hàng'}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-id-card"></i> Mã người dùng</div><div class="value" style="font-size:12px;font-family:monospace;">${order.userId || 'N/A'}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-clock"></i> Thời gian</div><div class="value" style="font-size:12px;">${time}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-boxes"></i> Số lượng</div><div class="value">${order.quantity || 1}</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-coins"></i> Giá</div><div class="value" style="color:var(--accent);">${price} VND</div></div>
+                    <div class="d-item"><div class="label"><i class="fas fa-check-circle"></i> Trạng thái</div><div class="value ${statusClass}">${statusText}</div></div>
+                    ${order.originalPrice && order.originalPrice !== order.price ? `<div class="d-item"><div class="label"><i class="fas fa-tag"></i> Giá gốc</div><div class="value" style="text-decoration:line-through;color:var(--text-muted);">${originalPrice} VND</div></div>` : ''}
+                    ${order.voucher ? `<div class="d-item full"><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div><div class="value" style="color:var(--success);">${order.voucher}</div></div>` : ''}
+                    ${order.productDesc ? `<div class="d-item full"><div class="label"><i class="fas fa-info-circle"></i> Mô tả</div><div class="value" style="font-weight:400;font-size:13px;">${order.productDesc}</div></div>` : ''}
+                    ${order.orderNote ? `<div class="d-item full"><div class="label"><i class="fas fa-sticky-note"></i> Ghi chú</div><div class="value" style="font-weight:400;font-size:13px;background:var(--bg-card);padding:4px 10px;border-radius:4px;border-left:3px solid var(--warning);">${order.orderNote}</div></div>` : ''}
+                </div>
             `;
             
             document.getElementById('detailModal').classList.add('active');
@@ -483,7 +519,7 @@
             document.getElementById('detailModal').classList.remove('active');
         }
 
-        // ===== DOWNLOAD ORDER AS TXT =====
+        // ===== DOWNLOAD ORDER =====
         function downloadOrder(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) {
@@ -495,26 +531,32 @@
             const price = (order.price || 0).toLocaleString('vi-VN');
             const originalPrice = (order.originalPrice || order.price || 0).toLocaleString('vi-VN');
             const time = new Date(order.timestamp).toLocaleString('vi-VN');
+            const categoryName = getCategoryName(order.productCategory);
+            const status = order.status || 'success';
+            const statusText = status === 'success' ? 'THÀNH CÔNG' : 'THẤT BẠI';
             
             const lines = [
-                '='.repeat(50),
-                '📜 HÓA ĐƠN MUA HÀNG',
-                '='.repeat(50),
+                '='.repeat(60),
+                '📜 HÓA ĐƠN MUA HÀNG - KuanZGame.Store',
+                '='.repeat(60),
                 '',
                 '🔑 Mã đơn hàng: ' + code,
                 '📦 Sản phẩm: ' + (order.productName || 'Không tên'),
                 '📝 Mô tả: ' + (order.productDesc || 'Không có'),
                 '📌 Ghi chú: ' + (order.orderNote || 'Không có'),
+                '🏷️ Loại mục: ' + categoryName,
                 '💰 Giá gốc: ' + originalPrice + ' VND',
                 '💰 Giá thanh toán: ' + price + ' VND',
+                '📦 Số lượng: ' + (order.quantity || 1),
                 order.voucher ? '🎫 Mã giảm giá: ' + order.voucher : '',
                 '👤 Người mua: ' + (order.userName || 'Khách hàng'),
+                '🆔 Mã người dùng: ' + (order.userId || 'N/A'),
                 '📅 Thời gian: ' + time,
-                '🆔 User ID: ' + (order.userId || 'N/A'),
+                '📌 Trạng thái: ' + statusText,
                 '',
-                '='.repeat(50),
+                '='.repeat(60),
                 '📌 Cảm ơn bạn đã mua hàng!',
-                '='.repeat(50)
+                '='.repeat(60)
             ].filter(line => line !== '').join('\n');
             
             const blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
@@ -574,6 +616,7 @@
                 document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
             });
             
+            loadCategories();
             loadHistory(user.uid);
             loadNotifications(user.uid);
             
@@ -611,7 +654,6 @@
             }
         }
 
-        // Đường dẫn đến index.html (lùi lại 1 cấp vì đang ở Pages/)
         function goHome() { closeMenu(); window.location.href = '../index.html'; }
         function goHistory() { closeMenu(); window.location.href = 'history.html'; }
         function goTopup() { closeMenu(); alert('💰 Đang phát triển!'); }
