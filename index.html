@@ -159,30 +159,30 @@
             font-weight: 400; 
         }
 
-        /* Brand Grid - hình chữ nhật vuông */
+        /* Brand Grid - hình chữ nhật nhỏ cân giữa */
         .brand-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 16px; 
-            margin-bottom: 20px;
+            display: flex; 
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px; 
+            margin: 12px 0 20px 0;
         }
         .brand-card { 
             background: var(--wallet-bg); 
             border-radius: 12px; 
-            padding: 16px 12px; 
+            padding: 12px 20px; 
             border: 2px solid var(--border-color); 
             transition: 0.3s; 
             text-align: center; 
             cursor: pointer;
-            aspect-ratio: 1 / 1;
+            min-width: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 120px;
         }
         .brand-card:hover { 
-            transform: translateY(-4px); 
+            transform: translateY(-3px); 
             box-shadow: var(--shadow-popup); 
             border-color: var(--accent); 
         }
@@ -194,17 +194,17 @@
         .brand-card.active .brand-name { color: #fff; }
         .brand-card.active .brand-count { color: rgba(255,255,255,0.8); }
         .brand-card .brand-image { 
-            width: 60px; 
-            height: 60px; 
+            width: 50px; 
+            height: 50px; 
             border-radius: 50%; 
             object-fit: cover; 
             background: var(--bg-card);
             border: 2px solid var(--border-color);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 24px;
         }
         .brand-card .brand-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .brand-card .brand-name { 
@@ -214,7 +214,7 @@
             transition: 0.3s;
         }
         .brand-card .brand-count { 
-            font-size: 11px; 
+            font-size: 10px; 
             color: var(--text-muted); 
             margin-top: 2px; 
         }
@@ -242,15 +242,15 @@
             border-color: var(--accent); 
         }
         .product-card .product-image { 
-            width: 80px; 
-            height: 80px; 
+            width: 70px; 
+            height: 70px; 
             border-radius: 10px; 
             object-fit: cover; 
             background: var(--bg-card);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 32px;
             margin: 0 auto 8px;
             border: 1px solid var(--border-color);
         }
@@ -334,10 +334,10 @@
             .menu-icon .bar { width: 18px; height: 2px; }
             .menu-icon .bar:nth-child(1) { transform: translateY(3px); }
             .menu-icon .bar:nth-child(3) { transform: translateY(-3px); }
-            .brand-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+            .brand-card { padding: 8px 14px; min-width: 60px; }
+            .brand-card .brand-image { width: 35px; height: 35px; font-size: 18px; }
+            .brand-card .brand-name { font-size: 11px; }
             .product-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-            .brand-card { min-height: 90px; padding: 12px 8px; }
-            .brand-card .brand-image { width: 45px; height: 45px; font-size: 20px; }
         }
     </style>
 </head>
@@ -408,6 +408,7 @@
 
     <div class="content">
 
+        <!-- ===== INTRO CARD - GIỮ NGUYÊN ===== -->
         <div class="intro-card">
             <div class="intro-top">
                 <div class="intro-top-left">
@@ -428,9 +429,10 @@
             <div class="brand-section-header">
                 <h2>🏷️ Hãng sản phẩm <span id="brandCount"></span></h2>
             </div>
+            
+            <!-- Brand Grid - hình chữ nhật nhỏ cân giữa -->
             <div class="brand-grid" id="brandGrid">
-                <div class="product-empty">
-                    <span class="big-icon">📦</span>
+                <div class="product-empty" style="grid-column:1/-1;padding:20px;">
                     <p>Đang tải danh sách hãng...</p>
                 </div>
             </div>
@@ -470,7 +472,7 @@
                 no_products: 'Chưa có sản phẩm nào',
                 buy: 'Mua ngay',
                 out_of_stock: 'Hết hàng',
-                all_brands: '📦 Tất cả'
+                all_brands: 'Tất cả'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
@@ -479,7 +481,7 @@
                 no_products: 'No products available',
                 buy: 'Buy now',
                 out_of_stock: 'Out of stock',
-                all_brands: '📦 All'
+                all_brands: 'All'
             }
         };
 
@@ -496,7 +498,6 @@
                 const key = el.getAttribute('data-key');
                 if (data[key] !== undefined) el.textContent = data[key];
             });
-            // Cập nhật "Tất cả" trong brand grid
             renderBrands();
         }
 
@@ -582,14 +583,12 @@
 
         // ===== LOAD DATA =====
         function loadData() {
-            // Load brands (categories)
             db.ref('categories').on('value', (snapshot) => {
                 brandsData = snapshot.val() || {};
                 renderBrands();
                 renderProducts();
             });
             
-            // Load products
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
                 renderProducts();
@@ -606,12 +605,13 @@
             countEl.textContent = `(${total} hãng)`;
             
             const allLabel = lang === 'vi' ? '📦 Tất cả' : '📦 All';
+            const allCount = Object.keys(productsData).length;
             
             let html = `
                 <div class="brand-card ${selectedBrand === 'all' ? 'active' : ''}" onclick="selectBrand('all')">
-                    <div class="brand-image" style="font-size:32px;">📦</div>
+                    <div class="brand-image" style="font-size:28px;">📦</div>
                     <div class="brand-name">${allLabel}</div>
-                    <div class="brand-count">${Object.keys(productsData).length} sản phẩm</div>
+                    <div class="brand-count">${allCount} sp</div>
                 </div>
             `;
             
@@ -628,7 +628,7 @@
                             ${imageUrl ? `<img src="${imageUrl}" alt="${brand.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
                         <div class="brand-name">${brand.name || 'Chưa đặt tên'}</div>
-                        <div class="brand-count">${productCount} sản phẩm</div>
+                        <div class="brand-count">${productCount} sp</div>
                     </div>
                 `;
             });
