@@ -149,6 +149,7 @@
         .order-popup .order-item .item-info { flex: 1; }
         .order-popup .order-item .item-info .item-name { font-weight: 600; color: var(--text-primary); }
         .order-popup .order-item .item-info .item-price { color: var(--accent); font-weight: 600; }
+        .order-popup .order-item .item-info .item-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
         .order-popup .order-total { text-align: right; padding: 12px 0; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 2px solid var(--border-color); margin-top: 8px; }
         .order-popup .order-total span { color: var(--accent); }
         .order-popup .order-code { background: var(--wallet-bg); padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--text-muted); margin: 8px 0; display: flex; justify-content: space-between; align-items: center; border: 1px dashed var(--border-color); }
@@ -697,7 +698,7 @@
                 // Tạo mã đơn hàng ngẫu nhiên
                 const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
                 
-                // Lưu đơn hàng
+                // Lưu đơn hàng với đầy đủ thông tin sản phẩm
                 const orderRef = db.ref('orders').push();
                 const orderData = {
                     userId: currentUser.uid,
@@ -721,12 +722,14 @@
                 const historyData = {
                     orderCode: orderCode,
                     productName: product.name,
+                    productDesc: product.description || '',
                     price: price,
                     timestamp: Date.now(),
                     type: 'purchase',
                     encrypted: btoa(JSON.stringify({ 
                         productId: productId,
                         productName: product.name,
+                        productDesc: product.description || '',
                         price: price,
                         voucher: voucherUsed,
                         timestamp: Date.now()
@@ -768,6 +771,7 @@
             const price = orderData.price.toLocaleString('vi-VN');
             currentOrderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
             
+            // Hiển thị đầy đủ thông tin sản phẩm
             container.innerHTML = `
                 <div class="order-item">
                     <div class="item-image">
@@ -776,7 +780,7 @@
                     <div class="item-info">
                         <div class="item-name">${orderData.productName}</div>
                         <div class="item-price">${price} VND</div>
-                        ${orderData.productDesc ? `<div style="font-size:12px;color:var(--text-muted);">${orderData.productDesc}</div>` : ''}
+                        ${orderData.productDesc ? `<div class="item-desc">📝 ${orderData.productDesc}</div>` : ''}
                     </div>
                 </div>
                 ${orderData.voucher ? `<div style="padding:4px 0;color:var(--success);font-size:13px;">🎫 Đã áp mã: ${orderData.voucher}</div>` : ''}
