@@ -109,7 +109,7 @@
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-        .content { padding: 40px 24px; max-width: 800px; margin: 0 auto; }
+        .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
 
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
         .intro-top { display: flex; align-items: center; gap: 10px; }
@@ -127,6 +127,30 @@
         .intro-list li::before { content: "›"; position: absolute; left: 0; color: var(--text-secondary); font-weight: 700; }
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
+
+        /* ===== PRODUCT SECTION ===== */
+        .product-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
+        .product-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .product-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .product-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
+        .category-filter { display: flex; gap: 8px; flex-wrap: wrap; }
+        .category-filter button { padding: 6px 16px; border-radius: 20px; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.3s; }
+        .category-filter button:hover, .category-filter button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; text-align: center; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .product-card .product-icon { font-size: 40px; display: block; margin-bottom: 8px; }
+        .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 14px; }
+        .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 16px; margin: 4px 0; }
+        .product-card .product-category { font-size: 11px; color: var(--text-muted); background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; }
+        .product-card .product-stock { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .product-card .btn-buy { margin-top: 10px; padding: 6px 20px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 13px; width: 100%; }
+        .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
+        .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
         .loading-overlay {
             position: fixed;
@@ -146,8 +170,6 @@
         .loading-overlay.hidden {
             opacity: 0;
             pointer-events: none;
-        }
-        .loading-overlay.hidden {
             display: none !important;
         }
         .loading-spinner {
@@ -182,6 +204,8 @@
             .menu-icon .bar { width: 18px; height: 2px; }
             .menu-icon .bar:nth-child(1) { transform: translateY(3px); }
             .menu-icon .bar:nth-child(3) { transform: translateY(-3px); }
+            .product-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .product-section { padding: 14px; }
         }
     </style>
 </head>
@@ -285,6 +309,22 @@
             </div>
         </div>
 
+        <!-- ===== PRODUCT SECTION ===== -->
+        <div class="product-section" id="productSection">
+            <div class="product-section-header">
+                <h2>🛍️ Danh sách sản phẩm <span id="productCount"></span></h2>
+                <div class="category-filter" id="categoryFilter">
+                    <button class="active" data-category="all">📦 Tất cả</button>
+                </div>
+            </div>
+            <div id="productGrid" class="product-grid">
+                <div class="product-empty">
+                    <span class="big-icon">📦</span>
+                    <p>Đang tải sản phẩm...</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -305,17 +345,26 @@
             vi: { 
                 home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
                 profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
-                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo'
+                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
+                no_products: 'Chưa có sản phẩm nào',
+                buy: 'Mua ngay',
+                out_of_stock: 'Hết hàng'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
                 profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', 
-                notif_title: '📢 Notifications', notif_empty: 'No notifications'
+                notif_title: '📢 Notifications', notif_empty: 'No notifications',
+                no_products: 'No products available',
+                buy: 'Buy now',
+                out_of_stock: 'Out of stock'
             }
         };
 
         let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
+        let currentUser = null;
+        let currentCategory = 'all';
+        let productsData = {};
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -336,16 +385,13 @@
         applyLang();
 
         function hideLoading() {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.add('hidden');
+            document.getElementById('loadingOverlay').classList.add('hidden');
         }
 
         function showLoading() {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.classList.remove('hidden');
+            document.getElementById('loadingOverlay').classList.remove('hidden');
         }
 
-        // ===== KIỂM TRA QUICK LOGIN =====
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -353,7 +399,6 @@
             return !!(quickUid && quickToken && quickPending === 'true');
         }
 
-        // ===== TỰ ĐỘNG ĐĂNG NHẬP BẰNG QUICK LOGIN =====
         async function autoLoginWithQuickToken() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -361,7 +406,6 @@
             if (!quickUid || !quickToken) return false;
             
             try {
-                // Lấy thông tin user từ database
                 const snap = await db.ref('users/' + quickUid).once('value');
                 const userData = snap.val();
                 
@@ -372,14 +416,12 @@
                     return false;
                 }
                 
-                // Cập nhật presence - KHÔNG DÙNG DẤU "."
                 await db.ref('presence/' + quickUid).set(true);
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
                 
-                // Lấy dữ liệu user
                 document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
+                currentUser = { uid: quickUid, ...userData };
                 
-                // Load notifications
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
@@ -402,9 +444,7 @@
                     }
                 });
                 
-                // Không xóa quickLoginPending để giữ trạng thái qua các lần F5
-                // Chỉ xóa khi logout hoặc token hết hạn
-                
+                loadProducts();
                 isDataLoaded = true;
                 hideLoading();
                 return true;
@@ -414,19 +454,158 @@
             }
         }
 
-        // ===== XỬ LÝ AUTH STATE =====
+        // ===== LOAD PRODUCTS =====
+        function loadProducts() {
+            db.ref('products').on('value', (snapshot) => {
+                const data = snapshot.val();
+                productsData = data || {};
+                renderProducts(currentCategory);
+                renderCategoryFilter();
+            });
+        }
+
+        function renderCategoryFilter() {
+            const container = document.getElementById('categoryFilter');
+            const categories = new Set();
+            categories.add('all');
+            
+            Object.keys(productsData).forEach(key => {
+                const product = productsData[key];
+                if (product.category) {
+                    categories.add(product.category);
+                }
+            });
+            
+            let html = '';
+            categories.forEach(cat => {
+                const isActive = cat === currentCategory ? 'active' : '';
+                const label = cat === 'all' ? '📦 Tất cả' : cat;
+                html += `<button class="${isActive}" data-category="${cat}" onclick="filterCategory('${cat}')">${label}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            renderCategoryFilter();
+            renderProducts(category);
+        }
+
+        function renderProducts(category) {
+            const grid = document.getElementById('productGrid');
+            const countEl = document.getElementById('productCount');
+            
+            let filtered = [];
+            let total = 0;
+            
+            Object.keys(productsData).forEach(key => {
+                const product = productsData[key];
+                if (category === 'all' || product.category === category) {
+                    filtered.push({ id: key, ...product });
+                    total++;
+                }
+            });
+            
+            countEl.textContent = `(${total} sản phẩm)`;
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="product-empty" style="grid-column:1/-1;">
+                        <span class="big-icon">📦</span>
+                        <p>${lang === 'vi' ? 'Chưa có sản phẩm nào' : 'No products available'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            filtered.forEach(product => {
+                const isOutOfStock = product.stock <= 0;
+                const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
+                const icon = product.icon || '📦';
+                const stockText = product.stock !== undefined ? `${product.stock} còn lại` : '';
+                
+                html += `
+                    <div class="product-card">
+                        <span class="product-icon">${icon}</span>
+                        <div class="product-name">${product.name || 'Sản phẩm'}</div>
+                        <div class="product-price">${price} VND</div>
+                        <div class="product-category">${product.category || 'Không phân loại'}</div>
+                        <div class="product-stock">${stockText}</div>
+                        <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
+                            ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? 'Mua ngay' : 'Buy now')}
+                        </button>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        // ===== BUY PRODUCT =====
+        function buyProduct(productId) {
+            if (!currentUser) {
+                alert(lang === 'vi' ? 'Vui lòng đăng nhập!' : 'Please login!');
+                return;
+            }
+            
+            const product = productsData[productId];
+            if (!product) {
+                alert(lang === 'vi' ? 'Sản phẩm không tồn tại!' : 'Product not found!');
+                return;
+            }
+            
+            if (product.stock <= 0) {
+                alert(lang === 'vi' ? 'Sản phẩm đã hết hàng!' : 'Product out of stock!');
+                return;
+            }
+            
+            const price = product.price || 0;
+            if (currentUser.balance < price) {
+                alert(lang === 'vi' ? 'Số dư không đủ để mua sản phẩm này!' : 'Insufficient balance!');
+                return;
+            }
+            
+            if (confirm(lang === 'vi' ? `Bạn có chắc muốn mua "${product.name}" với giá ${price.toLocaleString('vi-VN')} VND?` : `Buy "${product.name}" for ${price.toLocaleString('vi-VN')} VND?`)) {
+                showLoading();
+                
+                const updates = {};
+                updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
+                updates[`products/${productId}/stock`] = (product.stock || 1) - 1;
+                
+                // Thêm lịch sử mua hàng
+                const historyRef = db.ref('history/' + currentUser.uid).push();
+                updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = {
+                    productId: productId,
+                    productName: product.name,
+                    price: price,
+                    timestamp: Date.now(),
+                    type: 'purchase'
+                };
+                
+                db.ref().update(updates).then(() => {
+                    hideLoading();
+                    alert(lang === 'vi' ? '✅ Mua hàng thành công!' : '✅ Purchase successful!');
+                    // Cập nhật lại balance
+                    db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
+                        const bal = snap.val() || 0;
+                        document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
+                        currentUser.balance = bal;
+                    });
+                }).catch(err => {
+                    hideLoading();
+                    alert('❌ ' + err.message);
+                });
+            }
+        }
+
+        // ===== AUTH STATE =====
         auth.onAuthStateChanged(async (user) => {
-            // Nếu đã load data rồi thì không làm gì
             if (isDataLoaded) return;
             
-            // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
             if (checkQuickLogin()) {
                 const success = await autoLoginWithQuickToken();
-                if (success) {
-                    // Đã login thành công bằng quick token
-                    return;
-                }
-                // Nếu fail thì xóa và chuyển về login
+                if (success) return;
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
@@ -434,14 +613,12 @@
                 return;
             }
             
-            // Nếu không có user, chuyển về login
             if (!user) { 
                 window.location.replace('Authenticator/login.html'); 
                 return; 
             }
             
             try {
-                // Kiểm tra user có bị block không
                 const blockSnap = await db.ref('users/' + user.uid + '/blocked').once('value');
                 if (blockSnap.val() === true) {
                     await auth.signOut();
@@ -449,15 +626,14 @@
                     return;
                 }
 
-                // Cập nhật presence - KHÔNG DÙNG DẤU "."
                 await db.ref('presence/' + user.uid).set(true);
                 db.ref('presence/' + user.uid).onDisconnect().set(false);
                 
-                // Lấy dữ liệu user
                 db.ref('users/' + user.uid).on('value', snap => {
                     const data = snap.val();
                     if (data) {
                         document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
+                        currentUser = { uid: user.uid, ...data };
                     }
                     if (!isDataLoaded) {
                         isDataLoaded = true;
@@ -465,7 +641,6 @@
                     }
                 });
 
-                // Lấy thông báo
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
@@ -487,6 +662,9 @@
                         dot.classList.remove('show'); 
                     }
                 });
+                
+                // Load products sau khi auth
+                loadProducts();
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
@@ -568,10 +746,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // Hiển thị loading khi trang bắt đầu load
         showLoading();
-
-        // Ẩn loading sau 5s nếu không có gì xảy ra
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
