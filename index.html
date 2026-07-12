@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; }
+        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --accent: #3b8fd6; --success: #27ae60; --danger: #e74c6f; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -26,48 +26,16 @@
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
         .logo span { color: var(--text-secondary); }
         
-        .menu-icon { 
-            cursor: pointer; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            background: var(--wallet-bg); 
-            border: 1px solid var(--border-color); 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            gap: 5px; 
-            transition: 0.3s; 
-            width: 40px;
-            height: 40px;
-            justify-content: center;
-        }
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.3s; width: 40px; height: 40px; justify-content: center; }
         .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { 
-            display: block; 
-            width: 22px; 
-            height: 2.5px; 
-            background: var(--text-secondary); 
-            border-radius: 4px; 
-            transition: 0.3s;
-        }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: 0.3s; }
         .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
         .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-        .wallet-container {
-            background: var(--wallet-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px 16px 6px 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            cursor: default;
-            min-height: 44px;
-        }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: 0.3s; cursor: default; min-height: 44px; }
         .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
         .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
@@ -119,205 +87,65 @@
         .intro-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
         .intro-body { margin-top: 16px; }
         .intro-lead { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); }
-        .intro-section { padding-top: 12px; }
-        .intro-section + .intro-section { margin-top: 4px; }
-        .intro-section-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-        .intro-list { list-style: none; }
-        .intro-list li { position: relative; padding-left: 16px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 4px; }
-        .intro-list li::before { content: "›"; position: absolute; left: 0; color: var(--text-secondary); font-weight: 700; }
-        .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
-        .intro-footer span { color: var(--accent); }
 
-        /* ===== BRAND / CATEGORY SECTION ===== */
-        .brand-section { 
-            background: var(--bg-card); 
-            border-radius: 16px; 
-            padding: 20px 22px; 
-            box-shadow: var(--shadow); 
-            border: 1px solid var(--border-color); 
-            margin-bottom: 16px; 
-            transition: 0.3s; 
-        }
-        .brand-section-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 16px; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-        }
-        .brand-section-header h2 { 
-            font-size: 18px; 
-            color: var(--text-primary); 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-        }
-        .brand-section-header h2 span { 
-            color: var(--text-secondary); 
-            font-size: 14px; 
-            font-weight: 400; 
-        }
-
-        /* Brand Grid - hình chữ nhật nhỏ cân giữa */
-        .brand-grid { 
-            display: flex; 
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px; 
-            margin: 12px 0 20px 0;
-        }
-        .brand-card { 
-            background: var(--wallet-bg); 
-            border-radius: 12px; 
-            padding: 12px 20px; 
-            border: 2px solid var(--border-color); 
-            transition: 0.3s; 
-            text-align: center; 
-            cursor: pointer;
-            min-width: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .brand-card:hover { 
-            transform: translateY(-3px); 
-            box-shadow: var(--shadow-popup); 
-            border-color: var(--accent); 
-        }
-        .brand-card.active { 
-            border-color: var(--accent); 
-            background: var(--accent); 
-            color: #fff;
-        }
+        /* Brand Grid */
+        .brand-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
+        .brand-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .brand-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .brand-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
+        .brand-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 12px 0 20px 0; }
+        .brand-card { background: var(--wallet-bg); border-radius: 12px; padding: 12px 20px; border: 2px solid var(--border-color); transition: 0.3s; text-align: center; cursor: pointer; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .brand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .brand-card.active { border-color: var(--accent); background: var(--accent); color: #fff; }
         .brand-card.active .brand-name { color: #fff; }
         .brand-card.active .brand-count { color: rgba(255,255,255,0.8); }
-        .brand-card .brand-image { 
-            width: 50px; 
-            height: 50px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
+        .brand-card .brand-image { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); margin-bottom: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
         .brand-card .brand-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .brand-card .brand-name { 
-            font-weight: 600; 
-            color: var(--text-primary); 
-            font-size: 13px; 
-            transition: 0.3s;
-        }
-        .brand-card .brand-count { 
-            font-size: 10px; 
-            color: var(--text-muted); 
-            margin-top: 2px; 
-        }
+        .brand-card .brand-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: 0.3s; }
+        .brand-card .brand-count { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-        /* Product grid khi chọn brand */
-        .product-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
-            gap: 16px; 
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 2px solid var(--border-color);
-        }
-        .product-card { 
-            background: var(--wallet-bg); 
-            border-radius: 12px; 
-            padding: 14px; 
-            border: 1px solid var(--border-color); 
-            transition: 0.3s; 
-            text-align: center; 
-        }
-        .product-card:hover { 
-            transform: translateY(-4px); 
-            box-shadow: var(--shadow-popup); 
-            border-color: var(--accent); 
-        }
-        .product-card .product-image { 
-            width: 70px; 
-            height: 70px; 
-            border-radius: 10px; 
-            object-fit: cover; 
-            background: var(--bg-card);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 8px;
-            border: 1px solid var(--border-color);
-        }
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
+        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; gap: 14px; align-items: center; }
+        .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .product-card .product-image { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
-        .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 14px; }
-        .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 16px; margin: 4px 0; }
-        .product-card .product-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0; line-height: 1.4; }
-        .product-card .btn-buy { 
-            margin-top: 10px; 
-            padding: 6px 20px; 
-            background: var(--accent); 
-            color: #fff; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            font-size: 13px; 
-            width: 100%; 
-        }
+        .product-card .product-info { flex: 1; min-width: 0; }
+        .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 15px; }
+        .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 17px; margin: 2px 0; }
+        .product-card .product-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+        .product-card .product-stats { display: flex; gap: 12px; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .product-card .product-stats .stat { display: flex; align-items: center; gap: 4px; }
+        .product-card .btn-buy { margin-top: 6px; padding: 5px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 13px; }
         .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        .product-empty { 
-            text-align: center; 
-            padding: 40px 20px; 
-            color: var(--text-muted); 
-            grid-column: 1/-1;
-        }
+        .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-body);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
-            transition: 0.5s;
-        }
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-            display: none !important;
-        }
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border-color);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loading-text {
-            color: var(--text-primary);
-            font-size: 16px;
-            font-weight: 500;
-        }
+        /* Order Popup */
+        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
+        .order-popup-overlay.active { display: flex; }
+        .order-popup { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 420px; width: 92%; border: 2px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; }
+        .order-popup .close-btn { position: absolute; top: 12px; right: 16px; font-size: 24px; cursor: pointer; color: var(--text-muted); transition: 0.3s; background: none; border: none; }
+        .order-popup .close-btn:hover { color: var(--danger); }
+        .order-popup h3 { color: var(--success); text-align: center; margin-bottom: 12px; }
+        .order-popup .order-item { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .order-popup .order-item .item-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; }
+        .order-popup .order-item .item-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .order-popup .order-item .item-info { flex: 1; }
+        .order-popup .order-item .item-info .item-name { font-weight: 600; color: var(--text-primary); }
+        .order-popup .order-item .item-info .item-price { color: var(--accent); font-weight: 600; }
+        .order-popup .order-total { text-align: right; padding: 12px 0; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 2px solid var(--border-color); margin-top: 8px; }
+        .order-popup .order-total span { color: var(--accent); }
+        .order-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 12px; }
+        .order-popup .btn-done:hover { transform: scale(1.02); }
+
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
+        .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
+        .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
 
         @media (max-width: 600px) { 
             .header { padding: 10px 12px; } 
@@ -337,7 +165,9 @@
             .brand-card { padding: 8px 14px; min-width: 60px; }
             .brand-card .brand-image { width: 35px; height: 35px; font-size: 18px; }
             .brand-card .brand-name { font-size: 11px; }
-            .product-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .product-grid { grid-template-columns: 1fr; }
+            .product-card .product-image { width: 60px; height: 60px; font-size: 28px; }
+            .order-popup { padding: 16px; }
         }
     </style>
 </head>
@@ -365,7 +195,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">🛒 <span>Shop</span></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -406,9 +236,19 @@
         <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
     </div>
 
+    <!-- Order Popup -->
+    <div class="order-popup-overlay" id="orderPopup">
+        <div class="order-popup">
+            <button class="close-btn" onclick="closeOrderPopup()">✕</button>
+            <h3>✅ Đặt hàng thành công!</h3>
+            <div id="orderItems"></div>
+            <div class="order-total">Tổng tiền: <span id="orderTotal">0</span> VND</div>
+            <button class="btn-done" onclick="closeOrderPopup()">📋 Đóng</button>
+        </div>
+    </div>
+
     <div class="content">
 
-        <!-- ===== INTRO CARD - GIỮ NGUYÊN ===== -->
         <div class="intro-card">
             <div class="intro-top">
                 <div class="intro-top-left">
@@ -424,20 +264,16 @@
             </div>
         </div>
 
-        <!-- ===== BRAND / CATEGORY SECTION ===== -->
         <div class="brand-section" id="brandSection">
             <div class="brand-section-header">
                 <h2>🏷️ Hãng sản phẩm <span id="brandCount"></span></h2>
             </div>
-            
-            <!-- Brand Grid - hình chữ nhật nhỏ cân giữa -->
             <div class="brand-grid" id="brandGrid">
                 <div class="product-empty" style="grid-column:1/-1;padding:20px;">
                     <p>Đang tải danh sách hãng...</p>
                 </div>
             </div>
 
-            <!-- Product list -->
             <div id="productContainer">
                 <div class="product-grid" id="productGrid">
                     <div class="product-empty">
@@ -472,7 +308,9 @@
                 no_products: 'Chưa có sản phẩm nào',
                 buy: 'Mua ngay',
                 out_of_stock: 'Hết hàng',
-                all_brands: 'Tất cả'
+                all_brands: 'Tất cả',
+                in_stock: 'Còn',
+                sold: 'Đã bán'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
@@ -481,7 +319,9 @@
                 no_products: 'No products available',
                 buy: 'Buy now',
                 out_of_stock: 'Out of stock',
-                all_brands: 'All'
+                all_brands: 'All',
+                in_stock: 'In stock',
+                sold: 'Sold'
             }
         };
 
@@ -491,6 +331,7 @@
         let selectedBrand = 'all';
         let brandsData = {};
         let productsData = {};
+        let ordersData = {};
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -528,24 +369,18 @@
 
         async function autoLoginWithQuickToken() {
             const quickUid = localStorage.getItem('quickLoginUid');
-            const quickToken = localStorage.getItem('quickLoginToken');
-            
-            if (!quickUid || !quickToken) return false;
-            
+            if (!quickUid) return false;
             try {
                 const snap = await db.ref('users/' + quickUid).once('value');
                 const userData = snap.val();
-                
                 if (!userData || userData.blocked === true) {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginToken');
                     localStorage.removeItem('quickLoginPending');
                     return false;
                 }
-                
                 await db.ref('presence/' + quickUid).set(true);
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
-                
                 document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
                 currentUser = { uid: quickUid, ...userData };
                 
@@ -555,8 +390,7 @@
                     const dot = document.getElementById('notifDot');
                     if (notifs) {
                         const keys = Object.keys(notifs).reverse();
-                        let html = '',
-                            hasUnread = false;
+                        let html = '', hasUnread = false;
                         keys.forEach(key => {
                             const n = notifs[key];
                             const isUnread = !n.readBy || !n.readBy[quickUid];
@@ -581,28 +415,23 @@
             }
         }
 
-        // ===== LOAD DATA =====
         function loadData() {
             db.ref('categories').on('value', (snapshot) => {
                 brandsData = snapshot.val() || {};
                 renderBrands();
                 renderProducts();
             });
-            
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
                 renderProducts();
             });
         }
 
-        // ===== RENDER BRANDS =====
         function renderBrands() {
             const grid = document.getElementById('brandGrid');
             const countEl = document.getElementById('brandCount');
-            
             const keys = Object.keys(brandsData);
-            const total = keys.length;
-            countEl.textContent = `(${total} hãng)`;
+            countEl.textContent = `(${keys.length} hãng)`;
             
             const allLabel = lang === 'vi' ? '📦 Tất cả' : '📦 All';
             const allCount = Object.keys(productsData).length;
@@ -636,18 +465,16 @@
             grid.innerHTML = html;
         }
 
-        // ===== SELECT BRAND =====
         function selectBrand(brandId) {
             selectedBrand = brandId;
             renderBrands();
             renderProducts();
         }
 
-        // ===== RENDER PRODUCTS =====
         function renderProducts() {
             const grid = document.getElementById('productGrid');
-            
             let filtered = [];
+            
             if (selectedBrand === 'all') {
                 Object.keys(productsData).forEach(key => {
                     filtered.push({ id: key, ...productsData[key] });
@@ -680,18 +507,28 @@
                 const image = product.image || '';
                 const icon = product.icon || '📦';
                 const desc = product.description || '';
+                const sold = product.sold || 0;
+                const stock = product.stock || 0;
+                const inStockLabel = lang === 'vi' ? 'Còn' : 'In stock';
+                const soldLabel = lang === 'vi' ? 'Đã bán' : 'Sold';
                 
                 html += `
                     <div class="product-card">
                         <div class="product-image">
                             ${image ? `<img src="${image}" alt="${product.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
                         </div>
-                        <div class="product-name">${product.name || 'Sản phẩm'}</div>
-                        <div class="product-price">${price} VND</div>
-                        ${desc ? `<div class="product-desc">${desc}</div>` : ''}
-                        <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
-                            ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? 'Mua ngay' : 'Buy now')}
-                        </button>
+                        <div class="product-info">
+                            <div class="product-name">${product.name || 'Sản phẩm'}</div>
+                            <div class="product-price">${price} VND</div>
+                            ${desc ? `<div class="product-desc">${desc}</div>` : ''}
+                            <div class="product-stats">
+                                <span class="stat">📦 ${inStockLabel}: ${stock}</span>
+                                <span class="stat">📈 ${soldLabel}: ${sold}</span>
+                            </div>
+                            <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
+                                ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? '🛒 Mua ngay' : '🛒 Buy now')}
+                            </button>
+                        </div>
                     </div>
                 `;
             });
@@ -729,7 +566,24 @@
                 const updates = {};
                 updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
                 updates[`products/${productId}/stock`] = (product.stock || 1) - 1;
+                updates[`products/${productId}/sold`] = (product.sold || 0) + 1;
                 
+                // Lưu đơn hàng
+                const orderRef = db.ref('orders').push();
+                const orderData = {
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || currentUser.email || 'Khách hàng',
+                    productId: productId,
+                    productName: product.name,
+                    productImage: product.image || '',
+                    productIcon: product.icon || '📦',
+                    price: price,
+                    timestamp: Date.now(),
+                    status: 'completed'
+                };
+                updates[orderRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = orderData;
+                
+                // Lưu lịch sử
                 const historyRef = db.ref('history/' + currentUser.uid).push();
                 updates[historyRef.toString().replace('https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app/', '')] = {
                     productId: productId,
@@ -741,7 +595,9 @@
                 
                 db.ref().update(updates).then(() => {
                     hideLoading();
-                    alert(lang === 'vi' ? '✅ Mua hàng thành công!' : '✅ Purchase successful!');
+                    // Hiển thị popup đơn hàng
+                    showOrderPopup(orderData);
+                    // Cập nhật balance
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
@@ -752,6 +608,41 @@
                     alert('❌ ' + err.message);
                 });
             }
+        }
+
+        // ===== ORDER POPUP =====
+        function showOrderPopup(orderData) {
+            const popup = document.getElementById('orderPopup');
+            const container = document.getElementById('orderItems');
+            const totalEl = document.getElementById('orderTotal');
+            
+            const image = orderData.productImage || orderData.productIcon || '📦';
+            const price = orderData.price.toLocaleString('vi-VN');
+            
+            container.innerHTML = `
+                <div class="order-item">
+                    <div class="item-image">
+                        ${orderData.productImage ? `<img src="${orderData.productImage}" alt="${orderData.productName}" onerror="this.style.display='none';this.parentElement.textContent='${orderData.productIcon || '📦'}'" />` : (orderData.productIcon || '📦')}
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">${orderData.productName}</div>
+                        <div class="item-price">${price} VND</div>
+                    </div>
+                </div>
+                <div style="padding:8px 0;color:var(--text-muted);font-size:13px;">
+                    👤 ${orderData.userName}
+                </div>
+                <div style="padding:8px 0;color:var(--text-muted);font-size:13px;">
+                    📅 ${new Date(orderData.timestamp).toLocaleString('vi-VN')}
+                </div>
+            `;
+            
+            totalEl.textContent = price;
+            popup.classList.add('active');
+        }
+
+        function closeOrderPopup() {
+            document.getElementById('orderPopup').classList.remove('active');
         }
 
         // ===== AUTH STATE =====
@@ -802,8 +693,7 @@
                     const dot = document.getElementById('notifDot');
                     if (notifs) {
                         const keys = Object.keys(notifs).reverse();
-                        let html = '',
-                            hasUnread = false;
+                        let html = '', hasUnread = false;
                         keys.forEach(key => {
                             const n = notifs[key];
                             const isUnread = !n.readBy || !n.readBy[user.uid];
@@ -853,29 +743,18 @@
             if (user && localStorage.getItem('autoView') !== 'false') {
                 db.ref('notifications').once('value', snap => {
                     const notifs = snap.val();
-                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + user.uid)
-                        .set(true));
+                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + user.uid).set(true));
                 });
                 document.getElementById('notifDot').classList.remove('show');
             }
         }
 
-        function goHome() { closeMenu();
-            window.location.href = 'index.html'; }
-
-        function goHistory() { closeMenu();
-            alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
-
-        function goTopup() { closeMenu();
-            alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
-
-        function goSupport() { closeMenu();
-            alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
-
+        function goHome() { closeMenu(); window.location.href = 'index.html'; }
+        function goHistory() { closeMenu(); alert(lang === 'vi' ? '📜 Đang phát triển!' : '📜 Coming soon!'); }
+        function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
+        function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
         function goToProfile() { window.location.href = 'Pop-up/profile.html'; }
-
         function goToSecurity() { window.location.href = 'Pop-up/security.html'; }
-
         function goToSettings() { window.location.href = 'Pop-up/settings.html'; }
 
         function logout() { 
@@ -895,8 +774,7 @@
         }
 
         window.addEventListener('storage', function(e) {
-            if (e.key === 'lang') { lang = e.newValue || 'vi';
-                applyLang(); }
+            if (e.key === 'lang') { lang = e.newValue || 'vi'; applyLang(); }
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
