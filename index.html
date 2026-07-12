@@ -40,7 +40,6 @@
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
 
-        /* ===== HEADER ===== */
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
@@ -82,7 +81,6 @@
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
 
-        /* ===== NOTIFICATIONS ===== */
         .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
@@ -96,7 +94,6 @@
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
         .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
 
-        /* ===== SIDE MENU ===== */
         .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
@@ -109,7 +106,6 @@
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
 
-        /* ===== CONTENT ===== */
         .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
 
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: var(--transition); }
@@ -148,7 +144,6 @@
         .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: var(--transition); }
         .category-item .cat-count { font-size: 10px; color: var(--text-muted); }
 
-        /* ===== PRODUCT GRID ===== */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
         .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; flex-direction: column; }
         .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
@@ -166,7 +161,6 @@
         .product-card .product-stats .stat.in-stock { color: var(--success); }
         .product-card .product-stats .stat.sold { color: var(--text-secondary); }
 
-        /* ===== NÚT MUA HÀNG ===== */
         .product-card .btn-buy { 
             margin-top: 10px; 
             padding: 8px 20px; 
@@ -186,7 +180,7 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* ===== ORDER POPUP (GIAO DIỆN MUA HÀNG) ===== */
+        /* Order Popup */
         .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .order-popup-overlay.active { display: flex; }
         .order-popup { 
@@ -226,7 +220,6 @@
         .order-popup .popup-body .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
         .order-popup .popup-body .info-row .label { color: var(--text-muted); }
         
-        /* ===== TĂNG/GIẢM SỐ LƯỢNG ===== */
         .quantity-control { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 12px 0; }
         .quantity-control .qty-btn { 
             width: 40px; height: 40px; 
@@ -247,7 +240,6 @@
         .quantity-control .qty-btn:disabled:hover { background: var(--wallet-bg); color: var(--text-primary); border-color: var(--border-color); }
         .quantity-control .qty-number { font-size: 24px; font-weight: 700; color: var(--text-primary); min-width: 40px; text-align: center; }
         
-        /* ===== MÃ GIẢM GIÁ TRONG POPUP ===== */
         .voucher-popup-section { display: flex; gap: 8px; margin: 8px 0 12px; }
         .voucher-popup-section input { 
             flex: 1; 
@@ -277,7 +269,6 @@
         .voucher-popup-section .apply-voucher-btn:hover { transform: scale(1.05); opacity: 0.9; }
         .voucher-popup-section .applied-voucher { color: var(--success); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
         
-        /* ===== TỔNG TIỀN ===== */
         .order-popup .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--border-color); margin-top: 8px; font-size: 18px; font-weight: 700; color: var(--text-primary); }
         .order-popup .total-row span { color: var(--accent); }
         
@@ -297,7 +288,6 @@
         .order-popup .btn-confirm:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
         .order-popup .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* ===== RESULT POPUP ===== */
         .result-popup .popup-header .status-icon { font-size: 48px; display: block; margin-bottom: 8px; }
         .result-popup .popup-header h3 { color: var(--success); font-size: 20px; }
         .result-popup .popup-header .order-code { color: var(--text-muted); font-size: 13px; font-family: monospace; background: var(--wallet-bg); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
@@ -315,14 +305,12 @@
         .result-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 12px; }
         .result-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
-        /* ===== LOADING ===== */
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
         .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
 
-        /* ===== TOAST ===== */
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.success { border-color: var(--success); color: var(--success); }
@@ -379,7 +367,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">KuanZGame.Store</div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -418,7 +406,7 @@
         <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
-    <!-- Order Popup (MUA HÀNG) -->
+    <!-- Order Popup -->
     <div class="order-popup-overlay" id="orderPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeOrderPopup()"><i class="fas fa-times"></i></button>
@@ -433,21 +421,18 @@
                 <div class="info-row"><span class="label"><i class="fas fa-user"></i> Số dư của bạn</span><span id="popupBalance">0 VND</span></div>
             </div>
             
-            <!-- Tăng/Giảm số lượng -->
             <div class="quantity-control">
                 <button class="qty-btn" id="qtyMinus" onclick="changeQuantity(-1)"><i class="fas fa-minus"></i></button>
                 <span class="qty-number" id="qtyNumber">1</span>
                 <button class="qty-btn" id="qtyPlus" onclick="changeQuantity(1)"><i class="fas fa-plus"></i></button>
             </div>
             
-            <!-- Mã giảm giá trong popup -->
             <div class="voucher-popup-section">
                 <input type="text" id="popupVoucherInput" placeholder="Nhập mã giảm giá" />
                 <button class="apply-voucher-btn" onclick="applyPopupVoucher()"><i class="fas fa-ticket-alt"></i> Áp</button>
                 <span id="popupVoucherStatus"></span>
             </div>
             
-            <!-- Tổng tiền -->
             <div class="total-row">
                 <span>Tổng tiền</span>
                 <span id="popupTotalPrice">0 VND</span>
@@ -457,7 +442,7 @@
         </div>
     </div>
 
-    <!-- Result Popup (KẾT QUẢ SAU KHI MUA) -->
+    <!-- Result Popup -->
     <div class="order-popup-overlay result-popup" id="resultPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeResultPopup()"><i class="fas fa-times"></i></button>
@@ -508,7 +493,6 @@
             </div>
         </div>
 
-        <!-- MỤC SẢN PHẨM -->
         <div class="category-section" id="categorySection">
             <div class="category-section-header">
                 <h2><i class="fas fa-folder"></i> Mục sản phẩm <span id="categoryCount"></span></h2>
@@ -547,7 +531,6 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
         let currentUser = null;
         let selectedCategory = 'all';
@@ -555,7 +538,6 @@
         let productsData = {};
         let vouchersData = {};
         
-        // Biến cho popup mua hàng
         let currentProduct = null;
         let currentQuantity = 1;
         let currentVoucherCode = null;
@@ -736,13 +718,14 @@
             
             let html = '';
             filtered.forEach(product => {
-                const isOutOfStock = product.stock <= 0;
+                // Lấy số lượng tồn kho từ data (mảng dữ liệu)
+                const stock = product.data ? product.data.length : 0;
+                const isOutOfStock = stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
                 const image = product.image || '';
                 const icon = product.icon || '📦';
                 const desc = product.description || '';
                 const sold = product.sold || 0;
-                const stock = product.stock || 0;
                 
                 html += `
                     <div class="product-card">
@@ -778,7 +761,8 @@
                 return;
             }
             
-            if (product.stock <= 0) {
+            const stock = product.data ? product.data.length : 0;
+            if (stock <= 0) {
                 showToast('Sản phẩm đã hết hàng!', 'error');
                 return;
             }
@@ -788,12 +772,11 @@
             currentVoucherCode = null;
             currentVoucherDiscount = 0;
             
-            // Cập nhật UI popup
             const icon = product.image ? `<img src="${product.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;" onerror="this.parentElement.textContent='${product.icon || '📦'}'" />` : (product.icon || '📦');
             document.getElementById('popupProductIcon').innerHTML = icon;
             document.getElementById('popupProductName').textContent = product.name || 'Sản phẩm';
             document.getElementById('popupProductPrice').textContent = (product.price || 0).toLocaleString('vi-VN') + ' VND';
-            document.getElementById('popupStock').textContent = product.stock || 0;
+            document.getElementById('popupStock').textContent = stock;
             document.getElementById('popupBalance').textContent = (currentUser?.balance || 0).toLocaleString('vi-VN') + ' VND';
             document.getElementById('qtyNumber').textContent = '1';
             document.getElementById('popupVoucherInput').value = '';
@@ -807,9 +790,10 @@
         // ===== TĂNG/GIẢM SỐ LƯỢNG =====
         function changeQuantity(delta) {
             if (!currentProduct) return;
+            const stock = currentProduct.data ? currentProduct.data.length : 0;
             const newQty = currentQuantity + delta;
             if (newQty < 1) return;
-            if (newQty > currentProduct.stock) {
+            if (newQty > stock) {
                 showToast('Số lượng vượt quá tồn kho!', 'error');
                 return;
             }
@@ -818,7 +802,7 @@
             updateTotalPrice();
         }
 
-        // ===== ÁP MÃ GIẢM GIÁ TRONG POPUP =====
+        // ===== ÁP MÃ GIẢM GIÁ =====
         function applyPopupVoucher() {
             const input = document.getElementById('popupVoucherInput');
             const code = input.value.trim().toUpperCase();
@@ -826,7 +810,7 @@
             
             if (!code) {
                 statusEl.textContent = '⚠️ Nhập mã giảm giá!';
-                statusEl.className = 'voucher-applied';
+                statusEl.className = 'applied-voucher';
                 statusEl.style.color = 'var(--danger)';
                 return;
             }
@@ -834,14 +818,14 @@
             const voucher = vouchersData[code];
             if (!voucher) {
                 statusEl.textContent = '❌ Mã không hợp lệ!';
-                statusEl.className = 'voucher-applied';
+                statusEl.className = 'applied-voucher';
                 statusEl.style.color = 'var(--danger)';
                 return;
             }
             
             if (voucher.usedCount >= voucher.maxUses) {
                 statusEl.textContent = '❌ Mã đã hết lượt!';
-                statusEl.className = 'voucher-applied';
+                statusEl.className = 'applied-voucher';
                 statusEl.style.color = 'var(--danger)';
                 return;
             }
@@ -854,7 +838,7 @@
                 currentVoucherDiscount = voucher.value;
                 statusEl.textContent = `✅ Giảm ${voucher.value.toLocaleString('vi-VN')}đ`;
             }
-            statusEl.className = 'voucher-applied';
+            statusEl.className = 'applied-voucher';
             statusEl.style.color = 'var(--success)';
             
             updateTotalPrice();
@@ -881,7 +865,7 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== XÁC NHẬN MUA HÀNG =====
+        // ===== XÁC NHẬN MUA =====
         function confirmOrder() {
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
@@ -893,7 +877,8 @@
                 return;
             }
             
-            if (currentProduct.stock < currentQuantity) {
+            const stock = currentProduct.data ? currentProduct.data.length : 0;
+            if (stock < currentQuantity) {
                 showToast('Số lượng vượt quá tồn kho!', 'error');
                 return;
             }
@@ -929,12 +914,18 @@
             
             showLoading();
             
+            // Lấy dữ liệu sản phẩm cần bán (lấy currentQuantity phần tử đầu tiên)
+            const dataList = currentProduct.data || [];
+            const soldData = dataList.slice(0, currentQuantity);
+            const remainingData = dataList.slice(currentQuantity);
+            
             const updates = {};
             updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
-            updates[`products/${currentProduct.id}/stock`] = (currentProduct.stock || 0) - currentQuantity;
+            updates[`products/${currentProduct.id}/data`] = remainingData;
             updates[`products/${currentProduct.id}/sold`] = (currentProduct.sold || 0) + currentQuantity;
             
             const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const orderDataStr = soldData.join('\n');
             
             const orderRef = db.ref('orders').push();
             const orderData = {
@@ -952,6 +943,7 @@
                 voucher: voucherUsed,
                 discountText: discountText,
                 orderCode: orderCode,
+                orderData: orderDataStr,
                 timestamp: Date.now(),
                 status: 'success'
             };
@@ -967,6 +959,7 @@
                 quantity: currentQuantity,
                 voucher: voucherUsed,
                 discountText: discountText,
+                orderData: orderDataStr,
                 status: 'success',
                 timestamp: Date.now(),
                 type: 'purchase'
@@ -986,13 +979,16 @@
                     document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                     currentUser.balance = bal;
                 });
+                // Cập nhật lại productsData local
+                productsData[currentProduct.id].data = remainingData;
+                productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                renderProducts();
             }).catch(err => {
                 hideLoading();
                 showToast('❌ ' + err.message, 'error');
             });
         }
 
-        // ===== CLOSE ORDER POPUP =====
         function closeOrderPopup() {
             document.getElementById('orderPopup').classList.remove('active');
             currentProduct = null;
@@ -1001,7 +997,6 @@
             currentVoucherDiscount = 0;
         }
 
-        // ===== RESULT POPUP =====
         function showResultPopup(orderData) {
             const popup = document.getElementById('resultPopup');
             const grid = document.getElementById('resultInfoGrid');
@@ -1021,6 +1016,7 @@
             codeText.textContent = orderCode;
             
             const categoryName = categoriesData[orderData.productCategory]?.name || orderData.productCategory || 'Không có';
+            const orderDataStr = orderData.orderData || 'Không có dữ liệu';
             
             grid.innerHTML = `
                 <div class="info-item"><div class="label"><i class="fas fa-user"></i> Người mua</div><div class="value">${orderData.userName || 'Khách hàng'}</div></div>
@@ -1032,6 +1028,7 @@
                 <div class="info-item"><div class="label"><i class="fas fa-dollar-sign"></i> Giá</div><div class="value" style="color:var(--accent);">${price} VND</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-check-circle"></i> Trạng thái</div><div class="value ${isSuccess ? 'status-success' : 'status-failed'}">${isSuccess ? '✅ Thành công' : '❌ Thất bại'}</div></div>
                 ${orderData.voucher ? `<div class="info-item full"><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div><div class="value" style="color:var(--success);">${orderData.voucher} ${orderData.discountText || ''}</div></div>` : ''}
+                <div class="info-item full"><div class="label"><i class="fas fa-database"></i> Dữ liệu nhận được</div><div class="value" style="font-weight:400;font-size:12px;font-family:monospace;background:var(--bg-card);padding:6px 10px;border-radius:4px;border:1px solid var(--border-color);word-break:break-all;">${orderDataStr}</div></div>
             `;
             
             const image = orderData.productImage || orderData.productIcon || '📦';
@@ -1055,7 +1052,7 @@
             document.getElementById('resultPopup').classList.remove('active');
         }
 
-        // ===== AUTH STATE =====
+        // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
             if (isDataLoaded) return;
             
@@ -1125,7 +1122,7 @@
             }
         });
 
-        // ===== MENU FUNCTIONS =====
+        // ===== MENU =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -1183,15 +1180,10 @@
             }
         }
 
-        // ===== KEYBOARD EVENTS =====
         document.getElementById('popupVoucherInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') applyPopupVoucher();
         });
 
-        document.getElementById('qtyMinus').addEventListener('click', function() { changeQuantity(-1); });
-        document.getElementById('qtyPlus').addEventListener('click', function() { changeQuantity(1); });
-
-        // Đóng popup khi click overlay
         document.getElementById('orderPopup').addEventListener('click', function(e) {
             if (e.target === this) closeOrderPopup();
         });
