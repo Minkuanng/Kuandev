@@ -40,11 +40,9 @@
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
         
-        /* ===== HEADER ===== */
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
-        .logo span { color: var(--text-secondary); }
         
         .menu-icon { cursor: pointer; padding: 8px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: var(--transition); width: 38px; height: 38px; flex-shrink: 0; }
         .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
@@ -67,12 +65,10 @@
         .bell-icon .bell-dot { width: 9px; height: 9px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
         .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-        
         .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
-        
         .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
@@ -80,7 +76,6 @@
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
-        
         .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
@@ -93,7 +88,6 @@
         .notif-popup .notif-item.unread i { color: #e74c6f; }
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
         .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
-        
         .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
@@ -105,7 +99,6 @@
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-        
         .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
         
         .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); margin-bottom: 16px; }
@@ -146,8 +139,8 @@
         .user-card .user-status.offline { background: #f8d7da; color: #721c24; }
         .user-card .user-status.blocked { background: #fff3cd; color: #856404; }
         .user-card .user-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
-        .user-card .user-actions button { padding: 4px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
-        .user-card .user-actions button:hover { transform: scale(1.05); }
+        .user-card .user-actions button { padding: 5px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .user-card .user-actions button:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
         .user-card .user-actions .add-money { background: var(--success); color: #fff; }
         .user-card .user-actions .sub-money { background: var(--danger); color: #fff; }
         .user-card .user-actions .block-btn { background: var(--warning); color: #fff; }
@@ -157,7 +150,7 @@
         .order-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
         .order-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 14px; align-items: center; }
         .order-item-admin:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: var(--shadow); }
-        .order-item-admin .order-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid var(--border-color); flex-shrink: 0; }
+        .order-item-admin .order-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
         .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
         .order-item-admin .order-info { flex: 1; min-width: 0; }
         .order-item-admin .order-info .order-name { font-weight: 600; color: var(--text-primary); font-size: 14px; }
@@ -226,16 +219,17 @@
         /* ===== MODAL ===== */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 520px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 560px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
         @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 20px; }
         .modal .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 80px; font-weight: 500; }
+        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 90px; font-weight: 500; }
         .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 100px; }
         .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .modal .row textarea { min-height: 60px; resize: vertical; font-family: inherit; }
+        .modal .row textarea { min-height: 80px; resize: vertical; font-family: inherit; }
         .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; }
         .modal .row .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .modal .row .count-badge { background: var(--accent); color: #fff; padding: 2px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; }
         .modal .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 80px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
@@ -303,7 +297,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">🛒 <span>Admin</span></div>
+            <div class="logo">Admin</div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -440,20 +434,38 @@
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3><i class="fas fa-box"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
-            <div class="row"><label><i class="fas fa-tag"></i> Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
-            <div class="row"><label><i class="fas fa-coins"></i> Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
-            <div class="row"><label><i class="fas fa-boxes"></i> Số lượng:</label><input type="number" id="productStock" placeholder="Số lượng" value="1" /></div>
-            <div class="row"><label><i class="fas fa-folder"></i> Mục:</label>
+            <div class="row">
+                <label><i class="fas fa-tag"></i> Tên:</label>
+                <input type="text" id="productName" placeholder="Tên sản phẩm" />
+            </div>
+            <div class="row">
+                <label><i class="fas fa-coins"></i> Giá:</label>
+                <input type="number" id="productPrice" placeholder="Giá VND" />
+            </div>
+            <div class="row">
+                <label><i class="fas fa-folder"></i> Mục:</label>
                 <select id="productCategory"><option value="">Chọn mục</option></select>
             </div>
-            <div class="row"><label><i class="fas fa-emoji"></i> Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
+            <div class="row">
+                <label><i class="fas fa-emoji"></i> Icon:</label>
+                <input type="text" id="productIcon" placeholder="📦" value="📦" />
+            </div>
             <div class="row">
                 <label><i class="fas fa-image"></i> Hình ảnh:</label>
                 <input type="text" id="productImage" placeholder="URL hình ảnh" />
                 <div class="image-preview" id="productImagePreview">🖼️</div>
             </div>
-            <div class="row"><label><i class="fas fa-info-circle"></i> Mô tả:</label>
-                <textarea id="productDesc" placeholder="Mô tả sản phẩm" rows="3"></textarea>
+            <div class="row">
+                <label><i class="fas fa-align-left"></i> Nội dung SP:</label>
+                <textarea id="productDesc" placeholder="Mô tả sản phẩm (tối đa 240 từ)" rows="6" maxlength="1500"></textarea>
+            </div>
+            <div class="row" style="justify-content:flex-end;">
+                <span style="font-size:12px;color:var(--text-muted);">Số từ: <span id="wordCount">0</span>/240</span>
+            </div>
+            <div class="row">
+                <label><i class="fas fa-boxes"></i> Số lượng SP:</label>
+                <input type="number" id="productQuantity" placeholder="Số lượng cần tạo" value="1" min="1" max="1000" />
+                <span class="count-badge">Tối đa 1000</span>
             </div>
             <input type="hidden" id="productEditId" value="" />
             <div class="actions">
@@ -916,7 +928,7 @@
                         <div class="product-price"><i class="fas fa-tag"></i> ${(p.price || 0).toLocaleString('vi-VN')}đ</div>
                         <div class="product-stock"><i class="fas fa-boxes"></i> Còn: ${p.stock || 0}</div>
                         <div class="product-sold"><i class="fas fa-chart-line"></i> Đã bán: ${p.sold || 0}</div>
-                        ${desc ? `<div class="product-desc-preview"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
+                        ${desc ? `<div class="product-desc-preview"><i class="fas fa-info-circle"></i> ${desc.substring(0, 50)}${desc.length > 50 ? '...' : ''}</div>` : ''}
                         <div class="product-category">${p.category && categoriesData[p.category] ? (categoriesData[p.category].icon || '📁') + ' ' + categoriesData[p.category].name : 'Không có mục'}</div>
                         <div class="product-actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
@@ -928,15 +940,28 @@
             container.innerHTML = html;
         }
 
+        // ===== PRODUCT MODAL =====
+        document.getElementById('productDesc').addEventListener('input', function() {
+            const text = this.value;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            document.getElementById('wordCount').textContent = words;
+            if (words > 240) {
+                this.style.borderColor = 'var(--danger)';
+            } else {
+                this.style.borderColor = 'var(--border-color)';
+            }
+        });
+
         function openProductModal() {
             document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
-            document.getElementById('productStock').value = '1';
             document.getElementById('productCategory').value = '';
             document.getElementById('productIcon').value = '📦';
             document.getElementById('productImage').value = '';
             document.getElementById('productDesc').value = '';
+            document.getElementById('productQuantity').value = '1';
+            document.getElementById('wordCount').textContent = '0';
             document.getElementById('productEditId').value = '';
             document.getElementById('productImagePreview').textContent = '🖼️';
             updateCategorySelect();
@@ -963,12 +988,15 @@
             document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
             document.getElementById('productName').value = p.name || '';
             document.getElementById('productPrice').value = p.price || '';
-            document.getElementById('productStock').value = p.stock || 1;
             document.getElementById('productCategory').value = p.category || '';
             document.getElementById('productIcon').value = p.icon || '📦';
             document.getElementById('productImage').value = p.image || '';
             document.getElementById('productDesc').value = p.description || '';
+            document.getElementById('productQuantity').value = '1';
             document.getElementById('productEditId').value = key;
+            
+            const words = p.description ? p.description.trim().split(/\s+/).length : 0;
+            document.getElementById('wordCount').textContent = words;
             
             const preview = document.getElementById('productImagePreview');
             if (p.image) {
@@ -984,27 +1012,58 @@
         function saveProduct() {
             const name = document.getElementById('productName').value.trim();
             const price = parseInt(document.getElementById('productPrice').value);
-            const stock = parseInt(document.getElementById('productStock').value) || 0;
             const category = document.getElementById('productCategory').value;
             const icon = document.getElementById('productIcon').value.trim() || '📦';
             const image = document.getElementById('productImage').value.trim();
             const description = document.getElementById('productDesc').value.trim();
+            const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
             const editId = document.getElementById('productEditId').value;
+            
+            // Kiểm tra số từ
+            const words = description ? description.trim().split(/\s+/).length : 0;
+            if (words > 240) {
+                showToast('❌ Nội dung sản phẩm vượt quá 240 từ!', 'error');
+                return;
+            }
             
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
             if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
+            if (quantity < 1 || quantity > 1000) { showToast('❌ Số lượng sản phẩm từ 1 đến 1000!', 'error'); return; }
             
-            const data = { name, price, stock, category, icon };
-            if (image) data.image = image;
-            if (description) data.description = description;
-            if (!editId) data.sold = 0;
+            const baseData = { 
+                name, 
+                price, 
+                category, 
+                icon,
+                sold: 0
+            };
+            if (image) baseData.image = image;
+            if (description) baseData.description = description;
             
-            const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
-            ref.set(data).then(() => {
-                showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm sản phẩm!', 'success');
+            if (editId) {
+                // Cập nhật 1 sản phẩm
+                db.ref('products/' + editId).update(baseData).then(() => {
+                    showToast('✅ Đã cập nhật sản phẩm!', 'success');
+                    closeProductModal();
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+                return;
+            }
+            
+            // Tạo nhiều sản phẩm
+            const promises = [];
+            for (let i = 0; i < quantity; i++) {
+                const newRef = db.ref('products').push();
+                const data = { ...baseData, stock: 1 };
+                promises.push(newRef.set(data));
+            }
+            
+            Promise.all(promises).then(() => {
+                showToast(`✅ Đã tạo ${quantity} sản phẩm thành công!`, 'success');
                 closeProductModal();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }).catch(err => {
+                showToast('❌ ' + err.message, 'error');
+            });
         }
 
         function deleteProduct(key) {
@@ -1059,7 +1118,7 @@
                                 <span><i class="fas fa-user"></i> ${o.userName || 'Khách hàng'}</span>
                                 <span class="order-code"><i class="fas fa-key"></i> ${o.orderCode || '#' + key.substring(0,6)}</span>
                             </div>
-                            ${o.productDesc ? `<div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> ${o.productDesc}</div>` : ''}
+                            ${o.productDesc ? `<div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> ${o.productDesc.substring(0, 60)}${o.productDesc.length > 60 ? '...' : ''}</div>` : ''}
                             ${o.orderNote ? `<div class="order-note"><i class="fas fa-sticky-note"></i> ${o.orderNote}</div>` : ''}
                             <div class="order-meta" style="margin-top:4px;">
                                 <span><i class="fas fa-clock"></i> ${new Date(o.timestamp).toLocaleString('vi-VN')}</span>
@@ -1181,7 +1240,6 @@
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
                 if (success) {
-                    // Load notifications
                     const uid = localStorage.getItem('quickLoginUid');
                     if (uid) {
                         db.ref('notifications').on('value', snap => {
@@ -1294,8 +1352,8 @@
 
         function goHome() { closeMenu(); window.location.href = '../index.html'; }
         function goHistory() { closeMenu(); window.location.href = '../Pages/history.html'; }
-        function goTopup() { closeMenu(); alert('💰 Đang phát triển!'); }
-        function goSupport() { closeMenu(); alert('🆘 Đang phát triển!'); }
+        function goTopup() { closeMenu(); showToast('💰 Đang phát triển!', 'error'); }
+        function goSupport() { closeMenu(); showToast('🆘 Đang phát triển!', 'error'); }
         function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
         function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
         function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
@@ -1328,7 +1386,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with full UI fixed!');
+        console.log('✅ Admin panel loaded with full features!');
     </script>
 </body>
 </html>
