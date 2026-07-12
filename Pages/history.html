@@ -158,11 +158,11 @@
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
-        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span>Trang chủ</button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span>Lịch sử</button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span>Nạp tiền</button>
         <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
+        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span>Hỗ trợ</button>
     </div>
 
     <header class="header">
@@ -191,19 +191,19 @@
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()">⚙️ <span data-key="settings">Cài đặt</span></button>
+                    <button class="popup-item" onclick="goToProfile()">👤 Thông tin</button>
+                    <button class="popup-item" onclick="goToSecurity()">🛡️ Bảo mật</button>
+                    <button class="popup-item" onclick="goToSettings()">⚙️ Cài đặt</button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()">🚪 <span data-key="logout">Đăng xuất</span></button>
+                    <button class="popup-item logout" onclick="logout()">🚪 Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span data-key="notif_title">📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
-        <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
+        <div class="notif-header"><span>📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div id="notifList"><div class="empty">Chưa có thông báo</div></div>
     </div>
 
     <div class="content">
@@ -339,7 +339,7 @@
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else {
-                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    list.innerHTML = `<div class="empty">Chưa có thông báo</div>`;
                     dot.classList.remove('show');
                 }
             });
@@ -361,7 +361,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <span class="big-icon">📦</span>
-                        <p>${lang === 'vi' ? 'Chưa có đơn hàng nào' : 'No orders yet'}</p>
+                        <p>Chưa có đơn hàng nào</p>
                     </div>
                 `;
                 return;
@@ -532,7 +532,7 @@
 
         // ===== DELETE ORDER =====
         function deleteOrder(orderId) {
-            if (!confirm(lang === 'vi' ? '🗑️ Xóa đơn hàng này?' : 'Delete this order?')) return;
+            if (!confirm('🗑️ Xóa đơn hàng này?')) return;
             
             const user = auth.currentUser;
             const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
@@ -556,12 +556,12 @@
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
-                window.location.replace('Authenticator/login.html');
+                window.location.replace('../Authenticator/login.html');
                 return;
             }
             
             if (!user) {
-                window.location.replace('Authenticator/login.html');
+                window.location.replace('../Authenticator/login.html');
                 return;
             }
             
@@ -611,16 +611,17 @@
             }
         }
 
-        function goHome() { closeMenu(); window.location.href = 'index.html'; }
-        function goHistory() { closeMenu(); window.location.href = 'history.html'; }
+        // Đường dẫn đến index.html (lùi lại 1 cấp vì đang ở Pages/)
+        function goHome() { closeMenu(); window.location.href = '../index.html'; }
+        function goHistory() { closeMenu(); window.location.href = 'History.html'; }
         function goTopup() { closeMenu(); alert('💰 Đang phát triển!'); }
         function goSupport() { closeMenu(); alert('🆘 Đang phát triển!'); }
-        function goToProfile() { window.location.href = 'Pop-up/profile.html'; }
-        function goToSecurity() { window.location.href = 'Pop-up/security.html'; }
-        function goToSettings() { window.location.href = 'Pop-up/settings.html'; }
+        function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
+        function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
+        function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
 
         function logout() {
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+            if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
                 if (user) {
                     db.ref('presence/' + user.uid).set(false);
@@ -630,7 +631,7 @@
                     localStorage.removeItem('quickLoginEmail');
                     localStorage.removeItem('quickLoginToken');
                     localStorage.removeItem('quickLoginPending');
-                    window.location.replace('Authenticator/login.html');
+                    window.location.replace('../Authenticator/login.html');
                 });
             }
         }
