@@ -3,445 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảo mật</title>
+    <title>Bảo mật - KuanZGame.Store</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --toggle-bg: #dce8f2; --toggle-active: #27ae60; --danger: #e74c6f; --success: #27ae60; --warning: #f39c12; --accent: #3b8fd6; }
-        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --toggle-bg: #2a2a5a; --accent: #8a7aff; }
-        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --toggle-bg: #1a3a6a; --accent: #4a9aff; }
-        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --toggle-bg: #1a4a1a; --accent: #4abf4a; }
-        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --toggle-bg: #5a2a1a; --accent: #ff8a4a; }
-        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --toggle-bg: #5a1a2a; --accent: #ff4a7a; }
-        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --toggle-bg: #333; --accent: #00ccff; }
-        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --toggle-bg: #3a2a5a; --accent: #b87aff; }
-        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --toggle-bg: #1a4a3a; --accent: #4abfa0; }
-        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --toggle-bg: #3a2a1a; --accent: #b8987a; }
-        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --toggle-bg: #2a3a5a; --accent: #8fc1e0; }
-        body { background: var(--bg-body); min-height: 100vh; transition: 0.3s; }
-        
-        .menu-icon { 
-            cursor: pointer; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            background: var(--wallet-bg); 
-            border: 1px solid var(--border-color); 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            gap: 5px; 
-            transition: 0.3s; 
-            width: 40px;
-            height: 40px;
-            justify-content: center;
-        }
-        .menu-icon:hover { background: var(--hover-bg); }
-        .menu-icon .bar { 
-            display: block; 
-            width: 22px; 
-            height: 2.5px; 
-            background: var(--text-secondary); 
-            border-radius: 4px; 
-            transition: 0.3s;
-        }
-        .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
-        .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
-        .menu-icon:hover .bar { background: var(--text-primary); }
-
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: 0.3s; }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: 0.3s; }
-        .logo span { color: var(--text-secondary); }
-        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-        .wallet-container {
-            background: var(--wallet-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px 16px 6px 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            cursor: default;
-            min-height: 44px;
-        }
-        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box svg { width: 18px; height: 18px; fill: #fff; }
-        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
-        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
-
-        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative; font-size: 16px; }
-        .bell-icon:hover { background: var(--hover-bg); }
-        .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
-        .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: 0.3s; padding: 6px; }
-        .dot-menu:hover { background: var(--hover-bg); }
-        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; z-index: 200; }
-        .popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); }
-        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
-        .popup-item.logout { color: #e74c6f; }
-        .settings-wrapper { position: relative; }
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: 0.3s; }
-        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
-        .notif-popup .notif-header .close { cursor: pointer; }
-        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
-        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
-        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
-        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: 0.3s; padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
-        .side-menu.active { left: 0; }
-        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.3s; color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
-        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
-        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
-        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
-        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: 0.3s; }
-        .menu-overlay.active { opacity: 1; visibility: visible; }
-        .content { padding: 30px 24px; max-width: 520px; margin: 0 auto; }
-        .security-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: 0.3s; }
-        .security-card .shield-icon { text-align: center; font-size: 48px; margin-bottom: 4px; }
-        .security-card h1 { text-align: center; color: var(--text-primary); font-size: 24px; transition: 0.3s; }
-        .security-card .sub { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px; transition: 0.3s; }
-
-        .section-title { color: var(--text-primary); font-size: 15px; font-weight: 600; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 3px; transition: 0.3s; }
-        .form-group input { width: 100%; padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 14px; background: var(--wallet-bg); color: var(--text-primary); transition: 0.3s; }
-        .form-group input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
-        .btn-change { width: 100%; padding: 12px; background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-change:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
-        .btn-change:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .message { padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; display: none; }
-        .message.error { display: block; background: #fef0f2; color: #c0392b; border: 1px solid #fdd5d9; }
-        .message.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c8e6d0; }
-
-        .twofa-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); transition: 0.3s; }
-        .twofa-row .left { display: flex; align-items: center; gap: 12px; }
-        .twofa-row .left .icon-box { width: 40px; height: 40px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); }
-        .twofa-row .left .info .title { color: var(--text-primary); font-size: 14px; font-weight: 500; }
-        .twofa-row .left .info .desc { color: var(--text-muted); font-size: 12px; }
-        .toggle-switch { width: 44px; height: 24px; background: var(--toggle-bg); border-radius: 12px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-        .toggle-switch.active { background: var(--toggle-active); }
-        .toggle-switch .knob { width: 18px; height: 18px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
-        .toggle-switch.active .knob { left: 23px; }
-        .twofa-status { font-size: 12px; font-weight: 500; padding: 2px 12px; border-radius: 12px; }
-        .twofa-status.on { color: var(--success); background: #d4edda; }
-        .twofa-status.off { color: var(--danger); background: #fef0f2; }
-        body.dark-mode .twofa-status.on { background: #1a3a2a; }
-        body.dark-mode .twofa-status.off { background: #3a1a2a; }
-
-        .secret-box { background: var(--wallet-bg); padding: 14px 18px; border-radius: 12px; border: 2px solid var(--border-color); margin: 10px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: 0.3s; }
-        .secret-box .secret-key { font-family: 'Courier New', monospace; font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--text-primary); word-break: break-all; }
-        .secret-box .copy-btn { padding: 6px 16px; background: var(--text-secondary); color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
-        .secret-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
-        .secret-box .copy-btn.copied { background: var(--success); }
-
-        .otp-section { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); margin: 8px 0; transition: 0.3s; }
-        .otp-section .otp-label { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 8px; display: block; }
-        .otp-input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
-        .otp-input-row input { padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 22px; font-weight: 700; background: var(--bg-card); color: var(--text-primary); text-align: center; letter-spacing: 8px; width: 180px; height: 52px; transition: 0.3s; }
-        .otp-input-row input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
-        .otp-input-row input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(231,76,111,0.15); }
-        .otp-input-row input.success { border-color: var(--success); box-shadow: 0 0 0 3px rgba(39,174,96,0.15); }
-        .otp-input-row .paste-btn { padding: 8px 16px; background: var(--wallet-bg); color: var(--text-secondary); border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
-        .otp-input-row .paste-btn:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
-        .otp-input-row .paste-btn:active { transform: scale(0.95); }
-
-        .error-msg { color: var(--danger); font-size: 13px; text-align: center; display: none; margin-top: 6px; }
-        .error-msg.show { display: block; }
-        .attempts { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 4px; }
-
-        .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
-        .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .modal-actions .btn-confirm { background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; }
-        .modal-actions .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
-        .modal-actions .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .modal-actions .btn-cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
-        .modal-actions .btn-cancel:hover { background: var(--hover-bg); }
-        .modal-actions .btn-danger { background: var(--danger); color: #fff; }
-        .modal-actions .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
-
-        .device-box { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; }
-        .device-box .device-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
-        .device-box .device-item:last-child { border-bottom: none; }
-        .device-box .device-item .label { color: var(--text-muted); font-weight: 500; }
-        .device-box .device-item .value { font-weight: 500; }
-
-        .btn-back { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.3s; border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; margin-top: 16px; }
-        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px 30px; max-width: 420px; width: 92%; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); animation: modalIn 0.3s ease; }
-        @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal h3 { color: var(--text-primary); text-align: center; font-size: 22px; margin-bottom: 4px; transition: 0.3s; }
-        .modal .modal-desc { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 16px; transition: 0.3s; }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-body);
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 20px;
-            transition: 0.5s;
-        }
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-            display: none !important;
-        }
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border-color);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loading-text {
-            color: var(--text-primary);
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .security-card { padding: 16px; } .secret-box { flex-direction: column; align-items: stretch; text-align: center; padding: 12px; } .secret-box .copy-btn { margin-top: 6px; justify-content: center; } .otp-input-row input { width: 140px; height: 44px; font-size: 18px; letter-spacing: 6px; } .menu-text { display: none; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .modal { padding: 20px; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } }
-    </style>
-</head>
-<body>
-
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">⏳ Đang tải dữ liệu...</div>
-    </div>
-
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
-        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
-    </div>
-
-    <header class="header">
-        <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-            <div class="logo"></div>
-        </div>
-        <div class="header-right">
-            <div class="wallet-container">
-                <div class="wallet-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
-                </div>
-                <div class="wallet-info">
-                    <span class="wallet-label">Số dư</span>
-                    <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
-                </div>
-            </div>
-
-            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div>🔔</div>
-            <div class="settings-wrapper">
-                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-                <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()">👤 <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()">🛡️ <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()">⚙️ <span data-key="settings">Cài đặt</span></button>
-                    <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()">🚪 <span data-key="logout">Đăng xuất</span></button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span data-key="notif_title">📢 Thông báo</span><span class="close" onclick="toggleNotif()">✕</span></div>
-        <div id="notifList"><div class="empty" data-key="notif_empty">Chưa có thông báo</div></div>
-    </div>
-
-    <div class="content">
-        <div class="security-card">
-            <div class="shield-icon">🛡️</div>
-            <h1><span data-key="security_title">Bảo mật</span></h1>
-            <p class="sub" data-key="security_sub">Quản lý bảo mật tài khoản của bạn</p>
-            <div id="message" class="message"></div>
-
-            <div class="section-title">🔑 <span data-key="change_pass">Đổi mật khẩu</span></div>
-            <form id="changePasswordForm">
-                <div class="form-group">
-                    <label data-key="current_pass">Mật khẩu hiện tại</label>
-                    <input type="password" id="currentPassword" placeholder="Nhập mật khẩu cũ" required>
-                </div>
-                <div class="form-group">
-                    <label data-key="new_pass">Mật khẩu mới</label>
-                    <input type="password" id="newPassword" placeholder="Tối thiểu 6 ký tự" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label data-key="confirm_pass">Xác nhận mật khẩu</label>
-                    <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
-                </div>
-                <button type="submit" class="btn-change" data-key="update_btn">🔄 Cập nhật</button>
-            </form>
-
-            <div class="section-title">🔒 <span data-key="twofa_title">Xác thực 2 lớp</span></div>
-            <div class="twofa-row" onclick="toggleTwoFA()">
-                <div class="left">
-                    <div class="icon-box">🔐</div>
-                    <div class="info">
-                        <div class="title" data-key="google_auth">Google Authenticator</div>
-                        <div class="desc" id="twofaStatusDesc" data-key="twofa_off">Chưa kích hoạt</div>
-                    </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <span class="twofa-status off" id="twofaStatusBadge">Tắt</span>
-                    <div class="toggle-switch" id="twofaToggle" onclick="event.stopPropagation(); toggleTwoFA()">
-                        <div class="knob"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-overlay" id="twofaModal">
-                <div class="modal">
-                    <h3 id="modalTitle">🔐 Xác thực 2 lớp</h3>
-                    <p class="modal-desc" id="modalDesc">Quét mã với Google Authenticator hoặc nhập thủ công</p>
-                    <div class="secret-box">
-                        <span class="secret-key" id="secretKeyDisplay">Đang tạo...</span>
-                        <button class="copy-btn" id="copyBtn" onclick="copySecret()">📋 Sao chép</button>
-                    </div>
-                    <div class="otp-section">
-                        <span class="otp-label">📱 Nhập mã OTP 6 số</span>
-                        <div class="otp-input-row">
-                            <input type="text" id="otpInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
-                            <button class="paste-btn" onclick="pasteOTP()">📋 Dán</button>
-                        </div>
-                    </div>
-                    <div class="error-msg" id="otpError">❌ Mã OTP không đúng! Vui lòng thử lại.</div>
-                    <div class="attempts">Còn <span id="attemptCount">3</span> lần thử</div>
-                    <div class="modal-actions">
-                        <button class="btn-confirm" id="btnVerifyOTP" onclick="verifyOTP()">✅ Xác nhận</button>
-                        <button class="btn-cancel" onclick="closeOTPModal()">❌ Hủy</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-overlay" id="twofaOffModal">
-                <div class="modal">
-                    <h3>🔓 Tắt xác thực 2 lớp</h3>
-                    <p class="modal-desc">Nhập mã OTP để xác nhận tắt</p>
-                    <div class="otp-section">
-                        <span class="otp-label">📱 Nhập mã OTP 6 số</span>
-                        <div class="otp-input-row">
-                            <input type="text" id="otpOffInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
-                            <button class="paste-btn" onclick="pasteOTPOff()">📋 Dán</button>
-                        </div>
-                    </div>
-                    <div class="error-msg" id="otpOffError">❌ Mã OTP không đúng!</div>
-                    <div class="attempts">Còn <span id="offAttemptCount">3</span> lần thử</div>
-                    <div class="modal-actions">
-                        <button class="btn-danger" id="btnTurnOff" onclick="turnOff2FA()">🔓 Tắt</button>
-                        <button class="btn-cancel" onclick="closeTwoFAOff()">Đóng</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-title">📱 <span data-key="device_title">Thiết bị đăng nhập</span></div>
-            <div class="device-box">
-                <div class="device-item"><span class="label">🌐 IP Address</span><span class="value" id="userIP">Đang lấy...</span></div>
-                <div class="device-item"><span class="label">🖥️ Trình duyệt</span><span class="value" id="userBrowser">Đang lấy...</span></div>
-                <div class="device-item"><span class="label">📅 Lần đăng nhập cuối</span><span class="value" id="lastLogin">Đang lấy...</span></div>
-            </div>
-
-            <button class="btn-back" onclick="goToSettings()"><span data-key="back_settings">← Quay lại cài đặt</span></button>
-        </div>
-    </div>
-
     <script>
-        // ===== FIREBASE CONFIG =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
-            authDomain: "shop-c6777.firebaseapp.com",
-            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "shop-c6777",
-            storageBucket: "shop-c6777.firebasestorage.app",
-            messagingSenderId: "43186563268",
-            appId: "1:43186563268:web:0d392ba57039a919670191"
-        };
-        
-        // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase initialized successfully');
-        } catch (error) {
-            console.error('❌ Firebase error:', error);
-        }
-        const auth = firebase.auth();
-        const db = firebase.database();
-        
-        // Declare global variables
-        let currentUser = null;
-        let lang = localStorage.getItem('lang') || 'vi';
-        let isDataLoaded = false;
-        let is2FAEnabled = false;
-        
-        console.log('✅ Firebase auth and database ready');
-        
-        // ===== TRANSLATIONS =====
-        const translations = {
-            vi: { 
-                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
-                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
-                notif_title: '📢 Thông báo', notif_empty: 'Chưa có thông báo',
-                security_title: 'Bảo mật', security_sub: 'Quản lý bảo mật tài khoản của bạn',
-                change_pass: 'Đổi mật khẩu', current_pass: 'Mật khẩu hiện tại', new_pass: 'Mật khẩu mới',
-                confirm_pass: 'Xác nhận mật khẩu', update_btn: '🔄 Cập nhật',
-                twofa_title: 'Xác thực 2 lớp', google_auth: 'Google Authenticator',
-                twofa_off: 'Chưa kích hoạt', twofa_on: 'Đã kích hoạt',
-                device_title: 'Thiết bị đăng nhập', back_settings: '← Quay lại cài đặt'
-            },
-            en: {
-                home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
-                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
-                notif_title: '📢 Notifications', notif_empty: 'No notifications',
-                security_title: 'Security', security_sub: 'Manage your account security',
-                change_pass: 'Change Password', current_pass: 'Current Password', new_pass: 'New Password',
-                confirm_pass: 'Confirm Password', update_btn: '🔄 Update',
-                twofa_title: '2FA', google_auth: 'Google Authenticator',
-                twofa_off: 'Not activated', twofa_on: 'Activated',
-                device_title: 'Login Devices', back_settings: '← Back to settings'
-            }
-        };
-
-        // ===== OTP HELPER =====
         class SimpleOTP {
             constructor() {
                 this.authenticator = {
@@ -459,17 +27,21 @@
                 const bytes = [];
                 let bits = 0;
                 let value = 0;
+                
                 for (let i = 0; i < base32.length; i++) {
                     const char = base32[i].toUpperCase();
                     const idx = alphabet.indexOf(char);
                     if (idx === -1) continue;
+                    
                     value = (value << 5) | idx;
                     bits += 5;
+                    
                     if (bits >= 8) {
                         bytes.push((value >> (bits - 8)) & 0xFF);
                         bits -= 8;
                     }
                 }
+                
                 return new Uint8Array(bytes);
             }
 
@@ -505,6 +77,7 @@
                     counterBytes[i] = counter & 0xFF;
                     counter = counter >> 8;
                 }
+                
                 const hmac = await this.hmacSha1(secret, counterBytes);
                 const otp = this.dynamicTruncation(hmac);
                 return String(otp).padStart(6, '0');
@@ -518,6 +91,7 @@
             async verifyTOTP(token, secret) {
                 if (!token || token.length !== 6) return false;
                 if (!secret || secret.length < 10) return false;
+                
                 try {
                     const windows = [0, -1, 1];
                     for (const w of windows) {
@@ -545,8 +119,423 @@
 
         const otp = new SimpleOTP();
         const authenticator = otp.authenticator;
+        console.log('✅ Simple OTP loaded successfully');
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { 
+            --bg-body: #f0f7ff; 
+            --bg-card: #fff; 
+            --bg-header: #fff; 
+            --text-primary: #2c5a7a; 
+            --text-secondary: #5a8fb5; 
+            --text-muted: #8ab3d4; 
+            --border-color: #e3eef9; 
+            --shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); 
+            --wallet-bg: #f0f7ff; 
+            --hover-bg: #f0f7ff; 
+            --toggle-bg: #dce8f2; 
+            --toggle-active: #27ae60; 
+            --success: #27ae60; 
+            --danger: #e74c6f; 
+            --warning: #f39c12;
+            --accent: #3b8fd6;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --toggle-bg: #2a2a5a; --accent: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --toggle-bg: #1a3a6a; --accent: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --toggle-bg: #1a4a1a; --accent: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --toggle-bg: #5a2a1a; --accent: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --toggle-bg: #5a1a2a; --accent: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --toggle-bg: #333; --accent: #00ccff; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --toggle-bg: #3a2a5a; --accent: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --toggle-bg: #1a4a3a; --accent: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --toggle-bg: #3a2a1a; --accent: #b8987a; }
+        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --toggle-bg: #2a3a5a; --accent: #8fc1e0; }
+        body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
+        
+        .menu-icon { cursor: pointer; padding: 8px 12px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; gap: 5px; transition: var(--transition); width: 40px; height: 40px; justify-content: center; }
+        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .menu-icon .bar { display: block; width: 22px; height: 2.5px; background: var(--text-secondary); border-radius: 4px; transition: var(--transition); }
+        .menu-icon .bar:nth-child(1) { transform: translateY(4px); }
+        .menu-icon .bar:nth-child(3) { transform: translateY(-4px); }
+        .menu-icon:hover .bar { background: var(--text-primary); }
 
-        // ===== UI FUNCTIONS =====
+        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
+        .logo span { color: var(--text-secondary); }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
+        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box i { color: #fff; font-size: 16px; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
+        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
+
+        .bell-icon { width: 32px; height: 32px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; }
+        .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 4px; border: 2px solid var(--bg-header); display: none; }
+        .bell-icon .bell-dot.show { display: block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .dot-menu { width: 36px; height: 36px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; }
+        .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; }
+        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
+        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
+        .popup-item.logout { color: #e74c6f; }
+        .settings-wrapper { position: relative; }
+        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
+        .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
+        .notif-popup .notif-header .close:hover { color: var(--danger); }
+        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; }
+        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
+        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .side-menu.active { left: 0; }
+        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header .close:hover { color: var(--danger); }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
+        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
+        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
+        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
+        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .menu-overlay.active { opacity: 1; visibility: visible; }
+        .content { padding: 30px 24px; max-width: 520px; margin: 0 auto; }
+        
+        .security-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); }
+        .security-card:hover { box-shadow: var(--shadow-popup); }
+        .security-card .shield-icon { text-align: center; font-size: 48px; margin-bottom: 4px; }
+        .security-card h1 { text-align: center; color: var(--text-primary); font-size: 24px; transition: var(--transition); }
+        .security-card .sub { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px; transition: var(--transition); }
+
+        .section-title { color: var(--text-primary); font-size: 15px; font-weight: 600; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 3px; transition: var(--transition); }
+        .form-group input { width: 100%; padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 14px; background: var(--wallet-bg); color: var(--text-primary); transition: var(--transition); }
+        .form-group input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
+        .btn-change { width: 100%; padding: 12px; background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .btn-change:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
+        .btn-change:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .message { padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; display: none; }
+        .message.error { display: block; background: #fef0f2; color: #c0392b; border: 1px solid #fdd5d9; }
+        body.dark-mode .message.error { background: #2a1a1a; color: #e8747a; border: 1px solid #4a2a2a; }
+        .message.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c8e6d0; }
+        body.dark-mode .message.success { background: #1a2a1a; color: #7ab87a; border: 1px solid #2a4a2a; }
+
+        .twofa-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); transition: var(--transition); cursor: pointer; }
+        .twofa-row:hover { background: var(--hover-bg); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+        .twofa-row .left { display: flex; align-items: center; gap: 12px; }
+        .twofa-row .left .icon-box { width: 40px; height: 40px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid var(--border-color); }
+        .twofa-row .left .info .title { color: var(--text-primary); font-size: 14px; font-weight: 500; }
+        .twofa-row .left .info .desc { color: var(--text-muted); font-size: 12px; }
+        .toggle-switch { width: 44px; height: 24px; background: var(--toggle-bg); border-radius: 12px; position: relative; cursor: pointer; transition: var(--transition); flex-shrink: 0; }
+        .toggle-switch.active { background: var(--toggle-active); }
+        .toggle-switch .knob { width: 18px; height: 18px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: var(--transition); box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .toggle-switch.active .knob { left: 23px; }
+        .twofa-status { font-size: 12px; font-weight: 500; padding: 2px 12px; border-radius: 12px; }
+        .twofa-status.on { color: var(--success); background: #d4edda; }
+        .twofa-status.off { color: var(--danger); background: #fef0f2; }
+        body.dark-mode .twofa-status.on { background: #1a3a2a; }
+        body.dark-mode .twofa-status.off { background: #3a1a2a; }
+
+        .secret-box { background: var(--wallet-bg); padding: 14px 18px; border-radius: 12px; border: 2px solid var(--border-color); margin: 10px 0 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: var(--transition); }
+        .secret-box:hover { border-color: var(--accent); }
+        .secret-box .secret-key { font-family: 'Courier New', monospace; font-size: 18px; font-weight: 700; letter-spacing: 3px; color: var(--text-primary); word-break: break-all; }
+        .secret-box .copy-btn { padding: 6px 16px; background: var(--text-secondary); color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; gap: 6px; }
+        .secret-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .secret-box .copy-btn.copied { background: var(--success); }
+
+        .otp-section { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); margin: 8px 0; transition: var(--transition); }
+        .otp-section .otp-label { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 8px; display: block; }
+        .otp-input-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .otp-input-row input { padding: 10px 14px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 22px; font-weight: 700; background: var(--bg-card); color: var(--text-primary); text-align: center; letter-spacing: 8px; width: 180px; height: 52px; transition: var(--transition); }
+        .otp-input-row input:focus { outline: none; border-color: var(--text-secondary); box-shadow: 0 0 0 3px rgba(90,143,181,0.1); }
+        .otp-input-row input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(231,76,111,0.15); }
+        .otp-input-row input.success { border-color: var(--success); box-shadow: 0 0 0 3px rgba(39,174,96,0.15); }
+        .otp-input-row .paste-btn { padding: 8px 16px; background: var(--wallet-bg); color: var(--text-secondary); border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .otp-input-row .paste-btn:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+        .otp-input-row .paste-btn:active { transform: scale(0.95); }
+
+        .error-msg { color: var(--danger); font-size: 13px; text-align: center; display: none; margin-top: 6px; }
+        .error-msg.show { display: block; }
+        .attempts { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+        .modal-actions button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .modal-actions .btn-confirm { background: linear-gradient(135deg, #8fc1e0, #5a8fb5); color: #fff; }
+        .modal-actions .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(90,143,181,0.3); }
+        .modal-actions .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .modal-actions .btn-cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .modal-actions .btn-cancel:hover { background: var(--hover-bg); }
+        .modal-actions .btn-danger { background: var(--danger); color: #fff; }
+        .modal-actions .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+
+        .device-box { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); }
+        .device-box:hover { border-color: var(--accent); }
+        .device-box .device-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--text-primary); border-bottom: 1px solid var(--border-color); }
+        .device-box .device-item:last-child { border-bottom: none; }
+        .device-box .device-item .label { color: var(--text-muted); font-weight: 500; }
+        .device-box .device-item .value { font-weight: 500; }
+
+        .btn-back { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; margin-top: 16px; }
+        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px 30px; max-width: 420px; width: 92%; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal h3 { color: var(--text-primary); text-align: center; font-size: 22px; margin-bottom: 4px; transition: var(--transition); }
+        .modal .modal-desc { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 16px; transition: var(--transition); }
+
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
+        .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
+        .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
+
+        @media (max-width: 600px) { 
+            .header { padding: 10px 12px; } 
+            .logo { font-size: 16px; } 
+            .content { padding: 12px; } 
+            .security-card { padding: 16px; } 
+            .secret-box { flex-direction: column; align-items: stretch; text-align: center; padding: 12px; } 
+            .secret-box .copy-btn { margin-top: 6px; justify-content: center; } 
+            .otp-input-row input { width: 140px; height: 44px; font-size: 18px; letter-spacing: 6px; } 
+            .notif-popup { right: 8px; left: 8px; min-width: auto; } 
+            .modal { padding: 20px; } 
+            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } 
+            .wallet-icon-box { width: 28px; height: 28px; } 
+            .wallet-icon-box i { font-size: 13px; } 
+            .wallet-balance { font-size: 13px; } 
+            .wallet-label { font-size: 9px; } 
+            .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } 
+            .menu-icon .bar { width: 18px; height: 2px; } 
+            .menu-icon .bar:nth-child(1) { transform: translateY(3px); } 
+            .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">⏳ Đang tải dữ liệu...</div>
+    </div>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);">📋 Menu</span><span class="close" onclick="closeMenu()">✕</span></div>
+        <button class="menu-item" onclick="goHome()"><span class="icon">🏠</span><span data-key="home">Trang chủ</span></button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon">⏳</span><span data-key="history">Lịch sử</span></button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon">💰</span><span data-key="topup">Nạp tiền</span></button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="goSupport()"><span class="icon">🆘</span><span data-key="support">Hỗ trợ</span></button>
+    </div>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <div class="logo">🛒 <span>Shop</span></div>
+        </div>
+        <div class="header-right">
+            <div class="wallet-container">
+                <div class="wallet-icon-box">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="wallet-info">
+                    <span class="wallet-label">Số dư</span>
+                    <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
+                </div>
+            </div>
+
+            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
+            <div class="settings-wrapper">
+                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="popup" id="settingsPopup">
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> <span data-key="profile">Thông tin</span></button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> <span data-key="security">Bảo mật</span></button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> <span data-key="settings">Cài đặt</span></button>
+                    <div class="popup-divider"></div>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-key="logout">Đăng xuất</span></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="notif-popup" id="notifPopup">
+        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> <span data-key="notif_title">Thông báo</span></span><span class="close" onclick="toggleNotif()">✕</span></div>
+        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> <span data-key="notif_empty">Chưa có thông báo</span></div></div>
+    </div>
+
+    <div class="content">
+        <div class="security-card">
+            <div class="shield-icon"><i class="fas fa-shield-halved"></i></div>
+            <h1><span data-key="security_title">Bảo mật</span></h1>
+            <p class="sub" data-key="security_sub">Quản lý bảo mật tài khoản của bạn</p>
+            <div id="message" class="message"></div>
+
+            <div class="section-title"><i class="fas fa-key"></i> <span data-key="change_pass">Đổi mật khẩu</span></div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label data-key="current_pass"><i class="fas fa-lock"></i> Mật khẩu hiện tại</label>
+                    <input type="password" id="currentPassword" placeholder="Nhập mật khẩu cũ" required>
+                </div>
+                <div class="form-group">
+                    <label data-key="new_pass"><i class="fas fa-key"></i> Mật khẩu mới</label>
+                    <input type="password" id="newPassword" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label data-key="confirm_pass"><i class="fas fa-check-double"></i> Xác nhận mật khẩu</label>
+                    <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                </div>
+                <button type="submit" class="btn-change"><i class="fas fa-sync"></i> <span data-key="update_btn">Cập nhật</span></button>
+            </form>
+
+            <div class="section-title"><i class="fas fa-shield"></i> <span data-key="twofa_title">Xác thực 2 lớp</span></div>
+            <div class="twofa-row" onclick="toggleTwoFA()">
+                <div class="left">
+                    <div class="icon-box"><i class="fas fa-qrcode"></i></div>
+                    <div class="info">
+                        <div class="title" data-key="google_auth">Google Authenticator</div>
+                        <div class="desc" id="twofaStatusDesc" data-key="twofa_off">Chưa kích hoạt</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span class="twofa-status off" id="twofaStatusBadge">Tắt</span>
+                    <div class="toggle-switch" id="twofaToggle" onclick="event.stopPropagation(); toggleTwoFA()">
+                        <div class="knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-overlay" id="twofaModal">
+                <div class="modal">
+                    <h3><i class="fas fa-qrcode"></i> <span id="modalTitle">Xác thực 2 lớp</span></h3>
+                    <p class="modal-desc" id="modalDesc">Quét mã với Google Authenticator hoặc nhập thủ công</p>
+                    <div class="secret-box">
+                        <span class="secret-key" id="secretKeyDisplay">Đang tạo...</span>
+                        <button class="copy-btn" id="copyBtn" onclick="copySecret()"><i class="fas fa-copy"></i> Sao chép</button>
+                    </div>
+                    <div class="otp-section">
+                        <span class="otp-label"><i class="fas fa-mobile-screen"></i> Nhập mã OTP 6 số</span>
+                        <div class="otp-input-row">
+                            <input type="text" id="otpInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
+                            <button class="paste-btn" onclick="pasteOTP()"><i class="fas fa-paste"></i> Dán</button>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="otpError"><i class="fas fa-times-circle"></i> Mã OTP không đúng! Vui lòng thử lại.</div>
+                    <div class="attempts">Còn <span id="attemptCount">3</span> lần thử</div>
+                    <div class="modal-actions">
+                        <button class="btn-confirm" id="btnVerifyOTP" onclick="verifyOTP()"><i class="fas fa-check"></i> Xác nhận</button>
+                        <button class="btn-cancel" onclick="closeOTPModal()"><i class="fas fa-times"></i> Hủy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-overlay" id="twofaOffModal">
+                <div class="modal">
+                    <h3><i class="fas fa-unlock"></i> Tắt xác thực 2 lớp</h3>
+                    <p class="modal-desc">Nhập mã OTP để xác nhận tắt</p>
+                    <div class="otp-section">
+                        <span class="otp-label"><i class="fas fa-mobile-screen"></i> Nhập mã OTP 6 số</span>
+                        <div class="otp-input-row">
+                            <input type="text" id="otpOffInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="off" />
+                            <button class="paste-btn" onclick="pasteOTPOff()"><i class="fas fa-paste"></i> Dán</button>
+                        </div>
+                    </div>
+                    <div class="error-msg" id="otpOffError"><i class="fas fa-times-circle"></i> Mã OTP không đúng!</div>
+                    <div class="attempts">Còn <span id="offAttemptCount">3</span> lần thử</div>
+                    <div class="modal-actions">
+                        <button class="btn-danger" id="btnTurnOff" onclick="turnOff2FA()"><i class="fas fa-unlock"></i> Tắt</button>
+                        <button class="btn-cancel" onclick="closeTwoFAOff()"><i class="fas fa-times"></i> Đóng</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title"><i class="fas fa-laptop"></i> <span data-key="device_title">Thiết bị đăng nhập</span></div>
+            <div class="device-box">
+                <div class="device-item"><span class="label"><i class="fas fa-globe"></i> IP Address</span><span class="value" id="userIP">Đang lấy...</span></div>
+                <div class="device-item"><span class="label"><i class="fas fa-desktop"></i> Trình duyệt</span><span class="value" id="userBrowser">Đang lấy...</span></div>
+                <div class="device-item"><span class="label"><i class="fas fa-clock"></i> Lần đăng nhập cuối</span><span class="value" id="lastLogin">Đang lấy...</span></div>
+            </div>
+
+            <button class="btn-back" onclick="goToSettings()"><i class="fas fa-arrow-left"></i> <span data-key="back_settings">Quay lại cài đặt</span></button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
+            authDomain: "shop-c6777.firebaseapp.com",
+            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "shop-c6777",
+            storageBucket: "shop-c6777.firebasestorage.app",
+            messagingSenderId: "43186563268",
+            appId: "1:43186563268:web:0d392ba57039a919670191"
+        };
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase error:', error);
+        }
+        const auth = firebase.auth();
+        const db = firebase.database();
+        
+        let currentUser = null;
+        let lang = localStorage.getItem('lang') || 'vi';
+        let isDataLoaded = false;
+        let is2FAEnabled = false;
+        
+        console.log('✅ Firebase auth and database ready');
+        
+        const translations = {
+            vi: { 
+                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
+                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
+                notif_title: 'Thông báo', notif_empty: 'Chưa có thông báo',
+                security_title: 'Bảo mật', security_sub: 'Quản lý bảo mật tài khoản của bạn',
+                change_pass: 'Đổi mật khẩu', current_pass: 'Mật khẩu hiện tại', new_pass: 'Mật khẩu mới',
+                confirm_pass: 'Xác nhận mật khẩu', update_btn: 'Cập nhật',
+                twofa_title: 'Xác thực 2 lớp', google_auth: 'Google Authenticator',
+                twofa_off: 'Chưa kích hoạt', twofa_on: 'Đã kích hoạt',
+                device_title: 'Thiết bị đăng nhập', back_settings: 'Quay lại cài đặt'
+            },
+            en: {
+                home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
+                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
+                notif_title: 'Notifications', notif_empty: 'No notifications',
+                security_title: 'Security', security_sub: 'Manage your account security',
+                change_pass: 'Change Password', current_pass: 'Current Password', new_pass: 'New Password',
+                confirm_pass: 'Confirm Password', update_btn: 'Update',
+                twofa_title: '2FA', google_auth: 'Google Authenticator',
+                twofa_off: 'Not activated', twofa_on: 'Activated',
+                device_title: 'Login Devices', back_settings: 'Back to settings'
+            }
+        };
+
+        const otp = new SimpleOTP();
+        const authenticator = otp.authenticator;
+
         function applyLang() {
             const data = translations[lang] || translations.vi;
             document.querySelectorAll('[data-key]').forEach(el => {
@@ -582,7 +571,6 @@
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
         
-        // Apply theme and language immediately
         applyTheme();
         applyLang();
 
@@ -596,7 +584,6 @@
             overlay.classList.remove('hidden');
         }
 
-        // ===== QUICK LOGIN =====
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -621,18 +608,14 @@
                     return false;
                 }
                 
-                // Update presence
                 await db.ref('presence/' + quickUid).set(true);
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
                 
-                // Update balance
                 const balance = userData.balance || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                 
-                // Update last login
                 document.getElementById('lastLogin').textContent = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
                 
-                // Update 2FA status
                 if (userData.twofaEnabled === true) {
                     document.getElementById('twofaToggle').classList.add('active');
                     is2FAEnabled = true;
@@ -642,25 +625,23 @@
                 }
                 updateTwoFAStatus();
                 
-                // Listen to notifications
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
                     const dot = document.getElementById('notifDot');
                     if (notifs) {
                         const keys = Object.keys(notifs).reverse();
-                        let html = '',
-                            hasUnread = false;
+                        let html = '', hasUnread = false;
                         keys.forEach(key => {
                             const n = notifs[key];
                             const isUnread = !n.readBy || !n.readBy[quickUid];
                             if (isUnread) hasUnread = true;
-                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                            html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                         });
                         list.innerHTML = html;
                         dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                     } else {
-                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
                         dot.classList.remove('show');
                     }
                 });
@@ -675,7 +656,6 @@
             }
         }
 
-        // ===== 2FA FUNCTIONS =====
         let twofaSecret = '';
         let isVerifying = false;
         let isTurningOff = false;
@@ -686,7 +666,6 @@
             const user = auth.currentUser;
             const toggle = document.getElementById('twofaToggle');
             
-            // If already active, show turn off modal
             if (toggle.classList.contains('active')) {
                 offAttempts = 3;
                 document.getElementById('otpOffInput').value = '';
@@ -698,7 +677,6 @@
                 return;
             }
             
-            // Otherwise, show turn on modal
             const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
             if (!uid) {
                 alert('Vui lòng đăng nhập!');
@@ -738,9 +716,9 @@
             const btn = document.getElementById('copyBtn');
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(secret).then(() => {
-                    btn.textContent = '✅ Đã sao chép!';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
                     btn.classList.add('copied');
-                    setTimeout(() => { btn.textContent = '📋 Sao chép';
+                    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép';
                         btn.classList.remove('copied'); }, 2000);
                 });
             } else {
@@ -750,9 +728,9 @@
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                btn.textContent = '✅ Đã sao chép!';
+                btn.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
                 btn.classList.add('copied');
-                setTimeout(() => { btn.textContent = '📋 Sao chép';
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép';
                     btn.classList.remove('copied'); }, 2000);
             }
         }
@@ -798,9 +776,9 @@
         async function verifyOTP() {
             if (isVerifying) return;
             const otpInput = document.getElementById('otpInput');
-            const otp = otpInput.value.trim();
+            const otpValue = otpInput.value.trim();
             
-            if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+            if (otpValue.length !== 6 || !/^\d{6}$/.test(otpValue)) {
                 document.getElementById('otpError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
                 document.getElementById('otpError').classList.add('show');
                 otpInput.classList.add('error');
@@ -810,7 +788,7 @@
             isVerifying = true;
             const btn = document.getElementById('btnVerifyOTP');
             btn.disabled = true;
-            btn.textContent = '⏳ Đang xác thực...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xác thực...';
 
             try {
                 const user = auth.currentUser;
@@ -819,7 +797,7 @@
                     alert('❌ Vui lòng đăng nhập lại!');
                     isVerifying = false;
                     btn.disabled = false;
-                    btn.textContent = '✅ Xác nhận';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận';
                     return;
                 }
 
@@ -834,11 +812,11 @@
                     document.getElementById('otpError').classList.add('show');
                     isVerifying = false;
                     btn.disabled = false;
-                    btn.textContent = '✅ Xác nhận';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận';
                     return;
                 }
 
-                const isValid = await authenticator.check(otp, secret);
+                const isValid = await authenticator.check(otpValue, secret);
 
                 if (isValid) {
                     await db.ref('users/' + uid).update({
@@ -848,7 +826,7 @@
                     otpInput.classList.remove('error');
                     otpInput.classList.add('success');
                     document.getElementById('otpError').classList.remove('show');
-                    btn.textContent = '✅ Thành công';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Thành công';
 
                     alert(lang === 'vi' ? '✅ Đã kích hoạt xác thực 2 lớp thành công!' : '✅ 2FA activated successfully!');
                     document.getElementById('twofaToggle').classList.add('active');
@@ -868,7 +846,7 @@
                             closeOTPModal();
                             isVerifying = false;
                             btn.disabled = false;
-                            btn.textContent = '✅ Xác nhận';
+                            btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận';
                         }, 2000);
                         return;
                     }
@@ -881,15 +859,15 @@
 
             isVerifying = false;
             btn.disabled = false;
-            btn.textContent = '✅ Xác nhận';
+            btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận';
         }
 
         async function turnOff2FA() {
             if (isTurningOff) return;
             const otpInput = document.getElementById('otpOffInput');
-            const otp = otpInput.value.trim();
+            const otpValue = otpInput.value.trim();
             
-            if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+            if (otpValue.length !== 6 || !/^\d{6}$/.test(otpValue)) {
                 document.getElementById('otpOffError').textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
                 document.getElementById('otpOffError').classList.add('show');
                 otpInput.classList.add('error');
@@ -899,7 +877,7 @@
             isTurningOff = true;
             const btn = document.getElementById('btnTurnOff');
             btn.disabled = true;
-            btn.textContent = '⏳ Đang xác thực...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xác thực...';
 
             try {
                 const user = auth.currentUser;
@@ -908,7 +886,7 @@
                     alert('❌ Vui lòng đăng nhập lại!');
                     isTurningOff = false;
                     btn.disabled = false;
-                    btn.textContent = '🔓 Tắt';
+                    btn.innerHTML = '<i class="fas fa-unlock"></i> Tắt';
                     return;
                 }
 
@@ -920,11 +898,11 @@
                     document.getElementById('otpOffError').classList.add('show');
                     isTurningOff = false;
                     btn.disabled = false;
-                    btn.textContent = '🔓 Tắt';
+                    btn.innerHTML = '<i class="fas fa-unlock"></i> Tắt';
                     return;
                 }
 
-                const isValid = await authenticator.check(otp, secret);
+                const isValid = await authenticator.check(otpValue, secret);
 
                 if (isValid) {
                     await db.ref('users/' + uid).update({
@@ -934,7 +912,7 @@
                     otpInput.classList.remove('error');
                     otpInput.classList.add('success');
                     document.getElementById('otpOffError').classList.remove('show');
-                    btn.textContent = '✅ Thành công';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Thành công';
 
                     alert(lang === 'vi' ? '✅ Đã tắt xác thực 2 lớp!' : '✅ 2FA turned off!');
                     document.getElementById('twofaToggle').classList.remove('active');
@@ -954,7 +932,7 @@
                             closeTwoFAOff();
                             isTurningOff = false;
                             btn.disabled = false;
-                            btn.textContent = '🔓 Tắt';
+                            btn.innerHTML = '<i class="fas fa-unlock"></i> Tắt';
                         }, 2000);
                         return;
                     }
@@ -967,7 +945,7 @@
 
             isTurningOff = false;
             btn.disabled = false;
-            btn.textContent = '🔓 Tắt';
+            btn.innerHTML = '<i class="fas fa-unlock"></i> Tắt';
         }
 
         function closeOTPModal() {
@@ -976,7 +954,7 @@
             document.getElementById('otpError').classList.remove('show');
             isVerifying = false;
             document.getElementById('btnVerifyOTP').disabled = false;
-            document.getElementById('btnVerifyOTP').textContent = '✅ Xác nhận';
+            document.getElementById('btnVerifyOTP').innerHTML = '<i class="fas fa-check"></i> Xác nhận';
         }
 
         function closeTwoFAOff() {
@@ -985,10 +963,9 @@
             document.getElementById('otpOffError').classList.remove('show');
             isTurningOff = false;
             document.getElementById('btnTurnOff').disabled = false;
-            document.getElementById('btnTurnOff').textContent = '🔓 Tắt';
+            document.getElementById('btnTurnOff').innerHTML = '<i class="fas fa-unlock"></i> Tắt';
         }
 
-        // ===== AUTH STATE =====
         auth.onAuthStateChanged(async (user) => {
             console.log('🔐 Auth state changed, user:', user?.uid || 'none');
             
@@ -997,7 +974,6 @@
                 return;
             }
             
-            // Check Quick Login first
             if (checkQuickLogin()) {
                 console.log('🔑 Quick login detected, attempting...');
                 const success = await completeQuickLogin();
@@ -1023,17 +999,14 @@
             
             currentUser = user;
             
-            // Update presence
             db.ref('presence/' + user.uid).set(true);
             db.ref('presence/' + user.uid).onDisconnect().set(false);
             
-            // Get balance
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 const balance = snap.val() || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
             });
 
-            // Get 2FA status
             db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
                 const enabled = snap.val() === true;
                 const toggle = document.getElementById('twofaToggle');
@@ -1047,31 +1020,28 @@
                 updateTwoFAStatus();
             });
 
-            // Get last login
             db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
                 const last = snap.val();
                 document.getElementById('lastLogin').textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
             });
 
-            // Get notifications
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
                 const list = document.getElementById('notifList');
                 const dot = document.getElementById('notifDot');
                 if (notifs) {
                     const keys = Object.keys(notifs).reverse();
-                    let html = '',
-                        hasUnread = false;
+                    let html = '', hasUnread = false;
                     keys.forEach(key => {
                         const n = notifs[key];
                         const isUnread = !n.readBy || !n.readBy[user.uid];
                         if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<div class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else {
-                    list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
                     dot.classList.remove('show');
                 }
             });
@@ -1082,7 +1052,6 @@
             }
         });
 
-        // ===== CHANGE PASSWORD =====
         document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const current = document.getElementById('currentPassword').value;
@@ -1103,7 +1072,7 @@
             
             const btn = document.querySelector('.btn-change');
             btn.disabled = true;
-            btn.textContent = 'Đang xử lý...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             
             try {
                 const user = auth.currentUser;
@@ -1112,12 +1081,12 @@
                     if (quickUid) {
                         alert('⚠️ Bạn đang đăng nhập nhanh. Vui lòng đăng nhập bằng email để đổi mật khẩu.');
                         btn.disabled = false;
-                        btn.textContent = '🔄 Cập nhật';
+                        btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
                         return;
                     }
                     alert('❌ Vui lòng đăng nhập lại!');
                     btn.disabled = false;
-                    btn.textContent = '🔄 Cập nhật';
+                    btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
                     return;
                 }
                 
@@ -1138,10 +1107,9 @@
                 msg.className = 'message error';
             }
             btn.disabled = false;
-            btn.textContent = '🔄 Cập nhật';
+            btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
         });
 
-        // ===== DEVICE INFO =====
         Promise.race([
             fetch('https://api.ipify.org?format=json').then(r => r.json()),
             new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1500))
@@ -1161,7 +1129,6 @@
         else if (ua.indexOf('Edge') > -1) browser = 'Edge';
         document.getElementById('userBrowser').textContent = browser + ' - ' + (navigator.platform || 'Unknown');
 
-        // ===== MENU =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -1251,7 +1218,6 @@
             }
         }
 
-        // ===== KEYBOARD EVENTS =====
         document.getElementById('otpInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') verifyOTP();
         });
@@ -1291,11 +1257,9 @@
             }
         });
 
-        // ===== INIT =====
         showLoading();
         console.log('⏳ Loading overlay shown');
 
-        // Fallback: hide loading after 2s if no data loaded
         setTimeout(() => {
             if (!isDataLoaded) {
                 console.warn('⚠️ Loading timeout - hiding spinner');
