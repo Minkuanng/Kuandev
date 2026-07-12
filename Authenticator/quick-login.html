@@ -372,16 +372,16 @@
                     await auth.signOut();
                 }
 
-                // Lưu thông tin vào localStorage
+                // === QUAN TRỌNG: Lưu đầy đủ thông tin vào localStorage ===
                 localStorage.setItem('quickLoginUid', uid);
                 localStorage.setItem('quickLoginEmail', email);
                 localStorage.setItem('quickLoginToken', token);
-                localStorage.setItem('quickLoginPending', 'true');
+                localStorage.setItem('quickLoginPending', 'true');  // QUAN TRỌNG: Đánh dấu đang trong phiên quick login
                 
                 // Cập nhật lastLogin
                 await db.ref('users/' + uid + '/lastLogin').set(Date.now());
                 
-                // Cập nhật presence - KHÔNG DÙNG DẤU "." trong path
+                // Cập nhật presence
                 await db.ref('presence/' + uid).set(true);
                 db.ref('presence/' + uid).onDisconnect().set(false);
 
