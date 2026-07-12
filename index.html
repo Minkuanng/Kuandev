@@ -79,7 +79,6 @@
         .menu-overlay.active { opacity: 1; visibility: visible; }
         .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
 
-        /* INTRO CARD */
         .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; overflow: hidden; }
         .intro-top { display: flex; align-items: center; gap: 10px; }
         .intro-top-left { display: flex; align-items: center; gap: 10px; }
@@ -97,7 +96,6 @@
         .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        /* Category Grid */
         .category-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: 0.3s; }
         .category-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .category-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
@@ -115,9 +113,8 @@
         .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: 0.3s; }
         .category-item .cat-count { font-size: 10px; color: var(--text-muted); }
 
-        /* Product Grid */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
-        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; gap: 14px; align-items: center; }
+        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border-color); transition: 0.3s; display: flex; gap: 14px; align-items: flex-start; }
         .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
         .product-card .product-image { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 1px solid var(--border-color); flex-shrink: 0; }
         .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
@@ -131,11 +128,13 @@
         .product-card .btn-buy:hover { transform: scale(1.03); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .product-card .btn-buy .discount-badge { background: var(--warning); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+        .product-card .order-note-input { margin-top: 6px; width: 100%; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); resize: vertical; min-height: 40px; font-family: inherit; }
+        .product-card .order-note-input:focus { outline: none; border-color: var(--accent); }
+        .product-card .order-note-input::placeholder { color: var(--text-muted); }
 
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* Order Popup */
         .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; display: none; align-items: center; justify-content: center; }
         .order-popup-overlay.active { display: flex; }
         .order-popup { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 420px; width: 92%; border: 2px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; }
@@ -149,6 +148,7 @@
         .order-popup .order-item .item-info .item-name { font-weight: 600; color: var(--text-primary); }
         .order-popup .order-item .item-info .item-price { color: var(--accent); font-weight: 600; }
         .order-popup .order-item .item-info .item-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .order-popup .order-item .item-info .item-note { font-size: 12px; color: var(--text-primary); background: var(--wallet-bg); padding: 4px 8px; border-radius: 4px; margin-top: 4px; border-left: 3px solid var(--warning); }
         .order-popup .order-total { text-align: right; padding: 12px 0; font-size: 16px; font-weight: 700; color: var(--text-primary); border-top: 2px solid var(--border-color); margin-top: 8px; }
         .order-popup .order-total span { color: var(--accent); }
         .order-popup .order-code { background: var(--wallet-bg); padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--text-muted); margin: 8px 0; display: flex; justify-content: space-between; align-items: center; border: 1px dashed var(--border-color); }
@@ -358,7 +358,8 @@
                 in_stock: 'Còn',
                 sold: 'Đã bán',
                 apply_voucher: 'Áp mã',
-                enter_voucher: 'Nhập mã giảm giá'
+                enter_voucher: 'Nhập mã giảm giá',
+                order_note: 'Ghi chú đơn hàng (tùy chọn)'
             },
             en: { 
                 home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
@@ -371,7 +372,8 @@
                 in_stock: 'In stock',
                 sold: 'Sold',
                 apply_voucher: 'Apply',
-                enter_voucher: 'Enter voucher code'
+                enter_voucher: 'Enter voucher code',
+                order_note: 'Order note (optional)'
             }
         };
 
@@ -571,6 +573,7 @@
                 const stock = product.stock || 0;
                 const inStockLabel = lang === 'vi' ? 'Còn' : 'In stock';
                 const soldLabel = lang === 'vi' ? 'Đã bán' : 'Sold';
+                const notePlaceholder = lang === 'vi' ? 'Ghi chú đơn hàng (tùy chọn)' : 'Order note (optional)';
                 
                 let discountPrice = originalPrice;
                 let discountText = '';
@@ -604,6 +607,7 @@
                                 <input type="text" id="voucher_${product.id}" placeholder="${lang === 'vi' ? 'Nhập mã giảm giá' : 'Enter voucher code'}" />
                                 <button onclick="applyVoucher('${product.id}')">${lang === 'vi' ? 'Áp mã' : 'Apply'}</button>
                             </div>
+                            <textarea class="order-note-input" id="note_${product.id}" placeholder="${notePlaceholder}" rows="2"></textarea>
                             <button class="btn-buy" ${isOutOfStock ? 'disabled' : ''} onclick="buyProduct('${product.id}')">
                                 ${isOutOfStock ? (lang === 'vi' ? 'Hết hàng' : 'Out of stock') : (lang === 'vi' ? '🛒 Mua ngay' : '🛒 Buy now')}
                             </button>
@@ -659,6 +663,10 @@
                 return;
             }
             
+            // Lấy ghi chú từ textarea
+            const noteInput = document.getElementById('note_' + productId);
+            const orderNote = noteInput ? noteInput.value.trim() : '';
+            
             let price = product.price || 0;
             let voucherUsed = null;
             
@@ -700,6 +708,7 @@
                     productImage: product.image || '',
                     productIcon: product.icon || '📦',
                     productDesc: product.description || '',
+                    orderNote: orderNote || '',
                     originalPrice: product.price || 0,
                     price: price,
                     voucher: voucherUsed,
@@ -714,6 +723,7 @@
                     orderCode: orderCode,
                     productName: product.name,
                     productDesc: product.description || '',
+                    orderNote: orderNote || '',
                     price: price,
                     timestamp: Date.now(),
                     type: 'purchase',
@@ -721,6 +731,7 @@
                         productId: productId,
                         productName: product.name,
                         productDesc: product.description || '',
+                        orderNote: orderNote || '',
                         price: price,
                         voucher: voucherUsed,
                         timestamp: Date.now()
@@ -761,6 +772,11 @@
             const price = orderData.price.toLocaleString('vi-VN');
             currentOrderCode = orderData.orderCode || '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
             
+            let noteHtml = '';
+            if (orderData.orderNote) {
+                noteHtml = `<div class="item-note">📝 Ghi chú: ${orderData.orderNote}</div>`;
+            }
+            
             container.innerHTML = `
                 <div class="order-item">
                     <div class="item-image">
@@ -770,6 +786,7 @@
                         <div class="item-name">${orderData.productName}</div>
                         <div class="item-price">${price} VND</div>
                         ${orderData.productDesc ? `<div class="item-desc">📝 ${orderData.productDesc}</div>` : ''}
+                        ${noteHtml}
                     </div>
                 </div>
                 ${orderData.voucher ? `<div style="padding:4px 0;color:var(--success);font-size:13px;">🎫 Đã áp mã: ${orderData.voucher}</div>` : ''}
