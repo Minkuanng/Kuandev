@@ -531,6 +531,7 @@
 
         let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
+        let currentUser = null;
 
         function applyLang() {
             const data = translations[lang] || translations.vi;
@@ -594,30 +595,68 @@
         // ===== COMPLETE QUICK LOGIN =====
         async function completeQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
-            if (!quickUid) return false;
+            const quickToken = localStorage.getItem('quickLoginToken');
+            
+            if (!quickUid || !quickToken) return false;
             
             try {
+                // Lấy thông tin user từ database
+                const snap = await db.ref('users/' + quickUid).once('value');
+                const userData = snap.val();
+                
+                if (!userData || userData.blocked === true) {
+                    localStorage.removeItem('quickLoginUid');
+                    localStorage.removeItem('quickLoginToken');
+                    localStorage.removeItem('quickLoginPending');
+                    return false;
+                }
+                
+                // Cập nhật presence
                 await db.ref('presence/' + quickUid).set(true);
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
                 
-                const snap = await db.ref('users/' + quickUid).once('value');
-                const data = snap.val();
-                if (data) {
-                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                    document.getElementById('lastLogin').textContent = data.lastLogin ? new Date(data.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
-                    
-                    // Kiểm tra 2FA status
-                    if (data.twofaEnabled) {
-                        document.getElementById('twofaToggle').classList.add('active');
-                        updateTwoFAStatus();
-                    } else {
-                        document.getElementById('twofaToggle').classList.remove('active');
-                        updateTwoFAStatus();
-                    }
+                // Cập nhật số dư
+                document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
+                
+                // Cập nhật last login
+                document.getElementById('lastLogin').textContent = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
+                
+                // Cập nhật 2FA status
+                if (userData.twofaEnabled === true) {
+                    document.getElementById('twofaToggle').classList.add('active');
+                } else {
+                    document.getElementById('twofaToggle').classList.remove('active');
                 }
+                updateTwoFAStatus();
+                
+                // Lắng nghe thông báo
+                db.ref('notifications').on('value', snap => {
+                    const notifs = snap.val();
+                    const list = document.getElementById('notifList');
+                    const dot = document.getElementById('notifDot');
+                    if (notifs) {
+                        const keys = Object.keys(notifs).reverse();
+                        let html = '',
+                            hasUnread = false;
+                        keys.forEach(key => {
+                            const n = notifs[key];
+                            const isUnread = !n.readBy || !n.readBy[quickUid];
+                            if (isUnread) hasUnread = true;
+                            html += `<div class="notif-item ${isUnread?'unread':''}">${n.message}<div class="time">${new Date(n.timestamp).toLocaleString('vi-VN')}</div></div>`;
+                        });
+                        list.innerHTML = html;
+                        dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                    } else {
+                        list.innerHTML = `<div class="empty">${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        dot.classList.remove('show');
+                    }
+                });
+                
+                // Đánh dấu đã load xong
                 isDataLoaded = true;
                 hideLoading();
                 return true;
+                
             } catch (error) {
                 console.error('Lỗi complete quick login:', error);
                 return false;
@@ -1002,6 +1041,7 @@
 
         // ===== AUTH STATE =====
         auth.onAuthStateChanged(async (user) => {
+            // Nếu đã load data rồi thì không làm gì
             if (isDataLoaded) return;
             
             // ƯU TIÊN: Kiểm tra Quick Login TRƯỚC
@@ -1024,11 +1064,19 @@
                 return; 
             }
             
+            currentUser = user;
+            
+            // Cập nhật presence
+            db.ref('presence/' + user.uid).set(true);
+            db.ref('presence/' + user.uid).onDisconnect().set(false);
+            
+            // Lấy số dư
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 const balance = snap.val() || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
             });
 
+            // Lấy 2FA status
             db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
                 const enabled = snap.val() === true;
                 const toggle = document.getElementById('twofaToggle');
@@ -1040,11 +1088,13 @@
                 updateTwoFAStatus();
             });
 
+            // Lấy last login
             db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
                 const last = snap.val();
                 document.getElementById('lastLogin').textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
             });
 
+            // Lấy thông báo
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
                 const list = document.getElementById('notifList');
@@ -1241,6 +1291,8 @@
 
         // Hiển thị loading
         showLoading();
+        
+        // Ẩn loading sau 5s nếu không có gì xảy ra
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
