@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+        /* (giữ nguyên các style từ file admin.html trước đó, chỉ thêm style cho brand management) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         :root { --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff; --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4; --border-color: #e3eef9; --shadow: 0 2px 10px rgba(0,0,0,0.05); --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff; --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; }
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
@@ -153,6 +154,7 @@
         .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 70px; }
         .modal .row input, .modal .row select { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); min-width: 100px; }
         .modal .row input:focus, .modal .row select:focus { outline: none; border-color: var(--text-secondary); }
+        .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; }
         .modal .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
         .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; min-width: 60px; }
         .modal .actions .add { background: #27ae60; color: #fff; }
@@ -184,11 +186,27 @@
         .status-dot.blocked { background: #f39c12; }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
         
-        /* ===== PRODUCT MANAGEMENT ===== */
+        /* Brand management styles */
+        .brand-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+        .brand-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: 0.3s; min-width: 160px; }
+        .brand-item:hover { border-color: var(--accent); }
+        .brand-item .brand-image { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        .brand-item .brand-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .brand-item .brand-info { flex: 1; }
+        .brand-item .brand-info .name { font-weight: 600; color: var(--text-primary); }
+        .brand-item .brand-info .count { font-size: 11px; color: var(--text-muted); }
+        .brand-item .brand-actions { display: flex; gap: 4px; }
+        .brand-item .brand-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .brand-item .brand-actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .brand-item .brand-actions .edit:hover { background: var(--text-secondary); color: #fff; }
+        .brand-item .brand-actions .del { background: #fef0f2; color: #e74c6f; border: 1px solid #fdd5d9; }
+        .brand-item .brand-actions .del:hover { background: #e74c6f; color: #fff; }
+
         .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
         .product-card-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); text-align: center; transition: 0.3s; }
         .product-card-admin:hover { border-color: var(--accent); }
-        .product-card-admin .icon { font-size: 32px; display: block; }
+        .product-card-admin .product-image { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 6px; border: 1px solid var(--border-color); }
+        .product-card-admin .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
         .product-card-admin .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
         .product-card-admin .price { color: var(--accent); font-weight: 600; font-size: 14px; }
         .product-card-admin .stock { font-size: 11px; color: var(--text-muted); }
@@ -207,7 +225,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .product-grid-admin { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+        @media (max-width: 600px) { .header { padding: 10px 12px; } .logo { font-size: 16px; } .content { padding: 12px; } .admin-card { padding: 16px; } .user-table { font-size: 11px; } .user-table th, .user-table td { padding: 5px 6px; } .notif-popup { right: 8px; left: 8px; min-width: auto; } .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } .wallet-icon-box { width: 28px; height: 28px; } .wallet-icon-box svg { width: 15px; height: 15px; } .wallet-balance { font-size: 13px; } .wallet-label { font-size: 9px; } .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } .menu-icon .bar { width: 18px; height: 2px; } .menu-icon .bar:nth-child(1) { transform: translateY(3px); } .menu-icon .bar:nth-child(3) { transform: translateY(-3px); } .product-grid-admin { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .brand-item { min-width: 120px; } }
     </style>
 </head>
 <body>
@@ -262,15 +280,14 @@
     </div>
 
     <div class="content">
-        <!-- Admin Card -->
         <div class="admin-card">
             <h1>👑 <span data-key="admin_title">Quản trị</span> <button class="refresh-btn" onclick="refreshUsers()">🔄 Làm mới</button></h1>
-            <p class="sub" data-key="admin_sub">Quản lý người dùng và hệ thống</p>
+            <p class="sub" data-key="admin_sub">Quản lý người dùng, sản phẩm và hãng</p>
             
             <div class="tabs">
                 <button class="tab active" data-tab="users" onclick="switchTab('users')">👥 Người dùng</button>
+                <button class="tab" data-tab="brands" onclick="switchTab('brands')">🏷️ Hãng</button>
                 <button class="tab" data-tab="products" onclick="switchTab('products')">🛍️ Sản phẩm</button>
-                <button class="tab" data-tab="categories" onclick="switchTab('categories')">📂 Danh mục</button>
             </div>
             
             <!-- Tab Users -->
@@ -291,6 +308,16 @@
                 </div>
             </div>
             
+            <!-- Tab Brands -->
+            <div class="tab-content" id="tab-brands">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+                    <button class="btn-send" onclick="openBrandModal()">➕ Thêm hãng</button>
+                </div>
+                <div id="brandList" class="brand-list">
+                    <div class="loading">⏳ Đang tải danh sách hãng...</div>
+                </div>
+            </div>
+            
             <!-- Tab Products -->
             <div class="tab-content" id="tab-products">
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
@@ -299,16 +326,6 @@
                 </div>
                 <div id="productGridAdmin" class="product-grid-admin">
                     <div class="loading">⏳ Đang tải sản phẩm...</div>
-                </div>
-            </div>
-            
-            <!-- Tab Categories -->
-            <div class="tab-content" id="tab-categories">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openCategoryModal()">➕ Thêm danh mục</button>
-                </div>
-                <div id="categoryList" style="display:flex; gap:8px; flex-wrap:wrap;">
-                    <div class="loading">⏳ Đang tải danh mục...</div>
                 </div>
             </div>
             
@@ -334,6 +351,24 @@
         </div>
     </div>
 
+    <!-- Modal Brand -->
+    <div class="modal-overlay" id="brandModal">
+        <div class="modal">
+            <h3 id="brandModalTitle">🏷️ Thêm hãng</h3>
+            <div class="row"><label>Tên:</label><input type="text" id="brandName" placeholder="Tên hãng" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="brandIcon" placeholder="🏷️" value="🏷️" /></div>
+            <div class="row"><label>Hình ảnh:</label>
+                <input type="text" id="brandImage" placeholder="URL hình ảnh (png/jpg)" />
+                <div class="image-preview" id="brandImagePreview">🖼️</div>
+            </div>
+            <input type="hidden" id="brandEditId" value="" />
+            <div class="actions">
+                <button class="save" onclick="saveBrand()">💾 Lưu</button>
+                <button class="cancel" onclick="closeBrandModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Product -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
@@ -341,25 +376,19 @@
             <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
             <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
             <div class="row"><label>Số lượng:</label><input type="number" id="productStock" placeholder="Số lượng" value="1" /></div>
-            <div class="row"><label>Danh mục:</label><select id="productCategory"><option value="">Chọn danh mục</option></select></div>
+            <div class="row"><label>Hãng:</label><select id="productBrand"><option value="">Chọn hãng</option></select></div>
             <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
+            <div class="row"><label>Hình ảnh:</label>
+                <input type="text" id="productImage" placeholder="URL hình ảnh" />
+                <div class="image-preview" id="productImagePreview">🖼️</div>
+            </div>
+            <div class="row"><label>Mô tả:</label>
+                <input type="text" id="productDesc" placeholder="Mô tả sản phẩm" />
+            </div>
             <input type="hidden" id="productEditId" value="" />
             <div class="actions">
                 <button class="save" onclick="saveProduct()">💾 Lưu</button>
                 <button class="cancel" onclick="closeProductModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Category -->
-    <div class="modal-overlay" id="categoryModal">
-        <div class="modal">
-            <h3>📂 Thêm danh mục</h3>
-            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên danh mục" /></div>
-            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
-            <div class="actions">
-                <button class="save" onclick="saveCategory()">💾 Lưu</button>
-                <button class="cancel" onclick="closeCategoryModal()">Đóng</button>
             </div>
         </div>
     </div>
@@ -386,7 +415,7 @@
         let loadingUsers = false;
         let onlineUsersMap = {};
         let isDataLoaded = false;
-        let categoriesData = {};
+        let brandsData = {};
         let productsData = {};
 
         const translations = {
@@ -456,8 +485,8 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             
+            if (tab === 'brands') loadBrandsAdmin();
             if (tab === 'products') loadProductsAdmin();
-            if (tab === 'categories') loadCategoriesAdmin();
         }
 
         function watchOnlineStatus() {
@@ -497,7 +526,7 @@
                         isAdmin = true;
                         showLoading(true);
                         loadUsers();
-                        loadCategoriesAdmin();
+                        loadBrandsAdmin();
                         loadProductsAdmin();
                         setTimeout(() => showLoading(false), 300);
                     } else {
@@ -514,72 +543,121 @@
             }
         }
 
-        // ===== CATEGORIES MANAGEMENT =====
-        function loadCategoriesAdmin() {
+        // ===== BRANDS MANAGEMENT =====
+        function loadBrandsAdmin() {
             db.ref('categories').on('value', (snapshot) => {
-                const data = snapshot.val() || {};
-                categoriesData = data;
-                renderCategories(data);
+                brandsData = snapshot.val() || {};
+                renderBrandsAdmin(brandsData);
+                updateBrandSelect();
             });
         }
 
-        function renderCategories(data) {
-            const container = document.getElementById('categoryList');
+        function renderBrandsAdmin(data) {
+            const container = document.getElementById('brandList');
             const keys = Object.keys(data);
             if (keys.length === 0) {
-                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có danh mục' : 'No categories'}</div>`;
+                container.innerHTML = `<div class="loading">${lang === 'vi' ? 'Chưa có hãng' : 'No brands'}</div>`;
                 return;
             }
             let html = '';
             keys.forEach(key => {
-                const cat = data[key];
+                const brand = data[key];
+                const productCount = Object.keys(productsData).filter(pid => productsData[pid].category === key).length;
+                const imageUrl = brand.image || '';
+                const icon = brand.icon || '🏷️';
+                
                 html += `
-                    <div style="background:var(--wallet-bg);padding:10px 16px;border-radius:10px;border:1px solid var(--border-color);display:flex;align-items:center;gap:10px;">
-                        <span>${cat.icon || '📁'}</span>
-                        <span style="color:var(--text-primary);font-weight:500;">${cat.name}</span>
-                        <button class="btn-action delete" onclick="deleteCategory('${key}')" style="font-size:11px;">🗑️</button>
+                    <div class="brand-item">
+                        <div class="brand-image">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${brand.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
+                        </div>
+                        <div class="brand-info">
+                            <div class="name">${brand.name || 'Chưa đặt tên'}</div>
+                            <div class="count">${productCount} sản phẩm</div>
+                        </div>
+                        <div class="brand-actions">
+                            <button class="edit" onclick="editBrand('${key}')">✏️</button>
+                            <button class="del" onclick="deleteBrand('${key}')">🗑️</button>
+                        </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
-            
-            // Cập nhật select danh mục trong modal
-            updateCategorySelect();
         }
 
-        function updateCategorySelect() {
-            const select = document.getElementById('productCategory');
-            select.innerHTML = '<option value="">Chọn danh mục</option>';
-            Object.keys(categoriesData).forEach(key => {
-                const cat = categoriesData[key];
-                select.innerHTML += `<option value="${key}">${cat.icon || '📁'} ${cat.name}</option>`;
+        function updateBrandSelect() {
+            const select = document.getElementById('productBrand');
+            select.innerHTML = '<option value="">Chọn hãng</option>';
+            Object.keys(brandsData).forEach(key => {
+                const brand = brandsData[key];
+                select.innerHTML += `<option value="${key}">${brand.icon || '🏷️'} ${brand.name}</option>`;
             });
         }
 
-        function openCategoryModal() {
-            document.getElementById('categoryName').value = '';
-            document.getElementById('categoryIcon').value = '📁';
-            document.getElementById('categoryModal').classList.add('active');
-        }
-
-        function closeCategoryModal() {
-            document.getElementById('categoryModal').classList.remove('active');
-        }
-
-        function saveCategory() {
-            const name = document.getElementById('categoryName').value.trim();
-            const icon = document.getElementById('categoryIcon').value.trim() || '📁';
-            if (!name) { showToast('❌ Nhập tên danh mục!', 'error'); return; }
+        function openBrandModal() {
+            document.getElementById('brandModalTitle').textContent = '🏷️ Thêm hãng';
+            document.getElementById('brandName').value = '';
+            document.getElementById('brandIcon').value = '🏷️';
+            document.getElementById('brandImage').value = '';
+            document.getElementById('brandImagePreview').textContent = '🖼️';
+            document.getElementById('brandEditId').value = '';
+            document.getElementById('brandModal').classList.add('active');
             
-            const ref = db.ref('categories').push();
-            ref.set({ name, icon }).then(() => {
-                showToast('✅ Đã thêm danh mục!', 'success');
-                closeCategoryModal();
+            // Preview image
+            document.getElementById('brandImage').oninput = function() {
+                const preview = document.getElementById('brandImagePreview');
+                const val = this.value.trim();
+                if (val) {
+                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                } else {
+                    preview.textContent = '🖼️';
+                }
+            };
+        }
+
+        function closeBrandModal() {
+            document.getElementById('brandModal').classList.remove('active');
+        }
+
+        function editBrand(key) {
+            const brand = brandsData[key];
+            if (!brand) return;
+            document.getElementById('brandModalTitle').textContent = '✏️ Sửa hãng';
+            document.getElementById('brandName').value = brand.name || '';
+            document.getElementById('brandIcon').value = brand.icon || '🏷️';
+            document.getElementById('brandImage').value = brand.image || '';
+            document.getElementById('brandEditId').value = key;
+            
+            const preview = document.getElementById('brandImagePreview');
+            if (brand.image) {
+                preview.innerHTML = `<img src="${brand.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+            } else {
+                preview.textContent = '🖼️';
+            }
+            
+            document.getElementById('brandModal').classList.add('active');
+        }
+
+        function saveBrand() {
+            const name = document.getElementById('brandName').value.trim();
+            const icon = document.getElementById('brandIcon').value.trim() || '🏷️';
+            const image = document.getElementById('brandImage').value.trim();
+            const editId = document.getElementById('brandEditId').value;
+            
+            if (!name) { showToast('❌ Nhập tên hãng!', 'error'); return; }
+            
+            const data = { name, icon };
+            if (image) data.image = image;
+            
+            const ref = editId ? db.ref('categories/' + editId) : db.ref('categories').push();
+            ref.set(data).then(() => {
+                showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm hãng!', 'success');
+                closeBrandModal();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
-        function deleteCategory(key) {
-            if (confirm(lang === 'vi' ? '🗑️ Xóa danh mục này?' : 'Delete this category?')) {
+        function deleteBrand(key) {
+            if (confirm(lang === 'vi' ? '🗑️ Xóa hãng này? (Sản phẩm thuộc hãng sẽ mất danh mục)' : 'Delete this brand? (Products will lose category)')) {
                 db.ref('categories/' + key).remove().then(() => {
                     showToast('✅ Đã xóa!', 'success');
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
@@ -589,9 +667,11 @@
         // ===== PRODUCTS MANAGEMENT =====
         function loadProductsAdmin() {
             db.ref('products').on('value', (snapshot) => {
-                const data = snapshot.val() || {};
-                productsData = data;
-                renderProductsAdmin(data);
+                productsData = snapshot.val() || {};
+                renderProductsAdmin(productsData);
+                updateBrandSelect();
+                // Cập nhật lại brand list để hiện số lượng
+                renderBrandsAdmin(brandsData);
             });
         }
 
@@ -605,13 +685,18 @@
             let html = '';
             keys.forEach(key => {
                 const p = data[key];
+                const imageUrl = p.image || '';
+                const icon = p.icon || '📦';
+                
                 html += `
                     <div class="product-card-admin">
-                        <span class="icon">${p.icon || '📦'}</span>
+                        <div class="product-image">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
+                        </div>
                         <div class="name">${p.name || 'Sản phẩm'}</div>
                         <div class="price">${(p.price || 0).toLocaleString('vi-VN')} VND</div>
                         <div class="stock">📊 ${p.stock || 0} còn lại</div>
-                        <div class="cat">${p.category ? (categoriesData[p.category]?.icon || '📁') + ' ' + (categoriesData[p.category]?.name || p.category) : 'Không phân loại'}</div>
+                        <div class="cat">${p.category && brandsData[p.category] ? (brandsData[p.category].icon || '🏷️') + ' ' + brandsData[p.category].name : 'Không có hãng'}</div>
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')">✏️ Sửa</button>
                             <button class="del" onclick="deleteProduct('${key}')">🗑️ Xóa</button>
@@ -627,11 +712,24 @@
             document.getElementById('productName').value = '';
             document.getElementById('productPrice').value = '';
             document.getElementById('productStock').value = '1';
-            document.getElementById('productCategory').value = '';
+            document.getElementById('productBrand').value = '';
             document.getElementById('productIcon').value = '📦';
+            document.getElementById('productImage').value = '';
+            document.getElementById('productDesc').value = '';
             document.getElementById('productEditId').value = '';
-            updateCategorySelect();
+            document.getElementById('productImagePreview').textContent = '🖼️';
+            updateBrandSelect();
             document.getElementById('productModal').classList.add('active');
+            
+            document.getElementById('productImage').oninput = function() {
+                const preview = document.getElementById('productImagePreview');
+                const val = this.value.trim();
+                if (val) {
+                    preview.innerHTML = `<img src="${val}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+                } else {
+                    preview.textContent = '🖼️';
+                }
+            };
         }
 
         function closeProductModal() {
@@ -645,10 +743,20 @@
             document.getElementById('productName').value = p.name || '';
             document.getElementById('productPrice').value = p.price || '';
             document.getElementById('productStock').value = p.stock || 1;
-            document.getElementById('productCategory').value = p.category || '';
+            document.getElementById('productBrand').value = p.category || '';
             document.getElementById('productIcon').value = p.icon || '📦';
+            document.getElementById('productImage').value = p.image || '';
+            document.getElementById('productDesc').value = p.description || '';
             document.getElementById('productEditId').value = key;
-            updateCategorySelect();
+            
+            const preview = document.getElementById('productImagePreview');
+            if (p.image) {
+                preview.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;" onerror="this.parentElement.textContent='❌'" />`;
+            } else {
+                preview.textContent = '🖼️';
+            }
+            
+            updateBrandSelect();
             document.getElementById('productModal').classList.add('active');
         }
 
@@ -656,14 +764,19 @@
             const name = document.getElementById('productName').value.trim();
             const price = parseInt(document.getElementById('productPrice').value);
             const stock = parseInt(document.getElementById('productStock').value) || 0;
-            const category = document.getElementById('productCategory').value;
+            const category = document.getElementById('productBrand').value;
             const icon = document.getElementById('productIcon').value.trim() || '📦';
+            const image = document.getElementById('productImage').value.trim();
+            const description = document.getElementById('productDesc').value.trim();
             const editId = document.getElementById('productEditId').value;
             
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
             
             const data = { name, price, stock, category, icon };
+            if (image) data.image = image;
+            if (description) data.description = description;
+            
             const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
             ref.set(data).then(() => {
                 showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm sản phẩm!', 'success');
@@ -687,7 +800,7 @@
             }
         }
 
-        // ===== USER MANAGEMENT =====
+        // ===== USER MANAGEMENT (giữ nguyên từ file cũ) =====
         auth.onAuthStateChanged(async (user) => {
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
@@ -716,7 +829,7 @@
                 isAdmin = true;
                 showLoading(true);
                 loadUsers();
-                loadCategoriesAdmin();
+                loadBrandsAdmin();
                 loadProductsAdmin();
                 setTimeout(() => showLoading(false), 300);
             });
@@ -1000,11 +1113,11 @@
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
+        document.getElementById('brandModal').addEventListener('click', function(e) {
+            if (e.target === this) closeBrandModal();
+        });
         document.getElementById('productModal').addEventListener('click', function(e) {
             if (e.target === this) closeProductModal();
-        });
-        document.getElementById('categoryModal').addEventListener('click', function(e) {
-            if (e.target === this) closeCategoryModal();
         });
 
         window.addEventListener('storage', function(e) {
@@ -1012,7 +1125,7 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Product & Category management!');
+        console.log('✅ Admin panel loaded with Brand & Product management!');
     </script>
 </body>
 </html>
