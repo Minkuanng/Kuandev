@@ -366,7 +366,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">🎮 KuanZGame</div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -541,7 +541,6 @@
         let currentQuantity = 1;
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
-        let isProcessing = false;
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -629,11 +628,18 @@
                 categoriesData = snapshot.val() || {};
                 renderCategories();
                 renderProducts();
+            }, (error) => {
+                console.error('Lỗi load categories:', error);
+                showToast('⚠️ Không thể tải mục sản phẩm', 'error');
             });
+            
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
                 renderProducts();
+            }, (error) => {
+                console.error('Lỗi load products:', error);
             });
+            
             db.ref('vouchers').on('value', (snapshot) => {
                 vouchersData = snapshot.val() || {};
             });
@@ -864,11 +870,8 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== XÁC NHẬN MUA HÀNG =====
+        // ===== XÁC NHẬN MUA =====
         function confirmOrder() {
-            // Chặn spam click
-            if (isProcessing) return;
-            
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
                 return;
@@ -914,11 +917,6 @@
             const confirmMsg = `Bạn có chắc muốn mua ${currentQuantity} "${currentProduct.name}" với tổng ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 Mã giảm giá: ' + voucherUsed : ''}`;
             if (!confirm(confirmMsg)) return;
             
-            // Đánh dấu đang xử lý
-            isProcessing = true;
-            const btn = document.getElementById('btnConfirmOrder');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             showLoading();
             
             const dataList = currentProduct.data || [];
@@ -976,30 +974,22 @@
                 updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
             
-            db.ref().update(updates)
-                .then(() => {
-                    hideLoading();
-                    closeOrderPopup();
-                    showResultPopup(orderData);
-                    db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
-                        const bal = snap.val() || 0;
-                        document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
-                        currentUser.balance = bal;
-                    });
-                    productsData[currentProduct.id].data = remainingData;
-                    productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
-                    renderProducts();
-                    isProcessing = false;
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
-                })
-                .catch(err => {
-                    hideLoading();
-                    showToast('❌ ' + err.message, 'error');
-                    isProcessing = false;
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
+            db.ref().update(updates).then(() => {
+                hideLoading();
+                closeOrderPopup();
+                showResultPopup(orderData);
+                db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
+                    const bal = snap.val() || 0;
+                    document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
+                    currentUser.balance = bal;
                 });
+                productsData[currentProduct.id].data = remainingData;
+                productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                renderProducts();
+            }).catch(err => {
+                hideLoading();
+                showToast('❌ ' + err.message, 'error');
+            });
         }
 
         function closeOrderPopup() {
@@ -1067,11 +1057,11 @@
 
         // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
-            if (isDataLoaded && currentUser) return;
-            
             if (checkQuickLogin()) {
                 const success = await autoLoginWithQuickToken();
-                if (success) return;
+                if (success) {
+                    return;
+                }
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
@@ -1129,7 +1119,7 @@
                 });
                 
                 loadData();
-                // Ẩn loading sau 3s nếu chưa ẩn
+                // Tắt loading sau 3 giây dù sao đi nữa
                 setTimeout(() => {
                     if (!isDataLoaded) {
                         isDataLoaded = true;
@@ -1138,6 +1128,7 @@
                 }, 3000);
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
+                isDataLoaded = true;
                 hideLoading();
             }
         });
@@ -1215,14 +1206,13 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // Hiển thị loading khi trang load
+        // Hiển thị loading
         showLoading();
-        // Ẩn loading sau 5s nếu không có gì xảy ra
+        // Ẩn loading sau 2 giây
         setTimeout(() => {
-            if (!isDataLoaded) {
-                hideLoading();
-            }
-        }, 5000);
+            hideLoading();
+            isDataLoaded = true;
+        }, 2000);
     </script>
 </body>
 </html>
