@@ -95,7 +95,7 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO RỘNG FULL NGANG ===== */
+        /* ===== SIDE MENU - LOGO PHÓNG TO X2 CHIỀU RỘNG ===== */
         .side-menu { 
             position: fixed; 
             top: 0; 
@@ -127,19 +127,21 @@
         .side-menu .menu-header .menu-logo { 
             display: block;
             width: 100%;
-            padding: 4px 6px;
+            padding: 0;
         }
         .side-menu .menu-header .menu-logo img { 
             width: 100%;
             height: auto;
-            max-height: 70px;
+            max-height: 100px;
             object-fit: contain;
-            border-radius: 4px;
+            border-radius: 0;
             display: block;
+            padding: 8px 12px;
+            background: #ffffff;
         }
         .side-menu .menu-header .close { 
             cursor: pointer; 
-            font-size: 16px; 
+            font-size: 18px; 
             color: var(--text-muted); 
             transition: var(--transition);
             position: absolute;
@@ -147,14 +149,15 @@
             top: 50%;
             transform: translateY(-50%);
             z-index: 5;
-            background: rgba(255,255,255,0.85);
-            width: 26px;
-            height: 26px;
+            background: rgba(255,255,255,0.9);
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            font-weight: 700;
         }
         .side-menu .menu-header .close:hover { 
             color: var(--danger); 
@@ -253,7 +256,7 @@
             .header { padding: 6px 10px; } 
             .content { padding: 10px 12px; } 
             .history-card { padding: 14px 16px; } 
-            .side-menu .menu-header .menu-logo img { max-height: 50px; }
+            .side-menu .menu-header .menu-logo img { max-height: 70px; padding: 4px 8px; }
             .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
             .wallet-icon-box { width: 22px; height: 22px; }
             .wallet-icon-box i { font-size: 10px; }
@@ -271,7 +274,7 @@
             .stat-box { min-width: 70px; padding: 6px 12px; }
             .stat-box .num { font-size: 16px; }
             .filter-bar input, .filter-bar select { min-width: 70px; font-size: 11px; padding: 4px 10px; }
-            .side-menu .menu-header .close { width: 22px; height: 22px; font-size: 13px; right: 5px; }
+            .side-menu .menu-header .close { width: 26px; height: 26px; font-size: 15px; right: 5px; }
         }
     </style>
 </head>
@@ -286,7 +289,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO RỘNG FULL NGANG -->
+    <!-- SIDE MENU - LOGO PHÓNG TO X2 -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
