@@ -541,6 +541,7 @@
         let currentQuantity = 1;
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
+        let isProcessing = false;
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -863,8 +864,11 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== XÁC NHẬN MUA =====
+        // ===== XÁC NHẬN MUA HÀNG =====
         function confirmOrder() {
+            // Chặn spam click
+            if (isProcessing) return;
+            
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
                 return;
@@ -910,6 +914,11 @@
             const confirmMsg = `Bạn có chắc muốn mua ${currentQuantity} "${currentProduct.name}" với tổng ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 Mã giảm giá: ' + voucherUsed : ''}`;
             if (!confirm(confirmMsg)) return;
             
+            // Đánh dấu đang xử lý
+            isProcessing = true;
+            const btn = document.getElementById('btnConfirmOrder');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             showLoading();
             
             const dataList = currentProduct.data || [];
@@ -967,22 +976,30 @@
                 updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
             
-            db.ref().update(updates).then(() => {
-                hideLoading();
-                closeOrderPopup();
-                showResultPopup(orderData);
-                db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
-                    const bal = snap.val() || 0;
-                    document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
-                    currentUser.balance = bal;
+            db.ref().update(updates)
+                .then(() => {
+                    hideLoading();
+                    closeOrderPopup();
+                    showResultPopup(orderData);
+                    db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
+                        const bal = snap.val() || 0;
+                        document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
+                        currentUser.balance = bal;
+                    });
+                    productsData[currentProduct.id].data = remainingData;
+                    productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                    renderProducts();
+                    isProcessing = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
+                })
+                .catch(err => {
+                    hideLoading();
+                    showToast('❌ ' + err.message, 'error');
+                    isProcessing = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
                 });
-                productsData[currentProduct.id].data = remainingData;
-                productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
-                renderProducts();
-            }).catch(err => {
-                hideLoading();
-                showToast('❌ ' + err.message, 'error');
-            });
         }
 
         function closeOrderPopup() {
@@ -1050,12 +1067,11 @@
 
         // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
+            if (isDataLoaded && currentUser) return;
+            
             if (checkQuickLogin()) {
                 const success = await autoLoginWithQuickToken();
-                if (success) {
-                    // Nếu quick login thành công, không làm gì thêm
-                    return;
-                }
+                if (success) return;
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
@@ -1113,7 +1129,7 @@
                 });
                 
                 loadData();
-                // Đảm bảo ẩn loading sau khi load data
+                // Ẩn loading sau 3s nếu chưa ẩn
                 setTimeout(() => {
                     if (!isDataLoaded) {
                         isDataLoaded = true;
