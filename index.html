@@ -180,52 +180,112 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        /* ===== POPUP MUA HÀNG ĐẸP ===== */
+        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .order-popup-overlay.active { display: flex; }
+        
         .order-popup { 
             background: var(--bg-card); 
-            border-radius: 20px; 
-            padding: 28px; 
-            max-width: 460px; 
-            width: 92%; 
-            border: 2px solid var(--border-color); 
-            max-height: 90vh; 
+            border-radius: 24px; 
+            padding: 32px 28px; 
+            max-width: 480px; 
+            width: 100%; 
+            border: 1px solid var(--border-color); 
+            max-height: 95vh; 
             overflow-y: auto; 
             position: relative; 
-            animation: popupIn 0.3s ease; 
+            animation: popupIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
         }
-        @keyframes popupIn { from { transform: scale(0.92) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        @keyframes popupIn { 
+            from { transform: scale(0.9) translateY(30px); opacity: 0; } 
+            to { transform: scale(1) translateY(0); opacity: 1; } 
+        }
         
         .order-popup .close-btn { 
             position: absolute; 
-            top: 12px; 
-            right: 16px; 
-            font-size: 22px; 
+            top: 14px; 
+            right: 18px; 
+            font-size: 20px; 
             cursor: pointer; 
             color: var(--text-muted); 
             transition: var(--transition); 
-            background: none; 
-            border: none; 
-            z-index: 1; 
+            background: var(--wallet-bg);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
         }
-        .order-popup .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
+        .order-popup .close-btn:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
         
-        .order-popup .popup-header { text-align: center; margin-bottom: 16px; }
-        .order-popup .popup-header .product-icon { font-size: 48px; display: block; margin-bottom: 6px; }
-        .order-popup .popup-header h3 { color: var(--text-primary); font-size: 20px; }
-        .order-popup .popup-header .product-price-display { color: var(--accent); font-size: 18px; font-weight: 700; }
+        .order-popup .popup-header { text-align: center; margin-bottom: 20px; padding-top: 4px; }
+        .order-popup .popup-header .product-icon { 
+            font-size: 64px; 
+            display: block; 
+            margin-bottom: 8px; 
+            background: var(--wallet-bg);
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+        }
+        .order-popup .popup-header .product-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 18px; }
+        .order-popup .popup-header h3 { 
+            color: var(--text-primary); 
+            font-size: 22px; 
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .order-popup .popup-header .product-price-display { 
+            color: var(--accent); 
+            font-size: 20px; 
+            font-weight: 700;
+            background: var(--wallet-bg);
+            display: inline-block;
+            padding: 4px 20px;
+            border-radius: 12px;
+            margin-top: 4px;
+        }
         
-        .order-popup .popup-body { margin: 12px 0; }
-        .order-popup .popup-body .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
-        .order-popup .popup-body .info-row .label { color: var(--text-muted); }
+        .order-popup .popup-body { margin: 16px 0; }
+        .order-popup .popup-body .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 10px 0; 
+            border-bottom: 1px solid var(--border-color); 
+            font-size: 14px; 
+            color: var(--text-primary); 
+        }
+        .order-popup .popup-body .info-row .label { color: var(--text-muted); font-weight: 500; }
+        .order-popup .popup-body .info-row .value { font-weight: 600; }
+        .order-popup .popup-body .info-row .value.stock { color: var(--success); }
+        .order-popup .popup-body .info-row .value.balance { color: var(--accent); }
         
-        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 12px 0; }
+        .quantity-control { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 20px; 
+            padding: 16px 0; 
+            background: var(--wallet-bg);
+            border-radius: 14px;
+            margin: 8px 0 12px;
+        }
         .quantity-control .qty-btn { 
-            width: 40px; height: 40px; 
+            width: 44px; height: 44px; 
             border-radius: 50%; 
             border: 2px solid var(--border-color); 
-            background: var(--wallet-bg); 
-            font-size: 20px; 
+            background: var(--bg-card); 
+            font-size: 18px; 
             font-weight: 700; 
             cursor: pointer; 
             transition: var(--transition); 
@@ -233,76 +293,194 @@
             align-items: center; 
             justify-content: center; 
             color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .quantity-control .qty-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.05); }
-        .quantity-control .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
-        .quantity-control .qty-btn:disabled:hover { background: var(--wallet-bg); color: var(--text-primary); border-color: var(--border-color); }
-        .quantity-control .qty-number { font-size: 24px; font-weight: 700; color: var(--text-primary); min-width: 40px; text-align: center; }
+        .quantity-control .qty-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.08); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
+        .quantity-control .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+        .quantity-control .qty-btn:disabled:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--border-color); }
+        .quantity-control .qty-number { 
+            font-size: 28px; 
+            font-weight: 700; 
+            color: var(--text-primary); 
+            min-width: 50px; 
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
         
-        .voucher-popup-section { display: flex; gap: 8px; margin: 8px 0 12px; }
+        .voucher-popup-section { 
+            display: flex; 
+            gap: 10px; 
+            margin: 12px 0 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
         .voucher-popup-section input { 
             flex: 1; 
-            padding: 8px 12px; 
+            padding: 10px 14px; 
             border: 2px solid var(--border-color); 
-            border-radius: 8px; 
+            border-radius: 12px; 
             font-size: 13px; 
             background: var(--bg-card); 
             color: var(--text-primary); 
             transition: var(--transition); 
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 120px;
         }
-        .voucher-popup-section input:focus { outline: none; border-color: var(--accent); }
-        .voucher-popup-section input::placeholder { text-transform: none; color: var(--text-muted); font-size: 12px; }
+        .voucher-popup-section input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .voucher-popup-section input::placeholder { text-transform: none; color: var(--text-muted); font-size: 12px; letter-spacing: 0; }
         .voucher-popup-section .apply-voucher-btn { 
-            padding: 8px 16px; 
-            background: var(--warning); 
+            padding: 10px 18px; 
+            background: linear-gradient(135deg, #f5a623, #f7c948);
             color: #fff; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 12px; 
             font-size: 13px; 
             font-weight: 600; 
             cursor: pointer; 
             transition: var(--transition); 
-            white-space: nowrap; 
+            white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(245,166,35,0.3);
         }
-        .voucher-popup-section .apply-voucher-btn:hover { transform: scale(1.05); opacity: 0.9; }
-        .voucher-popup-section .applied-voucher { color: var(--success); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .voucher-popup-section .apply-voucher-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.4); }
+        .voucher-popup-section .applied-voucher { 
+            color: var(--success); 
+            font-size: 13px; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+            padding: 4px 12px;
+            background: #d4edda;
+            border-radius: 8px;
+            flex: 1;
+        }
+        body.dark-mode .voucher-popup-section .applied-voucher { background: #1a3a2a; }
         
-        .order-popup .total-row { display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid var(--border-color); margin-top: 8px; font-size: 18px; font-weight: 700; color: var(--text-primary); }
-        .order-popup .total-row span { color: var(--accent); }
+        .order-popup .total-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 16px 0; 
+            border-top: 2px solid var(--border-color); 
+            margin-top: 4px; 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: var(--text-primary); 
+        }
+        .order-popup .total-row span { color: var(--accent); font-size: 22px; }
         
         .order-popup .btn-confirm { 
             width: 100%; 
-            padding: 12px; 
-            background: var(--success); 
+            padding: 14px; 
+            background: linear-gradient(135deg, var(--success), #1e8a4a);
             color: #fff; 
             border: none; 
-            border-radius: 10px; 
-            font-size: 16px; 
-            font-weight: 600; 
+            border-radius: 14px; 
+            font-size: 17px; 
+            font-weight: 700; 
             cursor: pointer; 
             transition: var(--transition); 
-            margin-top: 8px; 
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(39,174,96,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .order-popup .btn-confirm:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
-        .order-popup .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .order-popup .btn-confirm:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 8px 30px rgba(39,174,96,0.45); }
+        .order-popup .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .result-popup .popup-header .status-icon { font-size: 48px; display: block; margin-bottom: 8px; }
-        .result-popup .popup-header h3 { color: var(--success); font-size: 20px; }
-        .result-popup .popup-header .order-code { color: var(--text-muted); font-size: 13px; font-family: monospace; background: var(--wallet-bg); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 4px; }
-        .result-popup .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
-        .result-popup .info-grid .info-item { background: var(--wallet-bg); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); }
-        .result-popup .info-grid .info-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .result-popup .info-grid .info-item .value { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-top: 2px; word-break: break-word; }
+        /* ===== RESULT POPUP ===== */
+        .result-popup .popup-header .status-icon { font-size: 64px; display: block; margin-bottom: 8px; }
+        .result-popup .popup-header h3 { color: var(--success); font-size: 22px; }
+        .result-popup .popup-header .order-code { 
+            color: var(--text-muted); 
+            font-size: 13px; 
+            font-family: monospace; 
+            background: var(--wallet-bg); 
+            padding: 4px 16px; 
+            border-radius: 8px; 
+            display: inline-block; 
+            margin-top: 4px; 
+        }
+        .result-popup .info-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin: 16px 0; 
+        }
+        .result-popup .info-grid .info-item { 
+            background: var(--wallet-bg); 
+            border-radius: 12px; 
+            padding: 12px 14px; 
+            border: 1px solid var(--border-color); 
+            transition: var(--transition);
+        }
+        .result-popup .info-grid .info-item:hover { border-color: var(--accent); }
+        .result-popup .info-grid .info-item .label { 
+            font-size: 10px; 
+            color: var(--text-muted); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .result-popup .info-grid .info-item .value { 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: var(--text-primary); 
+            margin-top: 3px; 
+            word-break: break-word; 
+        }
         .result-popup .info-grid .info-item.full { grid-column: 1 / -1; }
-        .result-popup .product-detail { display: flex; gap: 12px; padding: 12px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); margin: 8px 0; align-items: center; }
-        .result-popup .product-detail .pd-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
-        .result-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .result-popup .product-detail { 
+            display: flex; 
+            gap: 14px; 
+            padding: 14px; 
+            background: var(--wallet-bg); 
+            border-radius: 14px; 
+            border: 1px solid var(--border-color); 
+            margin: 8px 0; 
+            align-items: center; 
+        }
+        .result-popup .product-detail .pd-image { 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 12px; 
+            object-fit: cover; 
+            background: var(--bg-card); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 28px; 
+            border: 1px solid var(--border-color); 
+            flex-shrink: 0; 
+            overflow: hidden; 
+        }
+        .result-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
         .result-popup .product-detail .pd-info { flex: 1; }
-        .result-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); }
+        .result-popup .product-detail .pd-info .pd-name { font-weight: 700; color: var(--text-primary); font-size: 15px; }
         .result-popup .product-detail .pd-info .pd-desc { font-size: 12px; color: var(--text-muted); }
-        .result-popup .btn-done { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 12px; }
-        .result-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        .result-popup .btn-done { 
+            width: 100%; 
+            padding: 12px; 
+            background: linear-gradient(135deg, var(--success), #1e8a4a);
+            color: #fff; 
+            border: none; 
+            border-radius: 14px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            margin-top: 12px;
+            box-shadow: 0 4px 20px rgba(39,174,96,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .result-popup .btn-done:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 8px 30px rgba(39,174,96,0.4); }
 
         .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
@@ -310,7 +488,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 12px 28px; background: var(--bg-card); color: var(--text-primary); border-radius: 14px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.success { border-color: var(--success); color: var(--success); }
         .toast.error { border-color: var(--danger); color: var(--danger); }
@@ -335,10 +513,11 @@
             .category-item .cat-name { font-size: 11px; }
             .product-grid { grid-template-columns: 1fr; }
             .product-card .product-image { width: 55px; height: 55px; font-size: 24px; }
-            .order-popup { padding: 16px; }
+            .order-popup { padding: 20px 16px; }
             .result-popup .info-grid { grid-template-columns: 1fr; }
-            .quantity-control .qty-btn { width: 34px; height: 34px; font-size: 16px; }
-            .quantity-control .qty-number { font-size: 20px; min-width: 30px; }
+            .quantity-control .qty-btn { width: 38px; height: 38px; font-size: 16px; }
+            .quantity-control .qty-number { font-size: 22px; min-width: 30px; }
+            .order-popup .popup-header .product-icon { width: 70px; height: 70px; font-size: 48px; }
         }
     </style>
 </head>
@@ -366,7 +545,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo"></div>
+            <div class="logo">🎮 KuanZGame</div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -410,14 +589,14 @@
         <div class="order-popup">
             <button class="close-btn" onclick="closeOrderPopup()"><i class="fas fa-times"></i></button>
             <div class="popup-header">
-                <span class="product-icon" id="popupProductIcon">📦</span>
+                <div class="product-icon" id="popupProductIcon">📦</div>
                 <h3 id="popupProductName">Sản phẩm</h3>
                 <div class="product-price-display" id="popupProductPrice">0 VND</div>
             </div>
             
             <div class="popup-body">
-                <div class="info-row"><span class="label"><i class="fas fa-boxes"></i> Số lượng tồn</span><span id="popupStock">0</span></div>
-                <div class="info-row"><span class="label"><i class="fas fa-user"></i> Số dư của bạn</span><span id="popupBalance">0 VND</span></div>
+                <div class="info-row"><span class="label"><i class="fas fa-boxes"></i> Số lượng tồn</span><span class="value stock" id="popupStock">0</span></div>
+                <div class="info-row"><span class="label"><i class="fas fa-wallet"></i> Số dư của bạn</span><span class="value balance" id="popupBalance">0 VND</span></div>
             </div>
             
             <div class="quantity-control">
@@ -428,7 +607,7 @@
             
             <div class="voucher-popup-section">
                 <input type="text" id="popupVoucherInput" placeholder="Nhập mã giảm giá" />
-                <button class="apply-voucher-btn" onclick="applyPopupVoucher()"><i class="fas fa-ticket-alt"></i> Áp</button>
+                <button class="apply-voucher-btn" onclick="applyPopupVoucher()"><i class="fas fa-ticket-alt"></i> Áp dụng</button>
                 <span id="popupVoucherStatus"></span>
             </div>
             
@@ -437,7 +616,9 @@
                 <span id="popupTotalPrice">0 VND</span>
             </div>
             
-            <button class="btn-confirm" id="btnConfirmOrder" onclick="confirmOrder()"><i class="fas fa-shopping-cart"></i> Xác nhận mua</button>
+            <button class="btn-confirm" id="btnConfirmOrder" onclick="confirmOrder()">
+                <i class="fas fa-shopping-cart"></i> Xác nhận mua
+            </button>
         </div>
     </div>
 
@@ -542,8 +723,8 @@
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
         let isProcessing = false;
-        let dataLoadAttempts = 0;
 
+        // ===== TOAST =====
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
             el.textContent = msg;
@@ -553,6 +734,7 @@
             el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
+        // ===== THEME =====
         function applyTheme() {
             const isDark = localStorage.getItem('theme') === 'dark';
             document.body.classList.toggle('dark-mode', isDark);
@@ -562,13 +744,12 @@
         }
         applyTheme();
 
+        // ===== LOADING =====
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) {
                 overlay.classList.add('hidden');
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                }, 300);
+                overlay.style.display = 'none';
             }
         }
 
@@ -580,6 +761,28 @@
             }
         }
 
+        // ===== FORCE LOAD =====
+        function forceLoadData() {
+            console.log('🔥 Force loading data...');
+            if (!isDataLoaded) {
+                // Tạo dữ liệu mẫu nếu chưa có
+                if (Object.keys(productsData).length === 0) {
+                    console.log('📦 No products found, using empty data');
+                    productsData = {};
+                }
+                if (Object.keys(categoriesData).length === 0) {
+                    console.log('📁 No categories found, using empty data');
+                    categoriesData = {};
+                }
+                renderCategories();
+                renderProducts();
+                isDataLoaded = true;
+                hideLoading();
+                showToast('✅ Đã tải dữ liệu!', 'success');
+            }
+        }
+
+        // ===== QUICK LOGIN =====
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -635,15 +838,17 @@
             }
         }
 
+        // ===== LOAD DATA =====
         function loadDataWithRetry() {
             return new Promise((resolve) => {
                 let loaded = false;
                 let timeoutId = null;
+                let retryCount = 0;
                 
                 const productsRef = db.ref('products');
                 const productsListener = productsRef.on('value', (snapshot) => {
                     productsData = snapshot.val() || {};
-                    console.log('Products loaded:', Object.keys(productsData).length);
+                    console.log('✅ Products loaded:', Object.keys(productsData).length);
                     renderCategories();
                     renderProducts();
                     if (!loaded) {
@@ -658,30 +863,33 @@
                 const categoriesRef = db.ref('categories');
                 categoriesRef.on('value', (snapshot) => {
                     categoriesData = snapshot.val() || {};
-                    console.log('Categories loaded:', Object.keys(categoriesData).length);
+                    console.log('✅ Categories loaded:', Object.keys(categoriesData).length);
                     renderCategories();
                     renderProducts();
                 });
                 
                 db.ref('vouchers').on('value', (snapshot) => {
                     vouchersData = snapshot.val() || {};
-                    console.log('Vouchers loaded:', Object.keys(vouchersData).length);
+                    console.log('✅ Vouchers loaded:', Object.keys(vouchersData).length);
                 });
                 
+                // ===== FORCE LOAD SAU 2.5 GIÂY =====
                 timeoutId = setTimeout(() => {
                     if (!loaded) {
-                        console.log('Load timeout, forcing render');
+                        console.log('⏰ Load timeout, forcing render...');
                         loaded = true;
                         isDataLoaded = true;
                         renderCategories();
                         renderProducts();
                         hideLoading();
+                        showToast('✅ Đã tải dữ liệu!', 'success');
                         resolve();
                     }
-                }, 3000);
+                }, 2500);
             });
         }
 
+        // ===== RENDER CATEGORIES =====
         function renderCategories() {
             const grid = document.getElementById('categoryGrid');
             const countEl = document.getElementById('categoryCount');
@@ -724,12 +932,14 @@
             grid.innerHTML = html;
         }
 
+        // ===== SELECT CATEGORY =====
         function selectCategory(categoryId) {
             selectedCategory = categoryId;
             renderCategories();
             renderProducts();
         }
 
+        // ===== RENDER PRODUCTS =====
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             let filtered = [];
@@ -798,6 +1008,7 @@
             grid.innerHTML = html;
         }
 
+        // ===== OPEN BUY POPUP =====
         function openBuyPopup(productId) {
             const product = productsData[productId];
             if (!product) {
@@ -820,8 +1031,12 @@
             currentVoucherCode = null;
             currentVoucherDiscount = 0;
             
-            const icon = product.image ? `<img src="${product.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;" onerror="this.parentElement.textContent='${product.icon || '📦'}'" />` : (product.icon || '📦');
-            document.getElementById('popupProductIcon').innerHTML = icon;
+            const iconEl = document.getElementById('popupProductIcon');
+            if (product.image) {
+                iconEl.innerHTML = `<img src="${product.image}" onerror="this.parentElement.textContent='${product.icon || '📦'}'" />`;
+            } else {
+                iconEl.textContent = product.icon || '📦';
+            }
             document.getElementById('popupProductName').textContent = product.name || 'Sản phẩm';
             document.getElementById('popupProductPrice').textContent = (product.price || 0).toLocaleString('vi-VN') + ' VND';
             document.getElementById('popupStock').textContent = stock;
@@ -835,6 +1050,7 @@
             document.getElementById('orderPopup').classList.add('active');
         }
 
+        // ===== CHANGE QUANTITY =====
         function changeQuantity(delta) {
             if (!currentProduct) return;
             const stock = currentProduct.dataArray ? currentProduct.dataArray.length : 0;
@@ -849,6 +1065,7 @@
             updateTotalPrice();
         }
 
+        // ===== APPLY VOUCHER =====
         function applyPopupVoucher() {
             const input = document.getElementById('popupVoucherInput');
             const code = input.value.trim().toUpperCase();
@@ -891,6 +1108,7 @@
             showToast('✅ Đã áp mã giảm giá!', 'success');
         }
 
+        // ===== UPDATE TOTAL =====
         function updateTotalPrice() {
             if (!currentProduct) return;
             const basePrice = currentProduct.price || 0;
@@ -910,6 +1128,7 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
+        // ===== CONFIRM ORDER =====
         function confirmOrder() {
             if (isProcessing) return;
             
@@ -962,7 +1181,6 @@
             const btn = document.getElementById('btnConfirmOrder');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
-            showLoading();
             
             const soldData = dataArray.slice(0, currentQuantity);
             const remainingData = dataArray.slice(currentQuantity);
@@ -1021,7 +1239,6 @@
             
             db.ref().update(updates)
                 .then(() => {
-                    hideLoading();
                     closeOrderPopup();
                     showResultPopup(orderData);
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
@@ -1037,10 +1254,10 @@
                     isProcessing = false;
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
+                    showToast('✅ Mua hàng thành công!', 'success');
                 })
                 .catch(err => {
                     console.error('Lỗi mua hàng:', err);
-                    hideLoading();
                     showToast('❌ ' + err.message, 'error');
                     isProcessing = false;
                     btn.disabled = false;
@@ -1048,6 +1265,7 @@
                 });
         }
 
+        // ===== CLOSE ORDER POPUP =====
         function closeOrderPopup() {
             document.getElementById('orderPopup').classList.remove('active');
             currentProduct = null;
@@ -1056,6 +1274,7 @@
             currentVoucherDiscount = 0;
         }
 
+        // ===== SHOW RESULT =====
         function showResultPopup(orderData) {
             const popup = document.getElementById('resultPopup');
             const grid = document.getElementById('resultInfoGrid');
@@ -1067,7 +1286,7 @@
             
             const isSuccess = orderData.status === 'success';
             statusIcon.textContent = isSuccess ? '✅' : '❌';
-            statusTitle.textContent = isSuccess ? 'Đặt hàng thành công!' : 'Đặt hàng thất bại!';
+            statusTitle.textContent = isSuccess ? '🎉 Đặt hàng thành công!' : '❌ Đặt hàng thất bại!';
             statusTitle.style.color = isSuccess ? 'var(--success)' : 'var(--danger)';
             
             const price = orderData.price.toLocaleString('vi-VN');
@@ -1079,13 +1298,10 @@
             
             grid.innerHTML = `
                 <div class="info-item"><div class="label"><i class="fas fa-user"></i> Người mua</div><div class="value">${orderData.userName || 'Khách hàng'}</div></div>
-                <div class="info-item"><div class="label"><i class="fas fa-id-card"></i> Mã người dùng</div><div class="value" style="font-size:12px;font-family:monospace;">${orderData.userId || 'N/A'}</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-tag"></i> Loại mục</div><div class="value">${categoryName}</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-clock"></i> Thời gian</div><div class="value" style="font-size:12px;">${new Date(orderData.timestamp).toLocaleString('vi-VN')}</div></div>
-                <div class="info-item full"><div class="label"><i class="fas fa-info-circle"></i> Mô tả sản phẩm</div><div class="value" style="font-weight:400;font-size:13px;">${orderData.productDesc || 'Không có mô tả'}</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-boxes"></i> Số lượng</div><div class="value">${orderData.quantity || 1}</div></div>
-                <div class="info-item"><div class="label"><i class="fas fa-dollar-sign"></i> Giá</div><div class="value" style="color:var(--accent);">${price} VND</div></div>
-                <div class="info-item"><div class="label"><i class="fas fa-check-circle"></i> Trạng thái</div><div class="value ${isSuccess ? 'status-success' : 'status-failed'}">${isSuccess ? '✅ Thành công' : '❌ Thất bại'}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-check-circle"></i> Trạng thái</div><div class="value" style="color:var(--success);">✅ Thành công</div></div>
                 ${orderData.voucher ? `<div class="info-item full"><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div><div class="value" style="color:var(--success);">${orderData.voucher} ${orderData.discountText || ''}</div></div>` : ''}
                 <div class="info-item full"><div class="label"><i class="fas fa-database"></i> Dữ liệu nhận được</div><div class="value" style="font-weight:400;font-size:12px;font-family:monospace;background:var(--bg-card);padding:6px 10px;border-radius:4px;border:1px solid var(--border-color);word-break:break-all;">${orderDataStr}</div></div>
             `;
@@ -1111,6 +1327,7 @@
             document.getElementById('resultPopup').classList.remove('active');
         }
 
+        // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
             if (isDataLoaded && currentUser) {
                 console.log('Data already loaded, skipping');
@@ -1184,16 +1401,19 @@
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
-                loadDataWithRetry();
-                setTimeout(() => {
-                    if (!isDataLoaded) {
-                        isDataLoaded = true;
-                        hideLoading();
-                    }
-                }, 5000);
+                forceLoadData();
             }
         });
 
+        // ===== FORCE LOAD SAU 3 GIÂY (FALLBACK) =====
+        setTimeout(() => {
+            if (!isDataLoaded) {
+                console.log('⏰ Final force load after 3s');
+                forceLoadData();
+            }
+        }, 3000);
+
+        // ===== MENU =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -1251,6 +1471,7 @@
             }
         }
 
+        // ===== EVENT LISTENERS =====
         document.getElementById('popupVoucherInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') applyPopupVoucher();
         });
@@ -1266,17 +1487,11 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
+        // ===== START =====
         showLoading();
-        console.log('Loading started');
+        console.log('🚀 Index page loading...');
         
-        setTimeout(() => {
-            if (!isDataLoaded) {
-                hideLoading();
-                console.log('Loading hidden (timeout fallback)');
-            }
-        }, 8000);
-        
-        console.log('Index page loaded with Firebase listeners');
+        console.log('✅ Index page loaded with Firebase listeners');
     </script>
 </body>
 </html>
