@@ -9,521 +9,303 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        /* ===== RESET & VARIABLES ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         :root { 
             --bg-body: #f0f7ff; 
             --bg-card: #fff; 
             --bg-header: #fff; 
-            --text-primary: #2c5a7a; 
-            --text-secondary: #5a8fb5; 
+            --text-primary: #1a3a5a; 
+            --text-secondary: #4a8ab5; 
             --text-muted: #8ab3d4; 
             --border-color: #e3eef9; 
-            --shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); 
+            --shadow: 0 2px 12px rgba(0,0,0,0.06); 
+            --shadow-popup: 0 8px 32px rgba(0,0,0,0.15); 
             --wallet-bg: #f0f7ff; 
-            --hover-bg: #f0f7ff; 
+            --hover-bg: #e8f0fa; 
             --accent: #3b8fd6; 
             --success: #27ae60; 
             --danger: #e74c6f; 
             --warning: #f39c12; 
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 12px;
         }
-        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
-        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
-        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
-        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --accent: #ff8a4a; }
-        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --accent: #ff4a7a; }
-        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --accent: #00ccff; }
-        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --accent: #b87aff; }
-        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
-        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
-        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
+        /* 10 themes như cũ, giữ nguyên để tiết kiệm dung lượng */
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --accent: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --accent: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 12px rgba(0,0,0,0.6); --shadow-popup: 0 8px 32px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --accent: #00ccff; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --accent: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
+        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 12px rgba(0,0,0,0.3); --shadow-popup: 0 8px 32px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
 
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
-
-        .menu-icon { cursor: pointer; padding: 8px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: var(--transition); width: 38px; height: 38px; flex-shrink: 0; }
+        /* ===== HEADER ===== */
+        .header { background: var(--bg-header); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(12px); }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { font-size: 18px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
+        .menu-icon { cursor: pointer; padding: 6px 8px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); width: 34px; height: 34px; flex-shrink: 0; }
         .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .menu-icon .bar { display: block; width: 20px; height: 2.5px; background: var(--text-secondary); border-radius: 3px; transition: var(--transition); flex-shrink: 0; }
-        .menu-icon .bar:nth-child(1) { transform: translateY(0px); }
-        .menu-icon .bar:nth-child(3) { transform: translateY(0px); }
+        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: var(--transition); flex-shrink: 0; }
         .menu-icon:hover .bar { background: var(--text-primary); }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 36px; }
+        .wallet-container:hover { border-color: var(--accent); }
+        .wallet-icon-box { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box i { color: #fff; font-size: 13px; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.2; }
+        .wallet-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
-        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box i { color: #fff; font-size: 16px; }
-        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
-        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
-
-        .bell-icon { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 18px; color: var(--text-secondary); flex-shrink: 0; }
+        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 15px; color: var(--text-secondary); flex-shrink: 0; }
         .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); color: var(--text-primary); }
-        .bell-icon .bell-dot { width: 9px; height: 9px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; position: absolute; top: 2px; right: 2px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
         .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
-        .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
+        .dot-menu { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
+        .dot-menu .dot { width: 3.5px; height: 3.5px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
 
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup { position: absolute; top: 42px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
-        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
-        .popup-item.logout { color: #e74c6f; }
+        .popup-item { padding: 8px 16px; color: var(--text-primary); font-size: 12px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 10px; }
+        .popup-item.logout { color: var(--danger); }
         .settings-wrapper { position: relative; }
 
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        /* ===== NOTIFICATION POPUP ===== */
+        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 320px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
+        .notif-popup .notif-header { padding: 0 12px 8px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 13px; }
         .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
         .notif-popup .notif-header .close:hover { color: var(--danger); }
-        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; display: flex; align-items: flex-start; gap: 10px; }
+        .notif-popup .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
         .notif-popup .notif-item i { margin-top: 2px; color: var(--text-secondary); }
-        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; display: block; }
-        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
-        .notif-popup .notif-item.unread i { color: #e74c6f; }
-        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
+        .notif-popup .notif-item .time { font-size: 9px; color: var(--text-muted); margin-top: 2px; display: block; }
+        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid var(--danger); }
+        .notif-popup .notif-item.unread i { color: var(--danger); }
+        .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
+        .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        /* ===== SIDE MENU ===== */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 14px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
-        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header { padding: 10px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 18px; color: var(--text-muted); transition: var(--transition); }
         .side-menu .menu-header .close:hover { color: var(--danger); transform: rotate(90deg); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
-        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
-        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
-        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
+        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .side-menu .menu-item .icon { font-size: 16px; width: 24px; text-align: center; }
+        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
 
-        .content { padding: 40px 24px; max-width: 1200px; margin: 0 auto; }
+        /* ===== CONTENT ===== */
+        .content { padding: 14px 16px; max-width: 1200px; margin: 0 auto; }
 
-        .intro-card { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: var(--transition); }
+        /* ===== INTRO CARD ===== */
+        .intro-card { background: var(--bg-card); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 14px; transition: var(--transition); }
         .intro-card:hover { box-shadow: var(--shadow-popup); }
         .intro-top { display: flex; align-items: center; gap: 10px; }
         .intro-top-left { display: flex; align-items: center; gap: 10px; }
-        .intro-top-left .intro-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
-        .intro-title { font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
-        .intro-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
-        .intro-body { margin-top: 16px; }
-        .intro-lead { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; padding-bottom: 12px; border-bottom: 1px dashed var(--border-color); }
-        .intro-section { padding-top: 12px; }
-        .intro-section + .intro-section { margin-top: 4px; }
-        .intro-section-title { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+        .intro-top-left .intro-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .intro-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .intro-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+        .intro-body { margin-top: 12px; }
+        .intro-lead { font-size: 12px; color: var(--text-secondary); line-height: 1.5; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); }
+        .intro-section { padding-top: 10px; }
+        .intro-section + .intro-section { margin-top: 2px; }
+        .intro-section-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
         .intro-list { list-style: none; }
-        .intro-list li { position: relative; padding-left: 16px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 4px; }
+        .intro-list li { position: relative; padding-left: 14px; font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 2px; }
         .intro-list li::before { content: "›"; position: absolute; left: 0; color: var(--text-secondary); font-weight: 700; }
-        .intro-footer { text-align: center; font-size: 12px; font-weight: 700; color: var(--text-primary); padding-top: 12px; margin-top: 4px; border-top: 1px dashed var(--border-color); }
+        .intro-footer { text-align: center; font-size: 11px; font-weight: 700; color: var(--text-primary); padding-top: 10px; margin-top: 2px; border-top: 1px dashed var(--border-color); }
         .intro-footer span { color: var(--accent); }
 
-        .category-section { background: var(--bg-card); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 16px; transition: var(--transition); }
+        /* ===== CATEGORY SECTION ===== */
+        .category-section { background: var(--bg-card); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 14px; transition: var(--transition); }
         .category-section:hover { box-shadow: var(--shadow-popup); }
-        .category-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .category-section-header h2 { font-size: 18px; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-        .category-section-header h2 span { color: var(--text-secondary); font-size: 14px; font-weight: 400; }
+        .category-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .category-section-header h2 { font-size: 16px; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+        .category-section-header h2 span { color: var(--text-secondary); font-size: 12px; font-weight: 400; }
 
-        .category-grid { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 20px 0; }
-        .category-item { background: var(--wallet-bg); border-radius: 12px; padding: 10px 18px; border: 2px solid var(--border-color); transition: var(--transition); cursor: pointer; display: flex; align-items: center; gap: 12px; min-width: 120px; flex: 0 1 auto; }
-        .category-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .category-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px 0; }
+        .category-item { background: var(--wallet-bg); border-radius: 8px; padding: 8px 14px; border: 2px solid var(--border-color); transition: var(--transition); cursor: pointer; display: flex; align-items: center; gap: 10px; min-width: 100px; flex: 0 1 auto; }
+        .category-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
         .category-item.active { border-color: var(--accent); background: var(--accent); color: #fff; }
         .category-item.active .cat-name { color: #fff; }
         .category-item.active .cat-count { color: rgba(255,255,255,0.8); }
-        .category-item .cat-image { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+        .category-item .cat-image { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
         .category-item .cat-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .category-item .cat-info { display: flex; flex-direction: column; }
-        .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 13px; transition: var(--transition); }
-        .category-item .cat-count { font-size: 10px; color: var(--text-muted); }
+        .category-item .cat-name { font-weight: 600; color: var(--text-primary); font-size: 12px; transition: var(--transition); }
+        .category-item .cat-count { font-size: 9px; color: var(--text-muted); }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border-color); }
-        .product-card { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        
-        .product-card .product-top { display: flex; gap: 14px; align-items: flex-start; }
-        .product-card .product-image { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
-        .product-card .product-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
+        /* ===== PRODUCT GRID ===== */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--border-color); }
+        .product-card { background: var(--wallet-bg); border-radius: var(--radius); padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .product-card .product-top { display: flex; gap: 12px; align-items: flex-start; }
+        .product-card .product-image { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
+        .product-card .product-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
         .product-card .product-info { flex: 1; min-width: 0; }
-        .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 15px; }
-        .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 17px; margin: 2px 0; }
-        .product-card .product-desc { 
-            font-size: 12px; 
-            color: var(--text-muted); 
-            line-height: 1.5; 
-            max-height: 60px;
-            overflow-y: auto;
-            padding-right: 4px;
-            margin-top: 4px;
-        }
+        .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 14px; }
+        .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 16px; margin: 2px 0; }
+        .product-card .product-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; max-height: 50px; overflow-y: auto; padding-right: 4px; margin-top: 2px; }
         .product-card .product-desc::-webkit-scrollbar { width: 3px; }
         .product-card .product-desc::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-        
-        .product-card .product-stats { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-color); }
-        .product-card .product-stats .stat { display: flex; align-items: center; gap: 4px; }
+        .product-card .product-stats { display: flex; gap: 12px; font-size: 11px; color: var(--text-muted); margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--border-color); }
+        .product-card .product-stats .stat { display: flex; align-items: center; gap: 3px; }
         .product-card .product-stats .stat.in-stock { color: var(--success); }
         .product-card .product-stats .stat.sold { color: var(--text-secondary); }
-
-        .product-card .btn-buy { 
-            margin-top: 10px; 
-            padding: 8px 20px; 
-            background: var(--accent); 
-            color: #fff; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            font-size: 14px; 
-            width: 100%;
-        }
+        .product-card .btn-buy { margin-top: 8px; padding: 7px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; width: 100%; }
         .product-card .btn-buy:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
         .product-card .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
-        .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
+        .product-empty { text-align: center; padding: 30px 16px; color: var(--text-muted); grid-column: 1/-1; }
+        .product-empty .big-icon { font-size: 36px; display: block; margin-bottom: 8px; }
 
         /* ===== ORDER POPUP ===== */
-        .order-popup-overlay { 
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); 
-            z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; 
-        }
+        .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .order-popup-overlay.active { display: flex; }
-        
-        .order-popup { 
-            background: var(--bg-card); 
-            border-radius: 20px; 
-            padding: 24px 24px 28px; 
-            max-width: 420px; 
-            width: 100%; 
-            border: 1px solid var(--border-color); 
-            position: relative; 
-            animation: popupIn 0.3s ease; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        @keyframes popupIn { 
-            from { transform: scale(0.92) translateY(20px); opacity: 0; } 
-            to { transform: scale(1) translateY(0); opacity: 1; } 
-        }
-        
-        .order-popup .close-btn { 
-            position: absolute; 
-            top: 12px; 
-            right: 14px; 
-            font-size: 18px; 
-            cursor: pointer; 
-            color: var(--text-muted); 
-            transition: var(--transition); 
-            background: var(--wallet-bg);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .order-popup { background: var(--bg-card); border-radius: 16px; padding: 20px 22px 24px; max-width: 400px; width: 100%; border: 1px solid var(--border-color); position: relative; animation: popupIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        @keyframes popupIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .order-popup .close-btn { position: absolute; top: 10px; right: 12px; font-size: 16px; cursor: pointer; color: var(--text-muted); transition: var(--transition); background: var(--wallet-bg); border: none; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .order-popup .close-btn:hover { background: var(--danger); color: #fff; transform: rotate(90deg); }
-        
-        .order-popup .popup-header { text-align: center; margin-bottom: 14px; }
-        .order-popup .popup-header .product-icon { 
-            font-size: 48px; 
-            width: 72px;
-            height: 72px;
-            background: var(--wallet-bg);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            border: 2px solid var(--border-color);
-            overflow: hidden;
-        }
-        .order-popup .popup-header .product-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
-        .order-popup .popup-header h3 { 
-            color: var(--text-primary); 
-            font-size: 18px; 
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .order-popup .popup-header .product-price-display { 
-            color: var(--accent); 
-            font-size: 17px; 
-            font-weight: 700;
-            background: var(--wallet-bg);
-            display: inline-block;
-            padding: 2px 16px;
-            border-radius: 10px;
-        }
-        
-        .order-popup .popup-body { margin: 12px 0; }
-        .order-popup .popup-body .info-row { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 8px 0; 
-            border-bottom: 1px solid var(--border-color); 
-            font-size: 13px; 
-            color: var(--text-primary); 
-        }
+        .order-popup .popup-header { text-align: center; margin-bottom: 10px; }
+        .order-popup .popup-header .product-icon { font-size: 36px; width: 60px; height: 60px; background: var(--wallet-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; border: 2px solid var(--border-color); overflow: hidden; }
+        .order-popup .popup-header .product-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+        .order-popup .popup-header h3 { color: var(--text-primary); font-size: 16px; font-weight: 700; margin-bottom: 1px; }
+        .order-popup .popup-header .product-price-display { color: var(--accent); font-size: 15px; font-weight: 700; background: var(--wallet-bg); display: inline-block; padding: 2px 14px; border-radius: 8px; }
+        .order-popup .popup-body { margin: 8px 0; }
+        .order-popup .popup-body .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 12px; color: var(--text-primary); }
         .order-popup .popup-body .info-row .label { color: var(--text-muted); font-weight: 500; }
         .order-popup .popup-body .info-row .value { font-weight: 600; }
         .order-popup .popup-body .info-row .value.stock { color: var(--success); }
         .order-popup .popup-body .info-row .value.balance { color: var(--accent); }
-        
-        .quantity-control { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 16px; 
-            padding: 12px 0; 
-            background: var(--wallet-bg);
-            border-radius: 12px;
-            margin: 6px 0 10px;
-        }
-        .quantity-control .qty-btn { 
-            width: 36px; height: 36px; 
-            border-radius: 50%; 
-            border: 2px solid var(--border-color); 
-            background: var(--bg-card); 
-            font-size: 16px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: var(--text-primary);
-        }
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 10px 0; background: var(--wallet-bg); border-radius: 10px; margin: 4px 0 8px; }
+        .quantity-control .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); background: var(--bg-card); font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; color: var(--text-primary); }
         .quantity-control .qty-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.06); }
         .quantity-control .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
         .quantity-control .qty-btn:disabled:hover { background: var(--bg-card); color: var(--text-primary); border-color: var(--border-color); }
-        .quantity-control .qty-number { 
-            font-size: 24px; 
-            font-weight: 700; 
-            color: var(--text-primary); 
-            min-width: 40px; 
-            text-align: center;
-        }
-        
-        .voucher-popup-section { 
-            display: flex; 
-            gap: 8px; 
-            margin: 10px 0 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .voucher-popup-section input { 
-            flex: 1; 
-            padding: 8px 12px; 
-            border: 2px solid var(--border-color); 
-            border-radius: 10px; 
-            font-size: 12px; 
-            background: var(--bg-card); 
-            color: var(--text-primary); 
-            transition: var(--transition); 
-            text-transform: uppercase;
-            min-width: 100px;
-        }
+        .quantity-control .qty-number { font-size: 20px; font-weight: 700; color: var(--text-primary); min-width: 34px; text-align: center; }
+        .voucher-popup-section { display: flex; gap: 6px; margin: 6px 0 8px; align-items: center; flex-wrap: wrap; }
+        .voucher-popup-section input { flex: 1; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 11px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); text-transform: uppercase; min-width: 80px; }
         .voucher-popup-section input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .voucher-popup-section input::placeholder { text-transform: none; color: var(--text-muted); font-size: 11px; }
-        .voucher-popup-section .apply-voucher-btn { 
-            padding: 8px 14px; 
-            background: var(--warning);
-            color: #fff; 
-            border: none; 
-            border-radius: 10px; 
-            font-size: 12px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            white-space: nowrap;
-        }
+        .voucher-popup-section input::placeholder { text-transform: none; color: var(--text-muted); font-size: 10px; }
+        .voucher-popup-section .apply-voucher-btn { padding: 6px 12px; background: var(--warning); color: #fff; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; }
         .voucher-popup-section .apply-voucher-btn:hover { transform: scale(1.05); opacity: 0.9; }
-        .voucher-popup-section .applied-voucher { 
-            color: var(--success); 
-            font-size: 12px; 
-            font-weight: 600; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px;
-            padding: 2px 10px;
-            background: #d4edda;
-            border-radius: 6px;
-        }
+        .voucher-popup-section .applied-voucher { color: var(--success); font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 3px; padding: 2px 8px; background: #d4edda; border-radius: 4px; }
         body.dark-mode .voucher-popup-section .applied-voucher { background: #1a3a2a; }
-        
-        .order-popup .total-row { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 12px 0; 
-            border-top: 2px solid var(--border-color); 
-            margin-top: 2px; 
-            font-size: 17px; 
-            font-weight: 700; 
-            color: var(--text-primary); 
-        }
-        .order-popup .total-row span { color: var(--accent); font-size: 19px; }
-        
-        .order-popup .btn-confirm { 
-            width: 100%; 
-            padding: 12px; 
-            background: var(--success);
-            color: #fff; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 15px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+        .order-popup .total-row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 2px solid var(--border-color); margin-top: 2px; font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .order-popup .total-row span { color: var(--accent); font-size: 18px; }
+        .order-popup .btn-confirm { width: 100%; padding: 10px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .order-popup .btn-confirm:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
         .order-popup .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
+        /* ===== CONFIRM STEP POPUP (This says pages) ===== */
+        .confirm-step-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 550; display: none; align-items: center; justify-content: center; padding: 16px; }
+        .confirm-step-overlay.active { display: flex; }
+        .confirm-step-popup { background: var(--bg-card); border-radius: 16px; padding: 24px 26px; max-width: 380px; width: 100%; border: 1px solid var(--border-color); animation: popupIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
+        .confirm-step-popup .icon-big { font-size: 48px; display: block; margin-bottom: 8px; }
+        .confirm-step-popup h3 { color: var(--text-primary); font-size: 18px; margin-bottom: 4px; }
+        .confirm-step-popup .desc { color: var(--text-muted); font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
+        .confirm-step-popup .detail-box { background: var(--wallet-bg); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; border: 1px solid var(--border-color); text-align: left; }
+        .confirm-step-popup .detail-box .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; color: var(--text-primary); }
+        .confirm-step-popup .detail-box .row .lbl { color: var(--text-muted); }
+        .confirm-step-popup .detail-box .row .val { font-weight: 600; }
+        .confirm-step-popup .detail-box .row .val.price { color: var(--accent); }
+        .confirm-step-popup .actions { display: flex; gap: 8px; }
+        .confirm-step-popup .actions button { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .confirm-step-popup .actions .btn-cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .confirm-step-popup .actions .btn-cancel:hover { background: var(--hover-bg); }
+        .confirm-step-popup .actions .btn-confirm-final { background: var(--success); color: #fff; }
+        .confirm-step-popup .actions .btn-confirm-final:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        .confirm-step-popup .actions .btn-confirm-final:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
         /* ===== RESULT POPUP ===== */
-        .result-popup .popup-header .status-icon { font-size: 52px; display: block; margin-bottom: 4px; }
-        .result-popup .popup-header h3 { color: var(--success); font-size: 20px; }
-        .result-popup .popup-header .order-code { 
-            color: var(--text-muted); 
-            font-size: 12px; 
-            font-family: monospace; 
-            background: var(--wallet-bg); 
-            padding: 3px 14px; 
-            border-radius: 6px; 
-            display: inline-block; 
-            margin-top: 2px; 
-        }
-        .result-popup .info-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 8px; 
-            margin: 12px 0; 
-        }
-        .result-popup .info-grid .info-item { 
-            background: var(--wallet-bg); 
-            border-radius: 10px; 
-            padding: 8px 12px; 
-            border: 1px solid var(--border-color); 
-        }
-        .result-popup .info-grid .info-item .label { 
-            font-size: 9px; 
-            color: var(--text-muted); 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-        }
-        .result-popup .info-grid .info-item .value { 
-            font-size: 13px; 
-            font-weight: 600; 
-            color: var(--text-primary); 
-            margin-top: 2px; 
-            word-break: break-word; 
-        }
+        .result-popup .popup-header .status-icon { font-size: 44px; display: block; margin-bottom: 2px; }
+        .result-popup .popup-header h3 { color: var(--success); font-size: 18px; }
+        .result-popup .popup-header .order-code { color: var(--text-muted); font-size: 11px; font-family: monospace; background: var(--wallet-bg); padding: 2px 12px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+        .result-popup .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+        .result-popup .info-grid .info-item { background: var(--wallet-bg); border-radius: 8px; padding: 6px 10px; border: 1px solid var(--border-color); }
+        .result-popup .info-grid .info-item .label { font-size: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .result-popup .info-grid .info-item .value { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-top: 1px; word-break: break-word; }
         .result-popup .info-grid .info-item.full { grid-column: 1 / -1; }
-        .result-popup .product-detail { 
-            display: flex; 
-            gap: 12px; 
-            padding: 10px 12px; 
-            background: var(--wallet-bg); 
-            border-radius: 12px; 
-            border: 1px solid var(--border-color); 
-            margin: 6px 0; 
-            align-items: center; 
-        }
-        .result-popup .product-detail .pd-image { 
-            width: 44px; 
-            height: 44px; 
-            border-radius: 10px; 
-            object-fit: cover; 
-            background: var(--bg-card); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 22px; 
-            border: 1px solid var(--border-color); 
-            flex-shrink: 0; 
-            overflow: hidden; 
-        }
-        .result-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
+        .result-popup .product-detail { display: flex; gap: 10px; padding: 8px 10px; background: var(--wallet-bg); border-radius: 8px; border: 1px solid var(--border-color); margin: 4px 0; align-items: center; }
+        .result-popup .product-detail .pd-image { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 18px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
+        .result-popup .product-detail .pd-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
         .result-popup .product-detail .pd-info { flex: 1; }
-        .result-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); font-size: 14px; }
-        .result-popup .product-detail .pd-info .pd-desc { font-size: 11px; color: var(--text-muted); }
-        .result-popup .btn-done { 
-            width: 100%; 
-            padding: 10px; 
-            background: var(--success);
-            color: #fff; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 14px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            margin-top: 8px;
-        }
+        .result-popup .product-detail .pd-info .pd-name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .result-popup .product-detail .pd-info .pd-desc { font-size: 10px; color: var(--text-muted); }
+        .result-popup .btn-done { width: 100%; padding: 9px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 6px; }
         .result-popup .btn-done:hover { transform: scale(1.02); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
+        /* ===== LOADING ===== */
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: 0.4s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
-        .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        .loading-spinner { width: 40px; height: 40px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
+        .loading-text { color: var(--text-primary); font-size: 14px; font-weight: 500; }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        /* ===== TOAST ===== */
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 8px 20px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 12px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.success { border-color: var(--success); color: var(--success); }
         .toast.error { border-color: var(--danger); color: var(--danger); }
 
-        @media (max-width: 600px) { 
-            .header { padding: 10px 12px; } 
-            .logo { font-size: 16px; } 
-            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; }
-            .wallet-icon-box { width: 28px; height: 28px; }
-            .wallet-icon-box i { font-size: 13px; }
-            .wallet-balance { font-size: 13px; }
-            .wallet-label { font-size: 9px; }
-            .content { padding: 16px; } 
-            .notif-popup { right: 8px; left: 8px; min-width: auto; } 
-            .intro-card { padding: 16px; }
-            .menu-icon { width: 34px; height: 34px; padding: 6px 8px; }
-            .menu-icon .bar { width: 17px; height: 2px; }
-            .bell-icon { width: 34px; height: 34px; font-size: 16px; }
-            .dot-menu { width: 34px; height: 34px; }
-            .category-item { padding: 8px 12px; min-width: 80px; flex: 1 0 auto; }
-            .category-item .cat-image { width: 30px; height: 30px; font-size: 14px; }
-            .category-item .cat-name { font-size: 11px; }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) { 
+            .header { padding: 8px 10px; } 
+            .logo { font-size: 15px; } 
+            .content { padding: 10px 12px; } 
+            .wallet-container { padding: 3px 8px 3px 6px; min-height: 32px; }
+            .wallet-icon-box { width: 24px; height: 24px; }
+            .wallet-icon-box i { font-size: 11px; }
+            .wallet-balance { font-size: 12px; }
+            .wallet-label { font-size: 7px; }
+            .menu-icon { width: 30px; height: 30px; padding: 4px 6px; }
+            .menu-icon .bar { width: 15px; height: 2px; }
+            .bell-icon { width: 30px; height: 30px; font-size: 14px; }
+            .dot-menu { width: 30px; height: 30px; }
+            .category-item { padding: 6px 10px; min-width: 70px; flex: 1 0 auto; }
+            .category-item .cat-image { width: 28px; height: 28px; font-size: 12px; }
+            .category-item .cat-name { font-size: 10px; }
             .product-grid { grid-template-columns: 1fr; }
-            .product-card .product-image { width: 55px; height: 55px; font-size: 24px; }
-            .order-popup { padding: 18px 16px 20px; max-width: 100%; }
+            .product-card .product-image { width: 50px; height: 50px; font-size: 20px; }
+            .order-popup { padding: 16px 14px 18px; max-width: 100%; }
             .result-popup .info-grid { grid-template-columns: 1fr; }
-            .quantity-control .qty-btn { width: 34px; height: 34px; font-size: 14px; }
-            .quantity-control .qty-number { font-size: 20px; min-width: 30px; }
-            .order-popup .popup-header .product-icon { width: 60px; height: 60px; font-size: 36px; }
-            .voucher-popup-section input { min-width: 80px; }
+            .quantity-control .qty-btn { width: 28px; height: 28px; font-size: 12px; }
+            .quantity-control .qty-number { font-size: 18px; min-width: 28px; }
+            .notif-popup { right: 6px; left: 6px; min-width: auto; }
+            .confirm-step-popup { padding: 18px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- LOADING -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text">⏳ Đang tải dữ liệu...</div>
     </div>
 
+    <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+    <!-- SIDE MENU -->
     <div class="side-menu" id="sideMenu">
-        <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span><span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span></div>
+        <div class="menu-header">
+            <span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span>
+            <span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span>
+        </div>
         <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
         <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
         <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
@@ -531,6 +313,7 @@
         <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
     </div>
 
+    <!-- HEADER -->
     <header class="header">
         <div class="header-left">
             <div class="menu-icon" onclick="toggleMenu()">
@@ -542,15 +325,12 @@
         </div>
         <div class="header-right">
             <div class="wallet-container">
-                <div class="wallet-icon-box">
-                    <i class="fas fa-wallet"></i>
-                </div>
+                <div class="wallet-icon-box"><i class="fas fa-wallet"></i></div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
                     <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
                 </div>
             </div>
-
             <div class="bell-icon" onclick="toggleNotif()">
                 <div class="bell-dot" id="notifDot"></div>
                 <i class="fas fa-bell"></i>
@@ -572,12 +352,13 @@
         </div>
     </header>
 
+    <!-- NOTIFICATION POPUP -->
     <div class="notif-popup" id="notifPopup">
         <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
         <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
-    <!-- Order Popup -->
+    <!-- ORDER POPUP -->
     <div class="order-popup-overlay" id="orderPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeOrderPopup()"><i class="fas fa-times"></i></button>
@@ -586,36 +367,48 @@
                 <h3 id="popupProductName">Sản phẩm</h3>
                 <div class="product-price-display" id="popupProductPrice">0 VND</div>
             </div>
-            
             <div class="popup-body">
                 <div class="info-row"><span class="label"><i class="fas fa-boxes"></i> Tồn kho</span><span class="value stock" id="popupStock">0</span></div>
                 <div class="info-row"><span class="label"><i class="fas fa-wallet"></i> Số dư</span><span class="value balance" id="popupBalance">0 VND</span></div>
             </div>
-            
             <div class="quantity-control">
                 <button class="qty-btn" id="qtyMinus" onclick="changeQuantity(-1)"><i class="fas fa-minus"></i></button>
                 <span class="qty-number" id="qtyNumber">1</span>
                 <button class="qty-btn" id="qtyPlus" onclick="changeQuantity(1)"><i class="fas fa-plus"></i></button>
             </div>
-            
             <div class="voucher-popup-section">
                 <input type="text" id="popupVoucherInput" placeholder="Mã giảm giá" />
                 <button class="apply-voucher-btn" onclick="applyPopupVoucher()"><i class="fas fa-ticket-alt"></i> Áp</button>
                 <span id="popupVoucherStatus"></span>
             </div>
-            
-            <div class="total-row">
-                <span>Tổng</span>
-                <span id="popupTotalPrice">0 VND</span>
-            </div>
-            
-            <button class="btn-confirm" id="btnConfirmOrder" onclick="confirmOrder()">
+            <div class="total-row"><span>Tổng</span><span id="popupTotalPrice">0 VND</span></div>
+            <button class="btn-confirm" id="btnConfirmOrder" onclick="openConfirmStep()">
                 <i class="fas fa-shopping-cart"></i> Xác nhận
             </button>
         </div>
     </div>
 
-    <!-- Result Popup -->
+    <!-- CONFIRM STEP POPUP (This says pages) -->
+    <div class="confirm-step-overlay" id="confirmStep">
+        <div class="confirm-step-popup">
+            <span class="icon-big">📋</span>
+            <h3>Xác nhận đơn hàng</h3>
+            <p class="desc">Vui lòng kiểm tra lại thông tin trước khi xác nhận mua hàng</p>
+            <div class="detail-box" id="confirmDetailBox">
+                <div class="row"><span class="lbl">Sản phẩm</span><span class="val" id="confirmProductName">---</span></div>
+                <div class="row"><span class="lbl">Số lượng</span><span class="val" id="confirmQuantity">1</span></div>
+                <div class="row"><span class="lbl">Đơn giá</span><span class="val" id="confirmUnitPrice">0 VND</span></div>
+                <div class="row"><span class="lbl">Tổng thanh toán</span><span class="val price" id="confirmTotal">0 VND</span></div>
+                <div id="confirmVoucherRow" style="display:none;" class="row"><span class="lbl">🎫 Mã giảm</span><span class="val" id="confirmVoucherText" style="color:var(--success);">---</span></div>
+            </div>
+            <div class="actions">
+                <button class="btn-cancel" onclick="closeConfirmStep()"><i class="fas fa-times"></i> Hủy</button>
+                <button class="btn-confirm-final" id="btnConfirmFinal" onclick="confirmOrderFinal()"><i class="fas fa-check"></i> Xác nhận mua</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT POPUP -->
     <div class="order-popup-overlay result-popup" id="resultPopup">
         <div class="order-popup">
             <button class="close-btn" onclick="closeResultPopup()"><i class="fas fa-times"></i></button>
@@ -631,51 +424,50 @@
         </div>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="content">
 
+        <!-- INTRO CARD -->
         <div class="intro-card">
             <div class="intro-top">
                 <div class="intro-top-left">
                     <div class="intro-icon">🎮</div>
                     <div>
-                        <div class="intro-title">Chào mừng bạn đến với KuanZGame.Store</div>
+                        <div class="intro-title">Chào mừng đến với KuanZGame.Store</div>
                         <div class="intro-sub">Chọn mục sản phẩm để xem sản phẩm</div>
                     </div>
                 </div>
             </div>
             <div class="intro-body">
                 <p class="intro-lead">Chọn một mục sản phẩm bên dưới để xem danh sách sản phẩm.</p>
-                
                 <div class="intro-section">
-                    <div class="intro-section-title"><i class="fas fa-box"></i> Hướng dẫn quy trình mua hàng</div>
+                    <div class="intro-section-title"><i class="fas fa-box"></i> Hướng dẫn</div>
                     <ul class="intro-list">
                         <li>Quay lại toàn bộ quá trình mua hàng để làm bằng chứng đối chiếu sản phẩm.</li>
-                        <li>Nếu phát hiện sai sót hoặc lỗi kỹ thuật, hãy liên hệ ngay Admin để được hỗ trợ xử lý đổi/trả sớm nhất.</li>
+                        <li>Nếu phát hiện sai sót, hãy liên hệ Admin để được hỗ trợ đổi/trả sớm nhất.</li>
                     </ul>
                 </div>
-
                 <div class="intro-section">
-                    <div class="intro-section-title"><i class="fas fa-exclamation-triangle"></i> Lưu ý quan trọng</div>
+                    <div class="intro-section-title"><i class="fas fa-exclamation-triangle"></i> Lưu ý</div>
                     <ul class="intro-list">
-                        <li>Tuyệt đối không chia sẻ thông tin tài khoản shop cho bất kỳ ai dưới mọi hình thức.</li>
-                        <li>Đọc kỹ mô tả sản phẩm và các điều khoản trước khi giao dịch để đảm bảo quyền lợi của bạn.</li>
+                        <li>Không chia sẻ thông tin tài khoản shop cho bất kỳ ai.</li>
+                        <li>Đọc kỹ mô tả sản phẩm trước khi giao dịch.</li>
                     </ul>
                 </div>
-
                 <div class="intro-footer">Cảm ơn bạn đã tin tưởng và đồng hành 🔥</div>
             </div>
         </div>
 
+        <!-- CATEGORY SECTION -->
         <div class="category-section" id="categorySection">
             <div class="category-section-header">
                 <h2><i class="fas fa-folder"></i> Mục sản phẩm <span id="categoryCount"></span></h2>
             </div>
             <div class="category-grid" id="categoryGrid">
-                <div class="product-empty" style="grid-column:1/-1;padding:20px;">
+                <div class="product-empty" style="grid-column:1/-1;padding:16px;">
                     <p>Đang tải danh sách mục...</p>
                 </div>
             </div>
-
             <div id="productContainer">
                 <div class="product-grid" id="productGrid">
                     <div class="product-empty">
@@ -688,9 +480,11 @@
 
     </div>
 
+    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
+        // ===== FIREBASE =====
         const firebaseConfig = {
             apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
             authDomain: "shop-c6777.firebaseapp.com",
@@ -704,18 +498,19 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
+        // ===== VARIABLES =====
         let isDataLoaded = false;
         let currentUser = null;
         let selectedCategory = 'all';
         let categoriesData = {};
         let productsData = {};
         let vouchersData = {};
-        
         let currentProduct = null;
         let currentQuantity = 1;
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
         let isProcessing = false;
+        let pendingOrderData = null; // Lưu tạm để xác nhận
 
         // ===== TOAST =====
         function showToast(msg, type = '') {
@@ -740,35 +535,11 @@
         // ===== LOADING =====
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.classList.add('hidden');
-                overlay.style.display = 'none';
-            }
+            if (overlay) { overlay.classList.add('hidden'); overlay.style.display = 'none'; }
         }
-
         function showLoading() {
             const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                overlay.style.display = 'flex';
-                overlay.classList.remove('hidden');
-            }
-        }
-
-        // ===== FORCE LOAD =====
-        function forceLoadData() {
-            console.log('🔥 Force loading data...');
-            if (!isDataLoaded) {
-                if (Object.keys(productsData).length === 0) {
-                    productsData = {};
-                }
-                if (Object.keys(categoriesData).length === 0) {
-                    categoriesData = {};
-                }
-                renderCategories();
-                renderProducts();
-                isDataLoaded = true;
-                hideLoading();
-            }
+            if (overlay) { overlay.style.display = 'flex'; overlay.classList.remove('hidden'); }
         }
 
         // ===== QUICK LOGIN =====
@@ -887,7 +658,7 @@
             
             let html = `
                 <div class="category-item ${selectedCategory === 'all' ? 'active' : ''}" onclick="selectCategory('all')">
-                    <div class="cat-image" style="font-size:20px;">📦</div>
+                    <div class="cat-image" style="font-size:18px;">📦</div>
                     <div class="cat-info">
                         <div class="cat-name">${allLabel}</div>
                         <div class="cat-count">${allCount} sp</div>
@@ -965,7 +736,6 @@
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
                 const image = product.image || '';
                 const icon = product.icon || '📦';
-                // HIỂN THỊ ĐỦ 240 TỪ MÔ TẢ
                 const desc = product.description || '';
                 const sold = product.sold || 0;
                 
@@ -1115,8 +885,13 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== CONFIRM ORDER - FIX LỖI TREO =====
-        function confirmOrder() {
+        // ===== OPEN CONFIRM STEP (This says pages) =====
+        function openConfirmStep() {
+            if (!currentProduct) {
+                showToast('❌ Không có sản phẩm!', 'error');
+                return;
+            }
+            
             if (isProcessing) {
                 showToast('⏳ Đang xử lý, vui lòng đợi...', 'error');
                 return;
@@ -1124,11 +899,6 @@
             
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
-                return;
-            }
-            
-            if (!currentProduct) {
-                showToast('Sản phẩm không tồn tại!', 'error');
                 return;
             }
             
@@ -1156,7 +926,6 @@
                     voucherUsed = currentVoucherCode;
                 }
             }
-            
             price = Math.round(price);
             
             if (currentUser.balance < price) {
@@ -1164,23 +933,73 @@
                 return;
             }
             
-            const confirmMsg = `Mua ${currentQuantity} "${currentProduct.name}" với ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 ' + voucherUsed : ''}`;
-            if (!confirm(confirmMsg)) return;
+            // Lưu tạm để xác nhận sau
+            pendingOrderData = {
+                product: currentProduct,
+                quantity: currentQuantity,
+                price: price,
+                voucherUsed: voucherUsed,
+                discountText: discountText,
+                dataArray: dataArray
+            };
+            
+            // Hiển thị thông tin xác nhận
+            document.getElementById('confirmProductName').textContent = currentProduct.name || 'Sản phẩm';
+            document.getElementById('confirmQuantity').textContent = currentQuantity;
+            document.getElementById('confirmUnitPrice').textContent = (currentProduct.price || 0).toLocaleString('vi-VN') + ' VND';
+            document.getElementById('confirmTotal').textContent = price.toLocaleString('vi-VN') + ' VND';
+            
+            const voucherRow = document.getElementById('confirmVoucherRow');
+            if (voucherUsed) {
+                voucherRow.style.display = 'flex';
+                document.getElementById('confirmVoucherText').textContent = `${voucherUsed} ${discountText}`;
+            } else {
+                voucherRow.style.display = 'none';
+            }
+            
+            // Đóng order popup, mở confirm step
+            document.getElementById('orderPopup').classList.remove('active');
+            document.getElementById('confirmStep').classList.add('active');
+        }
+
+        // ===== CLOSE CONFIRM STEP =====
+        function closeConfirmStep() {
+            document.getElementById('confirmStep').classList.remove('active');
+            pendingOrderData = null;
+            // Mở lại order popup nếu vẫn còn product
+            if (currentProduct) {
+                document.getElementById('orderPopup').classList.add('active');
+            }
+        }
+
+        // ===== CONFIRM ORDER FINAL =====
+        function confirmOrderFinal() {
+            if (!pendingOrderData) {
+                showToast('❌ Dữ liệu đơn hàng bị mất!', 'error');
+                closeConfirmStep();
+                return;
+            }
+            
+            if (isProcessing) {
+                showToast('⏳ Đang xử lý...', 'error');
+                return;
+            }
+            
+            const { product, quantity, price, voucherUsed, discountText, dataArray } = pendingOrderData;
             
             isProcessing = true;
-            const btn = document.getElementById('btnConfirmOrder');
+            const btn = document.getElementById('btnConfirmFinal');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             
-            // LẤY DỮ LIỆU BÁN
-            const soldData = dataArray.slice(0, currentQuantity);
-            const remainingData = dataArray.slice(currentQuantity);
+            const soldData = dataArray.slice(0, quantity);
+            const remainingData = dataArray.slice(quantity);
             const remainingDataStr = remainingData.join('\n');
             
             const updates = {};
             updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
-            updates[`products/${currentProduct.id}/data`] = remainingDataStr;
-            updates[`products/${currentProduct.id}/sold`] = (currentProduct.sold || 0) + currentQuantity;
+            updates[`products/${product.id}/data`] = remainingDataStr;
+            updates[`products/${product.id}/sold`] = (product.sold || 0) + quantity;
             
             const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
             const orderDataStr = soldData.join('\n');
@@ -1189,15 +1008,15 @@
             const orderData = {
                 userId: currentUser.uid,
                 userName: currentUser.displayName || currentUser.email || 'Khách hàng',
-                productId: currentProduct.id,
-                productName: currentProduct.name,
-                productImage: currentProduct.image || '',
-                productIcon: currentProduct.icon || '📦',
-                productDesc: currentProduct.description || '',
-                productCategory: currentProduct.category || '',
-                originalPrice: currentProduct.price || 0,
+                productId: product.id,
+                productName: product.name,
+                productImage: product.image || '',
+                productIcon: product.icon || '📦',
+                productDesc: product.description || '',
+                productCategory: product.category || '',
+                originalPrice: product.price || 0,
                 price: price,
-                quantity: currentQuantity,
+                quantity: quantity,
                 voucher: voucherUsed,
                 discountText: discountText,
                 orderCode: orderCode,
@@ -1210,11 +1029,11 @@
             const historyRef = db.ref('history/' + currentUser.uid).push();
             const historyData = {
                 orderCode: orderCode,
-                productName: currentProduct.name,
-                productDesc: currentProduct.description || '',
-                productCategory: currentProduct.category || '',
+                productName: product.name,
+                productDesc: product.description || '',
+                productCategory: product.category || '',
                 price: price,
-                quantity: currentQuantity,
+                quantity: quantity,
                 voucher: voucherUsed,
                 discountText: discountText,
                 orderData: orderDataStr,
@@ -1228,40 +1047,40 @@
                 updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
             
-            // THỰC HIỆN UPDATE
+            // ===== THỰC HIỆN UPDATE =====
             db.ref().update(updates)
                 .then(() => {
-                    // CẬP NHẬT SỐ DƯ
+                    // Cập nhật số dư
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                         currentUser.balance = bal;
                     });
                     
-                    // CẬP NHẬT SẢN PHẨM LOCAL
-                    if (productsData[currentProduct.id]) {
-                        productsData[currentProduct.id].data = remainingDataStr;
-                        productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                    // Cập nhật productsData LOCAL
+                    if (productsData[product.id]) {
+                        productsData[product.id].data = remainingDataStr;
+                        productsData[product.id].sold = (product.sold || 0) + quantity;
                     }
                     
-                    // RENDER LẠI
+                    // Render lại
                     renderProducts();
                     
-                    // ĐÓNG POPUP VÀ HIỆN KẾT QUẢ
-                    closeOrderPopup();
+                    // Đóng confirm step, hiện result
+                    closeConfirmStep();
                     showResultPopup(orderData);
                     showToast('✅ Mua thành công!', 'success');
                     
                     isProcessing = false;
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận mua';
                 })
                 .catch(err => {
                     console.error('Lỗi mua hàng:', err);
                     showToast('❌ Lỗi: ' + err.message, 'error');
                     isProcessing = false;
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận mua';
                 });
         }
 
@@ -1272,7 +1091,6 @@
             currentQuantity = 1;
             currentVoucherCode = null;
             currentVoucherDiscount = 0;
-            // Reset button state
             const btn = document.getElementById('btnConfirmOrder');
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
@@ -1304,10 +1122,10 @@
             grid.innerHTML = `
                 <div class="info-item"><div class="label"><i class="fas fa-user"></i> Người mua</div><div class="value">${orderData.userName || 'Khách hàng'}</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-tag"></i> Loại mục</div><div class="value">${categoryName}</div></div>
-                <div class="info-item"><div class="label"><i class="fas fa-clock"></i> Thời gian</div><div class="value" style="font-size:12px;">${new Date(orderData.timestamp).toLocaleString('vi-VN')}</div></div>
+                <div class="info-item"><div class="label"><i class="fas fa-clock"></i> Thời gian</div><div class="value" style="font-size:11px;">${new Date(orderData.timestamp).toLocaleString('vi-VN')}</div></div>
                 <div class="info-item"><div class="label"><i class="fas fa-boxes"></i> Số lượng</div><div class="value">${orderData.quantity || 1}</div></div>
                 ${orderData.voucher ? `<div class="info-item full"><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div><div class="value" style="color:var(--success);">${orderData.voucher} ${orderData.discountText || ''}</div></div>` : ''}
-                <div class="info-item full"><div class="label"><i class="fas fa-database"></i> Dữ liệu</div><div class="value" style="font-weight:400;font-size:12px;font-family:monospace;background:var(--bg-card);padding:4px 8px;border-radius:4px;border:1px solid var(--border-color);word-break:break-all;">${orderDataStr}</div></div>
+                <div class="info-item full"><div class="label"><i class="fas fa-database"></i> Dữ liệu</div><div class="value" style="font-weight:400;font-size:11px;font-family:monospace;background:var(--bg-card);padding:3px 6px;border-radius:4px;border:1px solid var(--border-color);word-break:break-all;">${orderDataStr}</div></div>
             `;
             
             const image = orderData.productImage || orderData.productIcon || '📦';
@@ -1417,7 +1235,23 @@
             }
         }, 3000);
 
-        // ===== MENU =====
+        function forceLoadData() {
+            console.log('🔥 Force loading data...');
+            if (!isDataLoaded) {
+                if (Object.keys(productsData).length === 0) {
+                    productsData = {};
+                }
+                if (Object.keys(categoriesData).length === 0) {
+                    categoriesData = {};
+                }
+                renderCategories();
+                renderProducts();
+                isDataLoaded = true;
+                hideLoading();
+            }
+        }
+
+        // ===== MENU FUNCTIONS =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -1485,6 +1319,9 @@
         });
         document.getElementById('resultPopup').addEventListener('click', function(e) {
             if (e.target === this) closeResultPopup();
+        });
+        document.getElementById('confirmStep').addEventListener('click', function(e) {
+            if (e.target === this) closeConfirmStep();
         });
 
         window.addEventListener('storage', function(e) {
