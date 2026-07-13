@@ -180,7 +180,6 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* ===== POPUP MUA HÀNG ĐẸP ===== */
         .order-popup-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .order-popup-overlay.active { display: flex; }
         
@@ -390,7 +389,6 @@
         .order-popup .btn-confirm:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 8px 30px rgba(39,174,96,0.45); }
         .order-popup .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ===== RESULT POPUP ===== */
         .result-popup .popup-header .status-icon { font-size: 64px; display: block; margin-bottom: 8px; }
         .result-popup .popup-header h3 { color: var(--success); font-size: 22px; }
         .result-popup .popup-header .order-code { 
@@ -545,7 +543,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">🎮 KuanZGame</div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -765,7 +763,6 @@
         function forceLoadData() {
             console.log('🔥 Force loading data...');
             if (!isDataLoaded) {
-                // Tạo dữ liệu mẫu nếu chưa có
                 if (Object.keys(productsData).length === 0) {
                     console.log('📦 No products found, using empty data');
                     productsData = {};
@@ -843,10 +840,9 @@
             return new Promise((resolve) => {
                 let loaded = false;
                 let timeoutId = null;
-                let retryCount = 0;
                 
                 const productsRef = db.ref('products');
-                const productsListener = productsRef.on('value', (snapshot) => {
+                productsRef.on('value', (snapshot) => {
                     productsData = snapshot.val() || {};
                     console.log('✅ Products loaded:', Object.keys(productsData).length);
                     renderCategories();
@@ -873,7 +869,6 @@
                     console.log('✅ Vouchers loaded:', Object.keys(vouchersData).length);
                 });
                 
-                // ===== FORCE LOAD SAU 2.5 GIÂY =====
                 timeoutId = setTimeout(() => {
                     if (!loaded) {
                         console.log('⏰ Load timeout, forcing render...');
@@ -1182,6 +1177,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             
+            // Lấy dữ liệu bán
             const soldData = dataArray.slice(0, currentQuantity);
             const remainingData = dataArray.slice(currentQuantity);
             const remainingDataStr = remainingData.join('\n');
@@ -1405,7 +1401,7 @@
             }
         });
 
-        // ===== FORCE LOAD SAU 3 GIÂY (FALLBACK) =====
+        // ===== FORCE LOAD SAU 3 GIÂY =====
         setTimeout(() => {
             if (!isDataLoaded) {
                 console.log('⏰ Final force load after 3s');
