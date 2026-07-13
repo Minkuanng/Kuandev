@@ -11,234 +11,242 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         :root { 
-            --bg-body: #f0f7ff; 
-            --bg-card: #fff; 
-            --bg-header: #fff; 
-            --text-primary: #2c5a7a; 
-            --text-secondary: #5a8fb5; 
-            --text-muted: #8ab3d4; 
-            --border-color: #e3eef9; 
-            --shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            --shadow-popup: 0 8px 30px rgba(0,0,0,0.15); 
-            --wallet-bg: #f0f7ff; 
-            --hover-bg: #f0f7ff; 
-            --danger: #e74c6f; 
-            --success: #27ae60; 
-            --accent: #3b8fd6; 
-            --warning: #f39c12; 
+            --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff;
+            --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4;
+            --border-color: #e3eef9; --shadow: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-popup: 0 8px 32px rgba(0,0,0,0.15);
+            --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff;
+            --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
-        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
-        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
-        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --accent: #ff8a4a; }
-        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --accent: #ff4a7a; }
-        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 10px rgba(0,0,0,0.6); --shadow-popup: 0 8px 30px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --accent: #00ccff; }
-        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --accent: #b87aff; }
-        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
-        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 10px rgba(0,0,0,0.4); --shadow-popup: 0 8px 30px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
-        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
+        .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
+        .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
+        .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
+        .theme-sunset { --bg-body: #1a0a0a; --bg-card: #2a120a; --bg-header: #3e1a0a; --text-primary: #ffb87f; --text-secondary: #ff8a4a; --text-muted: #9a6a3a; --border-color: #5a2a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a2a1a; --accent: #ff8a4a; }
+        .theme-cherry { --bg-body: #1a0a12; --bg-card: #2a0a16; --bg-header: #3e0a1a; --text-primary: #ff7fa8; --text-secondary: #ff4a7a; --text-muted: #9a3a5a; --border-color: #5a1a2a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #3e1a0a; --hover-bg: #5a1a2a; --accent: #ff4a7a; }
+        .theme-neon { --bg-body: #0a0a0a; --bg-card: #121212; --bg-header: #1a1a1a; --text-primary: #00ff88; --text-secondary: #00ccff; --text-muted: #666; --border-color: #333; --shadow: 0 2px 12px rgba(0,0,0,0.6); --shadow-popup: 0 8px 32px rgba(0,0,0,0.8); --wallet-bg: #1a1a1a; --hover-bg: #2a2a2a; --accent: #00ccff; }
+        .theme-lavender { --bg-body: #1a0a2a; --bg-card: #221a3a; --bg-header: #2a1a3e; --text-primary: #d4a8ff; --text-secondary: #b87aff; --text-muted: #7a5a9a; --border-color: #3a2a5a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #2a1a3e; --hover-bg: #3a2a5a; --accent: #b87aff; }
+        .theme-mint { --bg-body: #0a1a12; --bg-card: #0f2a1a; --bg-header: #0d2a1a; --text-primary: #7fffd4; --text-secondary: #4abfa0; --text-muted: #3a7a6a; --border-color: #1a4a3a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2a1a; --hover-bg: #1a4a3a; --accent: #4abfa0; }
+        .theme-coffee { --bg-body: #1a0f0a; --bg-card: #221a12; --bg-header: #2a1a12; --text-primary: #d4b896; --text-secondary: #b8987a; --text-muted: #7a6a5a; --border-color: #3a2a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #2a1a12; --hover-bg: #3a2a1a; --accent: #b8987a; }
+        body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 12px rgba(0,0,0,0.3); --shadow-popup: 0 8px 32px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
-        
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
-        
-        .menu-icon { cursor: pointer; padding: 8px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: var(--transition); width: 38px; height: 38px; flex-shrink: 0; }
+
+        /* ===== HEADER ===== */
+        .header { background: var(--bg-header); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
+        .header-left { display: flex; align-items: center; gap: 14px; }
+        .logo { font-size: 18px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
+        .menu-icon { cursor: pointer; padding: 6px 8px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); width: 34px; height: 34px; flex-shrink: 0; }
         .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .menu-icon .bar { display: block; width: 20px; height: 2.5px; background: var(--text-secondary); border-radius: 3px; transition: var(--transition); flex-shrink: 0; }
+        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 3px; transition: var(--transition); flex-shrink: 0; }
         .menu-icon:hover .bar { background: var(--text-primary); }
-        
-        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
-        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box i { color: #fff; font-size: 16px; }
-        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
-        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 38px; }
+        .wallet-container:hover { border-color: var(--accent); }
+        .wallet-icon-box { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box i { color: #fff; font-size: 13px; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.2; }
+        .wallet-label { font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 18px; color: var(--text-secondary); flex-shrink: 0; }
+        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; color: var(--text-secondary); flex-shrink: 0; }
         .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); color: var(--text-primary); }
-        .bell-icon .bell-dot { width: 9px; height: 9px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
+        .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-        .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
+
+        .dot-menu { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
+        .dot-menu .dot { width: 3.5px; height: 3.5px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+
+        .popup { position: absolute; top: 44px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
-        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
+        .popup-item { padding: 8px 16px; color: var(--text-primary); font-size: 12px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 10px; }
         .popup-item.logout { color: #e74c6f; }
         .settings-wrapper { position: relative; }
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+
+        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 340px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
+        .notif-popup .notif-header { padding: 0 12px 8px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 13px; }
         .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
         .notif-popup .notif-header .close:hover { color: var(--danger); }
-        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; display: flex; align-items: flex-start; gap: 10px; }
+        .notif-popup .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
         .notif-popup .notif-item i { margin-top: 2px; color: var(--text-secondary); }
-        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; display: block; }
+        .notif-popup .notif-item .time { font-size: 9px; color: var(--text-muted); margin-top: 2px; display: block; }
         .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
         .notif-popup .notif-item.unread i { color: #e74c6f; }
-        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
+        .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
+
+        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 14px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
-        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header { padding: 10px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 18px; color: var(--text-muted); transition: var(--transition); }
         .side-menu .menu-header .close:hover { color: var(--danger); transform: rotate(90deg); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
-        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
-        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
-        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
+        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .side-menu .menu-item .icon { font-size: 16px; width: 24px; text-align: center; }
+        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
-        .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
-        
-        .admin-card { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); margin-bottom: 16px; }
-        .admin-card:hover { box-shadow: var(--shadow-popup); }
-        .admin-card h1 { color: var(--text-primary); font-size: 22px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .admin-card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
-        .stat-card { background: var(--wallet-bg); padding: 14px 18px; border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); }
-        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+        /* ===== CONTENT ===== */
+        .content { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+
+        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+        .admin-header h1 { color: var(--text-primary); font-size: 20px; display: flex; align-items: center; gap: 8px; }
+        .admin-header .sub { color: var(--text-muted); font-size: 12px; font-weight: 400; }
+        .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-sm { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .btn-sm:hover { transform: translateY(-2px); }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
+        .btn-warning { background: var(--warning); color: #fff; }
+        .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
+        .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
+        .btn-outline:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+
+        /* ===== STATS ===== */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .stat-card { background: var(--bg-card); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
         .stat-card .num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
-        .stat-card .label { font-size: 11px; color: var(--text-muted); }
         .stat-card .num.green { color: var(--success); }
         .stat-card .num.red { color: var(--danger); }
         .stat-card .num.orange { color: var(--warning); }
         .stat-card .num.blue { color: var(--accent); }
+        .stat-card .label { font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
 
-        .tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
-        .tabs .tab { padding: 8px 20px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 14px; border-bottom: 3px solid transparent; }
+        /* ===== TABS ===== */
+        .tabs { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
+        .tabs .tab { padding: 8px 18px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; border-bottom: 3px solid transparent; }
         .tabs .tab:hover { color: var(--text-primary); }
         .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
-        .user-card { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); }
-        .user-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow-popup); }
-        .user-card .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-        .user-card .user-header .user-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; flex-shrink: 0; }
-        .user-card .user-header .user-info { flex: 1; min-width: 0; }
-        .user-card .user-header .user-name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
-        .user-card .user-header .user-email { font-size: 11px; color: var(--text-muted); word-break: break-all; }
-        .user-card .user-balance { font-size: 20px; font-weight: 700; color: var(--accent); padding: 6px 0; display: flex; align-items: center; gap: 6px; }
-        .user-card .user-balance i { font-size: 16px; color: var(--warning); }
-        .user-card .user-status { font-size: 11px; padding: 2px 12px; border-radius: 10px; display: inline-block; font-weight: 500; }
-        .user-card .user-status.online { background: #d4edda; color: #155724; }
-        .user-card .user-status.offline { background: #f8d7da; color: #721c24; }
-        .user-card .user-status.blocked { background: #fff3cd; color: #856404; }
-        .user-card .user-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
-        .user-card .user-actions button { padding: 5px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
-        .user-card .user-actions button:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-        .user-card .user-actions .add-money { background: var(--success); color: #fff; }
-        .user-card .user-actions .sub-money { background: var(--danger); color: #fff; }
-        .user-card .user-actions .block-btn { background: var(--warning); color: #fff; }
-        .user-card .user-actions .unblock-btn { background: var(--accent); color: #fff; }
+        /* ===== USER GRID ===== */
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+        .user-card { background: var(--bg-card); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .user-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .user-card .user-header .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+        .user-card .user-header .info { flex: 1; min-width: 0; }
+        .user-card .user-header .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .user-card .user-header .info .email { font-size: 10px; color: var(--text-muted); word-break: break-all; }
+        .user-card .balance { font-size: 17px; font-weight: 700; color: var(--accent); padding: 4px 0; display: flex; align-items: center; gap: 4px; }
+        .user-card .balance i { font-size: 13px; color: var(--warning); }
+        .user-card .status { font-size: 10px; padding: 2px 10px; border-radius: 8px; display: inline-block; font-weight: 500; }
+        .user-card .status.online { background: #d4edda; color: #155724; }
+        .user-card .status.offline { background: #f8d7da; color: #721c24; }
+        .user-card .status.blocked { background: #fff3cd; color: #856404; }
+        .user-card .actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-color); }
+        .user-card .actions button { padding: 3px 10px; border: none; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
+        .user-card .actions button:hover { transform: scale(1.05); }
+        .user-card .actions .add { background: var(--success); color: #fff; }
+        .user-card .actions .sub { background: var(--danger); color: #fff; }
+        .user-card .actions .block { background: var(--warning); color: #fff; }
+        .user-card .actions .unblock { background: var(--accent); color: #fff; }
 
-        .order-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-        .order-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 14px; align-items: center; }
-        .order-item-admin:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: var(--shadow); }
-        .order-item-admin .order-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
-        .order-item-admin .order-image img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-        .order-item-admin .order-info { flex: 1; min-width: 0; }
-        .order-item-admin .order-info .order-name { font-weight: 600; color: var(--text-primary); font-size: 14px; }
-        .order-item-admin .order-info .order-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
-        .order-item-admin .order-info .order-meta span { display: flex; align-items: center; gap: 4px; }
-        .order-item-admin .order-info .order-code { font-size: 12px; color: var(--accent); font-weight: 600; font-family: monospace; }
-        .order-item-admin .order-info .order-note { font-size: 11px; color: var(--text-primary); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; border-left: 3px solid var(--warning); margin-top: 4px; display: inline-block; }
-        .order-item-admin .order-status-badge { font-size: 11px; padding: 2px 10px; border-radius: 10px; font-weight: 500; }
-        .order-item-admin .order-status-badge.success { background: #d4edda; color: #155724; }
-        .order-item-admin .order-status-badge.failed { background: #f8d7da; color: #721c24; }
-        .order-item-admin .order-delete { padding: 4px 10px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 6px; cursor: pointer; transition: var(--transition); font-size: 12px; flex-shrink: 0; }
-        .order-item-admin .order-delete:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
+        /* ===== CATEGORY ===== */
+        .category-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .category-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; transition: var(--transition); box-shadow: var(--shadow); }
+        .category-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .category-item .icon { width: 38px; height: 38px; border-radius: 50%; background: var(--wallet-bg); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+        .category-item .icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .category-item .info { flex: 1; }
+        .category-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .category-item .info .count { font-size: 10px; color: var(--text-muted); }
+        .category-item .actions { display: flex; gap: 4px; }
+        .category-item .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 10px; cursor: pointer; transition: var(--transition); }
+        .category-item .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .category-item .actions .edit:hover { background: var(--accent); color: #fff; }
+        .category-item .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
+        .category-item .actions .del:hover { background: var(--danger); color: #fff; }
 
-        .category-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-        .category-item-admin { background: var(--wallet-bg); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: var(--transition); min-width: 160px; }
-        .category-item-admin:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-        .category-item-admin .cat-image { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: var(--bg-card); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
-        .category-item-admin .cat-image img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .category-item-admin .cat-info { flex: 1; }
-        .category-item-admin .cat-info .name { font-weight: 600; color: var(--text-primary); font-size: 14px; }
-        .category-item-admin .cat-info .count { font-size: 11px; color: var(--text-muted); }
-        .category-item-admin .cat-actions { display: flex; gap: 4px; }
-        .category-item-admin .cat-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
-        .category-item-admin .cat-actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .category-item-admin .cat-actions .edit:hover { background: var(--text-secondary); color: #fff; transform: scale(1.05); }
-        .category-item-admin .cat-actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
-        .category-item-admin .cat-actions .del:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
+        /* ===== PRODUCT ===== */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+        .product-card { background: var(--bg-card); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .product-card .top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .product-card .top .img { width: 44px; height: 44px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
+        .product-card .top .img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-card .top .title { flex: 1; min-width: 0; }
+        .product-card .top .title .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .product-card .top .title .cat { font-size: 10px; color: var(--text-muted); background: var(--wallet-bg); padding: 1px 8px; border-radius: 6px; display: inline-block; margin-top: 2px; }
+        .product-card .details { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+        .product-card .details .item { background: var(--wallet-bg); border-radius: 6px; padding: 4px 8px; text-align: center; border: 1px solid var(--border-color); }
+        .product-card .details .item .lbl { font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
+        .product-card .details .item .val { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .product-card .details .item .val.price { color: var(--accent); }
+        .product-card .details .item .val.stock { color: var(--success); }
+        .product-card .desc { font-size: 11px; color: var(--text-muted); background: var(--wallet-bg); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; max-height: 40px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .product-card .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+        .product-card .actions button { padding: 3px 10px; border: none; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+        .product-card .actions button:hover { transform: scale(1.05); }
+        .product-card .actions .edit { background: var(--accent); color: #fff; }
+        .product-card .actions .data { background: var(--warning); color: #fff; }
+        .product-card .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
+        .product-card .actions .del:hover { background: var(--danger); color: #fff; }
 
-        .product-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 12px; }
-        .product-card-admin { background: var(--wallet-bg); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color); transition: var(--transition); }
-        .product-card-admin:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow-popup); }
-        .product-card-admin .product-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        .product-card-admin .product-header .product-image { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 28px; border: 1px solid var(--border-color); flex-shrink: 0; overflow: hidden; }
-        .product-card-admin .product-header .product-image img { width: 100%; height: 100%; object-fit: cover; }
-        .product-card-admin .product-header .product-title { flex: 1; min-width: 0; }
-        .product-card-admin .product-header .product-title .name { font-weight: 600; color: var(--text-primary); font-size: 15px; }
-        .product-card-admin .product-header .product-title .category { font-size: 11px; color: var(--text-muted); background: var(--bg-card); padding: 2px 10px; border-radius: 10px; display: inline-block; margin-top: 2px; }
-        .product-card-admin .product-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .product-card-admin .product-details .detail-item { background: var(--bg-card); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border-color); text-align: center; }
-        .product-card-admin .product-details .detail-item .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
-        .product-card-admin .product-details .detail-item .value { font-size: 16px; font-weight: 700; color: var(--text-primary); }
-        .product-card-admin .product-details .detail-item .value.price { color: var(--accent); }
-        .product-card-admin .product-details .detail-item .value.stock { color: var(--success); }
-        .product-card-admin .product-details .detail-item .value.sold { color: var(--warning); }
-        .product-card-admin .product-desc { font-size: 12px; color: var(--text-muted); background: var(--bg-card); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; max-height: 60px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-        .product-card-admin .product-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .product-card-admin .product-actions button { padding: 4px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
-        .product-card-admin .product-actions .edit { background: var(--accent); color: #fff; }
-        .product-card-admin .product-actions .edit:hover { transform: scale(1.05); }
-        .product-card-admin .product-actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
-        .product-card-admin .product-actions .del:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
-        .product-card-admin .product-actions .data-btn { background: var(--warning); color: #fff; }
-        .product-card-admin .product-actions .data-btn:hover { transform: scale(1.05); }
+        /* ===== ORDER ===== */
+        .order-list { display: flex; flex-direction: column; gap: 8px; }
+        .order-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); }
+        .order-item:hover { transform: translateX(4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .order-item .img { width: 40px; height: 40px; border-radius: 6px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+        .order-item .img img { width: 100%; height: 100%; object-fit: cover; }
+        .order-item .info { flex: 1; min-width: 0; }
+        .order-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
+        .order-item .info .meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+        .order-item .info .meta span { display: flex; align-items: center; gap: 3px; }
+        .order-item .info .code { font-size: 11px; color: var(--accent); font-weight: 600; font-family: monospace; }
+        .order-item .badge { font-size: 10px; padding: 2px 10px; border-radius: 6px; font-weight: 500; flex-shrink: 0; }
+        .order-item .badge.success { background: #d4edda; color: #155724; }
+        .order-item .badge.failed { background: #f8d7da; color: #721c24; }
+        .order-item .del-btn { padding: 2px 10px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 11px; flex-shrink: 0; }
+        .order-item .del-btn:hover { background: var(--danger); color: #fff; }
 
-        .voucher-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-        .voucher-item { background: var(--wallet-bg); border-radius: 10px; padding: 12px 16px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: var(--transition); min-width: 180px; }
-        .voucher-item:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-        .voucher-item .voucher-code { font-weight: 700; color: var(--accent); font-size: 15px; font-family: monospace; }
-        .voucher-item .voucher-info { flex: 1; font-size: 12px; color: var(--text-muted); }
-        .voucher-item .voucher-actions button { padding: 2px 10px; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; transition: var(--transition); background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
-        .voucher-item .voucher-actions button:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
+        /* ===== VOUCHER ===== */
+        .voucher-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .voucher-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: var(--transition); box-shadow: var(--shadow); min-width: 160px; }
+        .voucher-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
+        .voucher-item .code { font-weight: 700; color: var(--accent); font-size: 14px; font-family: monospace; }
+        .voucher-item .info { flex: 1; font-size: 11px; color: var(--text-muted); }
+        .voucher-item .del-btn { padding: 2px 8px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 10px; }
+        .voucher-item .del-btn:hover { background: var(--danger); color: #fff; }
 
-        .btn-send { padding: 8px 20px; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
-        .btn-send:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
-        .btn-send.btn-danger { background: linear-gradient(135deg, var(--danger), #c0392b); }
-        .btn-send.btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
-        .btn-send.btn-warning { background: linear-gradient(135deg, var(--warning), #e67e22); color: #fff; }
-        .btn-send.btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; }
+        /* ===== MODAL ===== */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 20px; padding: 28px; max-width: 620px; width: 92%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
-        @keyframes modalIn { from { transform: scale(0.95) translateY(-20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 20px; }
-        .modal .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 13px; min-width: 100px; font-weight: 500; }
-        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 100px; }
+        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 560px; width: 100%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        @keyframes modalIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 14px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal .row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
+        .modal .row label { color: var(--text-muted); font-size: 12px; min-width: 80px; font-weight: 500; }
+        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 80px; }
         .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .modal .row textarea { min-height: 100px; resize: vertical; font-family: inherit; }
-        .modal .row .image-preview { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; overflow: hidden; }
-        .modal .row .image-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .modal .row .word-count { font-size: 12px; color: var(--text-muted); }
+        .modal .row textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+        .modal .row .preview { width: 50px; height: 50px; border-radius: 8px; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
+        .modal .row .preview img { width: 100%; height: 100%; object-fit: cover; }
+        .modal .row .word-count { font-size: 10px; color: var(--text-muted); }
         .modal .row .word-count.warning { color: var(--warning); }
         .modal .row .word-count.danger { color: var(--danger); }
-        .modal .row .data-list { flex: 1; max-height: 200px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-card); }
-        .modal .row .data-list .data-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-primary); }
-        .modal .row .data-list .data-item:last-child { border-bottom: none; }
-        .modal .row .data-list .data-item .remove-data { color: var(--danger); cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: var(--transition); }
-        .modal .row .data-list .data-item .remove-data:hover { background: var(--danger); color: #fff; }
-        .modal .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-        .modal .actions button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 80px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .modal .row .data-list { flex: 1; max-height: 150px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 6px; padding: 6px; background: var(--bg-card); }
+        .modal .row .data-list .item { display: flex; justify-content: space-between; align-items: center; padding: 3px 6px; border-bottom: 1px solid var(--border-color); font-size: 12px; color: var(--text-primary); }
+        .modal .row .data-list .item:last-child { border-bottom: none; }
+        .modal .row .data-list .item .remove { color: var(--danger); cursor: pointer; padding: 1px 4px; border-radius: 4px; transition: var(--transition); }
+        .modal .row .data-list .item .remove:hover { background: var(--danger); color: #fff; }
+        .modal .actions { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+        .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 60px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
         .modal .actions .cancel:hover { background: var(--hover-bg); }
         .modal .actions .save { background: var(--accent); color: #fff; }
@@ -248,49 +256,62 @@
         .modal .actions .success { background: var(--success); color: #fff; }
         .modal .actions .success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
-        .btn-back { margin-top: 16px; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); transform: translateY(-2px); }
-        .refresh-btn { background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: var(--transition); display: flex; align-items: center; gap: 4px; }
-        .refresh-btn:hover { background: var(--hover-bg); transform: scale(1.05); }
-        
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 8px 20px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 12px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.error { border-color: var(--danger); color: var(--danger); }
         .toast.success { border-color: var(--success); color: var(--success); }
-        .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 14px; }
 
-        @media (max-width: 600px) { 
-            .header { padding: 10px 12px; } 
-            .logo { font-size: 16px; } 
-            .content { padding: 12px; } 
-            .admin-card { padding: 16px; } 
-            .notif-popup { right: 8px; left: 8px; min-width: auto; } 
-            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } 
-            .wallet-icon-box { width: 28px; height: 28px; } 
-            .wallet-icon-box i { font-size: 13px; } 
-            .wallet-balance { font-size: 13px; } 
-            .wallet-label { font-size: 9px; } 
-            .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } 
-            .menu-icon .bar { width: 17px; height: 2px; }
-            .bell-icon { width: 34px; height: 34px; font-size: 16px; }
-            .dot-menu { width: 34px; height: 34px; }
-            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); } 
-            .modal { padding: 16px; } 
-            .modal .row { flex-direction: column; align-items: stretch; } 
-            .modal .row label { min-width: auto; }
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-muted); }
+        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 6px; }
+
+        .btn-back { margin-top: 12px; padding: 8px; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); transform: translateY(-2px); }
+
+        @media (max-width: 600px) {
+            .header { padding: 8px 12px; }
+            .logo { font-size: 15px; }
+            .content { padding: 10px 12px; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
             .user-grid { grid-template-columns: 1fr; }
-            .product-grid-admin { grid-template-columns: 1fr; }
-            .product-card-admin .product-details { grid-template-columns: 1fr 1fr; }
-            .order-item-admin { flex-wrap: wrap; }
-            .order-item-admin .order-delete { align-self: flex-end; }
+            .product-grid { grid-template-columns: 1fr; }
+            .order-item { flex-wrap: wrap; }
+            .modal { padding: 16px; }
+            .modal .row { flex-direction: column; align-items: stretch; }
+            .modal .row label { min-width: auto; }
+            .tabs .tab { padding: 6px 12px; font-size: 12px; }
+            .admin-header h1 { font-size: 17px; }
+            .wallet-container { padding: 3px 8px 3px 6px; min-height: 32px; }
+            .wallet-icon-box { width: 24px; height: 24px; }
+            .wallet-icon-box i { font-size: 11px; }
+            .wallet-balance { font-size: 12px; }
+            .wallet-label { font-size: 8px; }
+            .menu-icon { width: 30px; height: 30px; padding: 4px 6px; }
+            .menu-icon .bar { width: 15px; height: 2px; }
+            .bell-icon { width: 30px; height: 30px; font-size: 14px; }
+            .dot-menu { width: 30px; height: 30px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ===== LOADING ===== -->
+    <div class="loading-overlay" id="loadingOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:0.5s;">
+        <div style="width:40px;height:40px;border:4px solid var(--border-color);border-radius:50%;border-top-color:var(--accent);animation:spin 0.8s linear infinite;"></div>
+        <div style="color:var(--text-primary);font-size:14px;font-weight:500;">⏳ Đang tải...</div>
+    </div>
+    <style>
+        .loading-overlay.hidden { opacity:0; pointer-events:none; display:none !important; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
+
+    <!-- ===== MENU ===== -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
-        <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span><span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span></div>
+        <div class="menu-header">
+            <span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span>
+            <span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span>
+        </div>
         <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
         <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
         <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
@@ -298,6 +319,7 @@
         <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
     </div>
 
+    <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="header-left">
             <div class="menu-icon" onclick="toggleMenu()">
@@ -305,13 +327,11 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">Admin</div>
+            <div class="logo">🛠️ Admin</div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
-                <div class="wallet-icon-box">
-                    <i class="fas fa-wallet"></i>
-                </div>
+                <div class="wallet-icon-box"><i class="fas fa-wallet"></i></div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
                     <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
@@ -331,106 +351,114 @@
         </div>
     </header>
 
+    <!-- ===== NOTIFICATION ===== -->
     <div class="notif-popup" id="notifPopup">
         <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
         <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
+    <!-- ===== CONTENT ===== -->
     <div class="content">
-        <div class="admin-card">
-            <h1><i class="fas fa-crown"></i> Quản trị <button class="refresh-btn" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button></h1>
-            <p class="sub">Quản lý người dùng, mục sản phẩm, kho dữ liệu, đơn hàng và mã giảm giá</p>
-            
-            <div class="tabs">
-                <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
-                <button class="tab" data-tab="users" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
-                <button class="tab" data-tab="categories" onclick="switchTab('categories')"><i class="fas fa-folder"></i> Mục SP</button>
-                <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-warehouse"></i> Kho hàng</button>
-                <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
-                <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
+
+        <!-- ===== ADMIN HEADER ===== -->
+        <div class="admin-header">
+            <div>
+                <h1><i class="fas fa-crown" style="color:var(--warning);"></i> Quản trị <span class="sub">| Quản lý toàn bộ hệ thống</span></h1>
             </div>
-            
-            <!-- Tab Dashboard -->
-            <div class="tab-content active" id="tab-dashboard">
-                <div class="stats-grid" id="dashboardStats">
-                    <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label"><i class="fas fa-users"></i> Người dùng</div></div>
-                    <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label"><i class="fas fa-folder"></i> Mục SP</div></div>
-                    <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label"><i class="fas fa-warehouse"></i> Sản phẩm</div></div>
-                    <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label"><i class="fas fa-truck"></i> Đơn hàng</div></div>
-                    <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label"><i class="fas fa-coins"></i> Doanh thu hôm nay</div></div>
-                    <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div></div>
-                </div>
+            <div class="admin-actions">
+                <button class="btn-sm btn-outline" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button>
             </div>
-            
-            <!-- Tab Users -->
-            <div class="tab-content" id="tab-users">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="refreshUsers()"><i class="fas fa-sync"></i> Làm mới</button>
-                </div>
-                <div id="userGrid" class="user-grid">
-                    <div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải danh sách người dùng...</div>
-                </div>
-            </div>
-            
-            <!-- Tab Categories -->
-            <div class="tab-content" id="tab-categories">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm mục</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllCategories()"><i class="fas fa-trash"></i> Xóa tất cả</button>
-                </div>
-                <div id="categoryList" class="category-list">
-                    <div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải danh sách mục...</div>
-                </div>
-            </div>
-            
-            <!-- Tab Products (KHO HÀNG) -->
-            <div class="tab-content" id="tab-products">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllProducts()"><i class="fas fa-trash"></i> Xóa tất cả</button>
-                </div>
-                <div id="productGridAdmin" class="product-grid-admin">
-                    <div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải kho hàng...</div>
-                </div>
-            </div>
-            
-            <!-- Tab Orders -->
-            <div class="tab-content" id="tab-orders">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllOrders()"><i class="fas fa-trash"></i> Xóa tất cả đơn hàng</button>
-                </div>
-                <div id="ordersList" class="order-list">
-                    <div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải đơn hàng...</div>
-                </div>
-            </div>
-            
-            <!-- Tab Vouchers -->
-            <div class="tab-content" id="tab-vouchers">
-                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-                    <button class="btn-send" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã giảm giá</button>
-                    <button class="btn-send btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
-                </div>
-                <div id="voucherList" class="voucher-list">
-                    <div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải mã giảm giá...</div>
-                </div>
-            </div>
-            
-            <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại</button>
         </div>
+
+        <!-- ===== STATS ===== -->
+        <div class="stats-grid" id="dashboardStats">
+            <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label"><i class="fas fa-users"></i> Người dùng</div></div>
+            <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label"><i class="fas fa-folder"></i> Mục SP</div></div>
+            <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label"><i class="fas fa-warehouse"></i> Sản phẩm</div></div>
+            <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label"><i class="fas fa-truck"></i> Đơn hàng</div></div>
+            <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label"><i class="fas fa-coins"></i> DT hôm nay</div></div>
+            <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div></div>
+        </div>
+
+        <!-- ===== TABS ===== -->
+        <div class="tabs">
+            <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Tổng quan</button>
+            <button class="tab" data-tab="users" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
+            <button class="tab" data-tab="categories" onclick="switchTab('categories')"><i class="fas fa-folder"></i> Mục SP</button>
+            <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-warehouse"></i> Kho hàng</button>
+            <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
+            <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
+        </div>
+
+        <!-- ===== TAB: DASHBOARD ===== -->
+        <div class="tab-content active" id="tab-dashboard">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+                <div class="stat-card"><div class="num green" id="dashTodayOrders">0</div><div class="label"><i class="fas fa-shopping-cart"></i> Đơn hôm nay</div></div>
+                <div class="stat-card"><div class="num orange" id="dashTotalSold">0</div><div class="label"><i class="fas fa-box"></i> Tổng bán được</div></div>
+                <div class="stat-card"><div class="num blue" id="dashOnlineUsers">0</div><div class="label"><i class="fas fa-circle" style="color:var(--success);"></i> Đang online</div></div>
+                <div class="stat-card"><div class="num red" id="dashBlockedUsers">0</div><div class="label"><i class="fas fa-lock"></i> Đã khóa</div></div>
+            </div>
+        </div>
+
+        <!-- ===== TAB: USERS ===== -->
+        <div class="tab-content" id="tab-users">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="btn-sm btn-primary" onclick="loadUsersAdmin()"><i class="fas fa-sync"></i> Làm mới</button>
+            </div>
+            <div id="userGrid" class="user-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: CATEGORIES ===== -->
+        <div class="tab-content" id="tab-categories">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="btn-sm btn-primary" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm mục</button>
+                <button class="btn-sm btn-danger" onclick="confirmDeleteAllCategories()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            </div>
+            <div id="categoryList" class="category-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: PRODUCTS ===== -->
+        <div class="tab-content" id="tab-products">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="btn-sm btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm SP</button>
+                <button class="btn-sm btn-danger" onclick="confirmDeleteAllProducts()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            </div>
+            <div id="productGrid" class="product-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: ORDERS ===== -->
+        <div class="tab-content" id="tab-orders">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="btn-sm btn-danger" onclick="confirmDeleteAllOrders()"><i class="fas fa-trash"></i> Xóa tất cả đơn</button>
+            </div>
+            <div id="ordersList" class="order-list"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: VOUCHERS ===== -->
+        <div class="tab-content" id="tab-vouchers">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="btn-sm btn-primary" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã</button>
+                <button class="btn-sm btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            </div>
+            <div id="voucherList" class="voucher-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== BACK BUTTON ===== -->
+        <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</button>
     </div>
 
-    <!-- Modal Category -->
+    <!-- ===== MODAL: CATEGORY ===== -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
-            <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm mục sản phẩm</span></h3>
-            <div class="row"><label><i class="fas fa-tag"></i> Tên:</label><input type="text" id="categoryName" placeholder="Tên mục" /></div>
-            <div class="row"><label><i class="fas fa-emoji"></i> Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
+            <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm mục</span></h3>
+            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên mục" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
             <div class="row">
-                <label><i class="fas fa-image"></i> Hình ảnh:</label>
-                <input type="text" id="categoryImage" placeholder="URL hình ảnh (png/jpg)" />
-                <div class="image-preview" id="categoryImagePreview">🖼️</div>
+                <label>Hình:</label>
+                <input type="text" id="categoryImage" placeholder="URL hình ảnh" />
+                <div class="preview" id="categoryImagePreview">🖼️</div>
             </div>
-            <input type="hidden" id="categoryEditId" value="" />
+            <input type="hidden" id="categoryEditId" />
             <div class="actions">
                 <button class="save" onclick="saveCategory()"><i class="fas fa-save"></i> Lưu</button>
                 <button class="cancel" onclick="closeCategoryModal()"><i class="fas fa-times"></i> Đóng</button>
@@ -438,53 +466,33 @@
         </div>
     </div>
 
-    <!-- Modal Product (QUẢN LÝ KHO + DỮ LIỆU) -->
+    <!-- ===== MODAL: PRODUCT ===== -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
-            <h3><i class="fas fa-warehouse"></i> <span id="productModalTitle">Thêm sản phẩm vào kho</span></h3>
-            
+            <h3><i class="fas fa-warehouse"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
+            <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
+            <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
             <div class="row">
-                <label><i class="fas fa-tag"></i> Tên SP:</label>
-                <input type="text" id="productName" placeholder="Tên sản phẩm" />
-            </div>
-            
-            <div class="row">
-                <label><i class="fas fa-coins"></i> Giá:</label>
-                <input type="number" id="productPrice" placeholder="Giá VND" />
-            </div>
-            
-            <div class="row">
-                <label><i class="fas fa-folder"></i> Mục:</label>
+                <label>Mục:</label>
                 <select id="productCategory"><option value="">Chọn mục</option></select>
             </div>
-            
+            <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
             <div class="row">
-                <label><i class="fas fa-emoji"></i> Icon:</label>
-                <input type="text" id="productIcon" placeholder="📦" value="📦" />
-            </div>
-            
-            <div class="row">
-                <label><i class="fas fa-image"></i> Hình ảnh:</label>
+                <label>Hình:</label>
                 <input type="text" id="productImage" placeholder="URL hình ảnh" />
-                <div class="image-preview" id="productImagePreview">🖼️</div>
+                <div class="preview" id="productImagePreview">🖼️</div>
             </div>
-            
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;"><i class="fas fa-align-left"></i> Mô tả sản phẩm:</label>
-                <textarea id="productDesc" placeholder="Nhập mô tả chi tiết sản phẩm (tối đa 240 từ)" rows="4" maxlength="1500"></textarea>
-                <div style="display:flex;justify-content:flex-end;gap:10px;font-size:12px;">
-                    <span class="word-count" id="wordCount">0/240 từ</span>
-                </div>
+                <label style="min-width:auto;">Mô tả:</label>
+                <textarea id="productDesc" placeholder="Mô tả sản phẩm (tối đa 240 từ)" rows="3" maxlength="1500"></textarea>
+                <div style="display:flex;justify-content:flex-end;font-size:11px;"><span class="word-count" id="wordCount">0/240 từ</span></div>
             </div>
-            
-            <!-- DỮ LIỆU SẢN PHẨM - LƯU DƯỚI DẠNG CHUỖI -->
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;"><i class="fas fa-database"></i> Dữ liệu sản phẩm (mỗi dòng 1 món):</label>
-                <textarea id="productData" placeholder="Nhập dữ liệu từng món, mỗi dòng 1 món&#10;VD:&#10;acc1:pass1&#10;acc2:pass2&#10;acc3:pass3" rows="6"></textarea>
-                <span style="font-size:11px;color:var(--text-muted);">📌 Mỗi dòng là 1 sản phẩm trong kho. Khi bán sẽ lấy 1 dòng và xóa nó đi</span>
+                <label style="min-width:auto;">Dữ liệu (mỗi dòng 1 món):</label>
+                <textarea id="productData" placeholder="VD:&#10;acc1:pass1&#10;acc2:pass2" rows="4"></textarea>
+                <span style="font-size:10px;color:var(--text-muted);">📌 Mỗi dòng = 1 sản phẩm trong kho</span>
             </div>
-            
-            <input type="hidden" id="productEditId" value="" />
+            <input type="hidden" id="productEditId" />
             <div class="actions">
                 <button class="save" onclick="saveProduct()"><i class="fas fa-save"></i> Lưu</button>
                 <button class="cancel" onclick="closeProductModal()"><i class="fas fa-times"></i> Đóng</button>
@@ -492,43 +500,44 @@
         </div>
     </div>
 
-    <!-- Modal Data (Quản lý dữ liệu từng sản phẩm) -->
+    <!-- ===== MODAL: DATA ===== -->
     <div class="modal-overlay" id="dataModal">
         <div class="modal">
             <h3><i class="fas fa-database"></i> Quản lý dữ liệu</h3>
-            <div class="row"><label><i class="fas fa-tag"></i> Sản phẩm:</label><span id="dataProductName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label><i class="fas fa-boxes"></i> Số lượng:</label><span id="dataCount" style="color:var(--accent);font-weight:700;"></span></div>
+            <div class="row"><label>Sản phẩm:</label><span id="dataProductName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label>Số lượng:</label><span id="dataCount" style="color:var(--accent);font-weight:700;"></span></div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;"><i class="fas fa-list"></i> Danh sách dữ liệu:</label>
+                <label style="min-width:auto;">Danh sách:</label>
                 <div class="data-list" id="dataList"></div>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;"><i class="fas fa-plus"></i> Thêm dữ liệu mới:</label>
-                <div style="display:flex;gap:8px;">
-                    <input type="text" id="dataNewItem" placeholder="Nhập dữ liệu mới (VD: acc4:pass4)" style="flex:1;" />
-                    <button class="save" onclick="addDataItem()" style="padding:8px 16px;border:none;border-radius:8px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;"><i class="fas fa-plus"></i> Thêm</button>
+                <label style="min-width:auto;">Thêm mới:</label>
+                <div style="display:flex;gap:6px;">
+                    <input type="text" id="dataNewItem" placeholder="Nhập dữ liệu mới" style="flex:1;" />
+                    <button class="save" onclick="addDataItem()" style="padding:6px 14px;border:none;border-radius:6px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;font-size:12px;"><i class="fas fa-plus"></i> Thêm</button>
                 </div>
             </div>
-            <input type="hidden" id="dataProductId" value="" />
+            <input type="hidden" id="dataProductId" />
             <div class="actions">
                 <button class="cancel" onclick="closeDataModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Voucher -->
+    <!-- ===== MODAL: VOUCHER ===== -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
             <h3><i class="fas fa-ticket-alt"></i> Tạo mã giảm giá</h3>
-            <div class="row"><label><i class="fas fa-key"></i> Mã:</label><input type="text" id="voucherCode" placeholder="VD: SALE10" style="text-transform:uppercase;" /></div>
-            <div class="row"><label><i class="fas fa-tag"></i> Loại:</label>
+            <div class="row"><label>Mã:</label><input type="text" id="voucherCode" placeholder="VD: SALE10" style="text-transform:uppercase;" /></div>
+            <div class="row">
+                <label>Loại:</label>
                 <select id="voucherType">
-                    <option value="percent">Giảm theo %</option>
-                    <option value="fixed">Giảm theo số tiền</option>
+                    <option value="percent">Giảm %</option>
+                    <option value="fixed">Giảm tiền</option>
                 </select>
             </div>
-            <div class="row"><label><i class="fas fa-percent"></i> Giá trị:</label><input type="number" id="voucherValue" placeholder="VD: 10 hoặc 50000" /></div>
-            <div class="row"><label><i class="fas fa-users"></i> Số lượt:</label><input type="number" id="voucherMaxUses" placeholder="Số lần sử dụng" value="10" /></div>
+            <div class="row"><label>Giá trị:</label><input type="number" id="voucherValue" placeholder="10 hoặc 50000" /></div>
+            <div class="row"><label>Số lượt:</label><input type="number" id="voucherMaxUses" placeholder="Số lần" value="10" /></div>
             <div class="actions">
                 <button class="save" onclick="saveVoucher()"><i class="fas fa-save"></i> Lưu</button>
                 <button class="cancel" onclick="closeVoucherModal()"><i class="fas fa-times"></i> Đóng</button>
@@ -536,29 +545,28 @@
         </div>
     </div>
 
-    <!-- Modal Money -->
+    <!-- ===== MODAL: MONEY ===== -->
     <div class="modal-overlay" id="moneyModal">
         <div class="modal">
             <h3><i class="fas fa-coins"></i> <span id="moneyModalTitle">Điều chỉnh số dư</span></h3>
-            <div class="row"><label><i class="fas fa-user"></i> Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label><i class="fas fa-wallet"></i> Số dư hiện tại:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
-            <div class="row"><label><i class="fas fa-coins"></i> Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
-            <div class="row"><label><i class="fas fa-sticky-note"></i> Ghi chú:</label>
-                <input type="text" id="moneyNote" placeholder="Lý do điều chỉnh" />
-            </div>
-            <input type="hidden" id="moneyUserId" value="" />
-            <input type="hidden" id="moneyAction" value="add" />
+            <div class="row"><label>Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
+            <div class="row"><label>Số dư:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
+            <div class="row"><label>Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
+            <div class="row"><label>Ghi chú:</label><input type="text" id="moneyNote" placeholder="Lý do" /></div>
+            <input type="hidden" id="moneyUserId" />
             <div class="actions">
-                <button class="success" onclick="moneyAction('add')"><i class="fas fa-plus"></i> Cộng tiền</button>
-                <button class="danger" onclick="moneyAction('sub')"><i class="fas fa-minus"></i> Trừ tiền</button>
+                <button class="success" onclick="moneyAction('add')"><i class="fas fa-plus"></i> Cộng</button>
+                <button class="danger" onclick="moneyAction('sub')"><i class="fas fa-minus"></i> Trừ</button>
                 <button class="cancel" onclick="closeMoneyModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
     <script>
+        // ===== FIREBASE =====
         const firebaseConfig = {
             apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
             authDomain: "shop-c6777.firebaseapp.com",
@@ -572,6 +580,7 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
+        // ===== VARIABLES =====
         let isAdmin = false;
         let isDataLoaded = false;
         let categoriesData = {};
@@ -581,15 +590,17 @@
         let usersData = {};
         let onlineUsersMap = {};
 
+        // ===== TOAST =====
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
             el.textContent = msg;
             el.className = 'toast ' + type;
             el.classList.add('show');
             clearTimeout(el.timeout);
-            el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
+            el.timeout = setTimeout(() => el.classList.remove('show'), 2500);
         }
 
+        // ===== THEME =====
         function applyTheme() {
             const isDark = localStorage.getItem('theme') === 'dark';
             document.body.classList.toggle('dark-mode', isDark);
@@ -599,20 +610,17 @@
         }
         applyTheme();
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            
-            if (tab === 'dashboard') updateDashboard();
-            if (tab === 'users') loadUsersAdmin();
-            if (tab === 'categories') loadCategoriesAdmin();
-            if (tab === 'products') loadProductsAdmin();
-            if (tab === 'orders') loadOrdersAdmin();
-            if (tab === 'vouchers') loadVouchersAdmin();
+        // ===== LOADING =====
+        function hideLoading() {
+            const overlay = document.querySelector('.loading-overlay');
+            if (overlay) { overlay.classList.add('hidden'); overlay.style.display = 'none'; }
+        }
+        function showLoading() {
+            const overlay = document.querySelector('.loading-overlay');
+            if (overlay) { overlay.style.display = 'flex'; overlay.classList.remove('hidden'); }
         }
 
+        // ===== QUICK LOGIN =====
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -632,12 +640,7 @@
                     document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
                     if (data.isAdmin === true) {
                         isAdmin = true;
-                        loadUsersAdmin();
-                        loadCategoriesAdmin();
-                        loadProductsAdmin();
-                        loadOrdersAdmin();
-                        loadVouchersAdmin();
-                        updateDashboard();
+                        loadAllData();
                     } else {
                         alert('⚠️ Không có quyền truy cập!');
                         window.location.replace('../index.html');
@@ -645,99 +648,127 @@
                     }
                 }
                 isDataLoaded = true;
+                hideLoading();
                 return true;
             } catch (error) {
-                console.error('Lỗi complete quick login:', error);
+                console.error('Lỗi:', error);
                 return false;
             }
         }
 
+        // ===== LOAD ALL DATA =====
+        function loadAllData() {
+            db.ref('users').on('value', snap => { usersData = snap.val() || {}; renderUsers(); updateDashboard(); });
+            db.ref('presence').on('value', snap => { onlineUsersMap = snap.val() || {}; renderUsers(); });
+            db.ref('categories').on('value', snap => { categoriesData = snap.val() || {}; renderCategories(); updateCategorySelect(); updateDashboard(); });
+            db.ref('products').on('value', snap => { productsData = snap.val() || {}; renderProducts(); updateDashboard(); });
+            db.ref('orders').on('value', snap => { ordersData = snap.val() || {}; renderOrders(); updateDashboard(); });
+            db.ref('vouchers').on('value', snap => { vouchersData = snap.val() || {}; renderVouchers(); updateDashboard(); });
+            db.ref('notifications').on('value', snap => {
+                const notifs = snap.val();
+                const list = document.getElementById('notifList');
+                const dot = document.getElementById('notifDot');
+                const uid = auth.currentUser?.uid || localStorage.getItem('quickLoginUid');
+                if (notifs) {
+                    const keys = Object.keys(notifs).reverse();
+                    let html = '', hasUnread = false;
+                    keys.forEach(key => {
+                        const n = notifs[key];
+                        const isUnread = !n.readBy || !n.readBy[uid];
+                        if (isUnread) hasUnread = true;
+                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<span class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</span></div>`;
+                    });
+                    list.innerHTML = html;
+                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
+                } else {
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
+                    dot.classList.remove('show');
+                }
+            });
+            setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 3000);
+        }
+
+        // ===== UPDATE DASHBOARD =====
         function updateDashboard() {
-            db.ref('users').once('value', snap => {
-                const data = snap.val() || {};
-                document.getElementById('dashUsers').textContent = Object.keys(data).length;
+            const u = Object.keys(usersData).length;
+            const c = Object.keys(categoriesData).length;
+            const p = Object.keys(productsData).length;
+            const o = Object.keys(ordersData).length;
+            const v = Object.keys(vouchersData).length;
+            document.getElementById('dashUsers').textContent = u;
+            document.getElementById('dashCategories').textContent = c;
+            document.getElementById('dashProducts').textContent = p;
+            document.getElementById('dashOrders').textContent = o;
+            document.getElementById('dashVouchers').textContent = v;
+            
+            let todayRevenue = 0, todayOrders = 0, totalSold = 0, blocked = 0, online = 0;
+            const today = new Date(); today.setHours(0,0,0,0);
+            Object.keys(ordersData).forEach(key => {
+                const ord = ordersData[key];
+                totalSold += ord.quantity || 0;
+                if (ord.timestamp >= today.getTime()) {
+                    todayRevenue += ord.price || 0;
+                    todayOrders++;
+                }
             });
-            db.ref('categories').once('value', snap => {
-                const data = snap.val() || {};
-                document.getElementById('dashCategories').textContent = Object.keys(data).length;
+            Object.keys(usersData).forEach(key => {
+                if (usersData[key].blocked === true) blocked++;
+                if (onlineUsersMap[key] === true) online++;
             });
-            db.ref('products').once('value', snap => {
-                const data = snap.val() || {};
-                document.getElementById('dashProducts').textContent = Object.keys(data).length;
-            });
-            db.ref('orders').once('value', snap => {
-                const orders = snap.val() || {};
-                const keys = Object.keys(orders);
-                document.getElementById('dashOrders').textContent = keys.length;
-                
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                let revenue = 0;
-                keys.forEach(key => {
-                    const order = orders[key];
-                    if (order.timestamp >= today.getTime()) {
-                        revenue += order.price || 0;
-                    }
-                });
-                document.getElementById('dashRevenue').textContent = revenue.toLocaleString('vi-VN') + 'đ';
-            });
-            db.ref('vouchers').once('value', snap => {
-                const data = snap.val() || {};
-                document.getElementById('dashVouchers').textContent = Object.keys(data).length;
-            });
+            document.getElementById('dashRevenue').textContent = todayRevenue.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('dashTodayOrders').textContent = todayOrders;
+            document.getElementById('dashTotalSold').textContent = totalSold;
+            document.getElementById('dashOnlineUsers').textContent = online;
+            document.getElementById('dashBlockedUsers').textContent = blocked;
         }
 
-        // ===== USERS =====
-        function loadUsersAdmin() {
-            db.ref('users').on('value', (snapshot) => {
-                usersData = snapshot.val() || {};
-                renderUsersAdmin(usersData);
-            });
-            db.ref('presence').on('value', (snapshot) => {
-                onlineUsersMap = snapshot.val() || {};
-                renderUsersAdmin(usersData);
-            });
+        // ===== SWITCH TAB =====
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            if (tab === 'users') renderUsers();
+            if (tab === 'categories') renderCategories();
+            if (tab === 'products') renderProducts();
+            if (tab === 'orders') renderOrders();
+            if (tab === 'vouchers') renderVouchers();
+            if (tab === 'dashboard') updateDashboard();
         }
 
-        function renderUsersAdmin(data) {
+        // ===== RENDER USERS =====
+        function renderUsers() {
             const container = document.getElementById('userGrid');
-            const keys = Object.keys(data);
-            if (keys.length === 0) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-users"></i> Chưa có người dùng</div>`;
-                return;
-            }
+            const keys = Object.keys(usersData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">👤</span>Chưa có người dùng</div>`; return; }
             let html = '';
             keys.forEach(key => {
-                const user = data[key];
-                if (user.isAdmin === true) return;
-                
+                const u = usersData[key];
+                if (u.isAdmin === true) return;
                 const isOnline = onlineUsersMap[key] === true;
-                const isBlocked = user.blocked === true;
-                const balance = user.balance || 0;
-                const name = user.displayName || user.email || 'Chưa đặt tên';
-                const email = user.email || 'Không có email';
+                const isBlocked = u.blocked === true;
+                const name = u.displayName || u.email || 'Chưa đặt tên';
+                const email = u.email || 'Không có email';
                 const initial = name.charAt(0).toUpperCase() || '?';
-                
-                let statusClass = isBlocked ? 'blocked' : (isOnline ? 'online' : 'offline');
-                let statusText = isBlocked ? '🔒 Đã khóa' : (isOnline ? '🟢 Online' : '⚪ Offline');
-                
+                const statusClass = isBlocked ? 'blocked' : (isOnline ? 'online' : 'offline');
+                const statusText = isBlocked ? '🔒 Đã khóa' : (isOnline ? '🟢 Online' : '⚪ Offline');
                 html += `
                     <div class="user-card">
                         <div class="user-header">
-                            <div class="user-avatar">${initial}</div>
-                            <div class="user-info">
-                                <div class="user-name">${name}</div>
-                                <div class="user-email"><i class="fas fa-envelope"></i> ${email}</div>
+                            <div class="avatar">${initial}</div>
+                            <div class="info">
+                                <div class="name">${name}</div>
+                                <div class="email">${email}</div>
                             </div>
                         </div>
-                        <div class="user-balance"><i class="fas fa-coins"></i> ${balance.toLocaleString('vi-VN')} VND</div>
-                        <div><span class="user-status ${statusClass}"><i class="fas ${isBlocked ? 'fa-lock' : (isOnline ? 'fa-circle' : 'fa-circle')}"></i> ${statusText}</span></div>
-                        <div class="user-actions">
-                            <button class="add-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'add')"><i class="fas fa-plus"></i> Cộng</button>
-                            <button class="sub-money" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${balance},'sub')"><i class="fas fa-minus"></i> Trừ</button>
+                        <div class="balance"><i class="fas fa-coins"></i> ${(u.balance||0).toLocaleString('vi-VN')} VND</div>
+                        <div><span class="status ${statusClass}">${statusText}</span></div>
+                        <div class="actions">
+                            <button class="add" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'add')"><i class="fas fa-plus"></i></button>
+                            <button class="sub" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'sub')"><i class="fas fa-minus"></i></button>
                             ${isBlocked ? 
-                                `<button class="unblock-btn" onclick="toggleBlockUser('${key}',false)"><i class="fas fa-unlock"></i> Mở khóa</button>` :
-                                `<button class="block-btn" onclick="toggleBlockUser('${key}',true)"><i class="fas fa-lock"></i> Khóa</button>`
+                                `<button class="unblock" onclick="toggleBlock('${key}',false)"><i class="fas fa-unlock"></i></button>` :
+                                `<button class="block" onclick="toggleBlock('${key}',true)"><i class="fas fa-lock"></i></button>`
                             }
                         </div>
                     </div>
@@ -746,9 +777,15 @@
             container.innerHTML = html;
         }
 
-        function refreshUsers() {
-            loadUsersAdmin();
-            showToast('🔄 Đã làm mới danh sách!', 'success');
+        function loadUsersAdmin() { renderUsers(); showToast('🔄 Đã làm mới!', 'success'); }
+
+        // ===== TOGGLE BLOCK =====
+        function toggleBlock(uid, block) {
+            if (confirm(block ? '🔒 Khóa người dùng này?' : '🔓 Mở khóa?')) {
+                db.ref('users/' + uid + '/blocked').set(block).then(() => {
+                    showToast(block ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
+                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            }
         }
 
         // ===== MONEY =====
@@ -759,87 +796,39 @@
             document.getElementById('moneyAmount').value = '';
             document.getElementById('moneyNote').value = '';
             document.getElementById('moneyUserId').value = uid;
-            document.getElementById('moneyAction').value = action;
             document.getElementById('moneyModal').classList.add('active');
         }
-
-        function closeMoneyModal() {
-            document.getElementById('moneyModal').classList.remove('active');
-        }
+        function closeMoneyModal() { document.getElementById('moneyModal').classList.remove('active'); }
 
         function moneyAction(action) {
             const uid = document.getElementById('moneyUserId').value;
             const amount = parseInt(document.getElementById('moneyAmount').value);
             const note = document.getElementById('moneyNote').value.trim() || 'Admin điều chỉnh';
-            
-            if (!uid) { showToast('❌ Lỗi: Không tìm thấy người dùng!', 'error'); return; }
-            if (!amount || amount <= 0) { showToast('❌ Nhập số tiền hợp lệ!', 'error'); return; }
-            
+            if (!uid || !amount || amount <= 0) { showToast('❌ Nhập số tiền hợp lệ!', 'error'); return; }
             const isAdd = action === 'add';
-            const ref = db.ref('users/' + uid + '/balance');
-            ref.transaction(current => {
-                const c = current || 0;
-                return isAdd ? c + amount : Math.max(0, c - amount);
-            }).then(result => {
-                const newBalance = result.snapshot.val() || 0;
-                showToast(`✅ ${isAdd ? 'Cộng' : 'Trừ'} ${amount.toLocaleString('vi-VN')} VND thành công! Số dư mới: ${newBalance.toLocaleString('vi-VN')} VND`, 'success');
-                closeMoneyModal();
-                const msg = isAdd ? `💳 Tài khoản của bạn được cộng ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}` : `💳 Tài khoản của bạn bị trừ ${amount.toLocaleString('vi-VN')} VND. Lý do: ${note}`;
-                db.ref('notifications').push({
-                    message: msg,
-                    timestamp: Date.now(),
-                    from: 'Admin',
-                    readBy: {}
-                });
-                refreshUsers();
-            }).catch(err => {
-                showToast('❌ ' + err.message, 'error');
-            });
-        }
-
-        function toggleBlockUser(uid, blocked) {
-            const msg = blocked ? '🔒 Khóa người dùng này?' : '🔓 Mở khóa người dùng này?';
-            if (confirm(msg)) {
-                db.ref('users/' + uid + '/blocked').set(blocked).then(() => {
-                    showToast(blocked ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
-                    refreshUsers();
+            db.ref('users/' + uid + '/balance').transaction(c => { const v = c || 0; return isAdd ? v + amount : Math.max(0, v - amount); })
+                .then(r => {
+                    showToast(`✅ ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ thành công!`, 'success');
+                    closeMoneyModal();
+                    db.ref('notifications').push({ message: `💳 ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ. Lý do: ${note}`, timestamp: Date.now(), from: 'Admin', readBy: {} });
                 }).catch(err => showToast('❌ ' + err.message, 'error'));
-            }
         }
 
-        // ===== CATEGORIES =====
-        function loadCategoriesAdmin() {
-            db.ref('categories').on('value', (snapshot) => {
-                categoriesData = snapshot.val() || {};
-                renderCategoriesAdmin(categoriesData);
-                updateCategorySelect();
-            });
-        }
-
-        function renderCategoriesAdmin(data) {
+        // ===== RENDER CATEGORIES =====
+        function renderCategories() {
             const container = document.getElementById('categoryList');
-            const keys = Object.keys(data);
-            if (keys.length === 0) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-folder-open"></i> Chưa có mục sản phẩm</div>`;
-                return;
-            }
+            const keys = Object.keys(categoriesData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📁</span>Chưa có mục</div>`; return; }
             let html = '';
             keys.forEach(key => {
-                const cat = data[key];
-                const productCount = Object.keys(productsData).filter(pid => productsData[pid]?.category === key).length;
-                const imageUrl = cat.image || '';
-                const icon = cat.icon || '📁';
-                
+                const c = categoriesData[key];
+                const count = Object.keys(productsData).filter(p => productsData[p]?.category === key).length;
+                const img = c.image || '';
                 html += `
-                    <div class="category-item-admin">
-                        <div class="cat-image">
-                            ${imageUrl ? `<img src="${imageUrl}" alt="${cat.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
-                        </div>
-                        <div class="cat-info">
-                            <div class="name">${cat.name || 'Chưa đặt tên'}</div>
-                            <div class="count"><i class="fas fa-box"></i> ${productCount} sản phẩm</div>
-                        </div>
-                        <div class="cat-actions">
+                    <div class="category-item">
+                        <div class="icon">${img ? `<img src="${img}" onerror="this.parentElement.textContent='${c.icon||'📁'}'" />` : (c.icon||'📁')}</div>
+                        <div class="info"><div class="name">${c.name||'Chưa tên'}</div><div class="count">${count} sp</div></div>
+                        <div class="actions">
                             <button class="edit" onclick="editCategory('${key}')"><i class="fas fa-edit"></i></button>
                             <button class="del" onclick="deleteCategory('${key}')"><i class="fas fa-trash"></i></button>
                         </div>
@@ -850,54 +839,40 @@
         }
 
         function updateCategorySelect() {
-            const select = document.getElementById('productCategory');
-            select.innerHTML = '<option value="">Chọn mục</option>';
-            Object.keys(categoriesData).forEach(key => {
-                const cat = categoriesData[key];
-                select.innerHTML += `<option value="${key}">${cat.icon || '📁'} ${cat.name}</option>`;
+            const sel = document.getElementById('productCategory');
+            sel.innerHTML = '<option value="">Chọn mục</option>';
+            Object.keys(categoriesData).forEach(k => {
+                const c = categoriesData[k];
+                sel.innerHTML += `<option value="${k}">${c.icon||'📁'} ${c.name}</option>`;
             });
         }
 
+        // ===== CATEGORY CRUD =====
         function openCategoryModal() {
-            document.getElementById('categoryModalTitle').textContent = 'Thêm mục sản phẩm';
+            document.getElementById('categoryModalTitle').textContent = 'Thêm mục';
             document.getElementById('categoryName').value = '';
             document.getElementById('categoryIcon').value = '📁';
             document.getElementById('categoryImage').value = '';
             document.getElementById('categoryImagePreview').textContent = '🖼️';
             document.getElementById('categoryEditId').value = '';
             document.getElementById('categoryModal').classList.add('active');
-            
             document.getElementById('categoryImage').oninput = function() {
-                const preview = document.getElementById('categoryImagePreview');
-                const val = this.value.trim();
-                if (val) {
-                    preview.innerHTML = `<img src="${val}" onerror="this.parentElement.textContent='❌'" />`;
-                } else {
-                    preview.textContent = '🖼️';
-                }
+                const p = document.getElementById('categoryImagePreview');
+                const v = this.value.trim();
+                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
             };
         }
-
-        function closeCategoryModal() {
-            document.getElementById('categoryModal').classList.remove('active');
-        }
+        function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('active'); }
 
         function editCategory(key) {
-            const cat = categoriesData[key];
-            if (!cat) return;
-            document.getElementById('categoryModalTitle').textContent = 'Sửa mục sản phẩm';
-            document.getElementById('categoryName').value = cat.name || '';
-            document.getElementById('categoryIcon').value = cat.icon || '📁';
-            document.getElementById('categoryImage').value = cat.image || '';
+            const c = categoriesData[key]; if (!c) return;
+            document.getElementById('categoryModalTitle').textContent = 'Sửa mục';
+            document.getElementById('categoryName').value = c.name || '';
+            document.getElementById('categoryIcon').value = c.icon || '📁';
+            document.getElementById('categoryImage').value = c.image || '';
             document.getElementById('categoryEditId').value = key;
-            
-            const preview = document.getElementById('categoryImagePreview');
-            if (cat.image) {
-                preview.innerHTML = `<img src="${cat.image}" onerror="this.parentElement.textContent='❌'" />`;
-            } else {
-                preview.textContent = '🖼️';
-            }
-            
+            const p = document.getElementById('categoryImagePreview');
+            p.innerHTML = c.image ? `<img src="${c.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
             document.getElementById('categoryModal').classList.add('active');
         }
 
@@ -906,99 +881,57 @@
             const icon = document.getElementById('categoryIcon').value.trim() || '📁';
             const image = document.getElementById('categoryImage').value.trim();
             const editId = document.getElementById('categoryEditId').value;
-            
             if (!name) { showToast('❌ Nhập tên mục!', 'error'); return; }
-            
-            const data = { name, icon };
-            if (image) data.image = image;
-            
+            const data = { name, icon }; if (image) data.image = image;
             const ref = editId ? db.ref('categories/' + editId) : db.ref('categories').push();
-            ref.set(data).then(() => {
-                showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm mục!', 'success');
-                closeCategoryModal();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
+            ref.set(data).then(() => { showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm!', 'success'); closeCategoryModal(); })
+                .catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
         function deleteCategory(key) {
             if (confirm('🗑️ Xóa mục này?')) {
-                db.ref('categories/' + key).remove().then(() => {
-                    showToast('✅ Đã xóa!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+                db.ref('categories/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
-
         function confirmDeleteAllCategories() {
             if (confirm('🗑️ Xóa TẤT CẢ mục?')) {
-                db.ref('categories').remove().then(() => {
-                    showToast('✅ Đã xóa tất cả!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+                db.ref('categories').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
-        // ===== PRODUCTS (QUẢN LÝ KHO + DỮ LIỆU) =====
-        function loadProductsAdmin() {
-            db.ref('products').on('value', (snapshot) => {
-                productsData = snapshot.val() || {};
-                renderProductsAdmin(productsData);
-                updateCategorySelect();
-                renderCategoriesAdmin(categoriesData);
-            });
-        }
-
-        function renderProductsAdmin(data) {
-            const container = document.getElementById('productGridAdmin');
-            const keys = Object.keys(data);
-            if (keys.length === 0) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-warehouse"></i> Kho hàng đang trống</div>`;
-                return;
-            }
+        // ===== RENDER PRODUCTS =====
+        function renderProducts() {
+            const container = document.getElementById('productGrid');
+            const keys = Object.keys(productsData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📦</span>Kho hàng trống</div>`; return; }
             let html = '';
             keys.forEach(key => {
-                const p = data[key];
-                const imageUrl = p.image || '';
-                const icon = p.icon || '📦';
-                const desc = p.description || '';
-                // data là chuỗi, split để đếm số lượng
+                const p = productsData[key];
                 const dataList = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-                const sold = p.sold || 0;
-                const price = p.price || 0;
-                const categoryName = categoriesData[p.category]?.name || 'Không có mục';
-                const categoryIcon = categoriesData[p.category]?.icon || '📁';
                 const stock = dataList.length;
-                
+                const catName = categoriesData[p.category]?.name || 'Không mục';
+                const catIcon = categoriesData[p.category]?.icon || '📁';
                 html += `
-                    <div class="product-card-admin">
-                        <div class="product-header">
-                            <div class="product-image">
-                                ${imageUrl ? `<img src="${imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='${icon}'" />` : icon}
-                            </div>
-                            <div class="product-title">
-                                <div class="name">${p.name || 'Sản phẩm'}</div>
-                                <div class="category">${categoryIcon} ${categoryName}</div>
+                    <div class="product-card">
+                        <div class="top">
+                            <div class="img">${p.image ? `<img src="${p.image}" onerror="this.parentElement.textContent='${p.icon||'📦'}'" />` : (p.icon||'📦')}</div>
+                            <div class="title">
+                                <div class="name">${p.name||'Sản phẩm'}</div>
+                                <div class="cat">${catIcon} ${catName}</div>
                             </div>
                         </div>
-                        <div class="product-details">
-                            <div class="detail-item">
-                                <div class="label"><i class="fas fa-tag"></i> Giá</div>
-                                <div class="value price">${price.toLocaleString('vi-VN')}đ</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label"><i class="fas fa-database"></i> Tồn kho</div>
-                                <div class="value stock">${stock}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label"><i class="fas fa-chart-line"></i> Đã bán</div>
-                                <div class="value sold">${sold}</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label"><i class="fas fa-status"></i> Trạng thái</div>
-                                <div class="value" style="color:${stock > 0 ? 'var(--success)' : 'var(--danger)'};font-size:13px;">${stock > 0 ? '🟢 Còn hàng' : '🔴 Hết hàng'}</div>
-                            </div>
+                        <div class="details">
+                            <div class="item"><div class="lbl">Giá</div><div class="val price">${(p.price||0).toLocaleString('vi-VN')}đ</div></div>
+                            <div class="item"><div class="lbl">Tồn kho</div><div class="val stock">${stock}</div></div>
+                            <div class="item"><div class="lbl">Đã bán</div><div class="val">${p.sold||0}</div></div>
+                            <div class="item"><div class="lbl">Trạng thái</div><div class="val" style="color:${stock>0?'var(--success)':'var(--danger)'};font-size:12px;">${stock>0?'🟢 Còn':'🔴 Hết'}</div></div>
                         </div>
-                        ${desc ? `<div class="product-desc"><i class="fas fa-info-circle"></i> ${desc}</div>` : ''}
-                        <div class="product-actions">
+                        ${p.description ? `<div class="desc">${p.description}</div>` : ''}
+                        <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
-                            <button class="data-btn" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Dữ liệu (${stock})</button>
+                            <button class="data" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Data (${stock})</button>
                             <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
@@ -1007,59 +940,38 @@
             container.innerHTML = html;
         }
 
-        // ===== PRODUCT MODAL =====
+        // ===== PRODUCT CRUD =====
         document.getElementById('productDesc').addEventListener('input', function() {
-            const text = this.value;
-            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-            const wordCountEl = document.getElementById('wordCount');
-            wordCountEl.textContent = `${words}/240 từ`;
-            
-            if (words > 240) {
-                wordCountEl.className = 'word-count danger';
-                this.style.borderColor = 'var(--danger)';
-            } else if (words > 200) {
-                wordCountEl.className = 'word-count warning';
-                this.style.borderColor = 'var(--warning)';
-            } else {
-                wordCountEl.className = 'word-count';
-                this.style.borderColor = 'var(--border-color)';
-            }
+            const words = this.value.trim() ? this.value.trim().split(/\s+/).length : 0;
+            const el = document.getElementById('wordCount');
+            el.textContent = `${words}/240 từ`;
+            el.className = 'word-count' + (words > 240 ? ' danger' : words > 200 ? ' warning' : '');
         });
 
         function openProductModal() {
-            document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm vào kho';
-            document.getElementById('productName').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productCategory').value = '';
+            document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
+            ['productName','productPrice','productCategory','productIcon','productImage','productDesc','productData'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.type !== 'number') el.value = '';
+                else if (el) el.value = '';
+            });
             document.getElementById('productIcon').value = '📦';
-            document.getElementById('productImage').value = '';
-            document.getElementById('productDesc').value = '';
-            document.getElementById('productData').value = '';
             document.getElementById('wordCount').textContent = '0/240 từ';
             document.getElementById('wordCount').className = 'word-count';
-            document.getElementById('productEditId').value = '';
             document.getElementById('productImagePreview').textContent = '🖼️';
+            document.getElementById('productEditId').value = '';
             updateCategorySelect();
             document.getElementById('productModal').classList.add('active');
-            
             document.getElementById('productImage').oninput = function() {
-                const preview = document.getElementById('productImagePreview');
-                const val = this.value.trim();
-                if (val) {
-                    preview.innerHTML = `<img src="${val}" onerror="this.parentElement.textContent='❌'" />`;
-                } else {
-                    preview.textContent = '🖼️';
-                }
+                const p = document.getElementById('productImagePreview');
+                const v = this.value.trim();
+                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
             };
         }
-
-        function closeProductModal() {
-            document.getElementById('productModal').classList.remove('active');
-        }
+        function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
 
         function editProduct(key) {
-            const p = productsData[key];
-            if (!p) return;
+            const p = productsData[key]; if (!p) return;
             document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
             document.getElementById('productName').value = p.name || '';
             document.getElementById('productPrice').value = p.price || '';
@@ -1067,28 +979,14 @@
             document.getElementById('productIcon').value = p.icon || '📦';
             document.getElementById('productImage').value = p.image || '';
             document.getElementById('productDesc').value = p.description || '';
-            // data là chuỗi, hiển thị đúng
             document.getElementById('productData').value = p.data || '';
             document.getElementById('productEditId').value = key;
-            
             const words = p.description ? p.description.trim().split(/\s+/).length : 0;
-            const wordCountEl = document.getElementById('wordCount');
-            wordCountEl.textContent = `${words}/240 từ`;
-            if (words > 240) {
-                wordCountEl.className = 'word-count danger';
-            } else if (words > 200) {
-                wordCountEl.className = 'word-count warning';
-            } else {
-                wordCountEl.className = 'word-count';
-            }
-            
+            const el = document.getElementById('wordCount');
+            el.textContent = `${words}/240 từ`;
+            el.className = 'word-count' + (words > 240 ? ' danger' : words > 200 ? ' warning' : '');
             const preview = document.getElementById('productImagePreview');
-            if (p.image) {
-                preview.innerHTML = `<img src="${p.image}" onerror="this.parentElement.textContent='❌'" />`;
-            } else {
-                preview.textContent = '🖼️';
-            }
-            
+            preview.innerHTML = p.image ? `<img src="${p.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
             updateCategorySelect();
             document.getElementById('productModal').classList.add('active');
         }
@@ -1101,67 +999,42 @@
             const image = document.getElementById('productImage').value.trim();
             const description = document.getElementById('productDesc').value.trim();
             const dataRaw = document.getElementById('productData').value;
-            // LƯU DƯỚI DẠNG CHUỖI (string) để index.html có thể split('\n')
             const dataString = dataRaw.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n');
             const editId = document.getElementById('productEditId').value;
-            
             const words = description ? description.trim().split(/\s+/).length : 0;
-            if (words > 240) {
-                showToast('❌ Mô tả sản phẩm vượt quá 240 từ!', 'error');
-                return;
-            }
-            
+            if (words > 240) { showToast('❌ Mô tả vượt quá 240 từ!', 'error'); return; }
             if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
             if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
-            if (!category) { showToast('❌ Chọn mục sản phẩm!', 'error'); return; }
-            if (!dataString) { showToast('❌ Nhập ít nhất 1 dữ liệu sản phẩm!', 'error'); return; }
-            
-            const data = { 
-                name, 
-                price, 
-                category, 
-                icon,
-                data: dataString,  // Lưu dưới dạng chuỗi
-                sold: 0
-            };
+            if (!category) { showToast('❌ Chọn mục!', 'error'); return; }
+            if (!dataString) { showToast('❌ Nhập ít nhất 1 dữ liệu!', 'error'); return; }
+            const data = { name, price, category, icon, data: dataString, sold: 0 };
             if (image) data.image = image;
             if (description) data.description = description;
-            
             const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
             ref.set(data).then(() => {
                 const count = dataString.split('\n').length;
-                showToast(editId ? '✅ Đã cập nhật sản phẩm!' : `✅ Đã thêm ${count} món vào kho!`, 'success');
+                showToast(editId ? '✅ Đã cập nhật!' : `✅ Đã thêm ${count} món!`, 'success');
                 closeProductModal();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
         function deleteProduct(key) {
-            if (confirm('🗑️ Xóa sản phẩm này khỏi kho?')) {
-                db.ref('products/' + key).remove().then(() => {
-                    showToast('✅ Đã xóa!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            if (confirm('🗑️ Xóa sản phẩm?')) {
+                db.ref('products/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
-
         function confirmDeleteAllProducts() {
-            if (confirm('🗑️ Xóa TẤT CẢ sản phẩm trong kho?')) {
-                db.ref('products').remove().then(() => {
-                    showToast('✅ Đã xóa tất cả!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            if (confirm('🗑️ Xóa TẤT CẢ sản phẩm?')) {
+                db.ref('products').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
-        // ===== DATA MANAGEMENT (QUẢN LÝ DỮ LIỆU TỪNG SẢN PHẨM) =====
-        let currentDataProductId = '';
-
+        // ===== DATA MANAGEMENT =====
         function openDataModal(productId, productName) {
-            currentDataProductId = productId;
-            const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
-            
-            // data là chuỗi, split thành mảng
+            const p = productsData[productId]; if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
             const dataArray = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            
             document.getElementById('dataProductName').textContent = productName;
             document.getElementById('dataCount').textContent = dataArray.length;
             document.getElementById('dataProductId').value = productId;
@@ -1172,18 +1045,10 @@
 
         function renderDataList(data) {
             const container = document.getElementById('dataList');
-            if (data.length === 0) {
-                container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:12px;">Chưa có dữ liệu nào</div>`;
-                return;
-            }
+            if (data.length === 0) { container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:8px;">Chưa có dữ liệu</div>`; return; }
             let html = '';
-            data.forEach((item, index) => {
-                html += `
-                    <div class="data-item">
-                        <span>${index + 1}. ${item}</span>
-                        <span class="remove-data" onclick="removeDataItem(${index})" title="Xóa"><i class="fas fa-times"></i></span>
-                    </div>
-                `;
+            data.forEach((item, i) => {
+                html += `<div class="item"><span>${i+1}. ${item}</span><span class="remove" onclick="removeDataItem(${i})"><i class="fas fa-times"></i></span></div>`;
             });
             container.innerHTML = html;
             document.getElementById('dataCount').textContent = data.length;
@@ -1192,94 +1057,63 @@
         function addDataItem() {
             const input = document.getElementById('dataNewItem');
             const newItem = input.value.trim();
-            if (!newItem) { showToast('❌ Nhập dữ liệu mới!', 'error'); return; }
-            
+            if (!newItem) { showToast('❌ Nhập dữ liệu!', 'error'); return; }
             const productId = document.getElementById('dataProductId').value;
             const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
-            
-            // data là chuỗi, split thành mảng để thêm
-            const currentData = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            currentData.push(newItem);
-            // Lưu lại dưới dạng chuỗi
-            const newDataString = currentData.join('\n');
-            
-            db.ref('products/' + productId + '/data').set(newDataString).then(() => {
-                showToast('✅ Đã thêm dữ liệu mới!', 'success');
-                input.value = '';
-                renderDataList(currentData);
-                productsData[productId].data = newDataString;
-                renderProductsAdmin(productsData);
+            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
+            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
+            current.push(newItem);
+            const newStr = current.join('\n');
+            db.ref('products/' + productId + '/data').set(newStr).then(() => {
+                showToast('✅ Đã thêm!', 'success');
+                renderDataList(current);
+                productsData[productId].data = newStr;
+                renderProducts();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
         function removeDataItem(index) {
             if (!confirm('🗑️ Xóa dữ liệu này?')) return;
-            
             const productId = document.getElementById('dataProductId').value;
             const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy sản phẩm!', 'error'); return; }
-            
-            const currentData = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            currentData.splice(index, 1);
-            const newDataString = currentData.join('\n');
-            
-            db.ref('products/' + productId + '/data').set(newDataString).then(() => {
+            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
+            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
+            current.splice(index, 1);
+            const newStr = current.join('\n');
+            db.ref('products/' + productId + '/data').set(newStr).then(() => {
                 showToast('✅ Đã xóa!', 'success');
-                renderDataList(currentData);
-                productsData[productId].data = newDataString;
-                renderProductsAdmin(productsData);
+                renderDataList(current);
+                productsData[productId].data = newStr;
+                renderProducts();
             }).catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
-        function closeDataModal() {
-            document.getElementById('dataModal').classList.remove('active');
-        }
+        function closeDataModal() { document.getElementById('dataModal').classList.remove('active'); }
 
-        // ===== ORDERS =====
-        function loadOrdersAdmin() {
-            db.ref('orders').on('value', (snapshot) => {
-                ordersData = snapshot.val() || {};
-                renderOrdersAdmin(ordersData);
-            });
-        }
-
-        function renderOrdersAdmin(data) {
+        // ===== RENDER ORDERS =====
+        function renderOrders() {
             const container = document.getElementById('ordersList');
-            const keys = Object.keys(data);
-            if (keys.length === 0) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-truck"></i> Chưa có đơn hàng</div>`;
-                return;
-            }
+            const keys = Object.keys(ordersData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📦</span>Chưa có đơn hàng</div>`; return; }
             let html = '';
-            const sorted = keys.sort((a,b) => (data[b]?.timestamp || 0) - (data[a]?.timestamp || 0));
+            const sorted = keys.sort((a,b) => (ordersData[b]?.timestamp||0) - (ordersData[a]?.timestamp||0));
             sorted.forEach(key => {
-                const o = data[key];
-                const image = o.productImage || o.productIcon || '📦';
+                const o = ordersData[key];
                 const status = o.status || 'success';
-                const statusText = status === 'success' ? 'Thành công' : 'Thất bại';
-                const statusClass = status === 'success' ? 'success' : 'failed';
-                
                 html += `
-                    <div class="order-item-admin">
-                        <div class="order-image">
-                            ${o.productImage ? `<img src="${o.productImage}" onerror="this.style.display='none';this.parentElement.textContent='${o.productIcon || '📦'}'" />` : (o.productIcon || '📦')}
-                        </div>
-                        <div class="order-info">
-                            <div class="order-name">${o.productName || 'Sản phẩm'}</div>
-                            <div class="order-meta">
-                                <span><i class="fas fa-coins"></i> ${(o.price || 0).toLocaleString('vi-VN')}đ</span>
-                                <span><i class="fas fa-user"></i> ${o.userName || 'Khách hàng'}</span>
-                                <span class="order-code"><i class="fas fa-key"></i> ${o.orderCode || '#' + key.substring(0,6)}</span>
-                            </div>
-                            ${o.productDesc ? `<div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> ${o.productDesc.substring(0, 60)}${o.productDesc.length > 60 ? '...' : ''}</div>` : ''}
-                            ${o.orderNote ? `<div class="order-note"><i class="fas fa-sticky-note"></i> ${o.orderNote}</div>` : ''}
-                            <div class="order-meta" style="margin-top:4px;">
+                    <div class="order-item">
+                        <div class="img">${o.productImage ? `<img src="${o.productImage}" onerror="this.parentElement.textContent='${o.productIcon||'📦'}'" />` : (o.productIcon||'📦')}</div>
+                        <div class="info">
+                            <div class="name">${o.productName||'Sản phẩm'}</div>
+                            <div class="meta">
+                                <span><i class="fas fa-coins"></i> ${(o.price||0).toLocaleString('vi-VN')}đ</span>
+                                <span><i class="fas fa-user"></i> ${o.userName||'Khách'}</span>
+                                <span class="code"><i class="fas fa-key"></i> ${o.orderCode||'#'+key.substring(0,6)}</span>
                                 <span><i class="fas fa-clock"></i> ${new Date(o.timestamp).toLocaleString('vi-VN')}</span>
-                                <span class="order-status-badge ${statusClass}"><i class="fas ${status === 'success' ? 'fa-check-circle' : 'fa-times-circle'}"></i> ${statusText}</span>
                             </div>
                         </div>
-                        <button class="order-delete" onclick="deleteOrder('${key}')"><i class="fas fa-trash"></i> Xóa</button>
+                        <span class="badge ${status}">${status==='success'?'✅ Thành công':'❌ Thất bại'}</span>
+                        <button class="del-btn" onclick="deleteOrder('${key}')"><i class="fas fa-trash"></i></button>
                     </div>
                 `;
             });
@@ -1287,53 +1121,39 @@
         }
 
         function deleteOrder(key) {
-            if (confirm('🗑️ Xóa đơn hàng này?')) {
-                db.ref('orders/' + key).remove().then(() => {
-                    showToast('✅ Đã xóa!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            if (confirm('🗑️ Xóa đơn hàng?')) {
+                db.ref('orders/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
-
         function confirmDeleteAllOrders() {
             if (confirm('🗑️ Xóa TẤT CẢ đơn hàng?')) {
-                db.ref('orders').remove().then(() => {
-                    showToast('✅ Đã xóa tất cả!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+                db.ref('orders').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
-        // ===== VOUCHERS =====
-        function loadVouchersAdmin() {
-            db.ref('vouchers').on('value', (snapshot) => {
-                vouchersData = snapshot.val() || {};
-                renderVouchersAdmin(vouchersData);
-            });
-        }
-
-        function renderVouchersAdmin(data) {
+        // ===== RENDER VOUCHERS =====
+        function renderVouchers() {
             const container = document.getElementById('voucherList');
-            const keys = Object.keys(data);
-            if (keys.length === 0) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-ticket-alt"></i> Chưa có mã giảm giá</div>`;
-                return;
-            }
+            const keys = Object.keys(vouchersData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">🎫</span>Chưa có mã giảm giá</div>`; return; }
             let html = '';
             keys.forEach(key => {
-                const v = data[key];
+                const v = vouchersData[key];
                 const typeText = v.type === 'percent' ? `${v.value}%` : `${v.value.toLocaleString('vi-VN')}đ`;
                 html += `
                     <div class="voucher-item">
-                        <div class="voucher-code">${key}</div>
-                        <div class="voucher-info">Giảm ${typeText} • ${v.usedCount || 0}/${v.maxUses || 0} lượt</div>
-                        <div class="voucher-actions">
-                            <button onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
-                        </div>
+                        <span class="code">${key}</span>
+                        <span class="info">Giảm ${typeText} • ${v.usedCount||0}/${v.maxUses||0} lượt</span>
+                        <button class="del-btn" onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
                     </div>
                 `;
             });
             container.innerHTML = html;
         }
 
+        // ===== VOUCHER CRUD =====
         function openVoucherModal() {
             document.getElementById('voucherCode').value = '';
             document.getElementById('voucherType').value = 'percent';
@@ -1341,98 +1161,60 @@
             document.getElementById('voucherMaxUses').value = '10';
             document.getElementById('voucherModal').classList.add('active');
         }
-
-        function closeVoucherModal() {
-            document.getElementById('voucherModal').classList.remove('active');
-        }
+        function closeVoucherModal() { document.getElementById('voucherModal').classList.remove('active'); }
 
         function saveVoucher() {
             const code = document.getElementById('voucherCode').value.trim().toUpperCase();
             const type = document.getElementById('voucherType').value;
             const value = parseInt(document.getElementById('voucherValue').value);
             const maxUses = parseInt(document.getElementById('voucherMaxUses').value) || 10;
-            
-            if (!code) { showToast('❌ Nhập mã giảm giá!', 'error'); return; }
-            if (!value || value <= 0) { showToast('❌ Nhập giá trị hợp lệ!', 'error'); return; }
-            if (type === 'percent' && value > 100) { showToast('❌ Giảm % không được vượt quá 100!', 'error'); return; }
-            
-            const data = { type, value, maxUses, usedCount: 0 };
-            db.ref('vouchers/' + code).set(data).then(() => {
-                showToast('✅ Đã tạo mã giảm giá!', 'success');
-                closeVoucherModal();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
+            if (!code) { showToast('❌ Nhập mã!', 'error'); return; }
+            if (!value || value <= 0) { showToast('❌ Nhập giá trị!', 'error'); return; }
+            if (type === 'percent' && value > 100) { showToast('❌ % không quá 100!', 'error'); return; }
+            db.ref('vouchers/' + code).set({ type, value, maxUses, usedCount: 0 })
+                .then(() => { showToast('✅ Đã tạo!', 'success'); closeVoucherModal(); })
+                .catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
         function deleteVoucher(key) {
             if (confirm(`🗑️ Xóa mã "${key}"?`)) {
-                db.ref('vouchers/' + key).remove().then(() => {
-                    showToast('✅ Đã xóa!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+                db.ref('vouchers/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
-
         function confirmDeleteAllVouchers() {
-            if (confirm('🗑️ Xóa TẤT CẢ mã giảm giá?')) {
-                db.ref('vouchers').remove().then(() => {
-                    showToast('✅ Đã xóa tất cả!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
+            if (confirm('🗑️ Xóa TẤT CẢ mã?')) {
+                db.ref('vouchers').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
             }
         }
 
+        // ===== REFRESH =====
         function refreshAll() {
-            loadUsersAdmin();
-            loadCategoriesAdmin();
-            loadProductsAdmin();
-            loadOrdersAdmin();
-            loadVouchersAdmin();
-            updateDashboard();
-            showToast('🔄 Đã làm mới!', 'success');
+            showLoading();
+            setTimeout(() => {
+                loadAllData();
+                setTimeout(() => { hideLoading(); showToast('🔄 Đã làm mới!', 'success'); }, 1000);
+            }, 500);
         }
 
         // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
-                if (success) {
-                    const uid = localStorage.getItem('quickLoginUid');
-                    if (uid) {
-                        db.ref('notifications').on('value', snap => {
-                            const notifs = snap.val();
-                            const list = document.getElementById('notifList');
-                            const dot = document.getElementById('notifDot');
-                            if (notifs) {
-                                const keys = Object.keys(notifs).reverse();
-                                let html = '', hasUnread = false;
-                                keys.forEach(key => {
-                                    const n = notifs[key];
-                                    const isUnread = !n.readBy || !n.readBy[uid];
-                                    if (isUnread) hasUnread = true;
-                                    html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<span class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</span></div>`;
-                                });
-                                list.innerHTML = html;
-                                dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                            } else {
-                                list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
-                                dot.classList.remove('show');
-                            }
-                        });
-                    }
-                    return;
-                }
+                if (success) return;
                 localStorage.removeItem('quickLoginUid');
                 localStorage.removeItem('quickLoginToken');
                 localStorage.removeItem('quickLoginPending');
                 window.location.replace('login.html');
                 return;
             }
-            
-            if (!user) { 
+            if (!user) {
                 if (!localStorage.getItem('quickLoginUid') || !localStorage.getItem('quickLoginToken')) {
                     window.location.replace('login.html');
                 }
-                return; 
+                return;
             }
-            
             db.ref('users/' + user.uid).once('value', snap => {
                 const data = snap.val();
                 if (!data || data.isAdmin !== true) {
@@ -1441,38 +1223,13 @@
                     return;
                 }
                 isAdmin = true;
-                loadUsersAdmin();
-                loadCategoriesAdmin();
-                loadProductsAdmin();
-                loadOrdersAdmin();
-                loadVouchersAdmin();
-                updateDashboard();
+                loadAllData();
             });
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
             });
-            db.ref('notifications').on('value', snap => {
-                const notifs = snap.val();
-                const list = document.getElementById('notifList');
-                const dot = document.getElementById('notifDot');
-                if (notifs) {
-                    const keys = Object.keys(notifs).reverse();
-                    let html = '', hasUnread = false;
-                    keys.forEach(key => {
-                        const n = notifs[key];
-                        const isUnread = !n.readBy || !n.readBy[user.uid];
-                        if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<span class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</span></div>`;
-                    });
-                    list.innerHTML = html;
-                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else {
-                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
-                    dot.classList.remove('show');
-                }
-            });
             if (!isDataLoaded) {
-                isDataLoaded = true;
+                setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 5000);
             }
         });
 
@@ -1482,8 +1239,7 @@
         function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
             document.getElementById('menuOverlay').classList.remove('active'); }
 
-        function togglePopup(e) { e.stopPropagation();
-            document.getElementById('settingsPopup').classList.toggle('active'); }
+        function togglePopup(e) { e.stopPropagation(); document.getElementById('settingsPopup').classList.toggle('active'); }
         document.addEventListener('click', function(e) {
             const popup = document.getElementById('settingsPopup');
             const wrapper = document.querySelector('.settings-wrapper');
@@ -1515,9 +1271,7 @@
         function logout() {
             if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
-                if (user) {
-                    db.ref('presence/' + user.uid).set(false);
-                }
+                if (user) db.ref('presence/' + user.uid).set(false);
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginEmail');
@@ -1528,19 +1282,18 @@
             }
         }
 
+        // ===== MODAL CLOSE ON OVERLAY =====
         document.querySelectorAll('.modal-overlay').forEach(el => {
-            el.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
+            el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
         });
 
         window.addEventListener('storage', function(e) {
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        console.log('✅ Admin panel loaded with Data management!');
+        // ===== START =====
+        showLoading();
+        console.log('✅ Admin panel loaded!');
     </script>
 </body>
 </html>
