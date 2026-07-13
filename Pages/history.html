@@ -95,7 +95,7 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO THÊM 10% ===== */
+        /* ===== SIDE MENU - LOGO THÊM 20% ===== */
         .side-menu { 
             position: fixed; 
             top: 0; 
@@ -132,7 +132,7 @@
         .side-menu .menu-header .menu-logo img { 
             width: 100%;
             height: auto;
-            max-height: 297px;
+            max-height: 356px;
             object-fit: contain;
             border-radius: 0;
             display: block;
@@ -192,10 +192,20 @@
         .filter-bar .btn-clear { padding: 6px 14px; background: var(--wallet-bg); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 11px; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
         .filter-bar .btn-clear:hover { background: var(--hover-bg); }
 
+        /* ===== DELETE BUTTONS ===== */
+        .delete-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+        .delete-bar .btn-delete { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
+        .delete-bar .btn-delete.danger { background: var(--danger); color: #fff; }
+        .delete-bar .btn-delete.danger:hover { opacity: 0.85; transform: scale(1.05); }
+        .delete-bar .btn-delete.outline { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
+        .delete-bar .btn-delete.outline:hover { background: var(--hover-bg); border-color: var(--danger); color: var(--danger); }
+        .delete-bar .btn-delete:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
         .order-list { display: flex; flex-direction: column; gap: 10px; }
-        .order-item { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); }
+        .order-item { background: var(--wallet-bg); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); position: relative; }
         .order-item:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
-        .order-item .order-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .order-item .order-checkbox { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--danger); }
+        .order-item .order-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; padding-right: 30px; }
         .order-item .order-code { font-weight: 700; color: var(--accent); font-size: 14px; font-family: 'Courier New', monospace; }
         .order-item .order-time { font-size: 11px; color: var(--text-muted); }
         .order-item .order-status { font-size: 11px; padding: 2px 10px; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
@@ -220,6 +230,8 @@
         .order-item .order-actions .view:hover { opacity: 0.8; transform: scale(1.05); }
         .order-item .order-actions .download { background: var(--success); color: #fff; }
         .order-item .order-actions .download:hover { opacity: 0.8; transform: scale(1.05); }
+        .order-item .order-actions .delete-single { background: var(--danger); color: #fff; }
+        .order-item .order-actions .delete-single:hover { opacity: 0.8; transform: scale(1.05); }
 
         .empty-state { text-align: center; padding: 30px 16px; color: var(--text-muted); }
         .empty-state .big-icon { font-size: 40px; display: block; margin-bottom: 8px; }
@@ -256,7 +268,7 @@
             .header { padding: 6px 10px; } 
             .content { padding: 10px 12px; } 
             .history-card { padding: 14px 16px; } 
-            .side-menu .menu-header .menu-logo img { max-height: 165px; padding: 4px 8px; }
+            .side-menu .menu-header .menu-logo img { max-height: 200px; padding: 4px 8px; }
             .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
             .wallet-icon-box { width: 22px; height: 22px; }
             .wallet-icon-box i { font-size: 10px; }
@@ -275,6 +287,7 @@
             .stat-box .num { font-size: 16px; }
             .filter-bar input, .filter-bar select { min-width: 70px; font-size: 11px; padding: 4px 10px; }
             .side-menu .menu-header .close { width: 32px; height: 32px; font-size: 20px; right: 4px; }
+            .order-item .order-checkbox { top: 8px; right: 8px; }
         }
     </style>
 </head>
@@ -289,7 +302,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO THÊM 10% -->
+    <!-- SIDE MENU - LOGO THÊM 20% -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
@@ -366,6 +379,19 @@
                 <button class="btn-clear" onclick="clearFilter()"><i class="fas fa-undo"></i> Xóa lọc</button>
             </div>
 
+            <!-- DELETE BAR -->
+            <div class="delete-bar">
+                <button class="btn-delete danger" onclick="deleteSelectedOrders()" id="deleteSelectedBtn" disabled>
+                    <i class="fas fa-trash"></i> Xóa đã chọn
+                </button>
+                <button class="btn-delete outline" onclick="toggleSelectAll()" id="selectAllBtn">
+                    <i class="fas fa-check-double"></i> Chọn tất cả
+                </button>
+                <button class="btn-delete danger" onclick="deleteAllOrders()" style="background:var(--danger);color:#fff;">
+                    <i class="fas fa-trash-alt"></i> Xóa tất cả
+                </button>
+            </div>
+
             <div class="order-list" id="orderList">
                 <div class="empty-state">
                     <span class="big-icon">📦</span>
@@ -406,6 +432,7 @@
         let allOrders = [];
         let isDataLoaded = false;
         let categoriesData = {};
+        let selectedOrders = new Set();
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -501,6 +528,8 @@
                 allOrders = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 renderOrders(allOrders);
                 updateStats(allOrders);
+                selectedOrders.clear();
+                updateDeleteButton();
             });
         }
 
@@ -523,6 +552,7 @@
 
             let html = '';
             orders.forEach(order => {
+                const isChecked = selectedOrders.has(order.id);
                 const image = order.productImage || order.productIcon || '📦';
                 const price = (order.price || 0).toLocaleString('vi-VN');
                 const time = new Date(order.timestamp).toLocaleString('vi-VN');
@@ -537,6 +567,7 @@
                 
                 html += `
                     <div class="order-item">
+                        <input type="checkbox" class="order-checkbox" data-id="${order.id}" ${isChecked ? 'checked' : ''} onchange="toggleOrderSelection('${order.id}')" />
                         <div class="order-header">
                             <div>
                                 <div class="order-code"><i class="fas fa-key"></i> ${orderCode}</div>
@@ -566,6 +597,7 @@
                         <div class="order-actions">
                             <button class="view" onclick="viewOrderDetail('${order.id}')"><i class="fas fa-eye"></i> Xem chi tiết</button>
                             <button class="download" onclick="downloadOrder('${order.id}')"><i class="fas fa-download"></i> Tải TXT</button>
+                            <button class="delete-single" onclick="deleteSingleOrder('${order.id}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
                 `;
@@ -604,6 +636,117 @@
             document.getElementById('searchInput').value = '';
             document.getElementById('sortSelect').value = 'newest';
             filterOrders();
+        }
+
+        // ===== SELECTION FUNCTIONS =====
+        function toggleOrderSelection(orderId) {
+            if (selectedOrders.has(orderId)) {
+                selectedOrders.delete(orderId);
+            } else {
+                selectedOrders.add(orderId);
+            }
+            updateDeleteButton();
+            filterOrders();
+        }
+
+        function toggleSelectAll() {
+            const filtered = getFilteredOrders();
+            const allSelected = filtered.every(o => selectedOrders.has(o.id));
+            
+            if (allSelected) {
+                filtered.forEach(o => selectedOrders.delete(o.id));
+            } else {
+                filtered.forEach(o => selectedOrders.add(o.id));
+            }
+            updateDeleteButton();
+            filterOrders();
+        }
+
+        function getFilteredOrders() {
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const sort = document.getElementById('sortSelect').value;
+            
+            let filtered = allOrders.filter(order => {
+                const name = (order.productName || '').toLowerCase();
+                const code = (order.orderCode || '').toLowerCase();
+                return name.includes(search) || code.includes(search);
+            });
+            return filtered;
+        }
+
+        function updateDeleteButton() {
+            const btn = document.getElementById('deleteSelectedBtn');
+            const count = selectedOrders.size;
+            btn.disabled = count === 0;
+            btn.innerHTML = `<i class="fas fa-trash"></i> Xóa đã chọn (${count})`;
+        }
+
+        // ===== DELETE FUNCTIONS =====
+        function deleteSingleOrder(orderId) {
+            if (!confirm('🗑️ Bạn có chắc muốn xóa đơn hàng này?')) return;
+            
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            showLoading();
+            db.ref('history/' + currentUser.uid + '/' + orderId).remove()
+                .then(() => {
+                    showToast('✅ Đã xóa đơn hàng!', 'success');
+                    hideLoading();
+                })
+                .catch(err => {
+                    showToast('❌ Lỗi: ' + err.message, 'error');
+                    hideLoading();
+                });
+        }
+
+        function deleteSelectedOrders() {
+            if (selectedOrders.size === 0) {
+                showToast('⚠️ Chưa chọn đơn hàng nào!', 'error');
+                return;
+            }
+            
+            if (!confirm(`🗑️ Bạn có chắc muốn xóa ${selectedOrders.size} đơn hàng đã chọn?`)) return;
+            
+            showLoading();
+            const promises = [];
+            selectedOrders.forEach(orderId => {
+                promises.push(db.ref('history/' + currentUser.uid + '/' + orderId).remove());
+            });
+            
+            Promise.all(promises)
+                .then(() => {
+                    selectedOrders.clear();
+                    showToast(`✅ Đã xóa ${selectedOrders.size} đơn hàng!`, 'success');
+                    updateDeleteButton();
+                    hideLoading();
+                })
+                .catch(err => {
+                    showToast('❌ Lỗi: ' + err.message, 'error');
+                    hideLoading();
+                });
+        }
+
+        function deleteAllOrders() {
+            if (allOrders.length === 0) {
+                showToast('⚠️ Không có đơn hàng để xóa!', 'error');
+                return;
+            }
+            
+            if (!confirm(`🗑️ Bạn có chắc muốn xóa TẤT CẢ ${allOrders.length} đơn hàng? Hành động này không thể hoàn tác!`)) return;
+            
+            showLoading();
+            db.ref('history/' + currentUser.uid).remove()
+                .then(() => {
+                    selectedOrders.clear();
+                    showToast('✅ Đã xóa tất cả đơn hàng!', 'success');
+                    updateDeleteButton();
+                    hideLoading();
+                })
+                .catch(err => {
+                    showToast('❌ Lỗi: ' + err.message, 'error');
+                    hideLoading();
+                });
         }
 
         // ===== VIEW ORDER DETAIL =====
