@@ -625,7 +625,6 @@
                     }
                 });
                 
-                // Load data with retry
                 await loadDataWithRetry();
                 isDataLoaded = true;
                 hideLoading();
@@ -641,7 +640,6 @@
                 let loaded = false;
                 let timeoutId = null;
                 
-                // Listen to products
                 const productsRef = db.ref('products');
                 const productsListener = productsRef.on('value', (snapshot) => {
                     productsData = snapshot.val() || {};
@@ -651,11 +649,12 @@
                     if (!loaded) {
                         loaded = true;
                         if (timeoutId) clearTimeout(timeoutId);
+                        isDataLoaded = true;
+                        hideLoading();
                         resolve();
                     }
                 });
                 
-                // Listen to categories
                 const categoriesRef = db.ref('categories');
                 categoriesRef.on('value', (snapshot) => {
                     categoriesData = snapshot.val() || {};
@@ -664,22 +663,22 @@
                     renderProducts();
                 });
                 
-                // Listen to vouchers
                 db.ref('vouchers').on('value', (snapshot) => {
                     vouchersData = snapshot.val() || {};
                     console.log('Vouchers loaded:', Object.keys(vouchersData).length);
                 });
                 
-                // Timeout fallback
                 timeoutId = setTimeout(() => {
                     if (!loaded) {
                         console.log('Load timeout, forcing render');
                         loaded = true;
+                        isDataLoaded = true;
                         renderCategories();
                         renderProducts();
+                        hideLoading();
                         resolve();
                     }
-                }, 5000);
+                }, 3000);
             });
         }
 
@@ -799,7 +798,6 @@
             grid.innerHTML = html;
         }
 
-        // ===== MỞ POPUP MUA HÀNG =====
         function openBuyPopup(productId) {
             const product = productsData[productId];
             if (!product) {
@@ -837,7 +835,6 @@
             document.getElementById('orderPopup').classList.add('active');
         }
 
-        // ===== TĂNG/GIẢM SỐ LƯỢNG =====
         function changeQuantity(delta) {
             if (!currentProduct) return;
             const stock = currentProduct.dataArray ? currentProduct.dataArray.length : 0;
@@ -852,7 +849,6 @@
             updateTotalPrice();
         }
 
-        // ===== ÁP MÃ GIẢM GIÁ =====
         function applyPopupVoucher() {
             const input = document.getElementById('popupVoucherInput');
             const code = input.value.trim().toUpperCase();
@@ -895,7 +891,6 @@
             showToast('✅ Đã áp mã giảm giá!', 'success');
         }
 
-        // ===== CẬP NHẬT TỔNG TIỀN =====
         function updateTotalPrice() {
             if (!currentProduct) return;
             const basePrice = currentProduct.price || 0;
@@ -915,7 +910,6 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== XÁC NHẬN MUA HÀNG =====
         function confirmOrder() {
             if (isProcessing) return;
             
@@ -1117,7 +1111,6 @@
             document.getElementById('resultPopup').classList.remove('active');
         }
 
-        // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
             if (isDataLoaded && currentUser) {
                 console.log('Data already loaded, skipping');
@@ -1157,13 +1150,11 @@
                 await db.ref('presence/' + user.uid).set(true);
                 db.ref('presence/' + user.uid).onDisconnect().set(false);
                 
-                // Get user data
                 const userSnap = await db.ref('users/' + user.uid + '/balance').once('value');
                 const balance = userSnap.val() || 0;
                 document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                 currentUser = { uid: user.uid, balance: balance };
                 
-                // Load notifications
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
@@ -1185,7 +1176,6 @@
                     }
                 });
                 
-                // Load data with retry
                 await loadDataWithRetry();
                 isDataLoaded = true;
                 hideLoading();
@@ -1194,7 +1184,6 @@
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
-                // Still try to load data
                 loadDataWithRetry();
                 setTimeout(() => {
                     if (!isDataLoaded) {
@@ -1205,7 +1194,6 @@
             }
         });
 
-        // ===== MENU =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -1278,11 +1266,9 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // Hiển thị loading khi trang load
         showLoading();
         console.log('Loading started');
         
-        // Ẩn loading sau 8s nếu không có gì xảy ra
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
