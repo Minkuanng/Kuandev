@@ -95,7 +95,7 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO PHÓNG TO X2 CHIỀU RỘNG ===== */
+        /* ===== SIDE MENU - LOGO PHÓNG TO GẤP ĐÔI NỮA ===== */
         .side-menu { 
             position: fixed; 
             top: 0; 
@@ -132,26 +132,26 @@
         .side-menu .menu-header .menu-logo img { 
             width: 100%;
             height: auto;
-            max-height: 100px;
+            max-height: 140px;
             object-fit: contain;
             border-radius: 0;
             display: block;
-            padding: 8px 12px;
+            padding: 6px 10px;
             background: #ffffff;
         }
         .side-menu .menu-header .close { 
             cursor: pointer; 
-            font-size: 18px; 
+            font-size: 20px; 
             color: var(--text-muted); 
             transition: var(--transition);
             position: absolute;
-            right: 8px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 5;
-            background: rgba(255,255,255,0.9);
-            width: 30px;
-            height: 30px;
+            background: rgba(255,255,255,0.95);
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -256,7 +256,7 @@
             .header { padding: 6px 10px; } 
             .content { padding: 10px 12px; } 
             .history-card { padding: 14px 16px; } 
-            .side-menu .menu-header .menu-logo img { max-height: 70px; padding: 4px 8px; }
+            .side-menu .menu-header .menu-logo img { max-height: 90px; padding: 4px 8px; }
             .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
             .wallet-icon-box { width: 22px; height: 22px; }
             .wallet-icon-box i { font-size: 10px; }
@@ -274,7 +274,7 @@
             .stat-box { min-width: 70px; padding: 6px 12px; }
             .stat-box .num { font-size: 16px; }
             .filter-bar input, .filter-bar select { min-width: 70px; font-size: 11px; padding: 4px 10px; }
-            .side-menu .menu-header .close { width: 26px; height: 26px; font-size: 15px; right: 5px; }
+            .side-menu .menu-header .close { width: 28px; height: 28px; font-size: 16px; right: 4px; }
         }
     </style>
 </head>
@@ -289,7 +289,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO PHÓNG TO X2 -->
+    <!-- SIDE MENU - LOGO PHÓNG TO GẤP ĐÔI -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
