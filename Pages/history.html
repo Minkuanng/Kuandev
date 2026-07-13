@@ -95,7 +95,7 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO FULL NGANG ===== */
+        /* ===== SIDE MENU - LOGO FULL NGANG, KHÔNG TRÀN ===== */
         .side-menu { 
             position: fixed; 
             top: 0; 
@@ -109,6 +109,7 @@
             padding: 0; 
             border-right: 1px solid var(--border-color); 
             overflow-y: auto; 
+            overflow-x: hidden;
         }
         .side-menu.active { left: 0; }
         
@@ -121,37 +122,39 @@
             margin: 0;
             width: 100%;
             position: relative;
+            overflow: hidden;
         }
         .side-menu .menu-header .menu-logo { 
             display: block;
             width: 100%;
-            padding: 6px 8px;
+            padding: 4px 6px;
         }
         .side-menu .menu-header .menu-logo img { 
             width: 100%;
             height: auto;
-            max-height: 60px;
+            max-height: 65px;
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: 4px;
             display: block;
         }
         .side-menu .menu-header .close { 
             cursor: pointer; 
-            font-size: 18px; 
+            font-size: 16px; 
             color: var(--text-muted); 
             transition: var(--transition);
             position: absolute;
-            right: 10px;
+            right: 8px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 5;
-            background: rgba(255,255,255,0.8);
-            width: 28px;
-            height: 28px;
+            background: rgba(255,255,255,0.85);
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         .side-menu .menu-header .close:hover { 
             color: var(--danger); 
@@ -268,7 +271,7 @@
             .stat-box { min-width: 70px; padding: 6px 12px; }
             .stat-box .num { font-size: 16px; }
             .filter-bar input, .filter-bar select { min-width: 70px; font-size: 11px; padding: 4px 10px; }
-            .side-menu .menu-header .close { width: 24px; height: 24px; font-size: 14px; right: 6px; }
+            .side-menu .menu-header .close { width: 22px; height: 22px; font-size: 13px; right: 5px; }
         }
     </style>
 </head>
@@ -283,7 +286,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO FULL NGANG -->
+    <!-- SIDE MENU - LOGO FULL NGANG, KHÔNG TRÀN -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
@@ -651,10 +654,9 @@
                 return;
             }
             
-            // Lấy dữ liệu sản phẩm từ order
             const orderData = order.orderData || 'Không có dữ liệu';
             
-            // Tạo nội dung file TXT - CHỈ DỮ LIỆU THUẦN, KHÔNG KÝ TỰ ĐẶC BIỆT
+            // CHỈ DỮ LIỆU THUẦN, KHÔNG KÝ TỰ ĐẶC BIỆT
             const content = orderData;
             
             try {
