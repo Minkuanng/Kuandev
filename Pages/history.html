@@ -49,9 +49,8 @@
         .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: var(--transition); flex-shrink: 0; }
         .menu-icon:hover .bar { background: var(--text-primary); }
         
-        /* ===== LOGO TRONG HEADER ===== */
-        .logo { display: flex; align-items: center; }
-        .logo img { height: 34px; width: auto; max-width: 140px; object-fit: contain; border-radius: 6px; }
+        /* ===== XÓA LOGO HEADER ===== */
+        .logo { display: none; }
         
         .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
@@ -96,34 +95,33 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO THAY CHO CHỮ MENU ===== */
-        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 14px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        /* ===== SIDE MENU - LOGO FULL NGANG ===== */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { 
-            padding: 10px 16px 12px 16px; 
+            padding: 12px 16px 14px 16px; 
             border-bottom: 1px solid var(--border-color); 
             display: flex; 
             justify-content: center; 
             align-items: center;
-            background: var(--wallet-bg);
-            border-radius: 0 0 12px 12px;
-            margin: 0 0 8px 0;
+            background: #ffffff;
+            border-radius: 0;
+            margin: 0;
+            width: 100%;
         }
         .side-menu .menu-header .menu-logo { 
             display: flex; 
             align-items: center; 
             justify-content: center;
             width: 100%;
-            padding: 4px 0;
         }
         .side-menu .menu-header .menu-logo img { 
-            height: 38px; 
-            width: auto; 
-            max-width: 180px; 
-            object-fit: contain; 
-            border-radius: 8px;
-            background: #fff;
-            padding: 2px 10px;
+            width: 100%;
+            height: auto;
+            max-height: 55px;
+            object-fit: contain;
+            border-radius: 6px;
+            padding: 2px 4px;
         }
         .side-menu .menu-header .close { 
             cursor: pointer; 
@@ -132,9 +130,10 @@
             transition: var(--transition);
             position: absolute;
             right: 12px;
-            top: 12px;
+            top: 14px;
         }
         .side-menu .menu-header .close:hover { color: var(--danger); transform: rotate(90deg); }
+        .side-menu .menu-items { padding: 8px 0; }
         .side-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
         .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 22px; }
         .side-menu .menu-item .icon { font-size: 16px; width: 24px; text-align: center; }
@@ -225,8 +224,7 @@
             .header { padding: 6px 10px; } 
             .content { padding: 10px 12px; } 
             .history-card { padding: 14px 16px; } 
-            .logo img { height: 28px; max-width: 100px; }
-            .side-menu .menu-header .menu-logo img { height: 30px; max-width: 140px; }
+            .side-menu .menu-header .menu-logo img { max-height: 40px; }
             .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
             .wallet-icon-box { width: 22px; height: 22px; }
             .wallet-icon-box i { font-size: 10px; }
@@ -258,7 +256,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - CÓ LOGO THAY CHO CHỮ MENU -->
+    <!-- SIDE MENU - LOGO FULL NGANG -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
@@ -266,14 +264,16 @@
             </div>
             <span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span>
         </div>
-        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
+        <div class="menu-items">
+            <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
+            <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
+            <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
+            <div class="menu-divider"></div>
+            <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
+        </div>
     </div>
 
-    <!-- HEADER -->
+    <!-- HEADER - KHÔNG CÓ LOGO -->
     <header class="header">
         <div class="header-left">
             <div class="menu-icon" onclick="toggleMenu()">
@@ -281,9 +281,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">
-                <img src="https://raw.githubusercontent.com/Minkuanng/Kuandev/refs/heads/main/Assets/image/KuanZGame.Store.png" alt="KuanZGame.Store" onerror="this.style.display='none'" />
-            </div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -618,7 +616,7 @@
             document.getElementById('detailModal').classList.remove('active');
         }
 
-        // ===== DOWNLOAD ORDER - CHỈ LẤY DỮ LIỆU BÊN TRONG =====
+        // ===== DOWNLOAD ORDER - CHỈ DỮ LIỆU THUẦN, KHÔNG KÝ TỰ ĐẶC BIỆT =====
         function downloadOrder(orderId) {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) {
@@ -629,18 +627,9 @@
             // Lấy dữ liệu sản phẩm từ order
             const orderData = order.orderData || 'Không có dữ liệu';
             
-            // Tạo nội dung file TXT - CHỈ HIỂN THỊ DỮ LIỆU
+            // Tạo nội dung file TXT - CHỈ DỮ LIỆU THUẦN
             const lines = [
-                '══════════════════════════════════════════════════',
-                '  📦 DỮ LIỆU SẢN PHẨM',
-                '══════════════════════════════════════════════════',
-                '',
-                orderData,
-                '',
-                '══════════════════════════════════════════════════',
-                '  📌 Mã đơn: ' + (order.orderCode || '#' + orderId.substring(0, 6).toUpperCase()),
-                '  📅 Ngày: ' + new Date(order.timestamp).toLocaleString('vi-VN'),
-                '══════════════════════════════════════════════════'
+                orderData
             ].join('\n');
             
             try {
