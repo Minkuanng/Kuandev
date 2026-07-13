@@ -542,6 +542,7 @@
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
         let isProcessing = false;
+        let dataLoadAttempts = 0;
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -565,7 +566,6 @@
             const overlay = document.getElementById('loadingOverlay');
             if (overlay) {
                 overlay.classList.add('hidden');
-                // Force hide after a moment
                 setTimeout(() => {
                     overlay.style.display = 'none';
                 }, 300);
@@ -625,7 +625,8 @@
                     }
                 });
                 
-                loadData();
+                // Load data with retry
+                await loadDataWithRetry();
                 isDataLoaded = true;
                 hideLoading();
                 return true;
@@ -635,18 +636,50 @@
             }
         }
 
-        function loadData() {
-            db.ref('categories').on('value', (snapshot) => {
-                categoriesData = snapshot.val() || {};
-                renderCategories();
-                renderProducts();
-            });
-            db.ref('products').on('value', (snapshot) => {
-                productsData = snapshot.val() || {};
-                renderProducts();
-            });
-            db.ref('vouchers').on('value', (snapshot) => {
-                vouchersData = snapshot.val() || {};
+        function loadDataWithRetry() {
+            return new Promise((resolve) => {
+                let loaded = false;
+                let timeoutId = null;
+                
+                // Listen to products
+                const productsRef = db.ref('products');
+                const productsListener = productsRef.on('value', (snapshot) => {
+                    productsData = snapshot.val() || {};
+                    console.log('Products loaded:', Object.keys(productsData).length);
+                    renderCategories();
+                    renderProducts();
+                    if (!loaded) {
+                        loaded = true;
+                        if (timeoutId) clearTimeout(timeoutId);
+                        resolve();
+                    }
+                });
+                
+                // Listen to categories
+                const categoriesRef = db.ref('categories');
+                categoriesRef.on('value', (snapshot) => {
+                    categoriesData = snapshot.val() || {};
+                    console.log('Categories loaded:', Object.keys(categoriesData).length);
+                    renderCategories();
+                    renderProducts();
+                });
+                
+                // Listen to vouchers
+                db.ref('vouchers').on('value', (snapshot) => {
+                    vouchersData = snapshot.val() || {};
+                    console.log('Vouchers loaded:', Object.keys(vouchersData).length);
+                });
+                
+                // Timeout fallback
+                timeoutId = setTimeout(() => {
+                    if (!loaded) {
+                        console.log('Load timeout, forcing render');
+                        loaded = true;
+                        renderCategories();
+                        renderProducts();
+                        resolve();
+                    }
+                }, 5000);
             });
         }
 
@@ -731,7 +764,6 @@
             
             let html = '';
             filtered.forEach(product => {
-                // product.data là string (lưu dưới dạng text, mỗi dòng 1 món)
                 const dataArray = product.data ? product.data.split('\n').filter(d => d.trim() !== '') : [];
                 const stock = dataArray.length;
                 const isOutOfStock = stock <= 0;
@@ -938,7 +970,6 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             showLoading();
             
-            // Lấy dữ liệu cần bán
             const soldData = dataArray.slice(0, currentQuantity);
             const remainingData = dataArray.slice(currentQuantity);
             const remainingDataStr = remainingData.join('\n');
@@ -1004,7 +1035,6 @@
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                         currentUser.balance = bal;
                     });
-                    // Cập nhật lại productsData
                     if (productsData[currentProduct.id]) {
                         productsData[currentProduct.id].data = remainingDataStr;
                         productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
@@ -1128,12 +1158,10 @@
                 db.ref('presence/' + user.uid).onDisconnect().set(false);
                 
                 // Get user data
-                const userSnap = await db.ref('users/' + user.uid).once('value');
-                const userData = userSnap.val();
-                if (userData) {
-                    document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
-                    currentUser = { uid: user.uid, ...userData };
-                }
+                const userSnap = await db.ref('users/' + user.uid + '/balance').once('value');
+                const balance = userSnap.val() || 0;
+                document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
+                currentUser = { uid: user.uid, balance: balance };
                 
                 // Load notifications
                 db.ref('notifications').on('value', snap => {
@@ -1157,41 +1185,23 @@
                     }
                 });
                 
-                // Load data
-                loadData();
-                
-                // Mark data as loaded and hide loading
-                setTimeout(() => {
-                    if (!isDataLoaded) {
-                        isDataLoaded = true;
-                        hideLoading();
-                        console.log('Data loaded (timeout fallback)');
-                    }
-                }, 3000);
-                
-                // If data loads via listeners, hide loading
-                const checkDataLoaded = setInterval(() => {
-                    if (Object.keys(productsData).length > 0 && Object.keys(categoriesData).length > 0) {
-                        isDataLoaded = true;
-                        hideLoading();
-                        clearInterval(checkDataLoaded);
-                        console.log('Data loaded via listeners');
-                    }
-                }, 500);
-                
-                // Stop checking after 10s
-                setTimeout(() => {
-                    clearInterval(checkDataLoaded);
-                    if (!isDataLoaded) {
-                        isDataLoaded = true;
-                        hideLoading();
-                        console.log('Data load check stopped (fallback)');
-                    }
-                }, 10000);
+                // Load data with retry
+                await loadDataWithRetry();
+                isDataLoaded = true;
+                hideLoading();
+                console.log('Data loaded successfully');
                 
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
                 hideLoading();
+                // Still try to load data
+                loadDataWithRetry();
+                setTimeout(() => {
+                    if (!isDataLoaded) {
+                        isDataLoaded = true;
+                        hideLoading();
+                    }
+                }, 5000);
             }
         });
 
@@ -1276,7 +1286,7 @@
         setTimeout(() => {
             if (!isDataLoaded) {
                 hideLoading();
-                console.log('Loading hidden (timeout)');
+                console.log('Loading hidden (timeout fallback)');
             }
         }, 8000);
         
