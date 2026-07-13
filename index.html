@@ -154,7 +154,17 @@
         .product-card .product-info { flex: 1; min-width: 0; }
         .product-card .product-name { font-weight: 700; color: var(--text-primary); font-size: 15px; }
         .product-card .product-price { color: var(--accent); font-weight: 600; font-size: 17px; margin: 2px 0; }
-        .product-card .product-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-card .product-desc { 
+            font-size: 12px; 
+            color: var(--text-muted); 
+            line-height: 1.5; 
+            max-height: 60px;
+            overflow-y: auto;
+            padding-right: 4px;
+            margin-top: 4px;
+        }
+        .product-card .product-desc::-webkit-scrollbar { width: 3px; }
+        .product-card .product-desc::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
         
         .product-card .product-stats { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-color); }
         .product-card .product-stats .stat { display: flex; align-items: center; gap: 4px; }
@@ -180,7 +190,7 @@
         .product-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); grid-column: 1/-1; }
         .product-empty .big-icon { font-size: 48px; display: block; margin-bottom: 12px; }
 
-        /* ===== ORDER POPUP ĐẸP GỌN ===== */
+        /* ===== ORDER POPUP ===== */
         .order-popup-overlay { 
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
             background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); 
@@ -955,6 +965,7 @@
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
                 const image = product.image || '';
                 const icon = product.icon || '📦';
+                // HIỂN THỊ ĐỦ 240 TỪ MÔ TẢ
                 const desc = product.description || '';
                 const sold = product.sold || 0;
                 
@@ -1104,9 +1115,12 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== CONFIRM ORDER =====
+        // ===== CONFIRM ORDER - FIX LỖI TREO =====
         function confirmOrder() {
-            if (isProcessing) return;
+            if (isProcessing) {
+                showToast('⏳ Đang xử lý, vui lòng đợi...', 'error');
+                return;
+            }
             
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
@@ -1158,6 +1172,7 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             
+            // LẤY DỮ LIỆU BÁN
             const soldData = dataArray.slice(0, currentQuantity);
             const remainingData = dataArray.slice(currentQuantity);
             const remainingDataStr = remainingData.join('\n');
@@ -1213,30 +1228,37 @@
                 updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
             
+            // THỰC HIỆN UPDATE
             db.ref().update(updates)
                 .then(() => {
-                    closeOrderPopup();
-                    showResultPopup(orderData);
-                    // Cập nhật số dư
+                    // CẬP NHẬT SỐ DƯ
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                         currentUser.balance = bal;
                     });
-                    // Cập nhật sản phẩm local
+                    
+                    // CẬP NHẬT SẢN PHẨM LOCAL
                     if (productsData[currentProduct.id]) {
                         productsData[currentProduct.id].data = remainingDataStr;
                         productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
                     }
+                    
+                    // RENDER LẠI
                     renderProducts();
+                    
+                    // ĐÓNG POPUP VÀ HIỆN KẾT QUẢ
+                    closeOrderPopup();
+                    showResultPopup(orderData);
+                    showToast('✅ Mua thành công!', 'success');
+                    
                     isProcessing = false;
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
-                    showToast('✅ Mua thành công!', 'success');
                 })
                 .catch(err => {
                     console.error('Lỗi mua hàng:', err);
-                    showToast('❌ ' + err.message, 'error');
+                    showToast('❌ Lỗi: ' + err.message, 'error');
                     isProcessing = false;
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
@@ -1250,6 +1272,11 @@
             currentQuantity = 1;
             currentVoucherCode = null;
             currentVoucherDiscount = 0;
+            // Reset button state
+            const btn = document.getElementById('btnConfirmOrder');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận';
+            isProcessing = false;
         }
 
         // ===== SHOW RESULT =====
