@@ -95,7 +95,7 @@
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
-        /* ===== SIDE MENU - LOGO RỘNG FULL 100% ===== */
+        /* ===== SIDE MENU - LOGO CĂNG THÊM 50% ===== */
         .side-menu { 
             position: fixed; 
             top: 0; 
@@ -132,7 +132,7 @@
         .side-menu .menu-header .menu-logo img { 
             width: 100%;
             height: auto;
-            max-height: 180px;
+            max-height: 270px;
             object-fit: contain;
             border-radius: 0;
             display: block;
@@ -141,7 +141,7 @@
         }
         .side-menu .menu-header .close { 
             cursor: pointer; 
-            font-size: 22px; 
+            font-size: 24px; 
             color: var(--text-muted); 
             transition: var(--transition);
             position: absolute;
@@ -150,8 +150,8 @@
             transform: translateY(-50%);
             z-index: 5;
             background: rgba(255,255,255,0.95);
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -256,7 +256,7 @@
             .header { padding: 6px 10px; } 
             .content { padding: 10px 12px; } 
             .history-card { padding: 14px 16px; } 
-            .side-menu .menu-header .menu-logo img { max-height: 100px; padding: 4px 8px; }
+            .side-menu .menu-header .menu-logo img { max-height: 150px; padding: 4px 8px; }
             .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
             .wallet-icon-box { width: 22px; height: 22px; }
             .wallet-icon-box i { font-size: 10px; }
@@ -274,7 +274,7 @@
             .stat-box { min-width: 70px; padding: 6px 12px; }
             .stat-box .num { font-size: 16px; }
             .filter-bar input, .filter-bar select { min-width: 70px; font-size: 11px; padding: 4px 10px; }
-            .side-menu .menu-header .close { width: 30px; height: 30px; font-size: 18px; right: 4px; }
+            .side-menu .menu-header .close { width: 32px; height: 32px; font-size: 20px; right: 4px; }
         }
     </style>
 </head>
@@ -289,7 +289,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO RỘNG FULL 100% -->
+    <!-- SIDE MENU - LOGO CĂNG THÊM 50% -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
