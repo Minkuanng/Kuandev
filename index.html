@@ -346,6 +346,7 @@
 
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
+        <div class="loading-text">⏳ Đang tải dữ liệu...</div>
     </div>
 
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
@@ -365,7 +366,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">🎮 KuanZGame</div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -540,6 +541,7 @@
         let currentQuantity = 1;
         let currentVoucherCode = null;
         let currentVoucherDiscount = 0;
+        let isProcessing = false;
 
         function showToast(msg, type = '') {
             const el = document.getElementById('toast');
@@ -560,11 +562,22 @@
         applyTheme();
 
         function hideLoading() {
-            document.getElementById('loadingOverlay').classList.add('hidden');
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                // Force hide after a moment
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300);
+            }
         }
 
         function showLoading() {
-            document.getElementById('loadingOverlay').classList.remove('hidden');
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.classList.remove('hidden');
+            }
         }
 
         function checkQuickLogin() {
@@ -627,18 +640,11 @@
                 categoriesData = snapshot.val() || {};
                 renderCategories();
                 renderProducts();
-            }, (error) => {
-                console.error('Lỗi load categories:', error);
-                showToast('⚠️ Không thể tải mục sản phẩm', 'error');
             });
-            
             db.ref('products').on('value', (snapshot) => {
                 productsData = snapshot.val() || {};
                 renderProducts();
-            }, (error) => {
-                console.error('Lỗi load products:', error);
             });
-            
             db.ref('vouchers').on('value', (snapshot) => {
                 vouchersData = snapshot.val() || {};
             });
@@ -665,7 +671,7 @@
             
             keys.forEach(key => {
                 const cat = categoriesData[key];
-                const productCount = Object.keys(productsData).filter(pid => productsData[pid].category === key).length;
+                const productCount = Object.keys(productsData).filter(pid => productsData[pid] && productsData[pid].category === key).length;
                 const isActive = selectedCategory === key ? 'active' : '';
                 const imageUrl = cat.image || '';
                 const icon = cat.icon || '📁';
@@ -698,11 +704,13 @@
             
             if (selectedCategory === 'all') {
                 Object.keys(productsData).forEach(key => {
-                    filtered.push({ id: key, ...productsData[key] });
+                    if (productsData[key]) {
+                        filtered.push({ id: key, ...productsData[key] });
+                    }
                 });
             } else {
                 Object.keys(productsData).forEach(key => {
-                    if (productsData[key].category === selectedCategory) {
+                    if (productsData[key] && productsData[key].category === selectedCategory) {
                         filtered.push({ id: key, ...productsData[key] });
                     }
                 });
@@ -723,7 +731,9 @@
             
             let html = '';
             filtered.forEach(product => {
-                const stock = product.data ? product.data.length : 0;
+                // product.data là string (lưu dưới dạng text, mỗi dòng 1 món)
+                const dataArray = product.data ? product.data.split('\n').filter(d => d.trim() !== '') : [];
+                const stock = dataArray.length;
                 const isOutOfStock = stock <= 0;
                 const price = product.price ? product.price.toLocaleString('vi-VN') : '0';
                 const image = product.image || '';
@@ -765,13 +775,17 @@
                 return;
             }
             
-            const stock = product.data ? product.data.length : 0;
+            const dataArray = product.data ? product.data.split('\n').filter(d => d.trim() !== '') : [];
+            const stock = dataArray.length;
             if (stock <= 0) {
                 showToast('Sản phẩm đã hết hàng!', 'error');
                 return;
             }
             
-            currentProduct = product;
+            currentProduct = {
+                ...product,
+                dataArray: dataArray
+            };
             currentQuantity = 1;
             currentVoucherCode = null;
             currentVoucherDiscount = 0;
@@ -794,7 +808,7 @@
         // ===== TĂNG/GIẢM SỐ LƯỢNG =====
         function changeQuantity(delta) {
             if (!currentProduct) return;
-            const stock = currentProduct.data ? currentProduct.data.length : 0;
+            const stock = currentProduct.dataArray ? currentProduct.dataArray.length : 0;
             const newQty = currentQuantity + delta;
             if (newQty < 1) return;
             if (newQty > stock) {
@@ -869,8 +883,10 @@
             document.getElementById('popupTotalPrice').textContent = Math.round(total).toLocaleString('vi-VN') + ' VND';
         }
 
-        // ===== XÁC NHẬN MUA =====
+        // ===== XÁC NHẬN MUA HÀNG =====
         function confirmOrder() {
+            if (isProcessing) return;
+            
             if (!currentUser) {
                 showToast('Vui lòng đăng nhập!', 'error');
                 return;
@@ -881,8 +897,8 @@
                 return;
             }
             
-            const stock = currentProduct.data ? currentProduct.data.length : 0;
-            if (stock < currentQuantity) {
+            const dataArray = currentProduct.dataArray || [];
+            if (dataArray.length < currentQuantity) {
                 showToast('Số lượng vượt quá tồn kho!', 'error');
                 return;
             }
@@ -916,15 +932,20 @@
             const confirmMsg = `Bạn có chắc muốn mua ${currentQuantity} "${currentProduct.name}" với tổng ${price.toLocaleString('vi-VN')} VND?${voucherUsed ? '\n🎫 Mã giảm giá: ' + voucherUsed : ''}`;
             if (!confirm(confirmMsg)) return;
             
+            isProcessing = true;
+            const btn = document.getElementById('btnConfirmOrder');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             showLoading();
             
-            const dataList = currentProduct.data || [];
-            const soldData = dataList.slice(0, currentQuantity);
-            const remainingData = dataList.slice(currentQuantity);
+            // Lấy dữ liệu cần bán
+            const soldData = dataArray.slice(0, currentQuantity);
+            const remainingData = dataArray.slice(currentQuantity);
+            const remainingDataStr = remainingData.join('\n');
             
             const updates = {};
             updates[`users/${currentUser.uid}/balance`] = currentUser.balance - price;
-            updates[`products/${currentProduct.id}/data`] = remainingData;
+            updates[`products/${currentProduct.id}/data`] = remainingDataStr;
             updates[`products/${currentProduct.id}/sold`] = (currentProduct.sold || 0) + currentQuantity;
             
             const orderCode = '#' + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -973,37 +994,34 @@
                 updates[`vouchers/${voucherUsed}/usedCount`] = (vouchersData[voucherUsed]?.usedCount || 0) + 1;
             }
             
-            db.ref().update(updates).then(() => {
-                try {
+            db.ref().update(updates)
+                .then(() => {
                     hideLoading();
                     closeOrderPopup();
                     showResultPopup(orderData);
-                    
-                    // Cập nhật số dư
                     db.ref('users/' + currentUser.uid + '/balance').once('value', snap => {
                         const bal = snap.val() || 0;
                         document.getElementById('balanceAmount').textContent = bal.toLocaleString('vi-VN');
                         currentUser.balance = bal;
                     });
-                    
-                    // Cập nhật sản phẩm
-                    productsData[currentProduct.id].data = remainingData;
-                    productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                    // Cập nhật lại productsData
+                    if (productsData[currentProduct.id]) {
+                        productsData[currentProduct.id].data = remainingDataStr;
+                        productsData[currentProduct.id].sold = (currentProduct.sold || 0) + currentQuantity;
+                    }
                     renderProducts();
-                    
-                    showToast('✅ Mua hàng thành công!', 'success');
-                } catch (e) {
+                    isProcessing = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
+                })
+                .catch(err => {
+                    console.error('Lỗi mua hàng:', err);
                     hideLoading();
-                    console.error('Lỗi sau khi mua:', e);
-                }
-            }).catch(err => {
-                hideLoading();
-                console.error('Lỗi Firebase:', err);
-                showToast('❌ Lỗi: ' + (err.message || 'Không thể xử lý đơn hàng'), 'error');
-            }).finally(() => {
-                // Chắc chắn tắt loading trong mọi trường hợp
-                setTimeout(() => hideLoading(), 500);
-            });
+                    showToast('❌ ' + err.message, 'error');
+                    isProcessing = false;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-shopping-cart"></i> Xác nhận mua';
+                });
         }
 
         function closeOrderPopup() {
@@ -1071,9 +1089,16 @@
 
         // ===== AUTH =====
         auth.onAuthStateChanged(async (user) => {
+            if (isDataLoaded && currentUser) {
+                console.log('Data already loaded, skipping');
+                return;
+            }
+            
             if (checkQuickLogin()) {
+                console.log('Quick login detected');
                 const success = await autoLoginWithQuickToken();
                 if (success) {
+                    console.log('Quick login success');
                     return;
                 }
                 localStorage.removeItem('quickLoginUid');
@@ -1084,9 +1109,12 @@
             }
             
             if (!user) { 
+                console.log('No user, redirecting to login');
                 window.location.replace('Authenticator/login.html'); 
                 return; 
             }
+            
+            console.log('User logged in:', user.uid);
             
             try {
                 const blockSnap = await db.ref('users/' + user.uid + '/blocked').once('value');
@@ -1099,18 +1127,15 @@
                 await db.ref('presence/' + user.uid).set(true);
                 db.ref('presence/' + user.uid).onDisconnect().set(false);
                 
-                db.ref('users/' + user.uid).on('value', snap => {
-                    const data = snap.val();
-                    if (data) {
-                        document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                        currentUser = { uid: user.uid, ...data };
-                    }
-                    if (!isDataLoaded) {
-                        isDataLoaded = true;
-                        hideLoading();
-                    }
-                });
-
+                // Get user data
+                const userSnap = await db.ref('users/' + user.uid).once('value');
+                const userData = userSnap.val();
+                if (userData) {
+                    document.getElementById('balanceAmount').textContent = (userData.balance || 0).toLocaleString('vi-VN');
+                    currentUser = { uid: user.uid, ...userData };
+                }
+                
+                // Load notifications
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
@@ -1132,17 +1157,40 @@
                     }
                 });
                 
+                // Load data
                 loadData();
-                // Tắt loading sau 2 giây dù sao đi nữa
+                
+                // Mark data as loaded and hide loading
                 setTimeout(() => {
                     if (!isDataLoaded) {
                         isDataLoaded = true;
                         hideLoading();
+                        console.log('Data loaded (timeout fallback)');
                     }
-                }, 2000);
+                }, 3000);
+                
+                // If data loads via listeners, hide loading
+                const checkDataLoaded = setInterval(() => {
+                    if (Object.keys(productsData).length > 0 && Object.keys(categoriesData).length > 0) {
+                        isDataLoaded = true;
+                        hideLoading();
+                        clearInterval(checkDataLoaded);
+                        console.log('Data loaded via listeners');
+                    }
+                }, 500);
+                
+                // Stop checking after 10s
+                setTimeout(() => {
+                    clearInterval(checkDataLoaded);
+                    if (!isDataLoaded) {
+                        isDataLoaded = true;
+                        hideLoading();
+                        console.log('Data load check stopped (fallback)');
+                    }
+                }, 10000);
+                
             } catch (error) {
                 console.error('Lỗi load dữ liệu:', error);
-                isDataLoaded = true;
                 hideLoading();
             }
         });
@@ -1220,13 +1268,19 @@
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // Hiển thị loading
+        // Hiển thị loading khi trang load
         showLoading();
-        // Ẩn loading sau 1.5 giây
+        console.log('Loading started');
+        
+        // Ẩn loading sau 8s nếu không có gì xảy ra
         setTimeout(() => {
-            hideLoading();
-            isDataLoaded = true;
-        }, 1500);
+            if (!isDataLoaded) {
+                hideLoading();
+                console.log('Loading hidden (timeout)');
+            }
+        }, 8000);
+        
+        console.log('Index page loaded with Firebase listeners');
     </script>
 </body>
 </html>
