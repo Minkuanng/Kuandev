@@ -505,7 +505,7 @@
             margin-bottom: 6px;
         }
 
-        /* ===== SIDE MENU - LOGO RỘNG HƠN BÊN PHẢI ===== */
+        /* ===== SIDE MENU ===== */
         .side-menu {
             position: fixed;
             top: 0;
@@ -544,41 +544,52 @@
             margin-right: -20px;
         }
         .side-menu .menu-header .menu-logo img {
-            width: calc(100% + 20px);
+            width: calc(100% + 21px);
             height: auto;
             display: block;
             padding: 0;
             background: #ffffff;
             object-fit: contain;
             max-height: none;
-            margin-right: -20px;
+            margin-right: -21px;
         }
-        .side-menu .menu-header .close {
+        /* Nút 3 gạch thay cho X */
+        .side-menu .menu-header .close-menu-btn {
             cursor: pointer;
-            font-size: 24px;
-            color: var(--text-muted);
+            padding: 6px 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
             transition: var(--transition);
             position: absolute;
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 5;
-            background: rgba(255, 255, 255, 0.75);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-            font-weight: 700;
-            opacity: 0.75;
+            width: 34px;
+            height: 34px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
-        .side-menu .menu-header .close:hover {
-            color: var(--danger);
+        .side-menu .menu-header .close-menu-btn:hover {
             background: rgba(255, 255, 255, 0.95);
-            transform: translateY(-50%) rotate(90deg);
-            opacity: 1;
+            transform: translateY(-50%) scale(1.05);
+        }
+        .side-menu .menu-header .close-menu-btn .bar {
+            display: block;
+            width: 16px;
+            height: 2px;
+            background: var(--text-muted);
+            border-radius: 2px;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .side-menu .menu-header .close-menu-btn:hover .bar {
+            background: var(--text-primary);
         }
 
         .side-menu .menu-items {
@@ -1216,8 +1227,8 @@
             }
             .side-menu .menu-header .menu-logo img {
                 padding: 0;
-                width: calc(100% + 10px);
-                margin-right: -10px;
+                width: calc(100% + 11px);
+                margin-right: -11px;
             }
             .side-menu {
                 width: 260px;
@@ -1289,12 +1300,13 @@
                 font-size: 11px;
                 padding: 4px 10px;
             }
-            .side-menu .menu-header .close {
-                width: 32px;
-                height: 32px;
-                font-size: 20px;
+            .side-menu .menu-header .close-menu-btn {
+                width: 30px;
+                height: 30px;
                 right: 4px;
-                opacity: 0.75;
+            }
+            .side-menu .menu-header .close-menu-btn .bar {
+                width: 14px;
             }
             .order-item .order-checkbox {
                 top: 8px;
@@ -1314,13 +1326,18 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO RỘNG HƠN BÊN PHẢI -->
+    <!-- SIDE MENU -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
                 <img src="https://raw.githubusercontent.com/Minkuanng/Kuandev/refs/heads/main/Assets/image/KuanZGame.Store.png" alt="KuanZGame.Store" onerror="this.style.display='none'" />
             </div>
-            <span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span>
+            <!-- Nút 3 gạch thay cho X -->
+            <div class="close-menu-btn" onclick="closeMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
         <div class="menu-items">
             <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
