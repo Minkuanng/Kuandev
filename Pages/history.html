@@ -505,12 +505,12 @@
             margin-bottom: 6px;
         }
 
-        /* ===== SIDE MENU - LOGO FULL ===== */
+        /* ===== SIDE MENU - LOGO RỘNG HƠN BÊN PHẢI ===== */
         .side-menu {
             position: fixed;
             top: 0;
-            left: -300px;
-            width: 280px;
+            left: -320px;
+            width: 300px;
             height: 100vh;
             background: var(--bg-card);
             box-shadow: var(--shadow-popup);
@@ -541,15 +541,17 @@
             width: 100%;
             padding: 0;
             background: #ffffff;
+            margin-right: -20px;
         }
         .side-menu .menu-header .menu-logo img {
-            width: 100%;
+            width: calc(100% + 20px);
             height: auto;
             display: block;
             padding: 0;
             background: #ffffff;
             object-fit: contain;
             max-height: none;
+            margin-right: -20px;
         }
         .side-menu .menu-header .close {
             cursor: pointer;
@@ -561,7 +563,7 @@
             top: 50%;
             transform: translateY(-50%);
             z-index: 5;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.75);
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -570,11 +572,13 @@
             justify-content: center;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
             font-weight: 700;
+            opacity: 0.75;
         }
         .side-menu .menu-header .close:hover {
             color: var(--danger);
-            background: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.95);
             transform: translateY(-50%) rotate(90deg);
+            opacity: 1;
         }
 
         .side-menu .menu-items {
@@ -1212,10 +1216,12 @@
             }
             .side-menu .menu-header .menu-logo img {
                 padding: 0;
+                width: calc(100% + 10px);
+                margin-right: -10px;
             }
             .side-menu {
-                width: 240px;
-                left: -260px;
+                width: 260px;
+                left: -280px;
             }
             .wallet-container {
                 padding: 3px 8px 3px 6px;
@@ -1288,6 +1294,7 @@
                 height: 32px;
                 font-size: 20px;
                 right: 4px;
+                opacity: 0.75;
             }
             .order-item .order-checkbox {
                 top: 8px;
@@ -1307,7 +1314,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO FULL WIDTH -->
+    <!-- SIDE MENU - LOGO RỘNG HƠN BÊN PHẢI -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
