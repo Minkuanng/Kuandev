@@ -505,7 +505,7 @@
             margin-bottom: 6px;
         }
 
-        /* ===== SIDE MENU ===== */
+        /* ===== SIDE MENU - KHÔNG CÓ HEADER, LOGO FULL ===== */
         .side-menu {
             position: fixed;
             top: 0;
@@ -525,25 +525,16 @@
             left: 0;
         }
 
-        .side-menu .menu-header {
-            padding: 0;
-            border-bottom: 1px solid var(--border-color);
+        /* LOGO FULL - KHÔNG CÓ HEADER */
+        .side-menu .menu-logo-wrap {
             display: block;
-            background: #ffffff;
-            border-radius: 0;
-            margin: 0;
             width: 100%;
+            padding: 0;
+            background: #ffffff;
             position: relative;
-            overflow: hidden;
+            margin-right: -21px;
         }
-        .side-menu .menu-header .menu-logo {
-            display: block;
-            width: 100%;
-            padding: 0;
-            background: #ffffff;
-            margin-right: -20px;
-        }
-        .side-menu .menu-header .menu-logo img {
+        .side-menu .menu-logo-wrap img {
             width: calc(100% + 21px);
             height: auto;
             display: block;
@@ -553,12 +544,13 @@
             max-height: none;
             margin-right: -21px;
         }
-        /* Nút 3 gạch thay cho X */
-        .side-menu .menu-header .close-menu-btn {
+
+        /* NÚT 3 GẠCH ĐÈ LÊN LOGO - GÓC TRÊN BÊN PHẢI */
+        .side-menu .close-menu-btn {
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
@@ -567,19 +559,18 @@
             gap: 3px;
             transition: var(--transition);
             position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 5;
+            right: 12px;
+            top: 12px;
+            z-index: 10;
             width: 34px;
             height: 34px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
-        .side-menu .menu-header .close-menu-btn:hover {
+        .side-menu .close-menu-btn:hover {
             background: rgba(255, 255, 255, 0.95);
-            transform: translateY(-50%) scale(1.05);
+            transform: scale(1.05);
         }
-        .side-menu .menu-header .close-menu-btn .bar {
+        .side-menu .close-menu-btn .bar {
             display: block;
             width: 16px;
             height: 2px;
@@ -588,7 +579,7 @@
             transition: var(--transition);
             flex-shrink: 0;
         }
-        .side-menu .menu-header .close-menu-btn:hover .bar {
+        .side-menu .close-menu-btn:hover .bar {
             background: var(--text-primary);
         }
 
@@ -1225,7 +1216,7 @@
             .history-card {
                 padding: 14px 16px;
             }
-            .side-menu .menu-header .menu-logo img {
+            .side-menu .menu-logo-wrap img {
                 padding: 0;
                 width: calc(100% + 11px);
                 margin-right: -11px;
@@ -1233,6 +1224,15 @@
             .side-menu {
                 width: 260px;
                 left: -280px;
+            }
+            .side-menu .close-menu-btn {
+                width: 30px;
+                height: 30px;
+                right: 8px;
+                top: 8px;
+            }
+            .side-menu .close-menu-btn .bar {
+                width: 14px;
             }
             .wallet-container {
                 padding: 3px 8px 3px 6px;
@@ -1300,14 +1300,6 @@
                 font-size: 11px;
                 padding: 4px 10px;
             }
-            .side-menu .menu-header .close-menu-btn {
-                width: 30px;
-                height: 30px;
-                right: 4px;
-            }
-            .side-menu .menu-header .close-menu-btn .bar {
-                width: 14px;
-            }
             .order-item .order-checkbox {
                 top: 8px;
                 right: 8px;
@@ -1326,13 +1318,12 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU -->
+    <!-- SIDE MENU - KHÔNG HEADER, LOGO FULL + 3 GẠCH ĐÈ LÊN -->
     <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <div class="menu-logo">
-                <img src="https://raw.githubusercontent.com/Minkuanng/Kuandev/refs/heads/main/Assets/image/KuanZGame.Store.png" alt="KuanZGame.Store" onerror="this.style.display='none'" />
-            </div>
-            <!-- Nút 3 gạch thay cho X -->
+        <!-- Logo full, không có header -->
+        <div class="menu-logo-wrap">
+            <img src="https://raw.githubusercontent.com/Minkuanng/Kuandev/refs/heads/main/Assets/image/KuanZGame.Store.png" alt="KuanZGame.Store" onerror="this.style.display='none'" />
+            <!-- Nút 3 gạch đè lên góc phải logo -->
             <div class="close-menu-btn" onclick="closeMenu()">
                 <span class="bar"></span>
                 <span class="bar"></span>
