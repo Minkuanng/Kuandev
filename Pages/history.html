@@ -505,7 +505,7 @@
             margin-bottom: 6px;
         }
 
-        /* ===== SIDE MENU - KHÔNG CÓ HEADER, LOGO FULL ===== */
+        /* ===== SIDE MENU - KHÔNG CÓ HEADER, LOGO FULL + 3 GẠCH GÓC ===== */
         .side-menu {
             position: fixed;
             top: 0;
@@ -525,7 +525,7 @@
             left: 0;
         }
 
-        /* LOGO FULL - KHÔNG CÓ HEADER */
+        /* LOGO FULL - KHÔNG CÓ KHOẢNG CÁCH TRÊN */
         .side-menu .menu-logo-wrap {
             display: block;
             width: 100%;
@@ -545,7 +545,7 @@
             margin-right: -21px;
         }
 
-        /* NÚT 3 GẠCH ĐÈ LÊN LOGO - GÓC TRÊN BÊN PHẢI */
+        /* NÚT 3 GẠCH Ở GÓC TRÊN BÊN PHẢI CỦA SIDE MENU */
         .side-menu .close-menu-btn {
             cursor: pointer;
             padding: 6px 8px;
@@ -583,6 +583,7 @@
             background: var(--text-primary);
         }
 
+        /* MENU ITEMS - XUẤT HIỆN BÊN DƯỚI LOGO */
         .side-menu .menu-items {
             padding: 8px 0;
         }
@@ -1318,18 +1319,19 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - KHÔNG HEADER, LOGO FULL + 3 GẠCH ĐÈ LÊN -->
+    <!-- SIDE MENU - KHÔNG HEADER, LOGO FULL, 3 GẠCH GÓC PHẢI -->
     <div class="side-menu" id="sideMenu">
-        <!-- Logo full, không có header -->
+        <!-- Logo full width -->
         <div class="menu-logo-wrap">
             <img src="https://raw.githubusercontent.com/Minkuanng/Kuandev/refs/heads/main/Assets/image/KuanZGame.Store.png" alt="KuanZGame.Store" onerror="this.style.display='none'" />
-            <!-- Nút 3 gạch đè lên góc phải logo -->
+            <!-- Nút 3 gạch góc trên bên phải - dùng chung để đóng menu -->
             <div class="close-menu-btn" onclick="closeMenu()">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
         </div>
+        <!-- Menu items xuất hiện bên dưới logo -->
         <div class="menu-items">
             <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
             <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
