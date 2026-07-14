@@ -505,7 +505,7 @@
             margin-bottom: 6px;
         }
 
-        /* ===== SIDE MENU - LOGO RỘNG TOÀN BỘ ===== */
+        /* ===== SIDE MENU - LOGO FULL ===== */
         .side-menu {
             position: fixed;
             top: 0;
@@ -540,16 +540,16 @@
             display: block;
             width: 100%;
             padding: 0;
+            background: #ffffff;
         }
         .side-menu .menu-header .menu-logo img {
             width: 100%;
             height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            border-radius: 0;
             display: block;
-            padding: 8px 16px;
+            padding: 0;
             background: #ffffff;
+            object-fit: contain;
+            max-height: none;
         }
         .side-menu .menu-header .close {
             cursor: pointer;
@@ -1211,8 +1211,7 @@
                 padding: 14px 16px;
             }
             .side-menu .menu-header .menu-logo img {
-                max-height: 200px;
-                padding: 4px 8px;
+                padding: 0;
             }
             .side-menu {
                 width: 240px;
@@ -1308,7 +1307,7 @@
     <!-- MENU OVERLAY -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
 
-    <!-- SIDE MENU - LOGO RỘNG TOÀN BỘ -->
+    <!-- SIDE MENU - LOGO FULL WIDTH -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-header">
             <div class="menu-logo">
