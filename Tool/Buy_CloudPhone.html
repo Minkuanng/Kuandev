@@ -1,731 +1,776 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mua Cloud Phone - Hanaminikata</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Phone Tool — Hanaminikata</title>
+<link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-xl: 1rem;
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a;
-            min-height: 100vh;
-            padding: 20px;
-        }
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --surface: #1a1a1a;
+  --surface-2: #222222;
+  --surface-off: #2a2a2a;
+  --border: rgba(255, 215, 0, 0.15);
+  --divider: rgba(255, 215, 0, 0.08);
+  --text: #f5f0e8;
+  --text-muted: #b8b0a0;
+  --text-faint: #6a6658;
+  --gold: #ffd700;
+  --gold-hover: #f0c000;
+  --gold-dim: rgba(255, 215, 0, 0.12);
+  --gold-glow: rgba(255, 215, 0, 0.2);
+  --success: #4ade80;
+  --success-bg: rgba(74, 222, 128, 0.1);
+  --error: #f87171;
+  --error-bg: rgba(248, 113, 113, 0.1);
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.6);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.7);
+  --shadow-gold: 0 0 30px rgba(255, 215, 0, 0.08);
+}
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            border: 2px solid #ffd700;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 0 40px rgba(255, 215, 0, 0.05);
-            position: relative;
-        }
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --surface: #ffffff;
+  --surface-2: #faf6ef;
+  --surface-off: #f0ebe0;
+  --border: rgba(180, 150, 80, 0.2);
+  --divider: rgba(180, 150, 80, 0.12);
+  --text: #1a1508;
+  --text-muted: #6a6250;
+  --text-faint: #b0a890;
+  --gold: #d4a800;
+  --gold-hover: #b89200;
+  --gold-dim: rgba(212, 168, 0, 0.1);
+  --gold-glow: rgba(212, 168, 0, 0.15);
+  --success: #16a34a;
+  --success-bg: rgba(22, 163, 74, 0.08);
+  --error: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.08);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+  --shadow-gold: 0 0 30px rgba(212, 168, 0, 0.08);
+}
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
-            pointer-events: none;
-        }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+}
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+input, textarea { font: inherit; color: inherit; }
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: var(--radius-sm); }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+.app-wrapper { min-height: 100dvh; display: grid; grid-template-rows: auto 1fr; }
 
-        .logo h1 {
-            color: #ffd700;
-            font-size: 28px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in oklch, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: var(--space-3) var(--space-6);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+}
+.topbar-brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--text); }
+.topbar-logo {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+  font-size: 20px;
+}
+.topbar-name {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--gold);
+}
+.topbar-name span { color: var(--text-muted); font-weight: 400; }
+.topbar-actions { display: flex; align-items: center; gap: var(--space-2); }
 
-        .logo .subtitle {
-            color: #b8960f;
-            font-size: 14px;
-            letter-spacing: 2px;
-            margin-top: 5px;
-        }
+.btn-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.btn-icon:hover { color: var(--gold); background: var(--surface-off); border-color: var(--gold); }
+.btn-icon svg { width: 16px; height: 16px; }
 
-        .logo .gold-line {
-            width: 80px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #ffd700, transparent);
-            margin: 10px auto 0;
-        }
+.main-content {
+  max-width: 920px; margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+  width: 100%; display: flex; flex-direction: column; gap: var(--space-6);
+}
 
-        /* CORS Solution Selector */
-        .solution-selector {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-        }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm), var(--shadow-gold);
+}
+.card-header {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.card-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-icon svg { width: 20px; height: 20px; color: var(--gold); }
+.card-title { font-size: var(--text-base); font-weight: 600; letter-spacing: -0.01em; color: var(--gold); }
+.card-desc { font-size: var(--text-xs); color: var(--text-muted); margin-top: 1px; }
 
-        .solution-selector label {
-            color: #ffd700;
-            font-size: 13px;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.form-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.input-wrap { position: relative; }
+.form-input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text);
+  outline: none;
+  transition: all var(--transition);
+}
+.form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+.form-input::placeholder { color: var(--text-faint); }
+.form-textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  transition: all var(--transition);
+}
+.form-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
 
-        .solution-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-hover));
+  color: #0a0a0a;
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--gold-glow);
+}
+.btn-primary:active:not(:disabled) { transform: none; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  background: var(--surface-off);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--gold); color: var(--gold); }
+.btn svg { width: 15px; height: 15px; }
+.btn-full { width: 100%; }
 
-        .solution-option {
-            position: relative;
-        }
+.server-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: var(--space-3);
+}
+.server-card {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex; flex-direction: column; gap: var(--space-2);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+.server-card:hover:not(.selected) { border-color: var(--gold); transform: translateY(-2px); }
+.server-card.selected {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+.server-card-top { display: flex; align-items: center; justify-content: space-between; }
+.server-flag { font-size: 1.6rem; line-height: 1; }
+.status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.status-dot.offline { background: var(--error); }
+.status-dot.unknown { background: var(--warning); opacity: 0.6; }
+.status-dot.loading { background: var(--warning); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.server-name { font-size: var(--text-sm); font-weight: 500; color: var(--text); }
+.server-avail { font-size: var(--text-xs); color: var(--text-muted); }
+.server-avail.online { color: var(--success); }
+.server-avail.offline { color: var(--error); }
+.server-avail.unknown { color: var(--warning); }
+.check-mark {
+  position: absolute;
+  top: var(--space-2); right: var(--space-2);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: none;
+  align-items: center; justify-content: center;
+}
+.check-mark svg { width: 11px; height: 11px; color: #0a0a0a; }
+.server-card.selected .check-mark { display: flex; }
 
-        .solution-option input[type="radio"] {
-            display: none;
-        }
+.status-notice {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--warning-bg);
+  border: 1px solid color-mix(in oklch, var(--warning) 30%, transparent);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-xs);
+  color: var(--warning);
+  margin-bottom: var(--space-3);
+}
+.status-notice svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+.status-notice a { color: var(--warning); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
-        .solution-option label {
-            display: block;
-            padding: 8px 12px;
-            background: #1a1a1a;
-            border: 1.5px solid #333;
-            border-radius: 8px;
-            color: #aaa;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
+.status-bar {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  opacity: 0; transform: translateY(-4px);
+  transition: all var(--transition);
+}
+.status-bar.visible { opacity: 1; transform: none; }
+.status-bar.success { background: var(--success-bg); color: var(--success); border: 1px solid color-mix(in oklch, var(--success) 25%, transparent); }
+.status-bar.error { background: var(--error-bg); color: var(--error); border: 1px solid color-mix(in oklch, var(--error) 25%, transparent); }
+.status-bar.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid color-mix(in oklch, var(--warning) 25%, transparent); }
+.status-bar.loading { background: var(--gold-dim); color: var(--gold); border: 1px solid var(--gold); }
+.status-bar svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-        .solution-option input[type="radio"]:checked + label {
-            border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
-            color: #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-        }
+.result-banner {
+  display: none;
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-top: var(--space-4);
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.result-banner.visible { display: flex; }
+.result-banner.success { background: var(--success-bg); border: 1px solid color-mix(in oklch, var(--success) 25%, transparent); }
+.result-banner.error { background: var(--error-bg); border: 1px solid color-mix(in oklch, var(--error) 25%, transparent); }
+.result-icon { font-size: 2.8rem; line-height: 1; }
+.result-title { font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.02em; }
+.result-banner.success .result-title { color: var(--success); }
+.result-banner.error .result-title { color: var(--error); }
+.result-msg { font-size: var(--text-sm); color: var(--text-muted); max-width: 40ch; }
 
-        .solution-option label:hover {
-            border-color: #ffd700;
-            color: #ffd700;
-        }
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(10, 10, 10, 0.2);
+  border-top-color: #0a0a0a;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        .solution-option .badge {
-            display: inline-block;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 4px;
-            background: rgba(255, 215, 0, 0.15);
-            color: #ffd700;
-        }
+.divider { height: 1px; background: var(--divider); margin: var(--space-4) 0; }
+.section-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2);
+}
 
-        .solution-hint {
-            color: #888;
-            font-size: 11px;
-            margin-top: 8px;
-            padding: 8px 12px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-            border-left: 2px solid #ffd700;
-        }
+.hero {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm), var(--shadow-gold);
+}
+.hero-icon {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.hero-text h1 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--gold);
+}
+.hero-text p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
 
-        .solution-hint i {
-            color: #ffd700;
-        }
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-off) 25%, var(--surface-2) 50%, var(--surface-off) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
+.token-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-off);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.token-badge span { color: var(--gold); font-weight: 600; font-family: var(--font-mono); }
 
-        .form-group label {
-            display: block;
-            color: #ffd700;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group label .required {
-            color: #ff4444;
-            margin-left: 3px;
-        }
-
-        .form-group select,
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            background: #1a1a1a;
-            border: 1.5px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-group select:focus,
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
-            background: #222;
-        }
-
-        .form-group select option {
-            background: #1a1a1a;
-            color: #fff;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 70px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
-
-        .form-group .hint {
-            color: #888;
-            font-size: 11px;
-            margin-top: 4px;
-            display: block;
-        }
-
-        .form-group .hint i {
-            color: #ffd700;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #ffd700, #f0c000);
-            border: none;
-            border-radius: 10px;
-            color: #0a0a0a;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 5px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-submit:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-        }
-
-        .btn-submit:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-submit .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #0a0a0a;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
-
-        .btn-submit.loading .spinner {
-            display: block;
-        }
-
-        .btn-submit.loading .btn-text {
-            display: none;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        #response {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            display: none;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        #response.success {
-            display: block;
-            background: rgba(0, 255, 0, 0.08);
-            border: 1px solid #00ff00;
-            color: #00ff00;
-        }
-
-        #response.error {
-            display: block;
-            background: rgba(255, 0, 0, 0.08);
-            border: 1px solid #ff4444;
-            color: #ff4444;
-        }
-
-        #response.loading {
-            display: block;
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid #ffd700;
-            color: #ffd700;
-        }
-
-        #response.info {
-            display: block;
-            background: rgba(0, 150, 255, 0.08);
-            border: 1px solid #0096ff;
-            color: #0096ff;
-        }
-
-        .proxy-status {
-            display: none;
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-bottom: 15px;
-            color: #ffd700;
-            font-size: 13px;
-        }
-
-        .proxy-status.active {
-            display: block;
-        }
-
-        .proxy-status .check {
-            color: #00ff00;
-        }
-
-        .proxy-status .error {
-            color: #ff4444;
-        }
-
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-            color: #555;
-            font-size: 11px;
-            letter-spacing: 0.5px;
-        }
-
-        .footer a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px 15px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-            .solution-options {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .logo h1 {
-                font-size: 22px;
-            }
-
-            .solution-option label {
-                font-size: 10px;
-                padding: 6px 8px;
-            }
-        }
-    </style>
+@media (max-width: 640px) {
+  .main-content { padding: var(--space-4); }
+  .topbar { padding: var(--space-3) var(--space-4); }
+  .server-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero { flex-wrap: wrap; }
+}
+</style>
 </head>
 <body>
+<div class="app-wrapper">
 
-<div class="container">
-    <div class="logo">
-        <h1>☁️ Cloud Phone</h1>
-        <div class="subtitle">HANAMINIKATA</div>
-        <div class="gold-line"></div>
+<header class="topbar">
+  <a class="topbar-brand" href="#">
+    <div class="topbar-logo">☁️</div>
+    <span class="topbar-name">Cloud <span>Phone Tool</span></span>
+  </a>
+  <div class="topbar-actions">
+    <div class="token-badge">
+      🔑 <span id="tokenDisplay">••••••</span>
     </div>
+    <button class="btn-icon" aria-label="Toggle theme" id="themeToggle">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
 
-    <!-- CORS Solution Selector -->
-    <div class="solution-selector">
-        <label>🛡️ Phương thức xử lý CORS</label>
-        <div class="solution-options">
-            <div class="solution-option">
-                <input type="radio" name="solution" id="sol_proxy" value="proxy" checked>
-                <label for="sol_proxy">🚀 Proxy Server <span class="badge">REC</span></label>
-            </div>
-            <div class="solution-option">
-                <input type="radio" name="solution" id="sol_extension" value="extension">
-                <label for="sol_extension">🔌 Extension CORS</label>
-            </div>
-            <div class="solution-option">
-                <input type="radio" name="solution" id="sol_ngrok" value="ngrok">
-                <label for="sol_ngrok">🌐 Ngrok Tunnel</label>
-            </div>
-            <div class="solution-option">
-                <input type="radio" name="solution" id="sol_direct" value="direct">
-                <label for="sol_direct">⚡ Direct (No-CORS)</label>
-            </div>
-        </div>
-        <div class="solution-hint" id="solutionHint">
-            <i>💡</i> <span id="hintText">Proxy Server: Chạy server Node.js để chuyển tiếp request</span>
-        </div>
+<main class="main-content">
+
+<div class="hero">
+  <div class="hero-icon">☁️</div>
+  <div class="hero-text">
+    <h1>Cloud Phone Tool</h1>
+    <p>Mua máy Cloud Phone nhanh chóng từ Hanaminikata</p>
+  </div>
+</div>
+
+<!-- SERVER STATUS -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
     </div>
-
-    <!-- Proxy Status -->
-    <div class="proxy-status" id="proxyStatus">
-        <span id="proxyStatusText">⏳ Đang kiểm tra kết nối proxy...</span>
+    <div>
+      <div class="card-title">Chọn máy chủ</div>
+      <div class="card-desc">Chọn server muốn lấy máy</div>
     </div>
+    <button class="btn btn-secondary" style="margin-left:auto" onclick="refreshStatus()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Làm mới
+    </button>
+  </div>
 
-    <form id="orderForm">
-        <div class="form-group">
-            <label>Mã Token <span class="required">*</span></label>
-            <input type="text" id="token" value="393fd251ca3e40cfc7c4a4d277a3c2040ab65eb3706697" readonly style="color: #ffd700; cursor: not-allowed;">
-            <span class="hint"><i>🔑</i> Token đã được cấu hình sẵn</span>
-        </div>
+  <div id="statusNotice" style="display:none;" class="status-notice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span id="statusNoticeText">Không thể kiểm tra trạng thái server. Bạn vẫn có thể chọn và thử lấy máy.</span>
+  </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>Loại Cloud <span class="required">*</span></label>
-                <select id="cloud_id" required>
-                    <option value="UG">UG (Ugphone)</option>
-                    <option value="VS">VS (Vsphone)</option>
-                    <option value="VM">VM (VMOS)</option>
-                </select>
-            </div>
+  <div class="server-grid" id="serverGrid">
+    <!-- Server cards will be rendered by JS -->
+  </div>
+  <div id="statusBar" class="status-bar" style="margin-top:var(--space-3)"></div>
+</div>
 
-            <div class="form-group">
-                <label>Máy chủ <span class="required" id="serverRequired">*</span></label>
-                <select id="server">
-                    <option value="SG">🇸🇬 Singapore</option>
-                    <option value="HK">🇭🇰 Hong Kong</option>
-                    <option value="JP">🇯🇵 Japan</option>
-                    <option value="DE">🇩🇪 Germany</option>
-                    <option value="US">🇺🇸 USA</option>
-                </select>
-                <span class="hint" id="serverHint"><i>📍</i> Bắt buộc khi chọn UG</span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Dữ liệu đầu vào</label>
-            <textarea id="input_data" placeholder='Ví dụ UG: {"key":"value"} hoặc VS/VM: "user|password"'></textarea>
-            <span class="hint" id="inputHint"><i>💡</i> UG: JSON Local Storage | VS/VM: user|password</span>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn">
-            <span class="btn-text">🚀 Đặt máy ngay</span>
-            <div class="spinner"></div>
-        </button>
-    </form>
-
-    <div id="response"></div>
-
-    <div class="footer">
-        Powered by <a href="https://hanaminikata.com" target="_blank">Hanaminikata</a>
+<!-- BUY CARD -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
     </div>
+    <div>
+      <div class="card-title">Đặt máy Cloud Phone</div>
+      <div class="card-desc">Nhập thông tin và chọn server</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="cloudType">Loại Cloud <span style="color:var(--error)">*</span></label>
+    <select class="form-input" id="cloudType">
+      <option value="UG">UG (Ugphone)</option>
+      <option value="VS">VS (Vsphone)</option>
+      <option value="VM">VM (VMOS)</option>
+    </select>
+  </div>
+
+  <div class="form-group" style="margin-top:var(--space-4)">
+    <label class="form-label" for="inputData">Dữ liệu đầu vào</label>
+    <textarea class="form-textarea" id="inputData" rows="4" placeholder='UG: {"UGPHONE-ID":"...","UGPHONE-Token":"..."}&#10;VS/VM: user|password'></textarea>
+    <span style="font-size:var(--text-xs);color:var(--text-faint)" id="inputHint">💡 UG: JSON Local Storage | VS/VM: user|password</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="section-label">Server đã chọn</div>
+    <div id="selectedServerDisplay" style="font-size:var(--text-sm);font-weight:500;color:var(--text-muted)">
+      Chưa chọn — chọn server ở trên
+    </div>
+  </div>
+
+  <div style="margin-top:var(--space-5)">
+    <button class="btn btn-primary btn-full" id="buyBtn" onclick="buyDevice()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Đặt máy ngay
+    </button>
+  </div>
+
+  <div id="buyStatus" class="status-bar" style="margin-top:var(--space-3)"></div>
+
+  <div id="resultBanner" class="result-banner">
+    <div class="result-icon" id="resultIcon"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+</div>
+
+</main>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('orderForm');
-        const cloudSelect = document.getElementById('cloud_id');
-        const serverSelect = document.getElementById('server');
-        const serverRequired = document.getElementById('serverRequired');
-        const serverHint = document.getElementById('serverHint');
-        const inputData = document.getElementById('input_data');
-        const inputHint = document.getElementById('inputHint');
-        const submitBtn = document.getElementById('submitBtn');
-        const responseDiv = document.getElementById('response');
-        const solutionRadios = document.querySelectorAll('input[name="solution"]');
-        const hintText = document.getElementById('hintText');
-        const proxyStatus = document.getElementById('proxyStatus');
-        const proxyStatusText = document.getElementById('proxyStatusText');
+// ===== THEME =====
+(function() {
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const icon = document.getElementById('themeIcon');
+  let dark = true;
+  const sun = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+  const moon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  btn.addEventListener('click', () => {
+    dark = !dark;
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    icon.innerHTML = dark ? moon : sun;
+  });
+})();
 
-        // Solution hints
-        const hints = {
-            proxy: 'Proxy Server: Chạy server Node.js để chuyển tiếp request (Cần chạy node proxy.js)',
-            extension: 'Extension CORS: Cài extension "Allow CORS" trên trình duyệt (Chỉ dùng để test)',
-            ngrok: 'Ngrok Tunnel: Dùng ngrok để expose local server ra internet',
-            direct: 'Direct (No-CORS): Gửi request trực tiếp (Có thể bị chặn CORS)'
-        };
+// ===== CONFIG =====
+const TOKEN = '393fd251ca3e40cfc7c4a4d277a3c2040ab65eb3706697';
+const API_URL = 'https://hanaminikata.com/dev/buy_device_cloud';
 
-        // Solution URLs
-        const apiUrls = {
-            proxy: 'http://localhost:3000/api/buy_device_cloud',
-            extension: 'https://hanaminikata.com/dev/buy_device_cloud',
-            ngrok: 'https://your-ngrok-url.ngrok.io/api/buy_device_cloud',
-            direct: 'https://hanaminikata.com/dev/buy_device_cloud'
-        };
+// Show token (hide some chars)
+document.getElementById('tokenDisplay').textContent = TOKEN.slice(0, 8) + '••••' + TOKEN.slice(-4);
 
-        // Update hint when solution changes
-        solutionRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                hintText.textContent = hints[this.value];
-                proxyStatus.classList.remove('active');
-                
-                if (this.value === 'proxy') {
-                    checkProxyServer();
-                }
-            });
-        });
+const FLAGS = {
+  'SG': '🇸🇬', 'Singapore': '🇸🇬',
+  'HK': '🇭🇰', 'Hong Kong': '🇭🇰',
+  'JP': '🇯🇵', 'Japan': '🇯🇵',
+  'US': '🇺🇸', 'America': '🇺🇸',
+  'DE': '🇩🇪', 'Germany': '🇩🇪'
+};
 
-        // Check proxy server
-        async function checkProxyServer() {
-            proxyStatus.classList.add('active');
-            proxyStatusText.innerHTML = '⏳ Đang kiểm tra kết nối proxy...';
-            
-            try {
-                const response = await fetch('http://localhost:3000/api/buy_device_cloud', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ test: true })
-                });
-                proxyStatusText.innerHTML = '✅ Proxy server đang chạy! <span class="check">✓</span>';
-                proxyStatus.style.borderColor = '#00ff00';
-            } catch (error) {
-                proxyStatusText.innerHTML = '❌ Không kết nối được proxy server. <span class="error">✗</span><br>' +
-                    '<span style="font-size:12px;color:#888;">Hãy chạy: node proxy.js</span>';
-                proxyStatus.style.borderColor = '#ff4444';
-            }
-        }
+const SERVER_LIST = [
+  { id: 'SG', name: 'Singapore' },
+  { id: 'HK', name: 'Hong Kong' },
+  { id: 'JP', name: 'Japan' },
+  { id: 'US', name: 'America' },
+  { id: 'DE', name: 'Germany' }
+];
 
-        // Auto check proxy on load
-        setTimeout(checkProxyServer, 1000);
+let selectedServer = null;
+let serverStatuses = {};
 
-        // Cloud change handler
-        cloudSelect.addEventListener('change', function() {
-            const isUG = this.value === 'UG';
-            serverSelect.disabled = !isUG;
-            serverSelect.required = isUG;
-            serverRequired.textContent = isUG ? '*' : '(không bắt buộc)';
-            serverHint.innerHTML = isUG ? 
-                '<i>📍</i> Bắt buộc khi chọn UG' : 
-                '<i>📍</i> Không bắt buộc với loại cloud này';
+// ===== HELPER FUNCTIONS =====
+function setStatus(id, type, html) {
+  const el = document.getElementById(id);
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    loading: '<div class="spinner"></div>',
+    warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+  };
+  el.className = `status-bar ${type} visible`;
+  el.innerHTML = (icons[type] || '') + '<span>' + html + '</span>';
+}
 
-            if (this.value === 'UG') {
-                inputHint.innerHTML = '<i>💡</i> Nhập JSON Local Storage (ví dụ: {"key":"value"})';
-            } else {
-                inputHint.innerHTML = '<i>💡</i> Định dạng: Tài khoản|Mật khẩu';
-            }
-        });
+function clearStatus(id) {
+  const el = document.getElementById(id);
+  el.className = 'status-bar';
+  el.innerHTML = '';
+}
 
-        cloudSelect.dispatchEvent(new Event('change'));
+function setBtnLoading(loading) {
+  const btn = document.getElementById('buyBtn');
+  btn.disabled = loading;
+  if (loading) {
+    btn.innerHTML = '<div class="spinner"></div><span>Đang xử lý...</span>';
+  } else {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> Đặt máy ngay';
+  }
+}
 
-        // Get selected solution
-        function getSelectedSolution() {
-            const selected = document.querySelector('input[name="solution"]:checked');
-            return selected ? selected.value : 'proxy';
-        }
+function showResult(success, icon, title, msg) {
+  const banner = document.getElementById('resultBanner');
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+  banner.className = 'result-banner ' + (success ? 'success' : 'error') + ' visible';
+}
+function hideResult() {
+  document.getElementById('resultBanner').className = 'result-banner';
+}
 
-        // Get API URL based on solution
-        function getApiUrl(solution) {
-            return apiUrls[solution] || apiUrls.proxy;
-        }
+// ===== RENDER SERVERS =====
+function renderServers(statuses) {
+  const grid = document.getElementById('serverGrid');
+  const hasStatus = Object.keys(statuses).length > 0;
 
-        // Submit handler
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+  grid.innerHTML = SERVER_LIST.map(s => {
+    const isSelected = selectedServer === s.id;
+    const status = statuses[s.id];
+    let statusClass = 'unknown';
+    let statusText = '? Không rõ';
+    let dotClass = 'unknown';
+    let availClass = 'unknown';
 
-            const token = document.getElementById('token').value.trim();
-            const cloud_id = cloudSelect.value;
-            const server = serverSelect.value;
-            const input_data = inputData.value.trim();
-            const solution = getSelectedSolution();
-
-            // Validate
-            if (!token) {
-                showResponse('❌ Vui lòng nhập token', 'error');
-                return;
-            }
-
-            if (!cloud_id) {
-                showResponse('❌ Vui lòng chọn loại cloud', 'error');
-                return;
-            }
-
-            if (cloud_id === 'UG' && !server) {
-                showResponse('❌ Vui lòng chọn máy chủ cho UG', 'error');
-                return;
-            }
-
-            // Build request body
-            const requestBody = {
-                token: token,
-                cloud_id: cloud_id
-            };
-
-            if (cloud_id === 'UG') {
-                requestBody.server = server;
-            }
-
-            if (input_data) {
-                if (cloud_id === 'UG') {
-                    try {
-                        JSON.parse(input_data);
-                        requestBody.input_data = input_data;
-                    } catch (e) {
-                        showResponse('❌ Dữ liệu đầu vào không đúng định dạng JSON', 'error');
-                        return;
-                    }
-                } else {
-                    requestBody.input_data = input_data;
-                }
-            }
-
-            // Show loading
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            showResponse('⏳ Đang xử lý đặt hàng...', 'loading');
-
-            try {
-                const apiUrl = getApiUrl(solution);
-                
-                // Special handling for direct mode
-                let fetchOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestBody)
-                };
-
-                // For direct mode, use no-cors to avoid CORS errors
-                if (solution === 'direct') {
-                    fetchOptions.mode = 'no-cors';
-                    // With no-cors, we can't read the response, so we need to handle differently
-                    await fetch(apiUrl, fetchOptions);
-                    showResponse('✅ Request đã được gửi thành công! (Chế độ no-cors)\n' +
-                        '⚠️ Lưu ý: Không thể đọc response từ server.', 'info');
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('loading');
-                    return;
-                }
-
-                // For proxy and extension modes
-                const response = await fetch(apiUrl, fetchOptions);
-
-                // Check if response is ok
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.code === 0) {
-                    showResponse(`✅ ${data.message || 'Đặt hàng thành công!'}`, 'success');
-                } else {
-                    showResponse(`❌ ${data.message || 'Có lỗi xảy ra, vui lòng thử lại'}`, 'error');
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                
-                let errorMessage = '❌ Lỗi kết nối. ';
-                
-                if (solution === 'proxy') {
-                    errorMessage += 'Vui lòng đảm bảo proxy server đang chạy!\n' +
-                        '📌 Hướng dẫn: Chạy lệnh "node proxy.js" trong terminal';
-                } else if (solution === 'extension') {
-                    errorMessage += 'Vui lòng kiểm tra extension CORS đã được bật!\n' +
-                        '📌 Hướng dẫn: Cài và bật extension "Allow CORS" trên Chrome';
-                } else if (solution === 'ngrok') {
-                    errorMessage += 'Vui lòng cập nhật URL ngrok trong code!\n' +
-                        '📌 Hướng dẫn: Thay "your-ngrok-url" bằng URL thực tế';
-                } else {
-                    errorMessage += 'Vui lòng thử phương thức khác.';
-                }
-                
-                showResponse(errorMessage, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-            }
-        });
-
-        function showResponse(message, type) {
-            responseDiv.textContent = message;
-            responseDiv.className = type;
-            responseDiv.style.display = 'block';
-        }
-
-        // Proxy server code generator
-        function generateProxyCode() {
-            return `// proxy.js - Chạy với Node.js
-const express = require('express');
-const cors = require('cors');
-const axios = require('axios');
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.post('/api/buy_device_cloud', async (req, res) => {
-    try {
-        const response = await axios.post(
-            'https://hanaminikata.com/dev/buy_device_cloud',
-            req.body,
-            { headers: { 'Content-Type': 'application/json' } }
-        );
-        res.json(response.data);
-    } catch (error) {
-        res.status(500).json({
-            code: -1,
-            message: error.response?.data?.message || 'Lỗi server'
-        });
+    if (hasStatus && status !== undefined) {
+      if (status) {
+        statusClass = 'online';
+        statusText = '● Còn máy';
+        dotClass = 'online';
+        availClass = 'online';
+      } else {
+        statusClass = 'offline';
+        statusText = '○ Hết máy';
+        dotClass = 'offline';
+        availClass = 'offline';
+      }
     }
+
+    return `
+      <div class="server-card ${isSelected ? 'selected' : ''} ${statusClass}" onclick="selectServer('${s.id}')">
+        <div class="check-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="server-card-top">
+          <span class="server-flag">${FLAGS[s.id]}</span>
+          <span class="status-dot ${dotClass}" title="${statusText}"></span>
+        </div>
+        <div class="server-name">${s.name}</div>
+        <div class="server-avail ${availClass}">${statusText}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Update notice visibility
+  const notice = document.getElementById('statusNotice');
+  if (!hasStatus) {
+    notice.style.display = 'flex';
+    document.getElementById('statusNoticeText').textContent = 
+      'Không thể kiểm tra trạng thái server. Bạn vẫn có thể chọn và thử lấy máy.';
+  } else {
+    notice.style.display = 'none';
+  }
+}
+
+// ===== SELECT SERVER =====
+function selectServer(serverId) {
+  selectedServer = serverId;
+  const server = SERVER_LIST.find(s => s.id === serverId);
+  const status = serverStatuses[serverId];
+  
+  let statusText = 'Không rõ trạng thái';
+  let color = 'var(--warning)';
+  if (Object.keys(serverStatuses).length > 0 && status !== undefined) {
+    statusText = status ? 'Còn máy ✅' : 'Hết máy ❌';
+    color = status ? 'var(--success)' : 'var(--error)';
+  }
+  
+  document.getElementById('selectedServerDisplay').innerHTML = 
+    `<span style="margin-right:6px">${FLAGS[serverId]}</span>${server.name} — <span style="color:${color}">${statusText}</span>`;
+  
+  renderServers(serverStatuses);
+}
+
+// ===== LOAD SERVER STATUS =====
+async function loadServerStatus() {
+  const grid = document.getElementById('serverGrid');
+  grid.innerHTML = SERVER_LIST.map(s => `
+    <div class="server-card" style="pointer-events:none;opacity:0.6">
+      <div class="server-card-top">
+        <span style="font-size:1.4rem">${FLAGS[s.id]}</span>
+        <div class="skeleton" style="width:10px;height:10px;border-radius:50%"></div>
+      </div>
+      <div class="skeleton" style="height:16px;width:65%;margin-bottom:4px"></div>
+      <div class="skeleton" style="height:12px;width:45%"></div>
+    </div>
+  `).join('');
+  clearStatus('statusBar');
+
+  // Since we can't actually check server status without an API endpoint,
+  // we'll just show all servers as unknown but still usable
+  serverStatuses = {};
+  renderServers(serverStatuses);
+  setStatus('statusBar', 'warning', '💡 Chọn server và đặt máy — hệ thống sẽ tự động xử lý');
+}
+
+// ===== REFRESH =====
+function refreshStatus() {
+  loadServerStatus();
+}
+
+// ===== BUY DEVICE =====
+async function buyDevice() {
+  if (!selectedServer) {
+    setStatus('buyStatus', 'warning', '⚠️ Vui lòng chọn server trước');
+    return;
+  }
+
+  const cloudType = document.getElementById('cloudType').value;
+  const inputData = document.getElementById('inputData').value.trim();
+
+  // Validate input for UG
+  if (cloudType === 'UG' && inputData) {
+    try {
+      JSON.parse(inputData);
+    } catch (e) {
+      setStatus('buyStatus', 'error', '❌ Dữ liệu UG không đúng định dạng JSON');
+      return;
+    }
+  }
+
+  // Build request
+  const requestBody = {
+    token: TOKEN,
+    cloud_id: cloudType,
+    server: selectedServer
+  };
+
+  if (inputData) {
+    requestBody.input_data = inputData;
+  }
+
+  hideResult();
+  setBtnLoading(true);
+  setStatus('buyStatus', 'loading', `⏳ Đang đặt máy tại ${selectedServer}...`);
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody)
+    });
+
+    const data = await response.json();
+    console.log('Response:', data);
+
+    if (data.code === 0) {
+      clearStatus('buyStatus');
+      showResult(true, '🎉', 'Đặt hàng thành công!', data.message || `Máy ${selectedServer} đã được đặt thành công`);
+    } else {
+      clearStatus('buyStatus');
+      showResult(false, '❌', 'Đặt hàng thất bại', data.message || 'Vui lòng thử lại sau');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    clearStatus('buyStatus');
+    showResult(false, '❌', 'Lỗi kết nối', 'Không thể kết nối đến server. Vui lòng thử lại.');
+  }
+
+  setBtnLoading(false);
+}
+
+// ===== CLOUD TYPE CHANGE =====
+document.getElementById('cloudType').addEventListener('change', function() {
+  const hint = document.getElementById('inputHint');
+  if (this.value === 'UG') {
+    hint.innerHTML = '💡 UG: Nhập JSON Local Storage (ví dụ: {"UGPHONE-ID":"...","UGPHONE-Token":"..."})';
+  } else {
+    hint.innerHTML = '💡 VS/VM: Định dạng Tài khoản|Mật khẩu';
+  }
 });
 
-app.listen(3000, () => {
-    console.log('🚀 Proxy server running at http://localhost:3000');
-});`;
-        }
+// ===== INIT =====
+loadServerStatus();
 
-        // Add proxy code generator info
-        console.log('📝 Proxy server code:\n' + generateProxyCode());
-    });
+// Auto-select first server
+setTimeout(() => {
+  selectServer('SG');
+}, 500);
 </script>
 
 </body>
