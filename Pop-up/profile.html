@@ -40,133 +40,128 @@
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-popup: 0 8px 30px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
         
-        .menu-icon { cursor: pointer; padding: 8px 10px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: var(--transition); width: 38px; height: 38px; flex-shrink: 0; }
-        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .menu-icon .bar { display: block; width: 20px; height: 2.5px; background: var(--text-secondary); border-radius: 3px; transition: var(--transition); flex-shrink: 0; }
-        .menu-icon .bar:nth-child(1) { transform: translateY(0px); }
-        .menu-icon .bar:nth-child(3) { transform: translateY(0px); }
-        .menu-icon:hover .bar { background: var(--text-primary); }
-
-        .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
-        .header-left { display: flex; align-items: center; gap: 16px; }
+        /* ===== HEADER GIỐNG INDEX ===== */
+        .header { background: var(--bg-header); padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(12px); }
+        .header-left { display: flex; align-items: center; gap: 12px; }
         .logo { display: none; }
-        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .menu-icon { cursor: pointer; padding: 6px 8px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); width: 34px; height: 34px; flex-shrink: 0; }
+        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
+        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: var(--transition); flex-shrink: 0; }
+        .menu-icon:hover .bar { background: var(--text-primary); }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
-        .wallet-container:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .wallet-icon-box { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box i { color: #fff; font-size: 16px; }
-        .wallet-info { display: flex; flex-direction: column; line-height: 1.3; }
-        .wallet-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .wallet-balance { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 36px; }
+        .wallet-container:hover { border-color: var(--accent); }
+        .wallet-icon-box { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .wallet-icon-box i { color: #fff; font-size: 13px; }
+        .wallet-info { display: flex; flex-direction: column; line-height: 1.2; }
+        .wallet-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-balance { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .wallet-balance span { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 18px; color: var(--text-secondary); flex-shrink: 0; }
+        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 15px; color: var(--text-secondary); flex-shrink: 0; }
         .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); color: var(--text-primary); }
-        .bell-icon .bell-dot { width: 9px; height: 9px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
-        .bell-icon .bell-dot.show { display: block; }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; position: absolute; top: 2px; right: 2px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-        
-        /* ===== POPUP 3 CHẤM ===== */
+
         .settings-wrapper { position: relative; }
-        .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
+        .dot-menu { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
+        .dot-menu .dot { width: 3.5px; height: 3.5px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
-        .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+        .popup { position: absolute; top: 42px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
-        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
-        .popup-item.logout { color: #e74c6f; }
-        
-        .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .popup-item { padding: 8px 16px; color: var(--text-primary); font-size: 12px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; background: none; width: 100%; font-weight: 500; }
+        .popup-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 10px; }
+        .popup-item.logout { color: var(--danger); }
+
+        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 320px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
+        .notif-popup .notif-header { padding: 0 12px 8px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 13px; }
         .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
         .notif-popup .notif-header .close:hover { color: var(--danger); }
-        .notif-popup .notif-item { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 13px; display: flex; align-items: flex-start; gap: 10px; }
+        .notif-popup .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
         .notif-popup .notif-item i { margin-top: 2px; color: var(--text-secondary); }
-        .notif-popup .notif-item .time { font-size: 10px; color: var(--text-muted); margin-top: 3px; display: block; }
-        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
-        .notif-popup .notif-item.unread i { color: #e74c6f; }
-        .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
-        .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
-        
-        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
+        .notif-popup .notif-item .time { font-size: 9px; color: var(--text-muted); margin-top: 2px; display: block; }
+        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid var(--danger); }
+        .notif-popup .notif-item.unread i { color: var(--danger); }
+        .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
+        .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
+
+        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 14px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
-        .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 20px; color: var(--text-muted); transition: var(--transition); }
+        .side-menu .menu-header { padding: 10px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .side-menu .menu-header .close { cursor: pointer; font-size: 18px; color: var(--text-muted); transition: var(--transition); }
         .side-menu .menu-header .close:hover { color: var(--danger); transform: rotate(90deg); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 14px; font-weight: 500; }
-        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 26px; }
-        .side-menu .menu-item .icon { font-size: 18px; width: 28px; text-align: center; }
-        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
+        .side-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
+        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 22px; }
+        .side-menu .menu-item .icon { font-size: 16px; width: 24px; text-align: center; }
+        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
+
+        .content { padding: 14px 16px; max-width: 500px; margin: 0 auto; }
         
-        .content { padding: 30px 24px; max-width: 500px; margin: 0 auto; }
-        
-        .profile-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); text-align: center; }
+        .profile-card { background: var(--bg-card); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); text-align: center; }
         .profile-card:hover { box-shadow: var(--shadow-popup); }
-        .avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; margin: 0 auto 16px; font-weight: 600; flex-shrink: 0; }
-        .profile-card h2 { color: var(--text-primary); font-size: 22px; transition: var(--transition); }
-        .profile-card .email-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; transition: var(--transition); }
-        .info-item { padding: 10px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; color: var(--text-primary); font-size: 14px; transition: var(--transition); }
-        .info-item .label { color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 6px; }
-        .info-item .value { word-break: break-all; font-weight: 500; }
-        .balance-box { margin-top: 16px; padding: 16px; background: var(--wallet-bg); border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); display: flex; align-items: center; justify-content: center; font-size: 26px; color: #fff; margin: 0 auto 12px; font-weight: 600; flex-shrink: 0; }
+        .profile-card h2 { color: var(--text-primary); font-size: 17px; transition: var(--transition); }
+        .profile-card .email-sub { color: var(--text-muted); font-size: 12px; margin-bottom: 12px; transition: var(--transition); }
+        .info-item { padding: 6px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; color: var(--text-primary); font-size: 13px; transition: var(--transition); }
+        .info-item .label { color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+        .info-item .value { word-break: break-all; font-weight: 500; font-size: 13px; }
+        .balance-box { margin-top: 12px; padding: 12px 14px; background: var(--wallet-bg); border-radius: 8px; border: 1px solid var(--border-color); transition: var(--transition); }
         .balance-box:hover { border-color: var(--accent); }
-        .balance-box .blabel { color: var(--text-muted); font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
-        .balance-box .bamount { color: var(--text-primary); font-size: 22px; font-weight: 700; }
-        .admin-badge { display: inline-block; background: linear-gradient(135deg, #f5a623, #f7c948); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 4px; }
-        .btn { padding: 10px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); border: none; width: 100%; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .balance-box .blabel { color: var(--text-muted); font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .balance-box .bamount { color: var(--text-primary); font-size: 18px; font-weight: 700; }
+        .admin-badge { display: inline-block; background: linear-gradient(135deg, #f5a623, #f7c948); color: #fff; padding: 2px 12px; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 4px; }
+        .btn { padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); border: none; width: 100%; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-security { background: linear-gradient(135deg, #2c5a7a, #1a3a5a); color: #fff; }
         .btn-security:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(44,90,122,0.3); }
         .btn-back { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
 
-        .token-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); }
-        .token-section .token-label { color: var(--text-muted); font-size: 12px; font-weight: 500; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .token-box { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: var(--transition); }
+        .token-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); }
+        .token-section .token-label { color: var(--text-muted); font-size: 11px; font-weight: 500; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .token-box { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; transition: var(--transition); }
         .token-box:hover { border-color: var(--accent); }
-        .token-box .token-key { font-family: 'Courier New', monospace; font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: 1px; word-break: break-all; }
-        .token-box .copy-btn { padding: 4px 14px; background: var(--text-secondary); color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
+        .token-box .token-key { font-family: 'Courier New', monospace; font-size: 12px; font-weight: 600; color: var(--text-primary); letter-spacing: 1px; word-break: break-all; }
+        .token-box .copy-btn { padding: 3px 10px; background: var(--text-secondary); color: #fff; border: none; border-radius: 4px; font-size: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
         .token-box .copy-btn:hover { transform: scale(1.05); opacity: 0.9; }
         .token-box .copy-btn.copied { background: var(--success); }
-        .token-actions { display: flex; gap: 8px; margin-top: 8px; }
-        .token-actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .token-actions { display: flex; gap: 6px; margin-top: 6px; }
+        .token-actions button { flex: 1; padding: 6px; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 4px; }
         .token-actions .btn-reset { background: var(--warning); color: #fff; }
         .token-actions .btn-reset:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
         .token-actions .btn-reset:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .token-status { font-size: 11px; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+        .token-status { font-size: 10px; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
 
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; transition: 0.5s; }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: 0.4s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
-        .loading-spinner { width: 50px; height: 50px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        .loading-spinner { width: 36px; height: 36px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
+        .loading-text { color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 6px 16px; background: var(--bg-card); color: var(--text-primary); border-radius: 8px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 11px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.success { border-color: var(--success); color: var(--success); }
         .toast.error { border-color: var(--danger); color: var(--danger); }
 
         @media (max-width: 600px) { 
-            .header { padding: 10px 12px; } 
-            .logo { font-size: 16px; } 
-            .content { padding: 16px; } 
-            .profile-card { padding: 20px; } 
-            .notif-popup { right: 8px; left: 8px; min-width: auto; } 
-            .wallet-container { padding: 4px 12px 4px 8px; min-height: 38px; } 
-            .wallet-icon-box { width: 28px; height: 28px; } 
-            .wallet-icon-box i { font-size: 13px; } 
-            .wallet-balance { font-size: 13px; } 
-            .wallet-label { font-size: 9px; } 
-            .menu-icon { width: 34px; height: 34px; padding: 6px 8px; } 
-            .menu-icon .bar { width: 17px; height: 2px; }
-            .bell-icon { width: 34px; height: 34px; font-size: 16px; }
-            .dot-menu { width: 34px; height: 34px; }
+            .header { padding: 6px 10px; } 
+            .content { padding: 8px 10px; } 
+            .profile-card { padding: 12px 14px; } 
+            .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
+            .wallet-icon-box { width: 22px; height: 22px; }
+            .wallet-icon-box i { font-size: 10px; }
+            .wallet-balance { font-size: 11px; }
+            .wallet-label { font-size: 7px; }
+            .menu-icon { width: 28px; height: 28px; padding: 4px 6px; }
+            .menu-icon .bar { width: 14px; height: 2px; }
+            .bell-icon { width: 28px; height: 28px; font-size: 13px; }
+            .dot-menu { width: 28px; height: 28px; }
+            .notif-popup { right: 6px; left: 6px; min-width: auto; }
             .token-box { flex-direction: column; align-items: stretch; } 
             .token-box .copy-btn { margin-top: 4px; } 
         }
@@ -200,15 +195,12 @@
         </div>
         <div class="header-right">
             <div class="wallet-container">
-                <div class="wallet-icon-box">
-                    <i class="fas fa-wallet"></i>
-                </div>
+                <div class="wallet-icon-box"><i class="fas fa-wallet"></i></div>
                 <div class="wallet-info">
                     <span class="wallet-label">Số dư</span>
                     <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
                 </div>
             </div>
-
             <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
             <div class="settings-wrapper">
                 <div class="dot-menu" onclick="togglePopup(event)">
@@ -241,7 +233,7 @@
             
             <div class="info-item"><span class="label"><i class="fas fa-envelope"></i> Email</span><span class="value" id="displayEmail">---</span></div>
             <div class="info-item"><span class="label"><i class="fas fa-user"></i> Tên</span><span class="value" id="displayName">---</span></div>
-            <div class="info-item"><span class="label"><i class="fas fa-id-card"></i> UID</span><span class="value" id="displayUid" style="font-size:12px;font-family:monospace;">---</span></div>
+            <div class="info-item"><span class="label"><i class="fas fa-id-card"></i> UID</span><span class="value" id="displayUid" style="font-size:11px;font-family:monospace;">---</span></div>
             <div class="info-item"><span class="label"><i class="fas fa-calendar-plus"></i> Ngày tạo</span><span class="value" id="displayCreated">---</span></div>
             
             <div class="balance-box">
@@ -252,7 +244,7 @@
             <div class="token-section">
                 <div class="token-label">
                     <span><i class="fas fa-key"></i> Token đăng nhập nhanh</span>
-                    <span style="font-size:10px;color:var(--text-muted);">(Không cần mật khẩu)</span>
+                    <span style="font-size:9px;color:var(--text-muted);">(Không cần mật khẩu)</span>
                 </div>
                 <div class="token-box">
                     <span class="token-key" id="tokenDisplay">Chưa có token</span>
@@ -294,7 +286,7 @@
             el.className = 'toast ' + type;
             el.classList.add('show');
             clearTimeout(el.timeout);
-            el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
+            el.timeout = setTimeout(() => el.classList.remove('show'), 2500);
         }
 
         function applyTheme() {
@@ -309,9 +301,7 @@
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('hidden');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 500);
+            setTimeout(() => overlay.style.display = 'none', 500);
         }
 
         function showLoading() {
@@ -330,7 +320,6 @@
         async function completeQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             if (!quickUid) return false;
-            
             try {
                 const snap = await db.ref('users/' + quickUid).once('value');
                 const data = snap.val();
@@ -343,12 +332,10 @@
                     document.getElementById('displayName').textContent = data.displayName || 'Chưa cập nhật';
                     document.getElementById('displayUid').textContent = quickUid;
                     document.getElementById('displayCreated').textContent = data.createdAt ? new Date(data.createdAt).toLocaleString('vi-VN') : '---';
-                    
                     const balance = data.balance || 0;
                     document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                     document.getElementById('profileBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
                     document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge"><i class="fas fa-crown"></i> ADMIN</span>' : '';
-                    
                     if (data.quickToken) {
                         document.getElementById('tokenDisplay').textContent = data.quickToken;
                         document.getElementById('tokenStatus').innerHTML = '<i class="fas fa-check-circle" style="color:var(--success);"></i> Token đã sẵn sàng!';
@@ -358,10 +345,8 @@
                         document.getElementById('tokenStatus').innerHTML = '<i class="fas fa-exclamation-circle"></i> Bạn chưa tạo token. Nhấn "Tạo mới" để tạo!';
                         document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
                     }
-                    
                     await db.ref('presence/' + quickUid).set(true);
                     db.ref('presence/' + quickUid).onDisconnect().set(false);
-                    
                     db.ref('notifications').on('value', snap => {
                         const notifs = snap.val();
                         const list = document.getElementById('notifList');
@@ -382,7 +367,6 @@
                             dot.classList.remove('show');
                         }
                     });
-                    
                     isDataLoaded = true;
                     hideLoading();
                     return true;
@@ -397,66 +381,45 @@
         function generateUniqueToken() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let token = '';
-            for (let i = 0; i < 16; i++) {
-                token += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            const time = Date.now().toString(36);
-            return token + time.slice(-4);
+            for (let i = 0; i < 16; i++) token += chars.charAt(Math.floor(Math.random() * chars.length));
+            return token + Date.now().toString(36).slice(-4);
         }
 
         async function resetToken() {
             if (!currentUser) {
                 const quickUid = localStorage.getItem('quickLoginUid');
-                if (quickUid) {
-                    currentUser = { uid: quickUid };
-                } else {
-                    showToast('Vui lòng đăng nhập!', 'error');
-                    return;
-                }
+                if (quickUid) currentUser = { uid: quickUid };
+                else { showToast('Vui lòng đăng nhập!', 'error'); return; }
             }
-            
             const btn = document.getElementById('resetTokenBtn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tạo...';
-
             try {
                 const newToken = generateUniqueToken();
                 await db.ref('users/' + currentUser.uid + '/quickToken').set(newToken);
-                
                 document.getElementById('tokenDisplay').textContent = newToken;
                 document.getElementById('tokenStatus').innerHTML = '<i class="fas fa-check-circle" style="color:var(--success);"></i> Token mới đã được tạo thành công!';
                 document.getElementById('tokenStatus').style.color = 'var(--success)';
                 showToast('✅ Token mới đã được tạo!', 'success');
-                
             } catch (error) {
-                let errorMsg = '❌ Lỗi tạo token! ';
-                if (error.code === 'PERMISSION_DENIED') {
-                    errorMsg += 'Vui lòng kiểm tra Firebase Rules (cần bật quyền ghi).';
-                } else {
-                    errorMsg += error.message;
-                }
+                let errorMsg = '❌ Lỗi tạo token! ' + (error.message || '');
                 document.getElementById('tokenStatus').innerHTML = '<i class="fas fa-exclamation-circle" style="color:var(--danger);"></i> ' + errorMsg;
                 document.getElementById('tokenStatus').style.color = 'var(--danger)';
                 showToast(errorMsg, 'error');
             }
-
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-sync"></i> Tạo mới';
         }
 
         function copyToken() {
             const token = document.getElementById('tokenDisplay').textContent;
-            if (token === 'Chưa có token') {
-                showToast('⚠️ Chưa có token để sao chép!', 'error');
-                return;
-            }
+            if (token === 'Chưa có token') { showToast('⚠️ Chưa có token để sao chép!', 'error'); return; }
             const btn = document.getElementById('copyTokenBtn');
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(token).then(() => {
                     btn.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
                     btn.classList.add('copied');
-                    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép';
-                        btn.classList.remove('copied'); }, 2000);
+                    setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép'; btn.classList.remove('copied'); }, 2000);
                     showToast('✅ Đã sao chép token!', 'success');
                 });
             } else {
@@ -468,15 +431,13 @@
                 document.body.removeChild(textarea);
                 btn.innerHTML = '<i class="fas fa-check"></i> Đã sao chép!';
                 btn.classList.add('copied');
-                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép';
-                    btn.classList.remove('copied'); }, 2000);
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Sao chép'; btn.classList.remove('copied'); }, 2000);
                 showToast('✅ Đã sao chép token!', 'success');
             }
         }
 
         auth.onAuthStateChanged(async (user) => {
             if (isDataLoaded) return;
-            
             if (checkQuickLogin()) {
                 const success = await completeQuickLogin();
                 if (success) return;
@@ -486,16 +447,10 @@
                 window.location.replace('../Authenticator/login.html');
                 return;
             }
-            
-            if (!user) { 
-                window.location.replace('../Authenticator/login.html'); 
-                return; 
-            }
-            
+            if (!user) { window.location.replace('../Authenticator/login.html'); return; }
             currentUser = user;
             db.ref('presence/' + user.uid).set(true);
             db.ref('presence/' + user.uid).onDisconnect().set(false);
-
             const name = user.displayName || user.email || 'U';
             document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
             document.getElementById('userName').textContent = name;
@@ -504,7 +459,6 @@
             document.getElementById('displayName').textContent = user.displayName || 'Chưa cập nhật';
             document.getElementById('displayUid').textContent = user.uid;
             document.getElementById('displayCreated').textContent = user.metadata.creationTime || '---';
-
             db.ref('users/' + user.uid).on('value', snap => {
                 const data = snap.val();
                 if (data) {
@@ -512,7 +466,6 @@
                     document.getElementById('balanceAmount').textContent = balance.toLocaleString('vi-VN');
                     document.getElementById('profileBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
                     document.getElementById('adminBadgeContainer').innerHTML = data.isAdmin ? '<span class="admin-badge"><i class="fas fa-crown"></i> ADMIN</span>' : '';
-                    
                     if (data.quickToken) {
                         document.getElementById('tokenDisplay').textContent = data.quickToken;
                         document.getElementById('tokenStatus').innerHTML = '<i class="fas fa-check-circle" style="color:var(--success);"></i> Token đã sẵn sàng!';
@@ -523,12 +476,8 @@
                         document.getElementById('tokenStatus').style.color = 'var(--text-muted)';
                     }
                 }
-                if (!isDataLoaded) {
-                    isDataLoaded = true;
-                    hideLoading();
-                }
+                if (!isDataLoaded) { isDataLoaded = true; hideLoading(); }
             });
-
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
                 const list = document.getElementById('notifList');
@@ -544,28 +493,17 @@
                     });
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else { 
+                } else {
                     list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
-                    dot.classList.remove('show'); 
+                    dot.classList.remove('show');
                 }
             });
         });
 
         // ===== MENU FUNCTIONS =====
-        function toggleMenu() { 
-            document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('menuOverlay').classList.toggle('active'); 
-        }
-
-        function closeMenu() { 
-            document.getElementById('sideMenu').classList.remove('active');
-            document.getElementById('menuOverlay').classList.remove('active'); 
-        }
-
-        function togglePopup(e) { 
-            e.stopPropagation();
-            document.getElementById('settingsPopup').classList.toggle('active'); 
-        }
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); document.getElementById('menuOverlay').classList.toggle('active'); }
+        function closeMenu() { document.getElementById('sideMenu').classList.remove('active'); document.getElementById('menuOverlay').classList.remove('active'); }
+        function togglePopup(e) { e.stopPropagation(); document.getElementById('settingsPopup').classList.toggle('active'); }
         document.addEventListener('click', function(e) {
             const popup = document.getElementById('settingsPopup');
             const wrapper = document.querySelector('.settings-wrapper');
@@ -593,12 +531,10 @@
         function goToSecurity() { window.location.href = 'security.html'; }
         function goToSettings() { window.location.href = 'settings.html'; }
 
-        function logout() { 
+        function logout() {
             if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
-                if (user) {
-                    db.ref('presence/' + user.uid).set(false);
-                }
+                if (user) db.ref('presence/' + user.uid).set(false);
                 auth.signOut().then(() => {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginEmail');
@@ -614,11 +550,8 @@
         });
 
         showLoading();
-        setTimeout(() => {
-            if (!isDataLoaded) {
-                hideLoading();
-            }
-        }, 5000);
+        setTimeout(() => { if (!isDataLoaded) hideLoading(); }, 3000);
+        console.log('✅ Profile page loaded!');
     </script>
 </body>
 </html>
