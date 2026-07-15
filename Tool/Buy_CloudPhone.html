@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mua Cloud Phone - Hanaminikata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), inset 0 0 40px rgba(255, 215, 0, 0.05);
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .logo .subtitle {
+            color: #b8960f;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .logo .gold-line {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            margin: 10px auto 0;
+        }
+
+        /* CORS Solution Selector */
+        .solution-selector {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .solution-selector label {
+            color: #ffd700;
+            font-size: 13px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .solution-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .solution-option {
+            position: relative;
+        }
+
+        .solution-option input[type="radio"] {
+            display: none;
+        }
+
+        .solution-option label {
+            display: block;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1.5px solid #333;
+            border-radius: 8px;
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .solution-option input[type="radio"]:checked + label {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .solution-option label:hover {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .solution-option .badge {
+            display: inline-block;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+        }
+
+        .solution-hint {
+            color: #888;
+            font-size: 11px;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 6px;
+            border-left: 2px solid #ffd700;
+        }
+
+        .solution-hint i {
+            color: #ffd700;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffd700;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group label .required {
+            color: #ff4444;
+            margin-left: 3px;
+        }
+
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1.5px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+            background: #222;
+        }
+
+        .form-group select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .form-group .hint {
+            color: #888;
+            font-size: 11px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .form-group .hint i {
+            color: #ffd700;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ffd700, #f0c000);
+            border: none;
+            border-radius: 10px;
+            color: #0a0a0a;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0a0a0a;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        .btn-submit.loading .spinner {
+            display: block;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        #response.success {
+            display: block;
+            background: rgba(0, 255, 0, 0.08);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        #response.error {
+            display: block;
+            background: rgba(255, 0, 0, 0.08);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+
+        #response.loading {
+            display: block;
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+        }
+
+        #response.info {
+            display: block;
+            background: rgba(0, 150, 255, 0.08);
+            border: 1px solid #0096ff;
+            color: #0096ff;
+        }
+
+        .proxy-status {
+            display: none;
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 15px;
+            color: #ffd700;
+            font-size: 13px;
+        }
+
+        .proxy-status.active {
+            display: block;
+        }
+
+        .proxy-status .check {
+            color: #00ff00;
+        }
+
+        .proxy-status .error {
+            color: #ff4444;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #555;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .solution-options {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .logo h1 {
+                font-size: 22px;
+            }
+
+            .solution-option label {
+                font-size: 10px;
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <h1>☁️ Cloud Phone</h1>
+        <div class="subtitle">HANAMINIKATA</div>
+        <div class="gold-line"></div>
+    </div>
+
+    <!-- CORS Solution Selector -->
+    <div class="solution-selector">
+        <label>🛡️ Phương thức xử lý CORS</label>
+        <div class="solution-options">
+            <div class="solution-option">
+                <input type="radio" name="solution" id="sol_proxy" value="proxy" checked>
+                <label for="sol_proxy">🚀 Proxy Server <span class="badge">REC</span></label>
+            </div>
+            <div class="solution-option">
+                <input type="radio" name="solution" id="sol_extension" value="extension">
+                <label for="sol_extension">🔌 Extension CORS</label>
+            </div>
+            <div class="solution-option">
+                <input type="radio" name="solution" id="sol_ngrok" value="ngrok">
+                <label for="sol_ngrok">🌐 Ngrok Tunnel</label>
+            </div>
+            <div class="solution-option">
+                <input type="radio" name="solution" id="sol_direct" value="direct">
+                <label for="sol_direct">⚡ Direct (No-CORS)</label>
+            </div>
+        </div>
+        <div class="solution-hint" id="solutionHint">
+            <i>💡</i> <span id="hintText">Proxy Server: Chạy server Node.js để chuyển tiếp request</span>
+        </div>
+    </div>
+
+    <!-- Proxy Status -->
+    <div class="proxy-status" id="proxyStatus">
+        <span id="proxyStatusText">⏳ Đang kiểm tra kết nối proxy...</span>
+    </div>
+
+    <form id="orderForm">
+        <div class="form-group">
+            <label>Mã Token <span class="required">*</span></label>
+            <input type="text" id="token" value="393fd251ca3e40cfc7c4a4d277a3c2040ab65eb3706697" readonly style="color: #ffd700; cursor: not-allowed;">
+            <span class="hint"><i>🔑</i> Token đã được cấu hình sẵn</span>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Loại Cloud <span class="required">*</span></label>
+                <select id="cloud_id" required>
+                    <option value="UG">UG (Ugphone)</option>
+                    <option value="VS">VS (Vsphone)</option>
+                    <option value="VM">VM (VMOS)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Máy chủ <span class="required" id="serverRequired">*</span></label>
+                <select id="server">
+                    <option value="SG">🇸🇬 Singapore</option>
+                    <option value="HK">🇭🇰 Hong Kong</option>
+                    <option value="JP">🇯🇵 Japan</option>
+                    <option value="DE">🇩🇪 Germany</option>
+                    <option value="US">🇺🇸 USA</option>
+                </select>
+                <span class="hint" id="serverHint"><i>📍</i> Bắt buộc khi chọn UG</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Dữ liệu đầu vào</label>
+            <textarea id="input_data" placeholder='Ví dụ UG: {"key":"value"} hoặc VS/VM: "user|password"'></textarea>
+            <span class="hint" id="inputHint"><i>💡</i> UG: JSON Local Storage | VS/VM: user|password</span>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-text">🚀 Đặt máy ngay</span>
+            <div class="spinner"></div>
+        </button>
+    </form>
+
+    <div id="response"></div>
+
+    <div class="footer">
+        Powered by <a href="https://hanaminikata.com" target="_blank">Hanaminikata</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('orderForm');
+        const cloudSelect = document.getElementById('cloud_id');
+        const serverSelect = document.getElementById('server');
+        const serverRequired = document.getElementById('serverRequired');
+        const serverHint = document.getElementById('serverHint');
+        const inputData = document.getElementById('input_data');
+        const inputHint = document.getElementById('inputHint');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseDiv = document.getElementById('response');
+        const solutionRadios = document.querySelectorAll('input[name="solution"]');
+        const hintText = document.getElementById('hintText');
+        const proxyStatus = document.getElementById('proxyStatus');
+        const proxyStatusText = document.getElementById('proxyStatusText');
+
+        // Solution hints
+        const hints = {
+            proxy: 'Proxy Server: Chạy server Node.js để chuyển tiếp request (Cần chạy node proxy.js)',
+            extension: 'Extension CORS: Cài extension "Allow CORS" trên trình duyệt (Chỉ dùng để test)',
+            ngrok: 'Ngrok Tunnel: Dùng ngrok để expose local server ra internet',
+            direct: 'Direct (No-CORS): Gửi request trực tiếp (Có thể bị chặn CORS)'
+        };
+
+        // Solution URLs
+        const apiUrls = {
+            proxy: 'http://localhost:3000/api/buy_device_cloud',
+            extension: 'https://hanaminikata.com/dev/buy_device_cloud',
+            ngrok: 'https://your-ngrok-url.ngrok.io/api/buy_device_cloud',
+            direct: 'https://hanaminikata.com/dev/buy_device_cloud'
+        };
+
+        // Update hint when solution changes
+        solutionRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                hintText.textContent = hints[this.value];
+                proxyStatus.classList.remove('active');
+                
+                if (this.value === 'proxy') {
+                    checkProxyServer();
+                }
+            });
+        });
+
+        // Check proxy server
+        async function checkProxyServer() {
+            proxyStatus.classList.add('active');
+            proxyStatusText.innerHTML = '⏳ Đang kiểm tra kết nối proxy...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/buy_device_cloud', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test: true })
+                });
+                proxyStatusText.innerHTML = '✅ Proxy server đang chạy! <span class="check">✓</span>';
+                proxyStatus.style.borderColor = '#00ff00';
+            } catch (error) {
+                proxyStatusText.innerHTML = '❌ Không kết nối được proxy server. <span class="error">✗</span><br>' +
+                    '<span style="font-size:12px;color:#888;">Hãy chạy: node proxy.js</span>';
+                proxyStatus.style.borderColor = '#ff4444';
+            }
+        }
+
+        // Auto check proxy on load
+        setTimeout(checkProxyServer, 1000);
+
+        // Cloud change handler
+        cloudSelect.addEventListener('change', function() {
+            const isUG = this.value === 'UG';
+            serverSelect.disabled = !isUG;
+            serverSelect.required = isUG;
+            serverRequired.textContent = isUG ? '*' : '(không bắt buộc)';
+            serverHint.innerHTML = isUG ? 
+                '<i>📍</i> Bắt buộc khi chọn UG' : 
+                '<i>📍</i> Không bắt buộc với loại cloud này';
+
+            if (this.value === 'UG') {
+                inputHint.innerHTML = '<i>💡</i> Nhập JSON Local Storage (ví dụ: {"key":"value"})';
+            } else {
+                inputHint.innerHTML = '<i>💡</i> Định dạng: Tài khoản|Mật khẩu';
+            }
+        });
+
+        cloudSelect.dispatchEvent(new Event('change'));
+
+        // Get selected solution
+        function getSelectedSolution() {
+            const selected = document.querySelector('input[name="solution"]:checked');
+            return selected ? selected.value : 'proxy';
+        }
+
+        // Get API URL based on solution
+        function getApiUrl(solution) {
+            return apiUrls[solution] || apiUrls.proxy;
+        }
+
+        // Submit handler
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const token = document.getElementById('token').value.trim();
+            const cloud_id = cloudSelect.value;
+            const server = serverSelect.value;
+            const input_data = inputData.value.trim();
+            const solution = getSelectedSolution();
+
+            // Validate
+            if (!token) {
+                showResponse('❌ Vui lòng nhập token', 'error');
+                return;
+            }
+
+            if (!cloud_id) {
+                showResponse('❌ Vui lòng chọn loại cloud', 'error');
+                return;
+            }
+
+            if (cloud_id === 'UG' && !server) {
+                showResponse('❌ Vui lòng chọn máy chủ cho UG', 'error');
+                return;
+            }
+
+            // Build request body
+            const requestBody = {
+                token: token,
+                cloud_id: cloud_id
+            };
+
+            if (cloud_id === 'UG') {
+                requestBody.server = server;
+            }
+
+            if (input_data) {
+                if (cloud_id === 'UG') {
+                    try {
+                        JSON.parse(input_data);
+                        requestBody.input_data = input_data;
+                    } catch (e) {
+                        showResponse('❌ Dữ liệu đầu vào không đúng định dạng JSON', 'error');
+                        return;
+                    }
+                } else {
+                    requestBody.input_data = input_data;
+                }
+            }
+
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            showResponse('⏳ Đang xử lý đặt hàng...', 'loading');
+
+            try {
+                const apiUrl = getApiUrl(solution);
+                
+                // Special handling for direct mode
+                let fetchOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                };
+
+                // For direct mode, use no-cors to avoid CORS errors
+                if (solution === 'direct') {
+                    fetchOptions.mode = 'no-cors';
+                    // With no-cors, we can't read the response, so we need to handle differently
+                    await fetch(apiUrl, fetchOptions);
+                    showResponse('✅ Request đã được gửi thành công! (Chế độ no-cors)\n' +
+                        '⚠️ Lưu ý: Không thể đọc response từ server.', 'info');
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
+                    return;
+                }
+
+                // For proxy and extension modes
+                const response = await fetch(apiUrl, fetchOptions);
+
+                // Check if response is ok
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.code === 0) {
+                    showResponse(`✅ ${data.message || 'Đặt hàng thành công!'}`, 'success');
+                } else {
+                    showResponse(`❌ ${data.message || 'Có lỗi xảy ra, vui lòng thử lại'}`, 'error');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                
+                let errorMessage = '❌ Lỗi kết nối. ';
+                
+                if (solution === 'proxy') {
+                    errorMessage += 'Vui lòng đảm bảo proxy server đang chạy!\n' +
+                        '📌 Hướng dẫn: Chạy lệnh "node proxy.js" trong terminal';
+                } else if (solution === 'extension') {
+                    errorMessage += 'Vui lòng kiểm tra extension CORS đã được bật!\n' +
+                        '📌 Hướng dẫn: Cài và bật extension "Allow CORS" trên Chrome';
+                } else if (solution === 'ngrok') {
+                    errorMessage += 'Vui lòng cập nhật URL ngrok trong code!\n' +
+                        '📌 Hướng dẫn: Thay "your-ngrok-url" bằng URL thực tế';
+                } else {
+                    errorMessage += 'Vui lòng thử phương thức khác.';
+                }
+                
+                showResponse(errorMessage, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }
+        });
+
+        function showResponse(message, type) {
+            responseDiv.textContent = message;
+            responseDiv.className = type;
+            responseDiv.style.display = 'block';
+        }
+
+        // Proxy server code generator
+        function generateProxyCode() {
+            return `// proxy.js - Chạy với Node.js
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.post('/api/buy_device_cloud', async (req, res) => {
+    try {
+        const response = await axios.post(
+            'https://hanaminikata.com/dev/buy_device_cloud',
+            req.body,
+            { headers: { 'Content-Type': 'application/json' } }
+        );
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({
+            code: -1,
+            message: error.response?.data?.message || 'Lỗi server'
+        });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('🚀 Proxy server running at http://localhost:3000');
+});`;
+        }
+
+        // Add proxy code generator info
+        console.log('📝 Proxy server code:\n' + generateProxyCode());
+    });
+</script>
+
+</body>
+</html>
