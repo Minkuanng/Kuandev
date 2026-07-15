@@ -50,8 +50,7 @@
 
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
-        .logo span { color: var(--text-secondary); }
+        .logo { display: none; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
         .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
@@ -68,6 +67,9 @@
         .bell-icon .bell-dot { width: 9px; height: 9px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
         .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        
+        /* ===== POPUP 3 CHẤM ===== */
+        .settings-wrapper { position: relative; }
         .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
@@ -78,7 +80,7 @@
         .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
-        .settings-wrapper { position: relative; }
+        
         .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 14px 10px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 14px; }
@@ -91,6 +93,7 @@
         .notif-popup .notif-item.unread i { color: #e74c6f; }
         .notif-popup .empty { padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px; }
         .notif-popup .empty i { font-size: 24px; display: block; margin-bottom: 8px; }
+        
         .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 16px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
         .side-menu.active { left: 0; }
         .side-menu .menu-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
@@ -102,6 +105,7 @@
         .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 6px 16px; }
         .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
         .menu-overlay.active { opacity: 1; visibility: visible; }
+        
         .content { padding: 30px 24px; max-width: 520px; margin: 0 auto; }
         
         .security-card { background: var(--bg-card); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); border: 1px solid var(--border-color); transition: var(--transition); }
@@ -196,6 +200,11 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 16px; font-weight: 500; }
 
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.5s; font-weight: 500; font-size: 13px; pointer-events: none; }
+        .toast.show { opacity: 1; }
+        .toast.success { border-color: var(--success); color: var(--success); }
+        .toast.error { border-color: var(--danger); color: var(--danger); }
+
         @media (max-width: 600px) { 
             .header { padding: 10px 12px; } 
             .logo { font-size: 16px; } 
@@ -228,11 +237,11 @@
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span><span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span></div>
-        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span><span data-key="home">Trang chủ</span></button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span><span data-key="history">Lịch sử</span></button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
         <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span><span data-key="support">Hỗ trợ</span></button>
+        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
     </div>
 
     <header class="header">
@@ -242,7 +251,7 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <div class="logo">🛒 <span>Shop</span></div>
+            <div class="logo"></div>
         </div>
         <div class="header-right">
             <div class="wallet-container">
@@ -257,54 +266,58 @@
 
             <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
             <div class="settings-wrapper">
-                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="dot-menu" onclick="togglePopup(event)">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> <span data-key="settings">Cài đặt</span></button>
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> Thông tin</button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> Bảo mật</button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> Cài đặt</button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-key="logout">Đăng xuất</span></button>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> <span data-key="notif_title">Thông báo</span></span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
-        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> <span data-key="notif_empty">Chưa có thông báo</span></div></div>
+        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
+        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
     <div class="content">
         <div class="security-card">
             <div class="shield-icon"><i class="fas fa-shield-halved"></i></div>
-            <h1><span data-key="security_title">Bảo mật</span></h1>
-            <p class="sub" data-key="security_sub">Quản lý bảo mật tài khoản của bạn</p>
+            <h1>Bảo mật</h1>
+            <p class="sub">Quản lý bảo mật tài khoản của bạn</p>
             <div id="message" class="message"></div>
 
-            <div class="section-title"><i class="fas fa-key"></i> <span data-key="change_pass">Đổi mật khẩu</span></div>
+            <div class="section-title"><i class="fas fa-key"></i> Đổi mật khẩu</div>
             <form id="changePasswordForm">
                 <div class="form-group">
-                    <label data-key="current_pass"><i class="fas fa-lock"></i> Mật khẩu hiện tại</label>
+                    <label><i class="fas fa-lock"></i> Mật khẩu hiện tại</label>
                     <input type="password" id="currentPassword" placeholder="Nhập mật khẩu cũ" required>
                 </div>
                 <div class="form-group">
-                    <label data-key="new_pass"><i class="fas fa-key"></i> Mật khẩu mới</label>
+                    <label><i class="fas fa-key"></i> Mật khẩu mới</label>
                     <input type="password" id="newPassword" placeholder="Tối thiểu 6 ký tự" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label data-key="confirm_pass"><i class="fas fa-check-double"></i> Xác nhận mật khẩu</label>
+                    <label><i class="fas fa-check-double"></i> Xác nhận mật khẩu</label>
                     <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
                 </div>
-                <button type="submit" class="btn-change"><i class="fas fa-sync"></i> <span data-key="update_btn">Cập nhật</span></button>
+                <button type="submit" class="btn-change"><i class="fas fa-sync"></i> Cập nhật</button>
             </form>
 
-            <div class="section-title"><i class="fas fa-shield"></i> <span data-key="twofa_title">Xác thực 2 lớp</span></div>
+            <div class="section-title"><i class="fas fa-shield"></i> Xác thực 2 lớp</div>
             <div class="twofa-row" onclick="toggleTwoFA()">
                 <div class="left">
                     <div class="icon-box"><i class="fas fa-qrcode"></i></div>
                     <div class="info">
-                        <div class="title" data-key="google_auth">Google Authenticator</div>
-                        <div class="desc" id="twofaStatusDesc" data-key="twofa_off">Chưa kích hoạt</div>
+                        <div class="title">Google Authenticator</div>
+                        <div class="desc" id="twofaStatusDesc">Chưa kích hoạt</div>
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:10px;">
@@ -359,14 +372,14 @@
                 </div>
             </div>
 
-            <div class="section-title"><i class="fas fa-laptop"></i> <span data-key="device_title">Thiết bị đăng nhập</span></div>
+            <div class="section-title"><i class="fas fa-laptop"></i> Thiết bị đăng nhập</div>
             <div class="device-box">
                 <div class="device-item"><span class="label"><i class="fas fa-globe"></i> IP Address</span><span class="value" id="userIP">Đang lấy...</span></div>
                 <div class="device-item"><span class="label"><i class="fas fa-desktop"></i> Trình duyệt</span><span class="value" id="userBrowser">Đang lấy...</span></div>
                 <div class="device-item"><span class="label"><i class="fas fa-clock"></i> Lần đăng nhập cuối</span><span class="value" id="lastLogin">Đang lấy...</span></div>
             </div>
 
-            <button class="btn-back" onclick="goToSettings()"><i class="fas fa-arrow-left"></i> <span data-key="back_settings">Quay lại cài đặt</span></button>
+            <button class="btn-back" onclick="goToSettings()"><i class="fas fa-arrow-left"></i> Quay lại cài đặt</button>
         </div>
     </div>
 
@@ -389,21 +402,17 @@
                 const bytes = [];
                 let bits = 0;
                 let value = 0;
-                
                 for (let i = 0; i < base32.length; i++) {
                     const char = base32[i].toUpperCase();
                     const idx = alphabet.indexOf(char);
                     if (idx === -1) continue;
-                    
                     value = (value << 5) | idx;
                     bits += 5;
-                    
                     if (bits >= 8) {
                         bytes.push((value >> (bits - 8)) & 0xFF);
                         bits -= 8;
                     }
                 }
-                
                 return new Uint8Array(bytes);
             }
 
@@ -416,11 +425,7 @@
                     false,
                     ['sign']
                 );
-                const signature = await crypto.subtle.sign(
-                    'HMAC',
-                    cryptoKey,
-                    data
-                );
+                const signature = await crypto.subtle.sign('HMAC', cryptoKey, data);
                 return new Uint8Array(signature);
             }
 
@@ -439,7 +444,6 @@
                     counterBytes[i] = counter & 0xFF;
                     counter = counter >> 8;
                 }
-                
                 const hmac = await this.hmacSha1(secret, counterBytes);
                 const otp = this.dynamicTruncation(hmac);
                 return String(otp).padStart(6, '0');
@@ -453,14 +457,11 @@
             async verifyTOTP(token, secret) {
                 if (!token || token.length !== 6) return false;
                 if (!secret || secret.length < 10) return false;
-                
                 try {
                     const windows = [0, -1, 1];
                     for (const w of windows) {
                         const generated = await this.generateTOTP(secret, w);
-                        if (generated === token) {
-                            return true;
-                        }
+                        if (generated === token) return true;
                     }
                     return false;
                 } catch (error) {
@@ -506,7 +507,6 @@
         
         // ===== GLOBAL VARIABLES =====
         let currentUser = null;
-        let lang = localStorage.getItem('lang') || 'vi';
         let isDataLoaded = false;
         let is2FAEnabled = false;
         let twofaSecret = '';
@@ -514,64 +514,18 @@
         let isTurningOff = false;
         let verifyAttempts = 3;
         let offAttempts = 3;
-        
-        console.log('✅ Firebase auth and database ready');
-        
-        // ===== TRANSLATIONS =====
-        const translations = {
-            vi: { 
-                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
-                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
-                notif_title: 'Thông báo', notif_empty: 'Chưa có thông báo',
-                security_title: 'Bảo mật', security_sub: 'Quản lý bảo mật tài khoản của bạn',
-                change_pass: 'Đổi mật khẩu', current_pass: 'Mật khẩu hiện tại', new_pass: 'Mật khẩu mới',
-                confirm_pass: 'Xác nhận mật khẩu', update_btn: 'Cập nhật',
-                twofa_title: 'Xác thực 2 lớp', google_auth: 'Google Authenticator',
-                twofa_off: 'Chưa kích hoạt', twofa_on: 'Đã kích hoạt',
-                device_title: 'Thiết bị đăng nhập', back_settings: 'Quay lại cài đặt'
-            },
-            en: {
-                home: 'Home', history: 'History', topup: 'Top up', support: 'Support',
-                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout',
-                notif_title: 'Notifications', notif_empty: 'No notifications',
-                security_title: 'Security', security_sub: 'Manage your account security',
-                change_pass: 'Change Password', current_pass: 'Current Password', new_pass: 'New Password',
-                confirm_pass: 'Confirm Password', update_btn: 'Update',
-                twofa_title: '2FA', google_auth: 'Google Authenticator',
-                twofa_off: 'Not activated', twofa_on: 'Activated',
-                device_title: 'Login Devices', back_settings: 'Back to settings'
-            }
-        };
 
-        // ===== UI FUNCTIONS =====
-        function applyLang() {
-            const data = translations[lang] || translations.vi;
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (data[key] !== undefined) el.textContent = data[key];
-            });
-            updateTwoFAStatus();
+        // ===== TOAST =====
+        function showToast(msg, type = '') {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.className = 'toast ' + type;
+            el.classList.add('show');
+            clearTimeout(el.timeout);
+            el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
-        function updateTwoFAStatus() {
-            const toggle = document.getElementById('twofaToggle');
-            if (!toggle) return;
-            const isActive = toggle.classList.contains('active');
-            const desc = document.getElementById('twofaStatusDesc');
-            const badge = document.getElementById('twofaStatusBadge');
-            if (isActive) {
-                if (desc) { desc.textContent = lang === 'vi' ? 'Đã kích hoạt' : 'Activated';
-                    desc.style.color = 'var(--success)'; }
-                if (badge) { badge.textContent = lang === 'vi' ? 'Bật' : 'On';
-                    badge.className = 'twofa-status on'; }
-            } else {
-                if (desc) { desc.textContent = lang === 'vi' ? 'Chưa kích hoạt' : 'Not activated';
-                    desc.style.color = 'var(--text-muted)'; }
-                if (badge) { badge.textContent = lang === 'vi' ? 'Tắt' : 'Off';
-                    badge.className = 'twofa-status off'; }
-            }
-        }
-
+        // ===== THEME =====
         function applyTheme() {
             const isDark = localStorage.getItem('theme') === 'dark';
             document.body.classList.toggle('dark-mode', isDark);
@@ -579,9 +533,7 @@
             document.body.className = document.body.className.replace(/theme-\w+/g, '');
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
-        
         applyTheme();
-        applyLang();
 
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
@@ -593,7 +545,21 @@
             if (overlay) overlay.classList.remove('hidden');
         }
 
-        // ===== QUICK LOGIN =====
+        function updateTwoFAStatus() {
+            const toggle = document.getElementById('twofaToggle');
+            if (!toggle) return;
+            const isActive = toggle.classList.contains('active');
+            const desc = document.getElementById('twofaStatusDesc');
+            const badge = document.getElementById('twofaStatusBadge');
+            if (isActive) {
+                if (desc) { desc.textContent = 'Đã kích hoạt'; desc.style.color = 'var(--success)'; }
+                if (badge) { badge.textContent = 'Bật'; badge.className = 'twofa-status on'; }
+            } else {
+                if (desc) { desc.textContent = 'Chưa kích hoạt'; desc.style.color = 'var(--text-muted)'; }
+                if (badge) { badge.textContent = 'Tắt'; badge.className = 'twofa-status off'; }
+            }
+        }
+
         function checkQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
@@ -604,32 +570,25 @@
         async function completeQuickLogin() {
             const quickUid = localStorage.getItem('quickLoginUid');
             const quickToken = localStorage.getItem('quickLoginToken');
-            
             if (!quickUid || !quickToken) return false;
-            
             try {
                 const snap = await db.ref('users/' + quickUid).once('value');
                 const userData = snap.val();
-                
                 if (!userData || userData.blocked === true) {
                     localStorage.removeItem('quickLoginUid');
                     localStorage.removeItem('quickLoginToken');
                     localStorage.removeItem('quickLoginPending');
                     return false;
                 }
-                
                 await db.ref('presence/' + quickUid).set(true);
                 db.ref('presence/' + quickUid).onDisconnect().set(false);
-                
                 const balance = userData.balance || 0;
                 const balanceEl = document.getElementById('balanceAmount');
                 if (balanceEl) balanceEl.textContent = balance.toLocaleString('vi-VN');
-                
                 const lastLoginEl = document.getElementById('lastLogin');
                 if (lastLoginEl) {
                     lastLoginEl.textContent = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
                 }
-                
                 if (userData.twofaEnabled === true) {
                     const toggle = document.getElementById('twofaToggle');
                     if (toggle) toggle.classList.add('active');
@@ -640,8 +599,6 @@
                     is2FAEnabled = false;
                 }
                 updateTwoFAStatus();
-                
-                // Load notifications
                 db.ref('notifications').on('value', snap => {
                     const notifs = snap.val();
                     const list = document.getElementById('notifList');
@@ -658,15 +615,13 @@
                         list.innerHTML = html;
                         dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                     } else {
-                        list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                        list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                         dot.classList.remove('show');
                     }
                 });
-                
                 isDataLoaded = true;
                 hideLoading();
                 return true;
-                
             } catch (error) {
                 console.error('Lỗi complete quick login:', error);
                 return false;
@@ -678,7 +633,6 @@
             const user = auth.currentUser;
             const toggle = document.getElementById('twofaToggle');
             if (!toggle) return;
-            
             if (toggle.classList.contains('active')) {
                 offAttempts = 3;
                 const offInput = document.getElementById('otpOffInput');
@@ -692,21 +646,18 @@
                 setTimeout(() => { if (offInput) offInput.focus(); }, 200);
                 return;
             }
-            
             const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
             if (!uid) {
-                alert('Vui lòng đăng nhập!');
+                showToast('Vui lòng đăng nhập!', 'error');
                 return;
             }
-            
             db.ref('users/' + uid + '/twofaEnabled').once('value').then((snap) => {
                 if (snap.val() === true) {
                     toggle.classList.add('active');
                     updateTwoFAStatus();
                     return;
                 }
-                
-                twofaSecret = generateSecret();
+                twofaSecret = otp.generateSecret();
                 const secretDisplay = document.getElementById('secretKeyDisplay');
                 if (secretDisplay) secretDisplay.textContent = twofaSecret;
                 const otpInput = document.getElementById('otpInput');
@@ -721,15 +672,6 @@
                 if (modal) modal.classList.add('active');
                 setTimeout(() => { if (otpInput) otpInput.focus(); }, 200);
             });
-        }
-
-        function generateSecret() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            let secret = '';
-            for (let i = 0; i < 16; i++) {
-                secret += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return secret;
         }
 
         function copySecret() {
@@ -773,10 +715,10 @@
                             otpError.classList.add('show'); }
                     }
                 }).catch(() => {
-                    alert(lang === 'vi' ? 'Không thể đọc clipboard. Vui lòng nhập thủ công.' : 'Cannot read clipboard. Please enter manually.');
+                    showToast('Không thể đọc clipboard. Vui lòng nhập thủ công.', 'error');
                 });
             } else {
-                alert(lang === 'vi' ? 'Trình duyệt không hỗ trợ dán. Vui lòng nhập thủ công.' : 'Browser does not support paste. Please enter manually.');
+                showToast('Trình duyệt không hỗ trợ dán.', 'error');
             }
         }
 
@@ -795,10 +737,10 @@
                             offError.classList.add('show'); }
                     }
                 }).catch(() => {
-                    alert(lang === 'vi' ? 'Không thể đọc clipboard. Vui lòng nhập thủ công.' : 'Cannot read clipboard. Please enter manually.');
+                    showToast('Không thể đọc clipboard. Vui lòng nhập thủ công.', 'error');
                 });
             } else {
-                alert(lang === 'vi' ? 'Trình duyệt không hỗ trợ dán. Vui lòng nhập thủ công.' : 'Browser does not support paste. Please enter manually.');
+                showToast('Trình duyệt không hỗ trợ dán.', 'error');
             }
         }
 
@@ -807,7 +749,6 @@
             const otpInput = document.getElementById('otpInput');
             if (!otpInput) return;
             const otpValue = otpInput.value.trim();
-            
             if (otpValue.length !== 6 || !/^\d{6}$/.test(otpValue)) {
                 const otpError = document.getElementById('otpError');
                 if (otpError) { otpError.textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
@@ -815,7 +756,6 @@
                 otpInput.classList.add('error');
                 return;
             }
-            
             isVerifying = true;
             const btn = document.getElementById('btnVerifyOTP');
             if (btn) { btn.disabled = true;
@@ -825,7 +765,7 @@
                 const user = auth.currentUser;
                 let uid = user ? user.uid : localStorage.getItem('quickLoginUid');
                 if (!uid) {
-                    alert('❌ Vui lòng đăng nhập lại!');
+                    showToast('Vui lòng đăng nhập lại!', 'error');
                     isVerifying = false;
                     if (btn) { btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-check"></i> Xác nhận'; }
@@ -861,7 +801,7 @@
                     if (otpError) otpError.classList.remove('show');
                     if (btn) btn.innerHTML = '<i class="fas fa-check"></i> Thành công';
 
-                    alert(lang === 'vi' ? '✅ Đã kích hoạt xác thực 2 lớp thành công!' : '✅ 2FA activated successfully!');
+                    showToast('✅ Đã kích hoạt xác thực 2 lớp thành công!', 'success');
                     const toggle = document.getElementById('twofaToggle');
                     if (toggle) toggle.classList.add('active');
                     is2FAEnabled = true;
@@ -891,7 +831,7 @@
                     otpInput.focus();
                 }
             } catch (error) {
-                alert('❌ Lỗi: ' + error.message);
+                showToast('❌ Lỗi: ' + error.message, 'error');
             }
 
             isVerifying = false;
@@ -904,7 +844,6 @@
             const otpInput = document.getElementById('otpOffInput');
             if (!otpInput) return;
             const otpValue = otpInput.value.trim();
-            
             if (otpValue.length !== 6 || !/^\d{6}$/.test(otpValue)) {
                 const offError = document.getElementById('otpOffError');
                 if (offError) { offError.textContent = '❌ Vui lòng nhập đúng mã OTP 6 số!';
@@ -922,7 +861,7 @@
                 const user = auth.currentUser;
                 let uid = user ? user.uid : localStorage.getItem('quickLoginUid');
                 if (!uid) {
-                    alert('❌ Vui lòng đăng nhập lại!');
+                    showToast('Vui lòng đăng nhập lại!', 'error');
                     isTurningOff = false;
                     if (btn) { btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-unlock"></i> Tắt'; }
@@ -955,7 +894,7 @@
                     if (offError) offError.classList.remove('show');
                     if (btn) btn.innerHTML = '<i class="fas fa-check"></i> Thành công';
 
-                    alert(lang === 'vi' ? '✅ Đã tắt xác thực 2 lớp!' : '✅ 2FA turned off!');
+                    showToast('✅ Đã tắt xác thực 2 lớp!', 'success');
                     const toggle = document.getElementById('twofaToggle');
                     if (toggle) toggle.classList.remove('active');
                     is2FAEnabled = false;
@@ -985,7 +924,7 @@
                     otpInput.focus();
                 }
             } catch (error) {
-                alert('❌ Lỗi: ' + error.message);
+                showToast('❌ Lỗi: ' + error.message, 'error');
             }
 
             isTurningOff = false;
@@ -1022,12 +961,10 @@
         // ===== AUTH STATE =====
         auth.onAuthStateChanged(async (user) => {
             console.log('🔐 Auth state changed, user:', user?.uid || 'none');
-            
             if (isDataLoaded) {
                 console.log('✅ Data already loaded, skipping');
                 return;
             }
-            
             if (checkQuickLogin()) {
                 console.log('🔑 Quick login detected, attempting...');
                 const success = await completeQuickLogin();
@@ -1043,25 +980,20 @@
                 window.location.replace('../Authenticator/login.html');
                 return;
             }
-            
             if (!user) { 
                 console.warn('⚠️ No user logged in, redirecting to login');
                 hideLoading();
                 window.location.replace('../Authenticator/login.html'); 
                 return; 
             }
-            
             currentUser = user;
-            
             db.ref('presence/' + user.uid).set(true);
             db.ref('presence/' + user.uid).onDisconnect().set(false);
-            
             db.ref('users/' + user.uid + '/balance').on('value', snap => {
                 const balance = snap.val() || 0;
                 const balanceEl = document.getElementById('balanceAmount');
                 if (balanceEl) balanceEl.textContent = balance.toLocaleString('vi-VN');
             });
-
             db.ref('users/' + user.uid + '/twofaEnabled').on('value', snap => {
                 const enabled = snap.val() === true;
                 const toggle = document.getElementById('twofaToggle');
@@ -1076,7 +1008,6 @@
                 }
                 updateTwoFAStatus();
             });
-
             db.ref('users/' + user.uid + '/lastLogin').on('value', snap => {
                 const last = snap.val();
                 const lastLoginEl = document.getElementById('lastLogin');
@@ -1084,7 +1015,6 @@
                     lastLoginEl.textContent = last ? new Date(last).toLocaleString('vi-VN') : 'Lần đầu đăng nhập';
                 }
             });
-
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
                 const list = document.getElementById('notifList');
@@ -1101,11 +1031,10 @@
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else {
-                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                     dot.classList.remove('show');
                 }
             });
-
             if (!isDataLoaded) {
                 isDataLoaded = true;
                 hideLoading();
@@ -1119,7 +1048,6 @@
             const newPass = document.getElementById('newPassword').value;
             const confirm = document.getElementById('confirmPassword').value;
             const msg = document.getElementById('message');
-            
             if (newPass.length < 6) {
                 msg.textContent = '❌ Mật khẩu tối thiểu 6 ký tự!';
                 msg.className = 'message error';
@@ -1130,42 +1058,40 @@
                 msg.className = 'message error';
                 return;
             }
-            
             const btn = document.querySelector('.btn-change');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
-            
             try {
                 const user = auth.currentUser;
                 if (!user) {
                     const quickUid = localStorage.getItem('quickLoginUid');
                     if (quickUid) {
-                        alert('⚠️ Bạn đang đăng nhập nhanh. Vui lòng đăng nhập bằng email để đổi mật khẩu.');
+                        showToast('⚠️ Bạn đang đăng nhập nhanh. Vui lòng đăng nhập bằng email để đổi mật khẩu.', 'error');
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
                         return;
                     }
-                    alert('❌ Vui lòng đăng nhập lại!');
+                    showToast('Vui lòng đăng nhập lại!', 'error');
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
                     return;
                 }
-                
                 const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
                 await user.reauthenticateWithCredential(credential);
                 await user.updatePassword(newPass);
-                
                 msg.textContent = '✅ Đổi mật khẩu thành công!';
                 msg.className = 'message success';
                 document.getElementById('currentPassword').value = '';
                 document.getElementById('newPassword').value = '';
                 document.getElementById('confirmPassword').value = '';
+                showToast('✅ Đổi mật khẩu thành công!', 'success');
             } catch (error) {
                 let err = '❌ Lỗi: ';
                 if (error.code === 'auth/wrong-password') err += 'Mật khẩu hiện tại sai!';
                 else err += error.message;
                 msg.textContent = err;
                 msg.className = 'message error';
+                showToast(err, 'error');
             }
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-sync"></i> Cập nhật';
@@ -1214,7 +1140,6 @@
             const popup = document.getElementById('settingsPopup');
             if (popup) popup.classList.toggle('active'); 
         }
-        
         document.addEventListener('click', function(e) {
             const popup = document.getElementById('settingsPopup');
             const wrapper = document.querySelector('.settings-wrapper');
@@ -1224,10 +1149,8 @@
         function toggleNotif() {
             const popup = document.getElementById('notifPopup');
             if (popup) popup.classList.toggle('active');
-            
             const user = auth.currentUser;
             const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
-            
             if (uid && localStorage.getItem('autoView') !== 'false') {
                 db.ref('notifications').once('value', snap => {
                     const notifs = snap.val();
@@ -1244,14 +1167,14 @@
 
         function goHome() { closeMenu(); window.location.href = '../index.html'; }
         function goHistory() { closeMenu(); window.location.href = '../Pages/history.html'; }
-        function goTopup() { closeMenu(); alert(lang === 'vi' ? '💰 Đang phát triển!' : '💰 Coming soon!'); }
-        function goSupport() { closeMenu(); alert(lang === 'vi' ? '🆘 Đang phát triển!' : '🆘 Coming soon!'); }
+        function goTopup() { closeMenu(); showToast('💰 Đang phát triển!', 'error'); }
+        function goSupport() { closeMenu(); showToast('🆘 Đang phát triển!', 'error'); }
         function goToProfile() { window.location.href = 'profile.html'; }
         function goToSecurity() { window.location.href = 'security.html'; }
         function goToSettings() { window.location.href = 'settings.html'; }
 
         function logout() {
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+            if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
                 if (user) {
                     db.ref('presence/' + user.uid).set(false);
@@ -1312,19 +1235,11 @@
         }
 
         window.addEventListener('storage', function(e) {
-            if (e.key === 'lang') { 
-                lang = e.newValue || 'vi';
-                applyLang(); 
-            }
-            if (e.key === 'theme' || e.key === 'theme_name') { 
-                applyTheme(); 
-            }
+            if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
-        // ===== INIT =====
         showLoading();
         console.log('⏳ Loading overlay shown');
-
         setTimeout(() => {
             if (!isDataLoaded) {
                 console.warn('⚠️ Loading timeout - hiding spinner');
@@ -1332,7 +1247,6 @@
                 hideLoading();
             }
         }, 3000);
-
         console.log('✅ Security page loaded successfully!');
     </script>
 </body>
