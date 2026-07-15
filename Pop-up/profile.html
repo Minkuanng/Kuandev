@@ -49,7 +49,7 @@
 
         .header { background: var(--bg-header); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
         .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
+        .logo { display: none; }
         .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
         .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 12px; padding: 6px 16px 6px 12px; display: flex; align-items: center; gap: 10px; transition: var(--transition); cursor: default; min-height: 44px; }
@@ -67,18 +67,18 @@
         .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
         
+        /* ===== POPUP 3 CHẤM ===== */
+        .settings-wrapper { position: relative; }
         .dot-menu { width: 38px; height: 38px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 4px; height: 4px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
-        
         .popup { position: absolute; top: 48px; right: 0; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 180px; padding: 6px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .popup-item { padding: 10px 18px; color: var(--text-primary); font-size: 13px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 12px; border: none; background: none; width: 100%; font-weight: 500; }
         .popup-item:hover { background: var(--hover-bg); padding-left: 24px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
         .popup-item.logout { color: #e74c6f; }
-        .settings-wrapper { position: relative; }
         
         .notif-popup { position: fixed; top: 60px; right: 16px; background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-popup); min-width: 280px; max-width: 360px; max-height: 350px; overflow-y: auto; padding: 12px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
@@ -182,11 +182,11 @@
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
     <div class="side-menu" id="sideMenu">
         <div class="menu-header"><span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span><span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span></div>
-        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span><span data-key="home">Trang chủ</span></button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span><span data-key="history">Lịch sử</span></button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span><span data-key="topup">Nạp tiền</span></button>
+        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
+        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
+        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
         <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span><span data-key="support">Hỗ trợ</span></button>
+        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
     </div>
 
     <header class="header">
@@ -211,21 +211,25 @@
 
             <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
             <div class="settings-wrapper">
-                <div class="dot-menu" onclick="togglePopup(event)"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                <div class="dot-menu" onclick="togglePopup(event)">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
                 <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> <span data-key="profile">Thông tin</span></button>
-                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> <span data-key="security">Bảo mật</span></button>
-                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> <span data-key="settings">Cài đặt</span></button>
+                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> Thông tin</button>
+                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> Bảo mật</button>
+                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> Cài đặt</button>
                     <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span data-key="logout">Đăng xuất</span></button>
+                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> <span data-key="notif_title">Thông báo</span></span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
-        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> <span data-key="notif_empty">Chưa có thông báo</span></div></div>
+        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
+        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
     </div>
 
     <div class="content">
@@ -281,20 +285,6 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        const translations = {
-            vi: { 
-                home: 'Trang chủ', history: 'Lịch sử', topup: 'Nạp tiền', support: 'Hỗ trợ', 
-                profile: 'Thông tin', security: 'Bảo mật', settings: 'Cài đặt', logout: 'Đăng xuất', 
-                notif_title: 'Thông báo', notif_empty: 'Chưa có thông báo'
-            },
-            en: { 
-                home: 'Home', history: 'History', topup: 'Top up', support: 'Support', 
-                profile: 'Profile', security: 'Security', settings: 'Settings', logout: 'Logout', 
-                notif_title: 'Notifications', notif_empty: 'No notifications'
-            }
-        };
-
-        let lang = localStorage.getItem('lang') || 'vi';
         let currentUser = null;
         let isDataLoaded = false;
 
@@ -307,14 +297,6 @@
             el.timeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
-        function applyLang() {
-            const data = translations[lang] || translations.vi;
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (data[key] !== undefined) el.textContent = data[key];
-            });
-        }
-
         function applyTheme() {
             const isDark = localStorage.getItem('theme') === 'dark';
             document.body.classList.toggle('dark-mode', isDark);
@@ -323,7 +305,6 @@
             if (theme !== 'default') document.body.classList.add('theme-' + theme);
         }
         applyTheme();
-        applyLang();
 
         function hideLoading() {
             const overlay = document.getElementById('loadingOverlay');
@@ -397,7 +378,7 @@
                             list.innerHTML = html;
                             dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                         } else {
-                            list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                            list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                             dot.classList.remove('show');
                         }
                     });
@@ -564,12 +545,13 @@
                     list.innerHTML = html;
                     dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
                 } else { 
-                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> ${lang === 'vi' ? 'Chưa có thông báo' : 'No notifications'}</div>`;
+                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
                     dot.classList.remove('show'); 
                 }
             });
         });
 
+        // ===== MENU FUNCTIONS =====
         function toggleMenu() { 
             document.getElementById('sideMenu').classList.toggle('active');
             document.getElementById('menuOverlay').classList.toggle('active'); 
@@ -612,7 +594,7 @@
         function goToSettings() { window.location.href = 'settings.html'; }
 
         function logout() { 
-            if (confirm(lang === 'vi' ? 'Đăng xuất?' : 'Logout?')) {
+            if (confirm('Đăng xuất?')) {
                 const user = auth.currentUser;
                 if (user) {
                     db.ref('presence/' + user.uid).set(false);
@@ -628,7 +610,6 @@
         }
 
         window.addEventListener('storage', function(e) {
-            if (e.key === 'lang') { lang = e.newValue || 'vi'; applyLang(); }
             if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
         });
 
