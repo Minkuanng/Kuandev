@@ -31,45 +31,45 @@
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 12px rgba(0,0,0,0.3); --shadow-popup: 0 8px 32px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
 
-        /* ===== HEADER ===== */
-        .header { background: var(--bg-header); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(10px); }
-        .header-left { display: flex; align-items: center; gap: 14px; }
-        .logo { font-size: 18px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
+        /* ===== HEADER GIỐNG INDEX ===== */
+        .header { background: var(--bg-header); padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(12px); }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { font-size: 16px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
         .menu-icon { cursor: pointer; padding: 6px 8px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); width: 34px; height: 34px; flex-shrink: 0; }
         .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 3px; transition: var(--transition); flex-shrink: 0; }
+        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: var(--transition); flex-shrink: 0; }
         .menu-icon:hover .bar { background: var(--text-primary); }
-        .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 38px; }
+        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 36px; }
         .wallet-container:hover { border-color: var(--accent); }
         .wallet-icon-box { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .wallet-icon-box i { color: #fff; font-size: 13px; }
         .wallet-info { display: flex; flex-direction: column; line-height: 1.2; }
-        .wallet-label { font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .wallet-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .wallet-balance { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
+        .wallet-balance span { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 16px; color: var(--text-secondary); flex-shrink: 0; }
+        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 15px; color: var(--text-secondary); flex-shrink: 0; }
         .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); color: var(--text-primary); }
-        .bell-icon .bell-dot { width: 8px; height: 8px; background: #e74c6f; border-radius: 50%; position: absolute; top: 2px; right: 3px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
+        .bell-icon .bell-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; position: absolute; top: 2px; right: 2px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
         .bell-icon .bell-dot.show { display: block; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
-        /* ===== POPUP 3 CHẤM ===== */
         .settings-wrapper { position: relative; }
         .dot-menu { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
         .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
         .dot-menu .dot { width: 3.5px; height: 3.5px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
         .dot-menu:hover .dot { background: var(--text-primary); }
-        .popup { position: absolute; top: 44px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); z-index: 200; }
+
+        .popup { position: absolute; top: 42px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); z-index: 200; }
         .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .popup-item { padding: 8px 16px; color: var(--text-primary); font-size: 12px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; background: none; width: 100%; font-weight: 500; }
         .popup-item:hover { background: var(--hover-bg); padding-left: 22px; }
         .popup-divider { height: 1px; background: var(--border-color); margin: 4px 10px; }
-        .popup-item.logout { color: #e74c6f; }
+        .popup-item.logout { color: var(--danger); }
 
-        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 340px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: var(--transition); }
+        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 320px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); }
         .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
         .notif-popup .notif-header { padding: 0 12px 8px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 13px; }
         .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
@@ -77,8 +77,8 @@
         .notif-popup .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
         .notif-popup .notif-item i { margin-top: 2px; color: var(--text-secondary); }
         .notif-popup .notif-item .time { font-size: 9px; color: var(--text-muted); margin-top: 2px; display: block; }
-        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid #e74c6f; }
-        .notif-popup .notif-item.unread i { color: #e74c6f; }
+        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid var(--danger); }
+        .notif-popup .notif-item.unread i { color: var(--danger); }
         .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
         .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
 
@@ -95,13 +95,13 @@
         .menu-overlay.active { opacity: 1; visibility: visible; }
 
         /* ===== CONTENT ===== */
-        .content { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+        .content { padding: 14px 16px; max-width: 1400px; margin: 0 auto; }
 
-        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
-        .admin-header h1 { color: var(--text-primary); font-size: 20px; display: flex; align-items: center; gap: 8px; }
-        .admin-header .sub { color: var(--text-muted); font-size: 12px; font-weight: 400; }
-        .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-        .btn-sm { padding: 6px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+        .admin-header h1 { color: var(--text-primary); font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .admin-header .sub { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+        .admin-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn-sm { padding: 5px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
         .btn-sm:hover { transform: translateY(-2px); }
         .btn-primary { background: var(--accent); color: #fff; }
         .btn-primary:hover { box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
@@ -114,139 +114,126 @@
         .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
         .btn-outline:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
 
-        /* ===== STATS ===== */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
-        .stat-card { background: var(--bg-card); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
+        .stat-card { background: var(--bg-card); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
         .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .stat-card .num { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+        .stat-card .num { font-size: 18px; font-weight: 700; color: var(--text-primary); }
         .stat-card .num.green { color: var(--success); }
         .stat-card .num.red { color: var(--danger); }
         .stat-card .num.orange { color: var(--warning); }
         .stat-card .num.blue { color: var(--accent); }
-        .stat-card .label { font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+        .stat-card .label { font-size: 9px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
 
-        /* ===== TABS ===== */
-        .tabs { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
-        .tabs .tab { padding: 8px 18px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 13px; border-bottom: 3px solid transparent; }
+        .tabs { display: flex; gap: 2px; margin-bottom: 14px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
+        .tabs .tab { padding: 6px 14px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 12px; border-bottom: 3px solid transparent; }
         .tabs .tab:hover { color: var(--text-primary); }
         .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ===== USER GRID ===== */
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
-        .user-card { background: var(--bg-card); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+        .user-card { background: var(--bg-card); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
         .user-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-        .user-card .user-header .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0; }
-        .user-card .user-header .info { flex: 1; min-width: 0; }
-        .user-card .user-header .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
-        .user-card .user-header .info .email { font-size: 10px; color: var(--text-muted); word-break: break-all; }
-        .user-card .balance { font-size: 17px; font-weight: 700; color: var(--accent); padding: 4px 0; display: flex; align-items: center; gap: 4px; }
-        .user-card .balance i { font-size: 13px; color: var(--warning); }
-        .user-card .status { font-size: 10px; padding: 2px 10px; border-radius: 8px; display: inline-block; font-weight: 500; }
+        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+        .user-card .user-header .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+        .user-card .user-header .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
+        .user-card .user-header .info .email { font-size: 9px; color: var(--text-muted); word-break: break-all; }
+        .user-card .balance { font-size: 15px; font-weight: 700; color: var(--accent); padding: 2px 0; display: flex; align-items: center; gap: 4px; }
+        .user-card .balance i { font-size: 12px; color: var(--warning); }
+        .user-card .status { font-size: 9px; padding: 2px 8px; border-radius: 6px; display: inline-block; font-weight: 500; }
         .user-card .status.online { background: #d4edda; color: #155724; }
         .user-card .status.offline { background: #f8d7da; color: #721c24; }
         .user-card .status.blocked { background: #fff3cd; color: #856404; }
-        .user-card .actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-color); }
-        .user-card .actions button { padding: 3px 10px; border: none; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
+        .user-card .actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-color); }
+        .user-card .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 3px; }
         .user-card .actions button:hover { transform: scale(1.05); }
         .user-card .actions .add { background: var(--success); color: #fff; }
         .user-card .actions .sub { background: var(--danger); color: #fff; }
         .user-card .actions .block { background: var(--warning); color: #fff; }
         .user-card .actions .unblock { background: var(--accent); color: #fff; }
 
-        /* ===== CATEGORY ===== */
-        .category-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .category-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; transition: var(--transition); box-shadow: var(--shadow); }
+        .category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .category-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: var(--shadow); }
         .category-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .category-item .icon { width: 38px; height: 38px; border-radius: 50%; background: var(--wallet-bg); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+        .category-item .icon { width: 32px; height: 32px; border-radius: 50%; background: var(--wallet-bg); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
         .category-item .icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .category-item .info { flex: 1; }
-        .category-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
-        .category-item .info .count { font-size: 10px; color: var(--text-muted); }
-        .category-item .actions { display: flex; gap: 4px; }
-        .category-item .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 10px; cursor: pointer; transition: var(--transition); }
+        .category-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
+        .category-item .info .count { font-size: 9px; color: var(--text-muted); }
+        .category-item .actions button { padding: 2px 6px; border: none; border-radius: 4px; font-size: 9px; cursor: pointer; transition: var(--transition); }
         .category-item .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .category-item .actions .edit:hover { background: var(--accent); color: #fff; }
         .category-item .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .category-item .actions .del:hover { background: var(--danger); color: #fff; }
 
-        /* ===== PRODUCT ===== */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-        .product-card { background: var(--bg-card); border-radius: 10px; padding: 14px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        .product-card { background: var(--bg-card); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
         .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .product-card .top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .product-card .top .img { width: 44px; height: 44px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
+        .product-card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .product-card .top .img { width: 38px; height: 38px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
         .product-card .top .img img { width: 100%; height: 100%; object-fit: cover; }
-        .product-card .top .title { flex: 1; min-width: 0; }
-        .product-card .top .title .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
-        .product-card .top .title .cat { font-size: 10px; color: var(--text-muted); background: var(--wallet-bg); padding: 1px 8px; border-radius: 6px; display: inline-block; margin-top: 2px; }
-        .product-card .details { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
-        .product-card .details .item { background: var(--wallet-bg); border-radius: 6px; padding: 4px 8px; text-align: center; border: 1px solid var(--border-color); }
-        .product-card .details .item .lbl { font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
-        .product-card .details .item .val { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+        .product-card .top .title .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
+        .product-card .top .title .cat { font-size: 9px; color: var(--text-muted); background: var(--wallet-bg); padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+        .product-card .details { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
+        .product-card .details .item { background: var(--wallet-bg); border-radius: 4px; padding: 3px 6px; text-align: center; border: 1px solid var(--border-color); }
+        .product-card .details .item .lbl { font-size: 7px; color: var(--text-muted); text-transform: uppercase; }
+        .product-card .details .item .val { font-size: 12px; font-weight: 700; color: var(--text-primary); }
         .product-card .details .item .val.price { color: var(--accent); }
         .product-card .details .item .val.stock { color: var(--success); }
-        .product-card .desc { font-size: 11px; color: var(--text-muted); background: var(--wallet-bg); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 8px; max-height: 40px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .product-card .desc { font-size: 10px; color: var(--text-muted); background: var(--wallet-bg); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px; max-height: 36px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         .product-card .actions { display: flex; gap: 4px; flex-wrap: wrap; }
-        .product-card .actions button { padding: 3px 10px; border: none; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+        .product-card .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 3px; flex: 1; justify-content: center; }
         .product-card .actions button:hover { transform: scale(1.05); }
         .product-card .actions .edit { background: var(--accent); color: #fff; }
         .product-card .actions .data { background: var(--warning); color: #fff; }
         .product-card .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .product-card .actions .del:hover { background: var(--danger); color: #fff; }
 
-        /* ===== ORDER ===== */
-        .order-list { display: flex; flex-direction: column; gap: 8px; }
-        .order-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow); }
+        .order-list { display: flex; flex-direction: column; gap: 6px; }
+        .order-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 10px; align-items: center; box-shadow: var(--shadow); }
         .order-item:hover { transform: translateX(4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .order-item .img { width: 40px; height: 40px; border-radius: 6px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+        .order-item .img { width: 34px; height: 34px; border-radius: 6px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
         .order-item .img img { width: 100%; height: 100%; object-fit: cover; }
-        .order-item .info { flex: 1; min-width: 0; }
-        .order-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
-        .order-item .info .meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+        .order-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
+        .order-item .info .meta { font-size: 10px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; }
         .order-item .info .meta span { display: flex; align-items: center; gap: 3px; }
-        .order-item .info .code { font-size: 11px; color: var(--accent); font-weight: 600; font-family: monospace; }
-        .order-item .badge { font-size: 10px; padding: 2px 10px; border-radius: 6px; font-weight: 500; flex-shrink: 0; }
+        .order-item .info .code { font-size: 10px; color: var(--accent); font-weight: 600; font-family: monospace; }
+        .order-item .badge { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 500; flex-shrink: 0; }
         .order-item .badge.success { background: #d4edda; color: #155724; }
         .order-item .badge.failed { background: #f8d7da; color: #721c24; }
-        .order-item .del-btn { padding: 2px 10px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 11px; flex-shrink: 0; }
+        .order-item .del-btn { padding: 2px 8px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 10px; flex-shrink: 0; }
         .order-item .del-btn:hover { background: var(--danger); color: #fff; }
 
-        /* ===== VOUCHER ===== */
-        .voucher-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .voucher-item { background: var(--bg-card); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; transition: var(--transition); box-shadow: var(--shadow); min-width: 160px; }
+        .voucher-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .voucher-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; transition: var(--transition); box-shadow: var(--shadow); min-width: 140px; }
         .voucher-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .voucher-item .code { font-weight: 700; color: var(--accent); font-size: 14px; font-family: monospace; }
-        .voucher-item .info { flex: 1; font-size: 11px; color: var(--text-muted); }
-        .voucher-item .del-btn { padding: 2px 8px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 10px; }
+        .voucher-item .code { font-weight: 700; color: var(--accent); font-size: 13px; font-family: monospace; }
+        .voucher-item .info { flex: 1; font-size: 10px; color: var(--text-muted); }
+        .voucher-item .del-btn { padding: 2px 6px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 9px; }
         .voucher-item .del-btn:hover { background: var(--danger); color: #fff; }
 
-        /* ===== MODAL ===== */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 560px; width: 100%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal { background: var(--bg-card); border-radius: 14px; padding: 18px 20px; max-width: 520px; width: 100%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         @keyframes modalIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 14px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .modal .row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 12px; min-width: 80px; font-weight: 500; }
-        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; font-size: 13px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 80px; }
+        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 10px; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .modal .row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; flex-wrap: wrap; }
+        .modal .row label { color: var(--text-muted); font-size: 11px; min-width: 70px; font-weight: 500; }
+        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 60px; }
         .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
-        .modal .row textarea { min-height: 80px; resize: vertical; font-family: inherit; }
-        .modal .row .preview { width: 50px; height: 50px; border-radius: 8px; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
+        .modal .row textarea { min-height: 60px; resize: vertical; font-family: inherit; }
+        .modal .row .preview { width: 40px; height: 40px; border-radius: 6px; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
         .modal .row .preview img { width: 100%; height: 100%; object-fit: cover; }
-        .modal .row .word-count { font-size: 10px; color: var(--text-muted); }
+        .modal .row .word-count { font-size: 9px; color: var(--text-muted); }
         .modal .row .word-count.warning { color: var(--warning); }
         .modal .row .word-count.danger { color: var(--danger); }
-        .modal .row .data-list { flex: 1; max-height: 150px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 6px; padding: 6px; background: var(--bg-card); }
-        .modal .row .data-list .item { display: flex; justify-content: space-between; align-items: center; padding: 3px 6px; border-bottom: 1px solid var(--border-color); font-size: 12px; color: var(--text-primary); }
+        .modal .row .data-list { flex: 1; max-height: 120px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 4px; padding: 4px; background: var(--bg-card); }
+        .modal .row .data-list .item { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-primary); }
         .modal .row .data-list .item:last-child { border-bottom: none; }
         .modal .row .data-list .item .remove { color: var(--danger); cursor: pointer; padding: 1px 4px; border-radius: 4px; transition: var(--transition); }
         .modal .row .data-list .item .remove:hover { background: var(--danger); color: #fff; }
-        .modal .actions { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
-        .modal .actions button { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 60px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .modal .actions { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
+        .modal .actions button { flex: 1; padding: 6px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 50px; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
         .modal .actions .cancel:hover { background: var(--hover-bg); }
         .modal .actions .save { background: var(--accent); color: #fff; }
@@ -256,54 +243,57 @@
         .modal .actions .success { background: var(--success); color: #fff; }
         .modal .actions .success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
 
-        .loading { text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; }
-        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 8px 20px; background: var(--bg-card); color: var(--text-primary); border-radius: 10px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 12px; pointer-events: none; }
+        .loading { text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 6px 16px; background: var(--bg-card); color: var(--text-primary); border-radius: 8px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 11px; pointer-events: none; }
         .toast.show { opacity: 1; }
         .toast.error { border-color: var(--danger); color: var(--danger); }
         .toast.success { border-color: var(--success); color: var(--success); }
 
-        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-muted); }
-        .empty-state .icon { font-size: 36px; display: block; margin-bottom: 6px; }
+        .empty-state { text-align: center; padding: 24px 16px; color: var(--text-muted); }
+        .empty-state .icon { font-size: 32px; display: block; margin-bottom: 4px; }
 
-        .btn-back { margin-top: 12px; padding: 8px; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-back { margin-top: 10px; padding: 6px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); transform: translateY(-2px); }
 
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: 0.4s; }
+        .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
+        .loading-spinner { width: 36px; height: 36px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-primary); font-size: 13px; font-weight: 500; }
+
         @media (max-width: 600px) {
-            .header { padding: 8px 12px; }
-            .logo { font-size: 15px; }
-            .content { padding: 10px 12px; }
-            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+            .header { padding: 6px 10px; }
+            .logo { font-size: 14px; }
+            .content { padding: 8px 10px; }
+            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); }
             .user-grid { grid-template-columns: 1fr; }
             .product-grid { grid-template-columns: 1fr; }
             .order-item { flex-wrap: wrap; }
-            .modal { padding: 16px; }
+            .modal { padding: 12px 14px; }
             .modal .row { flex-direction: column; align-items: stretch; }
             .modal .row label { min-width: auto; }
-            .tabs .tab { padding: 6px 12px; font-size: 12px; }
-            .admin-header h1 { font-size: 17px; }
-            .wallet-container { padding: 3px 8px 3px 6px; min-height: 32px; }
-            .wallet-icon-box { width: 24px; height: 24px; }
-            .wallet-icon-box i { font-size: 11px; }
-            .wallet-balance { font-size: 12px; }
-            .wallet-label { font-size: 8px; }
-            .menu-icon { width: 30px; height: 30px; padding: 4px 6px; }
-            .menu-icon .bar { width: 15px; height: 2px; }
-            .bell-icon { width: 30px; height: 30px; font-size: 14px; }
-            .dot-menu { width: 30px; height: 30px; }
+            .tabs .tab { padding: 4px 10px; font-size: 11px; }
+            .admin-header h1 { font-size: 15px; }
+            .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
+            .wallet-icon-box { width: 22px; height: 22px; }
+            .wallet-icon-box i { font-size: 10px; }
+            .wallet-balance { font-size: 11px; }
+            .wallet-label { font-size: 7px; }
+            .menu-icon { width: 28px; height: 28px; padding: 4px 6px; }
+            .menu-icon .bar { width: 14px; height: 2px; }
+            .bell-icon { width: 28px; height: 28px; font-size: 13px; }
+            .dot-menu { width: 28px; height: 28px; }
+            .notif-popup { right: 6px; left: 6px; min-width: auto; }
         }
     </style>
 </head>
 <body>
 
     <!-- ===== LOADING ===== -->
-    <div class="loading-overlay" id="loadingOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg-body);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:0.5s;">
-        <div style="width:40px;height:40px;border:4px solid var(--border-color);border-radius:50%;border-top-color:var(--accent);animation:spin 0.8s linear infinite;"></div>
-        <div style="color:var(--text-primary);font-size:14px;font-weight:500;">⏳ Đang tải...</div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">⏳ Đang tải...</div>
     </div>
-    <style>
-        .loading-overlay.hidden { opacity:0; pointer-events:none; display:none !important; }
-        @keyframes spin { to { transform:rotate(360deg); } }
-    </style>
 
     <!-- ===== MENU ===== -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
@@ -396,7 +386,7 @@
 
         <!-- ===== TAB: DASHBOARD ===== -->
         <div class="tab-content active" id="tab-dashboard">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
                 <div class="stat-card"><div class="num green" id="dashTodayOrders">0</div><div class="label"><i class="fas fa-shopping-cart"></i> Đơn hôm nay</div></div>
                 <div class="stat-card"><div class="num orange" id="dashTotalSold">0</div><div class="label"><i class="fas fa-box"></i> Tổng bán được</div></div>
                 <div class="stat-card"><div class="num blue" id="dashOnlineUsers">0</div><div class="label"><i class="fas fa-circle" style="color:var(--success);"></i> Đang online</div></div>
@@ -406,7 +396,7 @@
 
         <!-- ===== TAB: USERS ===== -->
         <div class="tab-content" id="tab-users">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
                 <button class="btn-sm btn-primary" onclick="loadUsersAdmin()"><i class="fas fa-sync"></i> Làm mới</button>
             </div>
             <div id="userGrid" class="user-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
@@ -414,7 +404,7 @@
 
         <!-- ===== TAB: CATEGORIES ===== -->
         <div class="tab-content" id="tab-categories">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
                 <button class="btn-sm btn-primary" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm mục</button>
                 <button class="btn-sm btn-danger" onclick="confirmDeleteAllCategories()"><i class="fas fa-trash"></i> Xóa tất cả</button>
             </div>
@@ -423,7 +413,7 @@
 
         <!-- ===== TAB: PRODUCTS ===== -->
         <div class="tab-content" id="tab-products">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
                 <button class="btn-sm btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm SP</button>
                 <button class="btn-sm btn-danger" onclick="confirmDeleteAllProducts()"><i class="fas fa-trash"></i> Xóa tất cả</button>
             </div>
@@ -432,7 +422,7 @@
 
         <!-- ===== TAB: ORDERS ===== -->
         <div class="tab-content" id="tab-orders">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
                 <button class="btn-sm btn-danger" onclick="confirmDeleteAllOrders()"><i class="fas fa-trash"></i> Xóa tất cả đơn</button>
             </div>
             <div id="ordersList" class="order-list"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
@@ -440,7 +430,7 @@
 
         <!-- ===== TAB: VOUCHERS ===== -->
         <div class="tab-content" id="tab-vouchers">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
                 <button class="btn-sm btn-primary" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã</button>
                 <button class="btn-sm btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
             </div>
@@ -451,7 +441,8 @@
         <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</button>
     </div>
 
-    <!-- ===== MODAL: CATEGORY ===== -->
+    <!-- ===== MODALS ===== -->
+    <!-- MODAL: CATEGORY -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
             <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm mục</span></h3>
@@ -470,7 +461,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL: PRODUCT ===== -->
+    <!-- MODAL: PRODUCT -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <h3><i class="fas fa-warehouse"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
@@ -489,12 +480,12 @@
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Mô tả:</label>
                 <textarea id="productDesc" placeholder="Mô tả sản phẩm (tối đa 240 từ)" rows="3" maxlength="1500"></textarea>
-                <div style="display:flex;justify-content:flex-end;font-size:11px;"><span class="word-count" id="wordCount">0/240 từ</span></div>
+                <div style="display:flex;justify-content:flex-end;font-size:10px;"><span class="word-count" id="wordCount">0/240 từ</span></div>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Dữ liệu (mỗi dòng 1 món):</label>
                 <textarea id="productData" placeholder="VD:&#10;acc1:pass1&#10;acc2:pass2" rows="4"></textarea>
-                <span style="font-size:10px;color:var(--text-muted);">📌 Mỗi dòng = 1 sản phẩm trong kho</span>
+                <span style="font-size:9px;color:var(--text-muted);">📌 Mỗi dòng = 1 sản phẩm trong kho</span>
             </div>
             <input type="hidden" id="productEditId" />
             <div class="actions">
@@ -504,7 +495,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL: DATA ===== -->
+    <!-- MODAL: DATA -->
     <div class="modal-overlay" id="dataModal">
         <div class="modal">
             <h3><i class="fas fa-database"></i> Quản lý dữ liệu</h3>
@@ -516,9 +507,9 @@
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Thêm mới:</label>
-                <div style="display:flex;gap:6px;">
+                <div style="display:flex;gap:4px;">
                     <input type="text" id="dataNewItem" placeholder="Nhập dữ liệu mới" style="flex:1;" />
-                    <button class="save" onclick="addDataItem()" style="padding:6px 14px;border:none;border-radius:6px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;font-size:12px;"><i class="fas fa-plus"></i> Thêm</button>
+                    <button class="save" onclick="addDataItem()" style="padding:4px 10px;border:none;border-radius:4px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;font-size:11px;"><i class="fas fa-plus"></i> Thêm</button>
                 </div>
             </div>
             <input type="hidden" id="dataProductId" />
@@ -528,7 +519,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL: VOUCHER ===== -->
+    <!-- MODAL: VOUCHER -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
             <h3><i class="fas fa-ticket-alt"></i> Tạo mã giảm giá</h3>
@@ -549,7 +540,7 @@
         </div>
     </div>
 
-    <!-- ===== MODAL: MONEY ===== -->
+    <!-- MODAL: MONEY -->
     <div class="modal-overlay" id="moneyModal">
         <div class="modal">
             <h3><i class="fas fa-coins"></i> <span id="moneyModalTitle">Điều chỉnh số dư</span></h3>
@@ -930,7 +921,7 @@
                             <div class="item"><div class="lbl">Giá</div><div class="val price">${(p.price||0).toLocaleString('vi-VN')}đ</div></div>
                             <div class="item"><div class="lbl">Tồn kho</div><div class="val stock">${stock}</div></div>
                             <div class="item"><div class="lbl">Đã bán</div><div class="val">${p.sold||0}</div></div>
-                            <div class="item"><div class="lbl">Trạng thái</div><div class="val" style="color:${stock>0?'var(--success)':'var(--danger)'};font-size:12px;">${stock>0?'🟢 Còn':'🔴 Hết'}</div></div>
+                            <div class="item"><div class="lbl">Trạng thái</div><div class="val" style="color:${stock>0?'var(--success)':'var(--danger)'};font-size:11px;">${stock>0?'🟢 Còn':'🔴 Hết'}</div></div>
                         </div>
                         ${p.description ? `<div class="desc">${p.description}</div>` : ''}
                         <div class="actions">
@@ -1049,7 +1040,7 @@
 
         function renderDataList(data) {
             const container = document.getElementById('dataList');
-            if (data.length === 0) { container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:8px;">Chưa có dữ liệu</div>`; return; }
+            if (data.length === 0) { container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:6px;">Chưa có dữ liệu</div>`; return; }
             let html = '';
             data.forEach((item, i) => {
                 html += `<div class="item"><span>${i+1}. ${item}</span><span class="remove" onclick="removeDataItem(${i})"><i class="fas fa-times"></i></span></div>`;
