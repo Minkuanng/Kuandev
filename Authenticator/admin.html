@@ -372,6 +372,7 @@
             <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label"><i class="fas fa-truck"></i> Đơn hàng</div></div>
             <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label"><i class="fas fa-coins"></i> DT hôm nay</div></div>
             <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div></div>
+            <div class="stat-card"><div class="num blue" id="dashShops">0</div><div class="label"><i class="fas fa-plug"></i> Đại lý API</div></div>
         </div>
 
         <!-- ===== TABS ===== -->
@@ -382,6 +383,7 @@
             <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-warehouse"></i> Kho hàng</button>
             <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
             <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
+            <button class="tab" data-tab="shops" onclick="switchTab('shops')"><i class="fas fa-plug"></i> API / Đại lý</button>
         </div>
 
         <!-- ===== TAB: DASHBOARD ===== -->
@@ -435,6 +437,18 @@
                 <button class="btn-sm btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
             </div>
             <div id="voucherList" class="voucher-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: SHOPS (API RESELLERS) ===== -->
+        <div class="tab-content" id="tab-shops">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+                <button class="btn-sm btn-primary" onclick="openShopModal()"><i class="fas fa-plus"></i> Tạo đại lý</button>
+                <a class="btn-sm btn-outline" href="api.html" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;"><i class="fas fa-book"></i> Xem tài liệu API</a>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);background:var(--wallet-bg);border:1px solid var(--border-color);border-radius:8px;padding:8px 10px;margin-bottom:10px;">
+                <i class="fas fa-circle-info"></i> Mỗi đại lý có 1 <b>shop_id</b> + <b>token</b> riêng để gọi API đặt hàng (POST). Đại lý dùng <b>số dư riêng</b> bên dưới (không dùng chung ví người dùng). Nạp/trừ số dư đại lý bằng nút "Sửa".
+            </div>
+            <div id="shopGrid" class="product-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
         </div>
 
         <!-- ===== BACK BUTTON ===== -->
@@ -540,6 +554,36 @@
         </div>
     </div>
 
+    <!-- MODAL: SHOP (API RESELLER) -->
+    <div class="modal-overlay" id="shopModal">
+        <div class="modal">
+            <h3><i class="fas fa-plug"></i> <span id="shopModalTitle">Tạo đại lý API</span></h3>
+            <div class="row"><label>Tên đại lý:</label><input type="text" id="shopName" placeholder="VD: Web ABC" /></div>
+            <div class="row">
+                <label>shop_id:</label>
+                <input type="text" id="shopId" placeholder="Tự tạo hoặc để trống để tự sinh" />
+            </div>
+            <div class="row">
+                <label>Token:</label>
+                <input type="text" id="shopToken" readonly style="font-family:monospace;font-size:11px;" />
+                <button class="btn-sm btn-outline" type="button" onclick="regenToken()" title="Tạo token mới"><i class="fas fa-rotate"></i></button>
+            </div>
+            <div class="row"><label>Số dư:</label><input type="number" id="shopBalance" placeholder="VND" value="0" /></div>
+            <div class="row">
+                <label>Trạng thái:</label>
+                <select id="shopStatus">
+                    <option value="active">Hoạt động</option>
+                    <option value="banned">Khóa</option>
+                </select>
+            </div>
+            <input type="hidden" id="shopEditId" />
+            <div class="actions">
+                <button class="save" onclick="saveShop()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="cancel" onclick="closeShopModal()"><i class="fas fa-times"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: MONEY -->
     <div class="modal-overlay" id="moneyModal">
         <div class="modal">
@@ -580,6 +624,7 @@
         let isDataLoaded = false;
         let categoriesData = {};
         let productsData = {};
+        let shopsData = {};
         let ordersData = {};
         let vouchersData = {};
         let usersData = {};
@@ -659,6 +704,7 @@
             db.ref('products').on('value', snap => { productsData = snap.val() || {}; renderProducts(); updateDashboard(); });
             db.ref('orders').on('value', snap => { ordersData = snap.val() || {}; renderOrders(); updateDashboard(); });
             db.ref('vouchers').on('value', snap => { vouchersData = snap.val() || {}; renderVouchers(); updateDashboard(); });
+            db.ref('shops').on('value', snap => { shopsData = snap.val() || {}; renderShops(); updateDashboard(); });
             db.ref('notifications').on('value', snap => {
                 const notifs = snap.val();
                 const list = document.getElementById('notifList');
@@ -690,11 +736,13 @@
             const p = Object.keys(productsData).length;
             const o = Object.keys(ordersData).length;
             const v = Object.keys(vouchersData).length;
+            const sh = Object.keys(shopsData).length;
             document.getElementById('dashUsers').textContent = u;
             document.getElementById('dashCategories').textContent = c;
             document.getElementById('dashProducts').textContent = p;
             document.getElementById('dashOrders').textContent = o;
             document.getElementById('dashVouchers').textContent = v;
+            document.getElementById('dashShops').textContent = sh;
             
             let todayRevenue = 0, todayOrders = 0, totalSold = 0, blocked = 0, online = 0;
             const today = new Date(); today.setHours(0,0,0,0);
@@ -728,6 +776,7 @@
             if (tab === 'products') renderProducts();
             if (tab === 'orders') renderOrders();
             if (tab === 'vouchers') renderVouchers();
+            if (tab === 'shops') renderShops();
             if (tab === 'dashboard') updateDashboard();
         }
 
@@ -1182,6 +1231,119 @@
                 db.ref('vouchers').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
                     .catch(err => showToast('❌ ' + err.message, 'error'));
             }
+        }
+
+        // ===== SHOPS (API RESELLERS) =====
+        function renderShops() {
+            const container = document.getElementById('shopGrid');
+            const keys = Object.keys(shopsData);
+            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">🔌</span>Chưa có đại lý API</div>`; return; }
+            let html = '';
+            keys.forEach(key => {
+                const s = shopsData[key];
+                const banned = s.status === 'banned';
+                html += `
+                    <div class="product-card">
+                        <div class="top">
+                            <div class="img"><i class="fas fa-plug"></i></div>
+                            <div class="title">
+                                <div class="name">${s.name || key}</div>
+                                <div class="cat">${banned ? '🔒 Đã khóa' : '✅ Hoạt động'}</div>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <div class="item"><div class="lbl">Số dư</div><div class="val price">${(s.balance||0).toLocaleString('vi-VN')}đ</div></div>
+                            <div class="item"><div class="lbl">Đơn API</div><div class="val stock">${s.totalOrders||0}</div></div>
+                        </div>
+                        <div class="desc" style="font-family:monospace;font-size:9px;word-break:break-all;">
+                            shop_id: ${key}<br>token: ${s.token || ''}
+                        </div>
+                        <div class="actions">
+                            <button class="edit" onclick="copyShopInfo('${key}')"><i class="fas fa-copy"></i> Copy</button>
+                            <button class="data" onclick="editShop('${key}')"><i class="fas fa-edit"></i> Sửa</button>
+                            <button class="del" onclick="deleteShop('${key}')"><i class="fas fa-trash"></i> Xóa</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function genToken() {
+            const bytes = new Uint8Array(24);
+            (window.crypto || window.msCrypto).getRandomValues(bytes);
+            const hex = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+            return 'sk_' + hex;
+        }
+
+        function regenToken() {
+            document.getElementById('shopToken').value = genToken();
+        }
+
+        function openShopModal() {
+            document.getElementById('shopModalTitle').textContent = 'Tạo đại lý API';
+            document.getElementById('shopName').value = '';
+            document.getElementById('shopId').value = '';
+            document.getElementById('shopId').removeAttribute('disabled');
+            document.getElementById('shopToken').value = genToken();
+            document.getElementById('shopBalance').value = 0;
+            document.getElementById('shopStatus').value = 'active';
+            document.getElementById('shopEditId').value = '';
+            document.getElementById('shopModal').classList.add('active');
+        }
+        function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
+
+        function editShop(key) {
+            const s = shopsData[key]; if (!s) return;
+            document.getElementById('shopModalTitle').textContent = 'Sửa đại lý API';
+            document.getElementById('shopName').value = s.name || '';
+            document.getElementById('shopId').value = key;
+            document.getElementById('shopId').setAttribute('disabled', 'disabled');
+            document.getElementById('shopToken').value = s.token || genToken();
+            document.getElementById('shopBalance').value = s.balance || 0;
+            document.getElementById('shopStatus').value = s.status || 'active';
+            document.getElementById('shopEditId').value = key;
+            document.getElementById('shopModal').classList.add('active');
+        }
+
+        function saveShop() {
+            const name = document.getElementById('shopName').value.trim();
+            let shopId = document.getElementById('shopId').value.trim();
+            const token = document.getElementById('shopToken').value.trim();
+            const balance = parseInt(document.getElementById('shopBalance').value) || 0;
+            const status = document.getElementById('shopStatus').value;
+            const editId = document.getElementById('shopEditId').value;
+
+            if (!name) { showToast('❌ Nhập tên đại lý!', 'error'); return; }
+            if (!token) { showToast('❌ Thiếu token!', 'error'); return; }
+
+            if (editId) {
+                db.ref('shops/' + editId).update({ name, token, balance, status })
+                    .then(() => { showToast('✅ Đã lưu!', 'success'); closeShopModal(); })
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
+                return;
+            }
+
+            if (!shopId) shopId = 'shop_' + Math.random().toString(36).substring(2, 9);
+            if (shopsData[shopId]) { showToast('❌ shop_id đã tồn tại!', 'error'); return; }
+
+            db.ref('shops/' + shopId).set({ name, token, balance, status, totalOrders: 0, totalSpent: 0, createdAt: Date.now() })
+                .then(() => { showToast('✅ Đã tạo đại lý!', 'success'); closeShopModal(); })
+                .catch(err => showToast('❌ ' + err.message, 'error'));
+        }
+
+        function deleteShop(key) {
+            if (confirm(`🗑️ Xóa đại lý "${shopsData[key]?.name || key}"?`)) {
+                db.ref('shops/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
+                    .catch(err => showToast('❌ ' + err.message, 'error'));
+            }
+        }
+
+        function copyShopInfo(key) {
+            const s = shopsData[key]; if (!s) return;
+            const text = `shop_id: ${key}\ntoken: ${s.token}`;
+            navigator.clipboard.writeText(text).then(() => showToast('✅ Đã copy shop_id & token!', 'success'))
+                .catch(() => showToast('❌ Không copy được!', 'error'));
         }
 
         // ===== REFRESH =====
