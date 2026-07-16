@@ -18,7 +18,9 @@
             --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff;
             --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --purple: #6c5ce7;
         }
+        /* ===== THEMES ===== */
         .theme-galaxy { --bg-body: #0a0a1a; --bg-card: #12122a; --bg-header: #1a1a3e; --text-primary: #c8b8ff; --text-secondary: #8a7aff; --text-muted: #6a5a9a; --border-color: #2a2a5a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #1a1a3e; --hover-bg: #2a2a5a; --accent: #8a7aff; }
         .theme-ocean { --bg-body: #0a1628; --bg-card: #0f2a4a; --bg-header: #0d2847; --text-primary: #7fc8ff; --text-secondary: #4a9aff; --text-muted: #3a6a8a; --border-color: #1a3a6a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2847; --hover-bg: #1a3a6a; --accent: #4a9aff; }
         .theme-forest { --bg-body: #0a1a0a; --bg-card: #0f2a0f; --bg-header: #0d2a0d; --text-primary: #7fdf7f; --text-secondary: #4abf4a; --text-muted: #3a7a3a; --border-color: #1a4a1a; --shadow: 0 2px 12px rgba(0,0,0,0.4); --shadow-popup: 0 8px 32px rgba(0,0,0,0.6); --wallet-bg: #0d2a0d; --hover-bg: #1a4a1a; --accent: #4abf4a; }
@@ -113,7 +115,7 @@
         .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
         .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
         .btn-outline:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
-        .btn-api { background: #6c5ce7; color: #fff; }
+        .btn-api { background: var(--purple); color: #fff; }
         .btn-api:hover { box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
@@ -190,7 +192,7 @@
         .product-card .actions .data { background: var(--warning); color: #fff; }
         .product-card .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .product-card .actions .del:hover { background: var(--danger); color: #fff; }
-        .product-card .actions .api { background: #6c5ce7; color: #fff; }
+        .product-card .actions .api { background: var(--purple); color: #fff; }
         .product-card .actions .api:hover { box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
 
         .order-list { display: flex; flex-direction: column; gap: 6px; }
@@ -279,6 +281,16 @@
         .api-import-box .api-result.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .api-import-box .api-result.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
+        /* API Config */
+        .api-config-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; }
+        .api-config-box .config-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .api-config-box .config-row label { font-size: 11px; color: var(--text-muted); font-weight: 500; min-width: 70px; }
+        .api-config-box .config-row input { flex: 1; min-width: 150px; padding: 5px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); }
+        .api-config-box .config-row input:focus { outline: none; border-color: var(--accent); }
+        .api-config-box .config-row .badge-status { font-size: 10px; padding: 2px 10px; border-radius: 20px; font-weight: 600; }
+        .api-config-box .config-row .badge-status.online { background: #d4edda; color: #155724; }
+        .api-config-box .config-row .badge-status.offline { background: #f8d7da; color: #721c24; }
+
         @media (max-width: 600px) {
             .header { padding: 6px 10px; }
             .logo { font-size: 14px; }
@@ -303,6 +315,7 @@
             .dot-menu { width: 28px; height: 28px; }
             .notif-popup { right: 6px; left: 6px; min-width: auto; }
             .api-import-box .api-row { flex-direction: column; align-items: stretch; }
+            .api-config-box .config-row { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -473,6 +486,23 @@
 
         <!-- ===== TAB: API IMPORT ===== -->
         <div class="tab-content" id="tab-api">
+            <!-- Cấu hình API Base -->
+            <div class="api-config-box">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+                    <span style="font-weight:600;color:var(--text-primary);font-size:13px;"><i class="fas fa-server"></i> Cấu hình API Gateway</span>
+                    <span id="apiStatus" class="badge-status offline">🔴 Chưa kết nối</span>
+                </div>
+                <div class="config-row">
+                    <label>Base URL:</label>
+                    <input type="text" id="apiBaseUrl" value="https://vercel-api-mocha-zeta.vercel.app/api" placeholder="https://your-api.vercel.app/api" />
+                    <button class="btn-sm btn-primary" onclick="testApiConnection()"><i class="fas fa-check"></i> Kiểm tra</button>
+                    <button class="btn-sm btn-outline" onclick="saveApiConfig()"><i class="fas fa-save"></i> Lưu</button>
+                </div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">
+                    <i class="fas fa-info-circle"></i> Lưu ý: GitHub Pages không hỗ trợ API server-side. Sử dụng Vercel API để có endpoint thật.
+                </div>
+            </div>
+
             <div class="api-import-box">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
                     <span style="font-weight:600;color:var(--text-primary);font-size:13px;"><i class="fas fa-cloud-upload-alt" style="color:var(--accent);"></i> Nhập dữ liệu sản phẩm từ API</span>
@@ -691,6 +721,7 @@
         let usersData = {};
         let onlineUsersMap = {};
         let apiFetchedData = null;
+        let API_BASE_URL = 'https://vercel-api-mocha-zeta.vercel.app/api';
 
         // ===== TOAST =====
         function showToast(msg, type = '') {
@@ -788,6 +819,12 @@
                     dot.classList.remove('show');
                 }
             });
+            // Load API config
+            const savedBaseUrl = localStorage.getItem('apiBaseUrl');
+            if (savedBaseUrl) {
+                document.getElementById('apiBaseUrl').value = savedBaseUrl;
+                API_BASE_URL = savedBaseUrl;
+            }
             setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 3000);
         }
 
@@ -841,6 +878,45 @@
             if (tab === 'shops') renderShops();
             if (tab === 'dashboard') updateDashboard();
             if (tab === 'api') updateApiCategorySelect();
+        }
+
+        // ===== API CONFIG =====
+        function saveApiConfig() {
+            const url = document.getElementById('apiBaseUrl').value.trim();
+            if (url) {
+                API_BASE_URL = url.replace(/\/$/, '');
+                localStorage.setItem('apiBaseUrl', API_BASE_URL);
+                showToast('✅ Đã lưu cấu hình API!', 'success');
+                testApiConnection();
+            } else {
+                showToast('❌ Vui lòng nhập Base URL!', 'error');
+            }
+        }
+
+        async function testApiConnection() {
+            const statusEl = document.getElementById('apiStatus');
+            statusEl.textContent = '⏳ Đang kiểm tra...';
+            statusEl.className = 'badge-status offline';
+            
+            try {
+                const baseUrl = document.getElementById('apiBaseUrl').value.trim().replace(/\/$/, '');
+                const testUrl = `${baseUrl}/products`;
+                const res = await fetch(testUrl, { method: 'GET', headers: { 'Accept': 'application/json' } });
+                
+                if (res.ok) {
+                    statusEl.textContent = '🟢 Kết nối thành công';
+                    statusEl.className = 'badge-status online';
+                    showToast('✅ API đang hoạt động!', 'success');
+                } else {
+                    statusEl.textContent = `🟡 HTTP ${res.status}`;
+                    statusEl.className = 'badge-status offline';
+                    showToast(`⚠️ API phản hồi mã ${res.status}`, 'error');
+                }
+            } catch (error) {
+                statusEl.textContent = '🔴 Không kết nối được';
+                statusEl.className = 'badge-status offline';
+                showToast(`❌ Không thể kết nối: ${error.message}`, 'error');
+            }
         }
 
         // ===== RENDER USERS =====
@@ -1048,7 +1124,7 @@
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
                             <button class="data" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Data (${stock})</button>
-                            <button class="api" onclick="getProductApiLink('${key}')"><i class="fas fa-link"></i> API</button>
+                            <button class="api" onclick="copyProductApiLink('${key}')"><i class="fas fa-link"></i> API</button>
                             <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
@@ -1057,15 +1133,36 @@
             container.innerHTML = html;
         }
 
-        // ===== PRODUCT API LINK =====
-        function getProductApiLink(productId) {
-            const apiUrl = `https://${window.location.host}/api/product/${productId}`;
-            const text = `GET ${apiUrl}`;
-            navigator.clipboard.writeText(apiUrl).then(() => {
-                showToast('✅ Đã copy API link!', 'success');
-            }).catch(() => {
-                showToast(`📋 API: ${apiUrl}`, '');
-            });
+        // ===== COPY PRODUCT API LINK (FIXED) =====
+        function copyProductApiLink(productId) {
+            // Sử dụng API_BASE_URL đã cấu hình thay vì window.location.host
+            const apiUrl = `${API_BASE_URL}/product/${productId}`;
+            
+            // Kiểm tra xem API có tồn tại không trước khi copy
+            fetch(apiUrl, { method: 'GET', headers: { 'Accept': 'application/json' } })
+                .then(res => {
+                    if (res.ok) {
+                        navigator.clipboard.writeText(apiUrl).then(() => {
+                            showToast('✅ Đã copy API link!', 'success');
+                        }).catch(() => {
+                            showToast(`📋 API: ${apiUrl}`, '');
+                        });
+                    } else if (res.status === 404) {
+                        showToast('⚠️ API chưa được tạo! Hãy deploy vercel-api trước.', 'error');
+                        // Vẫn copy link để tiện
+                        navigator.clipboard.writeText(apiUrl).catch(() => {});
+                    } else {
+                        showToast(`⚠️ API phản hồi mã ${res.status}`, 'error');
+                    }
+                })
+                .catch(() => {
+                    // Nếu không fetch được, vẫn copy link nhưng cảnh báo
+                    navigator.clipboard.writeText(apiUrl).then(() => {
+                        showToast('⚠️ Đã copy link API (chưa kiểm tra được kết nối)', 'error');
+                    }).catch(() => {
+                        showToast(`📋 API: ${apiUrl}`, '');
+                    });
+                });
         }
 
         // ===== PRODUCT CRUD =====
@@ -1462,7 +1559,6 @@
                     } else if (data.data && Array.isArray(data.data)) {
                         products = data.data;
                     } else {
-                        // Try to find any array
                         for (let key in data) {
                             if (Array.isArray(data[key]) && data[key].length > 0 && typeof data[key][0] === 'object') {
                                 products = data[key];
@@ -1475,7 +1571,6 @@
                         throw new Error('Không tìm thấy danh sách sản phẩm trong JSON');
                     }
 
-                    // Validate product structure
                     const validProducts = products.filter(p => p.name && p.price !== undefined);
                     if (validProducts.length === 0) {
                         throw new Error('Sản phẩm phải có trường "name" và "price"');
@@ -1484,7 +1579,6 @@
                     apiFetchedData = validProducts;
                     showResult('success', `✅ Đã lấy ${validProducts.length} sản phẩm từ API!`);
 
-                    // Show preview
                     let previewHtml = `<div style="font-size:11px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">📋 Preview (${validProducts.length} sản phẩm):</div>`;
                     previewHtml += `<table style="width:100%;font-size:10px;border-collapse:collapse;">`;
                     previewHtml += `<tr style="background:var(--border-color);"><th style="padding:4px 6px;text-align:left;">#</th><th style="padding:4px 6px;text-align:left;">Tên</th><th style="padding:4px 6px;text-align:left;">Giá</th><th style="padding:4px 6px;text-align:left;">Dữ liệu</th></tr>`;
@@ -1583,7 +1677,7 @@
             if (promises.length === 0) {
                 showToast('⚠️ Không có sản phẩm hợp lệ để nhập!', 'error');
                 btn.disabled = false;
-                btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
                 return;
             }
 
@@ -1592,13 +1686,13 @@
                     const total = promises.length;
                     showToast(`✅ Đã nhập ${total} sản phẩm vào kho! (${failCount} bị bỏ qua do thiếu dữ liệu)`, 'success');
                     btn.disabled = false;
-                    btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
                     clearApiResult();
                 })
                 .catch(err => {
                     showToast(`❌ Lỗi khi nhập: ${err.message}`, 'error');
                     btn.disabled = false;
-                    btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
                 });
         }
 
@@ -1710,6 +1804,8 @@
         // ===== START =====
         showLoading();
         console.log('✅ Admin panel loaded!');
+        console.log('📍 API Base URL:', API_BASE_URL);
+        console.log('💡 Hãy cấu hình Base URL đúng với Vercel API của bạn!');
     </script>
 </body>
 </html>
