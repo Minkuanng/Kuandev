@@ -3,41 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tài liệu API · KuanZGame.Store</title>
+    <title>API · Hướng dẫn cài đặt & sử dụng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ===== RESET & VARIABLES ===== */
-        *,
-        *::before,
-        *::after {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         :root {
-            --bg-page: #f5f9fe;
+            --bg-page: #f0f4f9;
             --bg-card: #ffffff;
-            --bg-header: #ffffff;
-            --bg-code: #0e1c2b;
+            --bg-code: #0d1b2a;
             --bg-note: #fef9e6;
-            --bg-badge-blue: #eaf3fc;
-            --bg-badge-green: #e6f7ed;
-            --bg-badge-gray: #f2f5f8;
             --bg-success-light: #e6f7ed;
             --bg-purple-light: #f0edff;
 
-            --text-primary: #1a3b4f;
-            --text-secondary: #4b6f88;
+            --text-primary: #1a2e44;
+            --text-secondary: #4a6a85;
             --text-muted: #7a9bb3;
-            --text-code: #cfe4ff;
+            --text-code: #d6eaff;
 
-            --border-color: #e1edf6;
-            --shadow-card: 0 2px 16px rgba(0, 20, 40, 0.06);
-            --shadow-hover: 0 4px 24px rgba(0, 20, 40, 0.10);
+            --border-color: #dce8f0;
+            --shadow: 0 2px 12px rgba(0, 20, 40, 0.06);
+            --shadow-hover: 0 4px 20px rgba(0, 20, 40, 0.10);
 
             --accent: #2d7fc1;
-            --accent-dark: #1f5f94;
+            --accent-dark: #1a5a8a;
             --success: #1fa86a;
             --danger: #d94a6b;
             --warning: #d48c1c;
@@ -45,128 +38,80 @@
 
             --radius: 12px;
             --radius-sm: 8px;
-            --transition: 0.25s ease;
+            --transition: 0.2s ease;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-page);
             color: var(--text-primary);
             line-height: 1.6;
-            padding-bottom: 60px;
+            padding-bottom: 40px;
         }
 
-        /* ===== HEADER ===== */
-        .app-header {
-            background: var(--bg-header);
-            padding: 14px 24px;
+        .header {
+            background: var(--bg-card);
+            padding: 12px 24px;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            z-index: 20;
+            z-index: 10;
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 8px 16px;
+            gap: 8px;
         }
 
-        .app-header .brand {
+        .header .brand {
             font-weight: 700;
             font-size: 17px;
             display: flex;
             align-items: center;
             gap: 8px;
-            letter-spacing: -0.3px;
         }
 
-        .app-header .brand i {
+        .header .brand i {
             color: var(--accent);
-            font-size: 18px;
         }
 
-        .app-header .brand span {
+        .header .brand span {
             color: var(--text-secondary);
             font-weight: 400;
             font-size: 13px;
-            margin-left: 2px;
         }
 
-        .app-header .back-link {
+        .header .back-link {
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
             padding: 6px 14px;
             border-radius: 40px;
             background: var(--bg-page);
-            border: 1px solid transparent;
             transition: var(--transition);
         }
 
-        .app-header .back-link:hover {
+        .header .back-link:hover {
             background: var(--bg-card);
-            border-color: var(--border-color);
+            border: 1px solid var(--border-color);
             color: var(--accent);
         }
 
-        /* ===== WRAPPER ===== */
         .container {
             max-width: 960px;
             margin: 0 auto;
             padding: 20px 16px;
         }
 
-        /* ===== HERO ===== */
-        .hero-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 22px 24px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-card);
-            transition: var(--transition);
-        }
-
-        .hero-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-
-        .hero-card h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.4px;
-            margin-bottom: 6px;
-        }
-
-        .hero-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            max-width: 680px;
-        }
-
-        .hero-card .inline-code {
-            background: var(--bg-page);
-            border: 1px solid var(--border-color);
-            padding: 1px 8px;
-            border-radius: 5px;
-            font-size: 12.5px;
-            font-weight: 500;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            color: var(--accent-dark);
-        }
-
-        /* ===== CARDS ===== */
+        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             padding: 20px 24px;
             margin-bottom: 18px;
-            box-shadow: var(--shadow-card);
+            box-shadow: var(--shadow);
             transition: var(--transition);
         }
 
@@ -175,28 +120,25 @@
         }
 
         .card h2 {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 14px;
-            letter-spacing: -0.2px;
+            margin-bottom: 12px;
         }
 
         .card h2 i {
             color: var(--accent);
-            width: 20px;
+            width: 22px;
             text-align: center;
-            font-size: 15px;
         }
 
         .card h3 {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
-            margin: 16px 0 8px;
-            letter-spacing: -0.1px;
+            margin: 14px 0 6px;
         }
 
         .card p,
@@ -205,126 +147,49 @@
             color: var(--text-primary);
         }
 
-        .card ul {
+        .card ul,
+        .card ol {
             padding-left: 20px;
-            margin-bottom: 4px;
+            margin: 4px 0;
         }
 
         .card li {
             margin-bottom: 2px;
         }
 
-        /* ===== BADGES ===== */
+        /* Badge */
         .badge {
             display: inline-block;
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 10px;
+            padding: 2px 10px;
             border-radius: 40px;
-            letter-spacing: 0.3px;
             text-transform: uppercase;
-            border: 1px solid transparent;
-        }
-
-        .badge.post {
-            background: var(--bg-badge-green);
-            color: var(--success);
-            border-color: #c2e6d4;
+            letter-spacing: 0.3px;
         }
 
         .badge.get {
-            background: var(--bg-badge-blue);
+            background: #eaf3fc;
             color: var(--accent);
-            border-color: #cadeef;
         }
 
-        .badge.code {
-            background: var(--bg-badge-gray);
-            color: var(--text-secondary);
-            border-color: #d9e2ea;
-            font-family: monospace;
-            font-size: 11px;
-            text-transform: none;
+        .badge.post {
+            background: #e6f7ed;
+            color: var(--success);
         }
 
-        /* ===== ENDPOINT LINE ===== */
-        .endpoint-line {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-page);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 12.5px;
-            overflow-x: auto;
-            white-space: nowrap;
-            margin-bottom: 10px;
-        }
-
-        .endpoint-line .url {
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        /* ===== TABLE ===== */
-        .table-wrap {
-            overflow-x: auto;
-            margin: 8px 0 4px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12.5px;
-            min-width: 420px;
-        }
-
-        th,
-        td {
-            text-align: left;
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
-        }
-
-        th {
-            background: var(--bg-page);
-            color: var(--text-secondary);
-            font-size: 10.5px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        td code {
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 11.5px;
-            background: var(--bg-page);
-            padding: 1px 6px;
-            border-radius: 4px;
-            color: var(--accent-dark);
-        }
-
-        /* ===== CODEBOX ===== */
+        /* Code */
         .codebox {
-            position: relative;
             background: var(--bg-code);
             color: var(--text-code);
             border-radius: var(--radius-sm);
-            padding: 16px 18px;
+            padding: 14px 16px;
             font-family: 'JetBrains Mono', 'Fira Code', monospace;
             font-size: 12px;
             line-height: 1.7;
             overflow-x: auto;
             margin: 8px 0;
+            position: relative;
             border: 1px solid #1e3347;
         }
 
@@ -335,96 +200,136 @@
 
         .codebox .copy-btn {
             position: absolute;
-            top: 10px;
-            right: 12px;
+            top: 8px;
+            right: 10px;
             background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #a1c0df;
-            font-size: 10.5px;
-            font-weight: 500;
-            padding: 4px 12px;
+            font-size: 10px;
+            padding: 3px 12px;
             border-radius: 30px;
             cursor: pointer;
             transition: var(--transition);
-            letter-spacing: 0.2px;
         }
 
         .codebox .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.13);
-            color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
         }
 
-        /* ===== ERROR TAGS ===== */
-        .err-tag {
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
+        .inline-code {
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            padding: 1px 8px;
+            border-radius: 4px;
             font-size: 12px;
+            font-family: monospace;
+            color: var(--accent-dark);
         }
 
-        .err-400 {
-            color: var(--warning);
-        }
-        .err-401,
-        .err-403 {
-            color: var(--danger);
-        }
-        .err-404 {
-            color: #b07a4a;
-        }
-        .err-409,
-        .err-402 {
-            color: #c0392b;
-        }
-        .err-500 {
-            color: #777;
-        }
-
-        /* ===== NOTE ===== */
-        .note {
-            background: var(--bg-note);
-            border: 1px solid #f0e0b0;
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 8px 0;
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            padding: 10px 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 12.5px;
-            color: #7a631a;
-            margin-top: 12px;
+            min-width: 400px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            font-family: monospace;
+            font-size: 11.5px;
+            background: var(--bg-page);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* Notes */
+        .note {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 12.5px;
+            margin-top: 10px;
             display: flex;
             align-items: flex-start;
             gap: 8px;
         }
 
         .note i {
-            color: var(--warning);
             margin-top: 2px;
-            font-size: 13px;
+            font-size: 14px;
         }
 
-        .note-success {
+        .note.warning {
+            background: var(--bg-note);
+            border: 1px solid #f0e0b0;
+            color: #7a631a;
+        }
+
+        .note.warning i {
+            color: var(--warning);
+        }
+
+        .note.success {
             background: var(--bg-success-light);
-            border-color: #b8e0cc;
+            border: 1px solid #b8e0cc;
             color: #1a6e4a;
         }
 
-        .note-success i {
+        .note.success i {
             color: var(--success);
         }
 
-        .note-purple {
+        .note.purple {
             background: var(--bg-purple-light);
-            border-color: #d5ccf0;
+            border: 1px solid #d5ccf0;
             color: #4a3a7a;
         }
 
-        .note-purple i {
+        .note.purple i {
             color: var(--purple);
         }
 
-        /* ===== STEP LIST ===== */
+        .note.danger {
+            background: #fde8ed;
+            border: 1px solid #f5c6cb;
+            color: #8a2a3a;
+        }
+
+        .note.danger i {
+            color: var(--danger);
+        }
+
+        /* Step */
         .step-list {
             counter-reset: step;
             list-style: none;
             padding: 0;
-            margin: 8px 0;
         }
 
         .step-list li {
@@ -432,7 +337,6 @@
             padding: 6px 0 6px 32px;
             position: relative;
             font-size: 13px;
-            color: var(--text-primary);
         }
 
         .step-list li::before {
@@ -457,20 +361,18 @@
             padding: 1px 6px;
             border-radius: 4px;
             font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-dark);
+            font-family: monospace;
         }
 
-        /* ===== FLOW CHART ===== */
         .flow-box {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px 8px;
+            gap: 8px;
             background: var(--bg-page);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
-            padding: 12px 16px;
+            padding: 10px 14px;
             margin: 8px 0;
             font-size: 12px;
             font-weight: 500;
@@ -486,7 +388,6 @@
 
         .flow-box .arrow {
             color: var(--text-muted);
-            font-size: 14px;
         }
 
         .flow-box .highlight {
@@ -495,142 +396,32 @@
             border-color: var(--accent);
         }
 
-        /* ===== API LIST ===== */
-        .api-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 8px 0;
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 16px 0;
         }
 
-        .api-grid .api-item {
-            background: var(--bg-page);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            transition: var(--transition);
-        }
-
-        .api-grid .api-item:hover {
-            border-color: var(--accent);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .api-grid .api-item .method {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 2px 8px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 4px;
-        }
-
-        .api-grid .api-item .method.get {
-            background: var(--bg-badge-blue);
-            color: var(--accent);
-        }
-        .api-grid .api-item .method.post {
-            background: var(--bg-badge-green);
-            color: var(--success);
-        }
-
-        .api-grid .api-item .endpoint {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--text-primary);
-            word-break: break-all;
-        }
-
-        .api-grid .api-item .desc {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* ===== SETUP GUIDE ===== */
-        .setup-step {
-            display: flex;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            align-items: flex-start;
-        }
-        .setup-step:last-child {
-            border-bottom: none;
-        }
-        .setup-step .num {
-            background: var(--purple);
-            color: #fff;
-            border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-        .setup-step .content {
-            font-size: 13px;
-            color: var(--text-primary);
-        }
-        .setup-step .content code {
-            background: var(--bg-page);
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-dark);
-        }
-
-        /* ===== RESPONSIVE ===== */
+        /* Responsive */
         @media (max-width: 700px) {
-            .api-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .app-header {
+            .header {
                 padding: 10px 16px;
             }
-            .app-header .brand {
+            .header .brand {
                 font-size: 15px;
             }
-            .app-header .brand span {
+            .header .brand span {
                 font-size: 11px;
             }
-            .app-header .back-link {
-                font-size: 12px;
-                padding: 4px 12px;
-            }
-
             .container {
                 padding: 12px 10px;
             }
-
-            .hero-card {
-                padding: 16px 18px;
-            }
-            .hero-card h1 {
-                font-size: 18px;
-            }
-
             .card {
                 padding: 16px 14px;
             }
             .card h2 {
-                font-size: 14px;
+                font-size: 15px;
             }
-
-            .endpoint-line {
-                font-size: 11px;
-                padding: 8px 10px;
-            }
-
             .codebox {
                 font-size: 10.5px;
                 padding: 12px 14px;
@@ -639,41 +430,25 @@
                 font-size: 9px;
                 padding: 2px 10px;
             }
-
             table {
                 font-size: 11px;
-                min-width: 320px;
+                min-width: 300px;
             }
             th,
             td {
-                padding: 7px 10px;
-            }
-
-            .note {
-                font-size: 11.5px;
-                padding: 8px 12px;
-            }
-
-            .flow-box {
-                font-size: 11px;
-                padding: 8px 10px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .app-header .brand span {
-                display: none;
+                padding: 6px 10px;
             }
         }
     </style>
 </head>
 <body>
+
     <!-- ===== HEADER ===== -->
-    <header class="app-header">
+    <header class="header">
         <div class="brand">
             <i class="fas fa-plug"></i>
-            API Đại lý
-            <span>· KuanZGame.Store</span>
+            API · Hướng dẫn
+            <span>KuanZGame.Store</span>
         </div>
         <a class="back-link" href="admin.html">
             <i class="fas fa-arrow-left"></i> Quản trị
@@ -683,528 +458,159 @@
     <!-- ===== CONTENT ===== -->
     <div class="container">
 
-        <!-- ===== HERO ===== -->
-        <div class="hero-card">
-            <h1>📘 Tài liệu API đặt hàng &amp; nhập kho</h1>
+        <!-- ===== INTRO ===== -->
+        <div class="card">
+            <h2><i class="fas fa-rocket"></i> Giới thiệu</h2>
             <p>
-                API dành cho website đối tác (đại lý) đặt mua sản phẩm bằng mã
-                <span class="inline-code">shop_id</span> +
-                <span class="inline-code">token</span>
-                được cấp trong trang quản trị (tab <strong>API / Đại lý</strong>).
-                Mỗi đại lý có số dư riêng, <strong>không dùng chung</strong> ví người dùng.
+                API này dành cho <strong>đại lý / website đối tác</strong> để đặt mua sản phẩm từ kho hàng KuanZGame.
+                Mỗi đại lý có <code>shop_id</code> và <code>token</code> riêng, số dư độc lập.
             </p>
+            <p style="margin-top:6px;">
+                <strong>Base URL:</strong>
+                <code class="inline-code">https://vercel-api-mocha-zeta.vercel.app/api</code>
+            </p>
+            <div class="note warning">
+                <i class="fas fa-triangle-exclamation"></i>
+                <div>⚠️ Base URL này là ví dụ. Bạn cần <strong>deploy repo vercel-api</strong> để có URL thực tế.</div>
+            </div>
         </div>
 
-        <!-- ====== HƯỚNG DẪN TẠO API ====== -->
+        <!-- ===== CÀI ĐẶT ===== -->
         <div class="card" style="border:2px solid var(--purple);">
-            <h2><i class="fas fa-tools" style="color:var(--purple);"></i> Cách tạo API GET / POST từ Vercel</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">
-                Để có các endpoint API hoạt động, bạn cần deploy repository <strong>vercel-api</strong> lên Vercel.
-                Dưới đây là hướng dẫn chi tiết từng bước:
-            </p>
+            <h2><i class="fas fa-tools" style="color:var(--purple);"></i> Cài đặt & Deploy</h2>
 
-            <div class="setup-step">
-                <span class="num">1</span>
-                <div class="content">
-                    <strong>Tạo repository trên GitHub</strong><br>
-                    Tạo repo mới tên <code>vercel-api</code> và clone về máy.
+            <div style="margin:8px 0;">
+                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border-color);">
+                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">1</span>
+                    <div>
+                        <strong>Clone repository</strong>
+                        <div style="font-size:13px;color:var(--text-secondary);">
+                            <code class="inline-code">git clone https://github.com/Minkuanng/vercel-api.git</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border-color);">
+                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">2</span>
+                    <div>
+                        <strong>Cài đặt dependencies</strong>
+                        <div style="font-size:13px;color:var(--text-secondary);">
+                            <code class="inline-code">npm install</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border-color);">
+                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">3</span>
+                    <div>
+                        <strong>Deploy lên Vercel</strong>
+                        <div style="font-size:13px;color:var(--text-secondary);">
+                            Import repository lên Vercel → Deploy
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:12px;padding:8px 0;">
+                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">4</span>
+                    <div>
+                        <strong>Thêm biến môi trường (Environment Variables)</strong>
+                        <div style="font-size:13px;color:var(--text-secondary);">
+                            <code class="inline-code">FIREBASE_PROJECT_ID</code> ·
+                            <code class="inline-code">FIREBASE_CLIENT_EMAIL</code> ·
+                            <code class="inline-code">FIREBASE_PRIVATE_KEY</code> ·
+                            <code class="inline-code">FIREBASE_DATABASE_URL</code>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="setup-step">
-                <span class="num">2</span>
-                <div class="content">
-                    <strong>Tạo cấu trúc thư mục</strong><br>
-                    <code>api/</code> → chứa các file endpoint<br>
-                    <code>lib/</code> → chứa file <code>cors.js</code><br>
-                    <code>package.json</code> → quản lý dependencies
-                </div>
-            </div>
-
-            <div class="setup-step">
-                <span class="num">3</span>
-                <div class="content">
-                    <strong>Tạo file endpoint mẫu</strong><br>
-                    Tạo file <code>api/products.js</code> với nội dung lấy danh sách sản phẩm từ Firebase.<br>
-                    Xem mã mẫu bên dưới.
-                </div>
-            </div>
-
-            <div class="setup-step">
-                <span class="num">4</span>
-                <div class="content">
-                    <strong>Cấu hình Firebase Admin</strong><br>
-                    Thêm biến môi trường trên Vercel:<br>
-                    <code>FIREBASE_PROJECT_ID</code>, <code>FIREBASE_CLIENT_EMAIL</code>,<br>
-                    <code>FIREBASE_PRIVATE_KEY</code>, <code>FIREBASE_DATABASE_URL</code>
-                </div>
-            </div>
-
-            <div class="setup-step">
-                <span class="num">5</span>
-                <div class="content">
-                    <strong>Deploy lên Vercel</strong><br>
-                    Import repository <code>vercel-api</code> lên Vercel → Deploy.<br>
-                    Sau khi deploy, bạn sẽ có base URL: <br>
-                    <code>https://vercel-api-mocha-zeta.vercel.app</code>
-                </div>
-            </div>
-
-            <div class="note note-purple">
-                <i class="fas fa-code-branch"></i>
+            <div class="note purple">
+                <i class="fas fa-key"></i>
                 <div>
-                    <strong>Base URL mẫu:</strong>
-                    <code style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">
-                        https://vercel-api-mocha-zeta.vercel.app/api
-                    </code>
-                    <br>
-                    <span style="font-size:12px;">📌 Thay đổi URL này thành URL thực tế của bạn sau khi deploy.</span>
+                    <strong>Lấy Firebase Admin credentials:</strong>
+                    Vào Firebase Console → Cài đặt → Tài khoản dịch vụ → Tạo khóa riêng tư mới.
+                    Copy JSON và lấy các trường tương ứng.
                 </div>
             </div>
 
-            <h3 style="margin-top:16px;">📄 Mã mẫu cho <code>api/products.js</code></h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>// api/products.js
-import admin from 'firebase-admin';
-import { getCorsHeaders, handleCors } from '../lib/cors.js';
-
-// Khởi tạo Firebase Admin
-if (!admin.apps.length) {
-  try {
-    if (process.env.FIREBASE_PROJECT_ID) {
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId: process.env.FIREBASE_PROJECT_ID,
-          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-          privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-        }),
-        databaseURL: process.env.FIREBASE_DATABASE_URL,
-      });
-    }
-  } catch (error) {
-    console.error('Lỗi khởi tạo Firebase Admin:', error);
-  }
-}
-const db = admin.database();
-
-export default async function handler(req, res) {
-  // Xử lý CORS
-  if (req.method === 'OPTIONS') {
-    return handleCors(res);
-  }
-
-  if (req.method !== 'GET') {
-    res.setHeader('Allow', ['GET']);
-    return res.status(405).json({ success: false, error: 'method_not_allowed' });
-  }
-
-  try {
-    const snapshot = await db.ref('products').once('value');
-    const productsData = snapshot.val();
-
-    if (!productsData) {
-      return res.status(200).json({ success: true, products: [], total: 0 });
-    }
-
-    const products = Object.keys(productsData).map(key => {
-      const p = productsData[key];
-      const dataArray = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-      return {
-        product_id: key,
-        name: p.name || 'Sản phẩm',
-        price: p.price || 0,
-        icon: p.icon || '📦',
-        image: p.image || '',
-        description: p.description || '',
-        category: p.category || '',
-        stock: dataArray.length,
-        sold: p.sold || 0,
-      };
-    });
-
-    res.status(200).json({ success: true, total: products.length, products });
-  } catch (error) {
-    console.error('Lỗi:', error);
-    res.status(500).json({ success: false, error: 'server_error' });
-  }
-}</pre>
-            </div>
-
-            <div class="note">
-                <i class="fas fa-lightbulb"></i>
+            <div class="note danger">
+                <i class="fas fa-lock"></i>
                 <div>
-                    <strong>Mẹo:</strong> Bạn có thể tạo thêm các file trong <code>api/</code>:
-                    <ul style="margin-top:4px;padding-left:16px;font-size:12.5px;">
-                        <li><code>api/product/[id].js</code> → Lấy chi tiết sản phẩm</li>
-                        <li><code>api/order.js</code> → Đặt hàng (POST)</li>
-                        <li><code>api/shop/balance.js</code> → Kiểm tra số dư đại lý</li>
-                        <li><code>api/categories.js</code> → Lấy danh sách danh mục</li>
-                    </ul>
+                    <strong>Quan trọng:</strong> <code>FIREBASE_PRIVATE_KEY</code> cần được
+                    <strong>escape</strong> đúng cách. Trên Vercel, thay <code>\n</code> thành <code>\\n</code>.
                 </div>
             </div>
         </div>
 
-        <!-- ====== DANH SÁCH API ====== -->
-        <div class="card" style="border:2px solid var(--purple);">
-            <h2><i class="fas fa-list" style="color:var(--purple);"></i> Danh sách API có sẵn</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">
-                Các endpoint GET và POST dùng để lấy dữ liệu và đặt hàng từ hệ thống.
-            </p>
-
-            <div class="api-grid">
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/products</div>
-                    <div class="desc">📦 Lấy danh sách tất cả sản phẩm trong kho</div>
-                </div>
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/product/:id</div>
-                    <div class="desc">🔍 Lấy chi tiết 1 sản phẩm theo ID</div>
-                </div>
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/orders</div>
-                    <div class="desc">📋 Lấy danh sách đơn hàng (có thể lọc theo shop_id)</div>
-                </div>
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/shop/balance</div>
-                    <div class="desc">💰 Kiểm tra số dư và trạng thái đại lý</div>
-                </div>
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/shop/orders</div>
-                    <div class="desc">📊 Lấy lịch sử đơn hàng của đại lý</div>
-                </div>
-                <div class="api-item">
-                    <span class="method get">GET</span>
-                    <div class="endpoint">/api/categories</div>
-                    <div class="desc">📁 Lấy danh sách danh mục sản phẩm</div>
-                </div>
-                <div class="api-item">
-                    <span class="method post">POST</span>
-                    <div class="endpoint">/api/order</div>
-                    <div class="desc">🛒 Đặt hàng (yêu cầu token + shop_id)</div>
-                </div>
-            </div>
-
-            <div class="note note-purple">
-                <i class="fas fa-code-branch"></i>
-                <div>
-                    <strong>Base URL:</strong>
-                    <code style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">
-                        https://vercel-api-mocha-zeta.vercel.app
-                    </code>
-                    <br>
-                    <span style="font-size:12px;">Tất cả các endpoint đều sử dụng chung base URL này.</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ====== GET /api/products ====== -->
+        <!-- ===== CÁC ENDPOINT ===== -->
         <div class="card">
-            <h2><i class="fas fa-warehouse"></i> GET /api/products</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/products</span>
-            </div>
-            <p>Lấy danh sách tất cả sản phẩm trong kho hàng. Dùng để đồng bộ dữ liệu hoặc import vào hệ thống khác.</p>
+            <h2><i class="fas fa-list"></i> Danh sách API Endpoint</h2>
 
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "total": 15,
-  "products": [
-    {
-      "product_id": "-Nabc123xyz",
-      "name": "Acc Free Fire VIP",
-      "price": 25000,
-      "icon": "🔥",
-      "image": "https://example.com/ff.jpg",
-      "description": "Acc Free Fire VIP - 100k diamonds, rank Master",
-      "category": "freefire",
-      "stock": 14,
-      "sold": 86
-    },
-    {
-      "product_id": "-Ndef456uvw",
-      "name": "Acc Liên Quân",
-      "price": 15000,
-      "icon": "⚔️",
-      "image": "https://example.com/lq.jpg",
-      "description": "Acc Liên Quân rank Cao thủ, 200 skin",
-      "category": "lienquan",
-      "stock": 5,
-      "sold": 95
-    }
-  ]
-}</pre>
-            </div>
-        </div>
-
-        <!-- ====== GET /api/product/:id ====== -->
-        <div class="card">
-            <h2><i class="fas fa-magnifying-glass"></i> GET /api/product/:id</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/product/-Nabc123xyz</span>
-            </div>
-            <p>Lấy thông tin chi tiết của một sản phẩm cụ thể theo ID.</p>
-
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "product_id": "-Nabc123xyz",
-  "name": "Acc Free Fire VIP",
-  "price": 25000,
-  "icon": "🔥",
-  "image": "https://example.com/ff.jpg",
-  "description": "Acc Free Fire VIP - 100k diamonds",
-  "category": "freefire",
-  "stock": 14,
-  "sold": 86,
-  "data": [
-    "acc1:pass1",
-    "acc2:pass2",
-    "acc3:pass3"
-  ]
-}</pre>
-            </div>
-
-            <h3>❌ Lỗi (404)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": false,
-  "error": "product_not_found"
-}</pre>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;">
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/products</div>
+                    <div style="font-size:11px;color:var(--text-muted);">📦 Danh sách sản phẩm</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/product/:id</div>
+                    <div style="font-size:11px;color:var(--text-muted);">🔍 Chi tiết 1 sản phẩm</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/categories</div>
+                    <div style="font-size:11px;color:var(--text-muted);">📁 Danh sách danh mục</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/orders</div>
+                    <div style="font-size:11px;color:var(--text-muted);">📋 Danh sách đơn hàng</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/shop/balance</div>
+                    <div style="font-size:11px;color:var(--text-muted);">💰 Kiểm tra số dư đại lý</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;">
+                    <span class="badge get">GET</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/shop/orders</div>
+                    <div style="font-size:11px;color:var(--text-muted);">📊 Lịch sử đơn đại lý</div>
+                </div>
+                <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;grid-column:1/-1;">
+                    <span class="badge post">POST</span>
+                    <div style="font-family:monospace;font-size:12px;margin-top:2px;">/api/order</div>
+                    <div style="font-size:11px;color:var(--text-muted);">🛒 Đặt hàng (yêu cầu <code>token</code> + <code>shop_id</code>)</div>
+                </div>
             </div>
         </div>
 
-        <!-- ====== GET /api/orders ====== -->
+        <!-- ===== ĐẶT HÀNG ===== -->
         <div class="card">
-            <h2><i class="fas fa-list-ul"></i> GET /api/orders</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/orders?shop_id=shop_ab12cd3&limit=20</span>
-            </div>
-            <p>Lấy danh sách đơn hàng. Có thể lọc theo <code>shop_id</code> và giới hạn số lượng.</p>
+            <h2><i class="fas fa-cart-shopping"></i> Đặt hàng - POST /api/order</h2>
 
-            <h3>🔗 Query Parameters</h3>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tham số</th>
-                            <th>Kiểu</th>
-                            <th>Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>shop_id</code></td><td>string</td><td>Lọc theo mã đại lý (không bắt buộc)</td></tr>
-                        <tr><td><code>limit</code></td><td>number</td><td>Số lượng đơn tối đa (mặc định 50)</td></tr>
-                        <tr><td><code>token</code></td><td>string</td><td>Token đại lý (bắt buộc nếu có shop_id)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "total": 8,
-  "orders": [
-    {
-      "order_id": "-Oabc123xyz",
-      "order_code": "#A1B2C3",
-      "shop_id": "shop_ab12cd3",
-      "product_id": "-Nabc123xyz",
-      "product_name": "Acc Free Fire VIP",
-      "quantity": 1,
-      "price": 25000,
-      "status": "success",
-      "input_data": "user123@game",
-      "timestamp": 1721059200000,
-      "data": ["acc1:pass1"]
-    }
-  ]
-}</pre>
-            </div>
-        </div>
-
-        <!-- ====== GET /api/shop/balance ====== -->
-        <div class="card">
-            <h2><i class="fas fa-wallet"></i> GET /api/shop/balance</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/shop/balance?shop_id=shop_ab12cd3&token=sk_xxx</span>
-            </div>
-            <p>Kiểm tra số dư và trạng thái của đại lý.</p>
-
-            <h3>🔗 Query Parameters</h3>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tham số</th>
-                            <th>Kiểu</th>
-                            <th>Bắt buộc</th>
-                            <th>Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
-                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "shop_id": "shop_ab12cd3",
-  "name": "Web ABC",
-  "balance": 475000,
-  "status": "active",
-  "total_orders": 8,
-  "total_spent": 200000
-}</pre>
-            </div>
-
-            <h3>❌ Lỗi (401)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": false,
-  "error": "invalid_token"
-}</pre>
-            </div>
-        </div>
-
-        <!-- ====== GET /api/shop/orders ====== -->
-        <div class="card">
-            <h2><i class="fas fa-receipt"></i> GET /api/shop/orders</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/shop/orders?shop_id=shop_ab12cd3&token=sk_xxx</span>
-            </div>
-            <p>Lấy lịch sử đơn hàng của một đại lý cụ thể.</p>
-
-            <h3>🔗 Query Parameters</h3>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tham số</th>
-                            <th>Kiểu</th>
-                            <th>Bắt buộc</th>
-                            <th>Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
-                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
-                        <tr><td><code>limit</code></td><td>number</td><td></td><td>Số lượng đơn tối đa (mặc định 20)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "shop_id": "shop_ab12cd3",
-  "total": 8,
-  "orders": [
-    {
-      "order_code": "#A1B2C3",
-      "product_name": "Acc Free Fire VIP",
-      "quantity": 1,
-      "price": 25000,
-      "status": "success",
-      "timestamp": 1721059200000
-    }
-  ]
-}</pre>
-            </div>
-        </div>
-
-        <!-- ====== GET /api/categories ====== -->
-        <div class="card">
-            <h2><i class="fas fa-folder"></i> GET /api/categories</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/categories</span>
-            </div>
-            <p>Lấy danh sách tất cả danh mục sản phẩm.</p>
-
-            <h3>📥 Response (200 OK)</h3>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "total": 4,
-  "categories": [
-    {
-      "category_id": "freefire",
-      "name": "Free Fire",
-      "icon": "🔥",
-      "image": "https://example.com/ff-cat.jpg",
-      "product_count": 8
-    },
-    {
-      "category_id": "lienquan",
-      "name": "Liên Quân",
-      "icon": "⚔️",
-      "image": "https://example.com/lq-cat.jpg",
-      "product_count": 5
-    }
-  ]
-}</pre>
-            </div>
-        </div>
-
-        <!-- ====== POST /api/order ====== -->
-        <div class="card">
-            <h2><i class="fas fa-cart-shopping"></i> POST /api/order</h2>
-
-            <div class="endpoint-line">
+            <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;margin-bottom:10px;">
                 <span class="badge post">POST</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/order</span>
+                <span style="color:var(--text-secondary);">https://vercel-api-mocha-zeta.vercel.app/api/order</span>
             </div>
 
-            <h3>Body (JSON)</h3>
+            <h3>📤 Body (JSON)</h3>
             <div class="table-wrap">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Trường</th>
-                            <th>Kiểu</th>
-                            <th>Bắt buộc</th>
-                            <th>Mô tả</th>
-                        </tr>
+                        <tr><th>Trường</th><th>Kiểu</th><th>Bắt buộc</th><th>Mô tả</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
+                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token đại lý</td></tr>
                         <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
-                        <tr><td><code>product_id</code></td><td>string</td><td>✔</td><td>ID sản phẩm (xem tab Kho hàng hoặc <code>GET /api/product/:id</code>)</td></tr>
-                        <tr><td><code>quantity</code></td><td>number</td><td></td><td>Số lượng, mặc định 1</td></tr>
-                        <tr><td><code>input_data</code></td><td>string</td><td></td><td>Thông tin đối tác truyền vào (VD: UID, ghi chú)</td></tr>
+                        <tr><td><code>product_id</code></td><td>string</td><td>✔</td><td>ID sản phẩm</td></tr>
+                        <tr><td><code>quantity</code></td><td>number</td><td></td><td>Số lượng (mặc định 1)</td></tr>
+                        <tr><td><code>input_data</code></td><td>string</td><td></td><td>Thông tin đối tác</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h3>Ví dụ request</h3>
+            <h3>Ví dụ cURL</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
                 <pre>curl -X POST https://vercel-api-mocha-zeta.vercel.app/api/order \
@@ -1218,28 +624,44 @@ export default async function handler(req, res) {
   }'</pre>
             </div>
 
-            <h3>Response thành công (200)</h3>
+            <h3>✅ Response thành công</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
                 <pre>{
   "success": true,
   "order_code": "#A1B2C3",
-  "product_id": "-Nabc123xyz",
   "product_name": "Acc Free Fire VIP",
   "quantity": 1,
   "price": 25000,
   "balance_left": 475000,
-  "data": ["acc1:pass1"]
+  "data": ["acc1:pass1", "acc2:pass2"]
 }</pre>
+            </div>
+
+            <h3>❌ Mã lỗi thường gặp</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>HTTP</th><th>error</th><th>Ý nghĩa</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>401</td><td><code>invalid_token</code></td><td>Token sai hoặc không khớp shop_id</td></tr>
+                        <tr><td>403</td><td><code>shop_banned</code></td><td>Đại lý bị khóa</td></tr>
+                        <tr><td>404</td><td><code>product_not_found</code></td><td>Sản phẩm không tồn tại</td></tr>
+                        <tr><td>409</td><td><code>out_of_stock</code></td><td>Hết hàng</td></tr>
+                        <tr><td>402</td><td><code>insufficient_balance</code></td><td>Số dư không đủ</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- ====== PHẦN NHẬP KHO TỪ API ====== -->
+        <!-- ===== NHẬP KHO TỪ API ===== -->
         <div class="card">
-            <h2><i class="fas fa-cloud-upload-alt" style="color:var(--purple);"></i> GET sản phẩm từ API → Nhập kho</h2>
-            <p style="margin-bottom:8px;">
-                Bạn có thể <strong>lấy danh sách sản phẩm từ API bên ngoài</strong> (Vercel, Shopify, WooCommerce, ...)
-                và nhập trực tiếp vào kho hàng của KuanZGame.Store bằng tính năng <strong>"API Import"</strong>
+            <h2><i class="fas fa-cloud-upload-alt" style="color:var(--purple);"></i> Nhập kho từ API</h2>
+
+            <p>
+                Bạn có thể lấy dữ liệu sản phẩm từ <strong>API bên ngoài</strong>
+                và nhập trực tiếp vào kho hàng bằng tính năng <strong>"API Import"</strong>
                 trong tab <strong>API Import</strong> của trang quản trị.
             </p>
 
@@ -1253,40 +675,22 @@ export default async function handler(req, res) {
                 <span class="step highlight">4. Nhập kho</span>
             </div>
 
-            <h3>📍 Cách dùng</h3>
-            <ol class="step-list">
-                <li>
-                    Chuẩn bị <strong>API endpoint</strong> trả về danh sách sản phẩm dạng JSON
-                    (ví dụ: <code>https://vercel-api-mocha-zeta.vercel.app/api/products</code>)
-                </li>
-                <li>
-                    Vào trang <strong>Quản trị → tab API Import</strong>
-                </li>
-                <li>
-                    Dán URL API vào ô <strong>"Lấy dữ liệu"</strong> và nhấn nút
-                </li>
-                <li>
-                    Hệ thống sẽ fetch và <strong>preview</strong> danh sách sản phẩm
-                </li>
-                <li>
-                    Chọn mục sản phẩm → nhấn <strong>"Nhập vào kho"</strong>
-                </li>
-            </ol>
-
-            <div class="note note-success">
-                <i class="fas fa-check-circle"></i>
-                <div>
-                    <strong>Định dạng JSON hỗ trợ:</strong>
-                    <ul style="margin-top:4px;padding-left:16px;font-size:12.5px;">
-                        <li><code>{ "products": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
-                        <li><code>[ { "name": "...", "price": 100000, "data": "..." } ]</code></li>
-                        <li><code>{ "data": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
-                        <li><code>{ "success": true, "products": [ ... ] }</code> (từ API của bạn)</li>
-                    </ul>
-                </div>
+            <h3>📥 Định dạng JSON hỗ trợ</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Format</th><th>Ví dụ</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>{ "products": [...] }</code></td><td>API của bạn</td></tr>
+                        <tr><td><code>{ "data": [...] }</code></td><td>API khác</td></tr>
+                        <tr><td><code>[ ... ]</code></td><td>Mảng trực tiếp</td></tr>
+                        <tr><td><code>{ "success": true, "products": [...] }</code></td><td>Vercel API</td></tr>
+                    </tbody>
+                </table>
             </div>
 
-            <h3>📦 Ví dụ JSON từ Vercel API (/api/products)</h3>
+            <h3>📦 Ví dụ JSON từ /api/products</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
                 <pre>{
@@ -1299,7 +703,7 @@ export default async function handler(req, res) {
       "price": 25000,
       "icon": "🔥",
       "image": "https://example.com/ff.jpg",
-      "description": "Acc Free Fire VIP - 100k diamonds",
+      "description": "Acc VIP 100k diamonds",
       "category": "freefire",
       "stock": 14,
       "sold": 86
@@ -1310,7 +714,7 @@ export default async function handler(req, res) {
       "price": 15000,
       "icon": "⚔️",
       "image": "https://example.com/lq.jpg",
-      "description": "Acc Liên Quân rank cao",
+      "description": "Acc rank cao",
       "category": "lienquan",
       "stock": 5,
       "sold": 95
@@ -1319,93 +723,78 @@ export default async function handler(req, res) {
 }</pre>
             </div>
 
-            <div class="note">
-                <i class="fas fa-lightbulb"></i>
+            <div class="note success">
+                <i class="fas fa-check-circle"></i>
                 <div>
-                    <strong>Mẹo:</strong> Khi import từ API, bạn có thể dùng chính endpoint
-                    <code>/api/products</code> để lấy dữ liệu từ Vercel và nhập vào kho Firebase.
-                    Hệ thống sẽ tự động nhận diện mảng sản phẩm dù lồng trong <code>products</code>, <code>data</code> hay mảng trực tiếp.
+                    <strong>Lưu ý:</strong> Khi import, hệ thống chỉ lấy các trường <code>name</code>, <code>price</code>,
+                    <code>data</code> (dạng string, mỗi dòng 1 món). Các trường khác như <code>icon</code>, <code>image</code>, <code>description</code> là tùy chọn.
                 </div>
-            </div>
-        </div>
-
-        <!-- ===== MÃ LỖI ===== -->
-        <div class="card">
-            <h2><i class="fas fa-circle-exclamation"></i> Mã lỗi</h2>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>HTTP</th>
-                            <th>error</th>
-                            <th>Ý nghĩa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="err-tag err-400">400</td><td><code>missing_fields</code></td><td>Thiếu trường bắt buộc</td></tr>
-                        <tr><td class="err-tag err-400">400</td><td><code>invalid_quantity</code></td><td><code>quantity</code> không hợp lệ</td></tr>
-                        <tr><td class="err-tag err-401">401</td><td><code>invalid_token</code></td><td>Token sai hoặc không khớp shop_id</td></tr>
-                        <tr><td class="err-tag err-403">403</td><td><code>shop_banned</code></td><td>Đại lý đã bị khóa</td></tr>
-                        <tr><td class="err-tag err-404">404</td><td><code>shop_not_found</code></td><td>shop_id không tồn tại</td></tr>
-                        <tr><td class="err-tag err-404">404</td><td><code>product_not_found</code></td><td>product_id không tồn tại</td></tr>
-                        <tr><td class="err-tag err-409">409</td><td><code>out_of_stock</code></td><td>Không đủ hàng trong kho</td></tr>
-                        <tr><td class="err-tag err-402">402</td><td><code>insufficient_balance</code></td><td>Số dư đại lý không đủ</td></tr>
-                        <tr><td class="err-tag err-500">500</td><td><code>server_error</code></td><td>Lỗi máy chủ, thử lại sau</td></tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
         <!-- ===== VÍ DỤ JS ===== -->
         <div class="card">
-            <h2><i class="fas fa-code"></i> Ví dụ gọi bằng JavaScript (Node.js)</h2>
+            <h2><i class="fas fa-code"></i> Ví dụ JavaScript (Node.js / Fetch)</h2>
+
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>// Lấy danh sách sản phẩm
-const productsRes = await fetch("https://vercel-api-mocha-zeta.vercel.app/api/products");
-const products = await productsRes.json();
-console.log(products);
+                <pre>// 1. Lấy danh sách sản phẩm
+const res = await fetch('https://vercel-api-mocha-zeta.vercel.app/api/products');
+const data = await res.json();
+console.log('Sản phẩm:', data.products);
 
-// Đặt hàng
-const orderRes = await fetch("https://vercel-api-mocha-zeta.vercel.app/api/order", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
+// 2. Đặt hàng
+const orderRes = await fetch('https://vercel-api-mocha-zeta.vercel.app/api/order', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    token: "sk_xxx...",
-    shop_id: "shop_ab12cd3",
-    product_id: "-Nabc123xyz",
+    token: 'sk_xxx...',
+    shop_id: 'shop_ab12cd3',
+    product_id: '-Nabc123xyz',
     quantity: 1,
-    input_data: "user123@game"
+    input_data: 'user123@game'
   })
 });
 const order = await orderRes.json();
-console.log(order);</pre>
+console.log('Đơn hàng:', order);</pre>
             </div>
-            <div class="note">
+
+            <div class="note warning">
                 <i class="fas fa-shield-halved"></i>
-                Luôn gọi API từ <strong>backend</strong> của đối tác, không gọi trực tiếp từ trình duyệt khách hàng cuối vì token sẽ bị lộ.
+                <div>
+                    <strong>Bảo mật:</strong> Luôn gọi API từ <strong>backend</strong> của đối tác,
+                    không gọi trực tiếp từ trình duyệt người dùng cuối để tránh lộ token.
+                </div>
             </div>
         </div>
 
-        <!-- ===== TỔNG KẾT ===== -->
-        <div class="card" style="border:2px solid var(--purple);">
-            <h2><i class="fas fa-route" style="color:var(--purple);"></i> Tóm tắt luồng làm việc</h2>
-            <div style="display:grid;grid-template-columns:1fr;gap:8px;">
-                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-color);">
-                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">1</span>
-                    <span style="font-size:13px;"><strong>Deploy Vercel API</strong> → Tạo base URL</span>
+        <!-- ===== TÓM TẮT ===== -->
+        <div class="card" style="border:2px solid var(--success);">
+            <h2><i class="fas fa-route" style="color:var(--success);"></i> Tóm tắt luồng làm việc</h2>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="background:var(--bg-page);border-radius:8px;padding:10px 14px;">
+                    <div style="font-weight:600;font-size:13px;">1️⃣ Deploy</div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Deploy <code>vercel-api</code> lên Vercel</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-color);">
-                    <span style="background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">2</span>
-                    <span style="font-size:13px;"><strong>GET</strong> từ API → Lấy JSON sản phẩm</span>
+                <div style="background:var(--bg-page);border-radius:8px;padding:10px 14px;">
+                    <div style="font-weight:600;font-size:13px;">2️⃣ Tạo đại lý</div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Tạo shop_id + token trong Admin</div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-color);">
-                    <span style="background:var(--warning);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">3</span>
-                    <span style="font-size:13px;">Admin <strong>preview</strong> dữ liệu, chọn mục</span>
+                <div style="background:var(--bg-page);border-radius:8px;padding:10px 14px;">
+                    <div style="font-weight:600;font-size:13px;">3️⃣ GET sản phẩm</div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Lấy JSON từ <code>/api/products</code></div>
                 </div>
-                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
-                    <span style="background:var(--success);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">4</span>
-                    <span style="font-size:13px;"><strong>Nhập vào kho</strong> → sản phẩm có sẵn để bán</span>
+                <div style="background:var(--bg-page);border-radius:8px;padding:10px 14px;">
+                    <div style="font-weight:600;font-size:13px;">4️⃣ POST đặt hàng</div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Gửi request đến <code>/api/order</code></div>
+                </div>
+            </div>
+
+            <div class="note success" style="margin-top:12px;">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>Hoàn tất!</strong> Đại lý có thể đặt hàng tự động qua API, admin quản lý số dư và kho hàng qua Firebase.
                 </div>
             </div>
         </div>
