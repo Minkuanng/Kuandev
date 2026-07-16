@@ -25,6 +25,7 @@
             --bg-badge-green: #e6f7ed;
             --bg-badge-gray: #f2f5f8;
             --bg-success-light: #e6f7ed;
+            --bg-purple-light: #f0edff;
 
             --text-primary: #1a3b4f;
             --text-secondary: #4b6f88;
@@ -114,7 +115,7 @@
 
         /* ===== WRAPPER ===== */
         .container {
-            max-width: 880px;
+            max-width: 920px;
             margin: 0 auto;
             padding: 20px 16px;
         }
@@ -408,6 +409,16 @@
             color: var(--success);
         }
 
+        .note-purple {
+            background: var(--bg-purple-light);
+            border-color: #d5ccf0;
+            color: #4a3a7a;
+        }
+
+        .note-purple i {
+            color: var(--purple);
+        }
+
         /* ===== STEP LIST ===== */
         .step-list {
             counter-reset: step;
@@ -484,7 +495,62 @@
             border-color: var(--accent);
         }
 
+        /* ===== API LIST ===== */
+        .api-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .api-grid .api-item {
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            transition: var(--transition);
+        }
+
+        .api-grid .api-item:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .api-grid .api-item .method {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .api-grid .api-item .method.get {
+            background: var(--bg-badge-blue);
+            color: var(--accent);
+        }
+
+        .api-grid .api-item .endpoint {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+
+        .api-grid .api-item .desc {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .api-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 600px) {
             .app-header {
                 padding: 10px 16px;
@@ -587,7 +653,331 @@
             </p>
         </div>
 
-        <!-- ====== PHẦN MỚI: GET ĐỂ NHẬP KHO ====== -->
+        <!-- ====== DANH SÁCH API GET ====== -->
+        <div class="card" style="border:2px solid var(--purple);">
+            <h2><i class="fas fa-list" style="color:var(--purple);"></i> Danh sách API GET có sẵn</h2>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">
+                Các endpoint GET dùng để lấy dữ liệu từ hệ thống, phục vụ cho việc tích hợp và nhập kho.
+            </p>
+
+            <div class="api-grid">
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/products</div>
+                    <div class="desc">📦 Lấy danh sách tất cả sản phẩm trong kho</div>
+                </div>
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/product/:id</div>
+                    <div class="desc">🔍 Lấy chi tiết 1 sản phẩm theo ID</div>
+                </div>
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/orders</div>
+                    <div class="desc">📋 Lấy danh sách đơn hàng (có thể lọc theo shop_id)</div>
+                </div>
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/shop/balance</div>
+                    <div class="desc">💰 Kiểm tra số dư và trạng thái đại lý</div>
+                </div>
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/shop/orders</div>
+                    <div class="desc">📊 Lấy lịch sử đơn hàng của đại lý</div>
+                </div>
+                <div class="api-item">
+                    <span class="method get">GET</span>
+                    <div class="endpoint">/api/categories</div>
+                    <div class="desc">📁 Lấy danh sách danh mục sản phẩm</div>
+                </div>
+            </div>
+
+            <div class="note note-purple">
+                <i class="fas fa-code-branch"></i>
+                <div>
+                    <strong>Base URL:</strong>
+                    <code style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">
+                        https://vercel-api-mocha-zeta.vercel.app
+                    </code>
+                    <br>
+                    <span style="font-size:12px;">Tất cả các endpoint đều sử dụng chung base URL này.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/products ====== -->
+        <div class="card">
+            <h2><i class="fas fa-warehouse"></i> GET /api/products</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/products</span>
+            </div>
+            <p>Lấy danh sách tất cả sản phẩm trong kho hàng. Dùng để đồng bộ dữ liệu hoặc import vào hệ thống khác.</p>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "total": 15,
+  "products": [
+    {
+      "product_id": "-Nabc123xyz",
+      "name": "Acc Free Fire VIP",
+      "price": 25000,
+      "icon": "🔥",
+      "image": "https://example.com/ff.jpg",
+      "description": "Acc Free Fire VIP - 100k diamonds, rank Master",
+      "category": "freefire",
+      "stock": 14,
+      "sold": 86
+    },
+    {
+      "product_id": "-Ndef456uvw",
+      "name": "Acc Liên Quân",
+      "price": 15000,
+      "icon": "⚔️",
+      "image": "https://example.com/lq.jpg",
+      "description": "Acc Liên Quân rank Cao thủ, 200 skin",
+      "category": "lienquan",
+      "stock": 5,
+      "sold": 95
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/product/:id ====== -->
+        <div class="card">
+            <h2><i class="fas fa-magnifying-glass"></i> GET /api/product/:id</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/product/-Nabc123xyz</span>
+            </div>
+            <p>Lấy thông tin chi tiết của một sản phẩm cụ thể theo ID.</p>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "product_id": "-Nabc123xyz",
+  "name": "Acc Free Fire VIP",
+  "price": 25000,
+  "icon": "🔥",
+  "image": "https://example.com/ff.jpg",
+  "description": "Acc Free Fire VIP - 100k diamonds",
+  "category": "freefire",
+  "stock": 14,
+  "sold": 86,
+  "data": [
+    "acc1:pass1",
+    "acc2:pass2",
+    "acc3:pass3"
+  ]
+}</pre>
+            </div>
+
+            <h3>❌ Lỗi (404)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": false,
+  "error": "product_not_found"
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/orders ====== -->
+        <div class="card">
+            <h2><i class="fas fa-list-ul"></i> GET /api/orders</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/orders?shop_id=shop_ab12cd3&limit=20</span>
+            </div>
+            <p>Lấy danh sách đơn hàng. Có thể lọc theo <code>shop_id</code> và giới hạn số lượng.</p>
+
+            <h3>🔗 Query Parameters</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Kiểu</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>shop_id</code></td><td>string</td><td>Lọc theo mã đại lý (không bắt buộc)</td></tr>
+                        <tr><td><code>limit</code></td><td>number</td><td>Số lượng đơn tối đa (mặc định 50)</td></tr>
+                        <tr><td><code>token</code></td><td>string</td><td>Token đại lý (bắt buộc nếu có shop_id)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "total": 8,
+  "orders": [
+    {
+      "order_id": "-Oabc123xyz",
+      "order_code": "#A1B2C3",
+      "shop_id": "shop_ab12cd3",
+      "product_id": "-Nabc123xyz",
+      "product_name": "Acc Free Fire VIP",
+      "quantity": 1,
+      "price": 25000,
+      "status": "success",
+      "input_data": "user123@game",
+      "timestamp": 1721059200000,
+      "data": ["acc1:pass1"]
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/shop/balance ====== -->
+        <div class="card">
+            <h2><i class="fas fa-wallet"></i> GET /api/shop/balance</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/shop/balance?shop_id=shop_ab12cd3&token=sk_xxx</span>
+            </div>
+            <p>Kiểm tra số dư và trạng thái của đại lý.</p>
+
+            <h3>🔗 Query Parameters</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Kiểu</th>
+                            <th>Bắt buộc</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
+                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "shop_id": "shop_ab12cd3",
+  "name": "Web ABC",
+  "balance": 475000,
+  "status": "active",
+  "total_orders": 8,
+  "total_spent": 200000
+}</pre>
+            </div>
+
+            <h3>❌ Lỗi (401)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": false,
+  "error": "invalid_token"
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/shop/orders ====== -->
+        <div class="card">
+            <h2><i class="fas fa-receipt"></i> GET /api/shop/orders</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/shop/orders?shop_id=shop_ab12cd3&token=sk_xxx</span>
+            </div>
+            <p>Lấy lịch sử đơn hàng của một đại lý cụ thể.</p>
+
+            <h3>🔗 Query Parameters</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tham số</th>
+                            <th>Kiểu</th>
+                            <th>Bắt buộc</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
+                        <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
+                        <tr><td><code>limit</code></td><td>number</td><td></td><td>Số lượng đơn tối đa (mặc định 20)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "shop_id": "shop_ab12cd3",
+  "total": 8,
+  "orders": [
+    {
+      "order_code": "#A1B2C3",
+      "product_name": "Acc Free Fire VIP",
+      "quantity": 1,
+      "price": 25000,
+      "status": "success",
+      "timestamp": 1721059200000
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== GET /api/categories ====== -->
+        <div class="card">
+            <h2><i class="fas fa-folder"></i> GET /api/categories</h2>
+            <div class="endpoint-line">
+                <span class="badge get">GET</span>
+                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/categories</span>
+            </div>
+            <p>Lấy danh sách tất cả danh mục sản phẩm.</p>
+
+            <h3>📥 Response (200 OK)</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "success": true,
+  "total": 4,
+  "categories": [
+    {
+      "category_id": "freefire",
+      "name": "Free Fire",
+      "icon": "🔥",
+      "image": "https://example.com/ff-cat.jpg",
+      "product_count": 8
+    },
+    {
+      "category_id": "lienquan",
+      "name": "Liên Quân",
+      "icon": "⚔️",
+      "image": "https://example.com/lq-cat.jpg",
+      "product_count": 5
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <!-- ====== PHẦN NHẬP KHO TỪ API ====== -->
         <div class="card">
             <h2><i class="fas fa-cloud-upload-alt" style="color:var(--purple);"></i> GET sản phẩm từ API → Nhập kho</h2>
             <p style="margin-bottom:8px;">
@@ -610,7 +1000,7 @@
             <ol class="step-list">
                 <li>
                     Chuẩn bị <strong>API endpoint</strong> trả về danh sách sản phẩm dạng JSON
-                    (ví dụ: <code>https://your-api.vercel.app/api/products</code>)
+                    (ví dụ: <code>https://vercel-api-mocha-zeta.vercel.app/api/products</code>)
                 </li>
                 <li>
                     Vào trang <strong>Quản trị → tab API Import</strong>
@@ -634,72 +1024,57 @@
                         <li><code>{ "products": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
                         <li><code>[ { "name": "...", "price": 100000, "data": "..." } ]</code></li>
                         <li><code>{ "data": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
+                        <li><code>{ "success": true, "products": [ ... ] }</code> (từ API của bạn)</li>
                     </ul>
                 </div>
             </div>
 
-            <h3>📦 Ví dụ JSON từ Vercel API</h3>
+            <h3>📦 Ví dụ JSON từ Vercel API (/api/products)</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
                 <pre>{
+  "success": true,
+  "total": 2,
   "products": [
     {
+      "product_id": "-Nabc123xyz",
       "name": "Acc Free Fire VIP",
       "price": 25000,
       "icon": "🔥",
       "image": "https://example.com/ff.jpg",
       "description": "Acc Free Fire VIP - 100k diamonds",
-      "data": "acc1:pass1\nacc2:pass2\nacc3:pass3"
+      "category": "freefire",
+      "stock": 14,
+      "sold": 86
     },
     {
+      "product_id": "-Ndef456uvw",
       "name": "Acc Liên Quân",
       "price": 15000,
       "icon": "⚔️",
       "image": "https://example.com/lq.jpg",
       "description": "Acc Liên Quân rank cao",
-      "data": "lq1:pass1\nlq2:pass2"
+      "category": "lienquan",
+      "stock": 5,
+      "sold": 95
     }
   ]
 }</pre>
             </div>
 
-            <h3>🔄 Luồng dữ liệu</h3>
-            <div style="background:var(--bg-code);border-radius:var(--radius-sm);padding:12px 16px;color:#cfe4ff;font-family:'JetBrains Mono',monospace;font-size:11px;overflow-x:auto;margin:4px 0;">
-                <span style="color:#7a9bb3;">// Step 1: Gọi API GET từ Vercel</span><br>
-                GET https://vercel-api-mocha-zeta.vercel.app/api/products<br>
-                <span style="color:#7a9bb3;">// Step 2: Nhận JSON, preview trong admin</span><br>
-                <span style="color:#7a9bb3;">// Step 3: Nhấn "Nhập vào kho" → lưu vào Firebase</span><br>
-                <span style="color:#4a9aff;">✅ Sản phẩm đã có trong kho hàng!</span>
-            </div>
-
             <div class="note">
                 <i class="fas fa-lightbulb"></i>
                 <div>
-                    <strong>Mẹo:</strong> Nếu bạn có API Vercel riêng, chỉ cần đảm bảo endpoint trả về JSON đúng định dạng.
+                    <strong>Mẹo:</strong> Khi import từ API, bạn có thể dùng chính endpoint
+                    <code>/api/products</code> để lấy dữ liệu từ Vercel và nhập vào kho Firebase.
                     Hệ thống sẽ tự động nhận diện mảng sản phẩm dù lồng trong <code>products</code>, <code>data</code> hay mảng trực tiếp.
                 </div>
             </div>
         </div>
 
-        <!-- XÁC THỰC -->
-        <div class="card">
-            <h2><i class="fas fa-key"></i> Xác thực</h2>
-            <p>
-                Mỗi request cần gửi kèm <code class="badge code">shop_id</code> và
-                <code class="badge code">token</code> tương ứng (lấy trong trang quản trị).
-                Token là bí mật — <strong>không chia sẻ công khai</strong>, không nhúng vào code phía trình duyệt.
-                Chỉ gọi API từ server của đối tác.
-            </p>
-            <div class="note">
-                <i class="fas fa-triangle-exclamation"></i>
-                Nếu lộ token, vào tab <strong>API / Đại lý</strong> → Sửa → bấm nút
-                <strong>xoay vòng</strong> để tạo token mới ngay lập tức.
-            </div>
-        </div>
-
         <!-- ĐẶT HÀNG -->
         <div class="card">
-            <h2><i class="fas fa-cart-shopping"></i> Đặt hàng</h2>
+            <h2><i class="fas fa-cart-shopping"></i> POST /api/order</h2>
 
             <div class="endpoint-line">
                 <span class="badge post">POST</span>
@@ -720,9 +1095,9 @@
                     <tbody>
                         <tr><td><code>token</code></td><td>string</td><td>✔</td><td>Token của đại lý</td></tr>
                         <tr><td><code>shop_id</code></td><td>string</td><td>✔</td><td>Mã đại lý</td></tr>
-                        <tr><td><code>product_id</code></td><td>string</td><td>✔</td><td>ID sản phẩm (xem tab Kho hàng hoặc <code>GET /product/:id</code>)</td></tr>
+                        <tr><td><code>product_id</code></td><td>string</td><td>✔</td><td>ID sản phẩm (xem tab Kho hàng hoặc <code>GET /api/product/:id</code>)</td></tr>
                         <tr><td><code>quantity</code></td><td>number</td><td></td><td>Số lượng, mặc định 1</td></tr>
-                        <tr><td><code>input_data</code></td><td>string</td><td></td><td>Thông tin đối tác truyền vào (VD: UID, ghi chú) — lưu kèm đơn</td></tr>
+                        <tr><td><code>input_data</code></td><td>string</td><td></td><td>Thông tin đối tác truyền vào (VD: UID, ghi chú)</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -753,44 +1128,6 @@
   "price": 25000,
   "balance_left": 475000,
   "data": ["acc1:pass1"]
-}</pre>
-            </div>
-        </div>
-
-        <!-- KIỂM TRA SẢN PHẨM -->
-        <div class="card">
-            <h2><i class="fas fa-magnifying-glass"></i> Kiểm tra sản phẩm</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/product/:product_id</span>
-            </div>
-            <p>Xem giá và tồn kho trước khi đặt hàng.</p>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "product_id": "-Nabc123xyz",
-  "name": "Acc Free Fire VIP",
-  "price": 25000,
-  "stock": 14
-}</pre>
-            </div>
-        </div>
-
-        <!-- SỐ DƯ ĐẠI LÝ -->
-        <div class="card">
-            <h2><i class="fas fa-wallet"></i> Kiểm tra số dư đại lý</h2>
-            <div class="endpoint-line">
-                <span class="badge get">GET</span>
-                <span class="url">https://vercel-api-mocha-zeta.vercel.app/api/shop/balance?shop_id=...&amp;token=...</span>
-            </div>
-            <div class="codebox">
-                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>{
-  "success": true,
-  "shop_id": "shop_ab12cd3",
-  "balance": 475000,
-  "status": "active"
 }</pre>
             </div>
         </div>
@@ -827,7 +1164,13 @@
             <h2><i class="fas fa-code"></i> Ví dụ gọi bằng JavaScript (Node.js)</h2>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>const res = await fetch("https://vercel-api-mocha-zeta.vercel.app/api/order", {
+                <pre>// Lấy danh sách sản phẩm
+const productsRes = await fetch("https://vercel-api-mocha-zeta.vercel.app/api/products");
+const products = await productsRes.json();
+console.log(products);
+
+// Đặt hàng
+const orderRes = await fetch("https://vercel-api-mocha-zeta.vercel.app/api/order", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -838,8 +1181,8 @@
     input_data: "user123@game"
   })
 });
-const data = await res.json();
-console.log(data);</pre>
+const order = await orderRes.json();
+console.log(order);</pre>
             </div>
             <div class="note">
                 <i class="fas fa-shield-halved"></i>
