@@ -31,7 +31,7 @@
         body.dark-mode { --bg-body: #1a1a2e; --bg-card: #1a1a2e; --bg-header: #16213e; --text-primary: #e8e8e8; --text-secondary: #8fc1e0; --text-muted: #6a8a9a; --border-color: #2a3a5a; --shadow: 0 2px 12px rgba(0,0,0,0.3); --shadow-popup: 0 8px 32px rgba(0,0,0,0.5); --wallet-bg: #1a2a4a; --hover-bg: #1a2a4a; --accent: #8fc1e0; }
         body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
 
-        /* ===== HEADER GIỐNG INDEX ===== */
+        /* ===== HEADER ===== */
         .header { background: var(--bg-header); padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(12px); }
         .header-left { display: flex; align-items: center; gap: 12px; }
         .logo { font-size: 16px; font-weight: 700; color: var(--text-primary); transition: var(--transition); }
@@ -113,6 +113,8 @@
         .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
         .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
         .btn-outline:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
+        .btn-api { background: #6c5ce7; color: #fff; }
+        .btn-api:hover { box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
         .stat-card { background: var(--bg-card); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
@@ -188,6 +190,8 @@
         .product-card .actions .data { background: var(--warning); color: #fff; }
         .product-card .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
         .product-card .actions .del:hover { background: var(--danger); color: #fff; }
+        .product-card .actions .api { background: #6c5ce7; color: #fff; }
+        .product-card .actions .api:hover { box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
 
         .order-list { display: flex; flex-direction: column; gap: 6px; }
         .order-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 10px; align-items: center; box-shadow: var(--shadow); }
@@ -261,6 +265,20 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
+        /* API Import UI */
+        .api-import-box { background: var(--bg-card); border: 2px dashed var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; transition: var(--transition); }
+        .api-import-box:hover { border-color: var(--accent); }
+        .api-import-box .api-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .api-import-box .api-row input { flex: 1; min-width: 150px; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); }
+        .api-import-box .api-row input:focus { outline: none; border-color: var(--accent); }
+        .api-import-box .api-row select { padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); }
+        .api-import-box .api-row button { padding: 6px 16px; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
+        .api-import-box .api-row button:hover { transform: translateY(-2px); }
+        .api-import-box .api-result { margin-top: 6px; padding: 6px 10px; border-radius: 6px; font-size: 11px; display: none; }
+        .api-import-box .api-result.show { display: block; }
+        .api-import-box .api-result.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .api-import-box .api-result.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
         @media (max-width: 600px) {
             .header { padding: 6px 10px; }
             .logo { font-size: 14px; }
@@ -284,6 +302,7 @@
             .bell-icon { width: 28px; height: 28px; font-size: 13px; }
             .dot-menu { width: 28px; height: 28px; }
             .notif-popup { right: 6px; left: 6px; min-width: auto; }
+            .api-import-box .api-row { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -384,6 +403,7 @@
             <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
             <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
             <button class="tab" data-tab="shops" onclick="switchTab('shops')"><i class="fas fa-plug"></i> API / Đại lý</button>
+            <button class="tab" data-tab="api" onclick="switchTab('api')"><i class="fas fa-code"></i> API Import</button>
         </div>
 
         <!-- ===== TAB: DASHBOARD ===== -->
@@ -449,6 +469,47 @@
                 <i class="fas fa-circle-info"></i> Mỗi đại lý có 1 <b>shop_id</b> + <b>token</b> riêng để gọi API đặt hàng (POST). Đại lý dùng <b>số dư riêng</b> bên dưới (không dùng chung ví người dùng). Nạp/trừ số dư đại lý bằng nút "Sửa".
             </div>
             <div id="shopGrid" class="product-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+        </div>
+
+        <!-- ===== TAB: API IMPORT ===== -->
+        <div class="tab-content" id="tab-api">
+            <div class="api-import-box">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                    <span style="font-weight:600;color:var(--text-primary);font-size:13px;"><i class="fas fa-cloud-upload-alt" style="color:var(--accent);"></i> Nhập dữ liệu sản phẩm từ API</span>
+                    <span style="font-size:10px;color:var(--text-muted);">Hỗ trợ JSON từ Vercel / API bên ngoài</span>
+                </div>
+                <div class="api-row">
+                    <input type="text" id="apiEndpoint" placeholder="https://your-api.vercel.app/api/products" style="flex:2;" />
+                    <input type="text" id="apiToken" placeholder="API Token (nếu cần)" style="flex:1;" />
+                    <button class="btn-api" onclick="fetchApiData()"><i class="fas fa-download"></i> Lấy dữ liệu</button>
+                </div>
+                <div class="api-row" style="margin-top:6px;">
+                    <select id="apiCategorySelect" style="flex:1;min-width:120px;">
+                        <option value="">Chọn mục để lưu</option>
+                    </select>
+                    <button class="btn-sm btn-success" onclick="importApiData()" id="importApiBtn"><i class="fas fa-upload"></i> Nhập vào kho</button>
+                    <button class="btn-sm btn-outline" onclick="clearApiResult()"><i class="fas fa-times"></i> Xóa kết quả</button>
+                </div>
+                <div class="api-result" id="apiResult"></div>
+                <div id="apiDataPreview" style="max-height:300px;overflow-y:auto;margin-top:8px;border:1px solid var(--border-color);border-radius:6px;padding:8px;background:var(--wallet-bg);display:none;"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);background:var(--wallet-bg);border:1px solid var(--border-color);border-radius:8px;padding:8px 10px;margin-top:8px;">
+                <i class="fas fa-info-circle"></i> <b>Định dạng JSON yêu cầu:</b>
+                <pre style="font-size:10px;background:var(--bg-body);padding:6px;border-radius:4px;margin-top:4px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;">
+{
+  "products": [
+    {
+      "name": "Tên sản phẩm",
+      "price": 100000,
+      "icon": "📦",
+      "image": "https://...",
+      "description": "Mô tả",
+      "data": "data1\ndata2\ndata3"
+    }
+  ]
+}
+                </pre>
+            </div>
         </div>
 
         <!-- ===== BACK BUTTON ===== -->
@@ -554,7 +615,7 @@
         </div>
     </div>
 
-    <!-- MODAL: SHOP (API RESELLER) -->
+    <!-- MODAL: SHOP -->
     <div class="modal-overlay" id="shopModal">
         <div class="modal">
             <h3><i class="fas fa-plug"></i> <span id="shopModalTitle">Tạo đại lý API</span></h3>
@@ -629,6 +690,7 @@
         let vouchersData = {};
         let usersData = {};
         let onlineUsersMap = {};
+        let apiFetchedData = null;
 
         // ===== TOAST =====
         function showToast(msg, type = '') {
@@ -778,6 +840,7 @@
             if (tab === 'vouchers') renderVouchers();
             if (tab === 'shops') renderShops();
             if (tab === 'dashboard') updateDashboard();
+            if (tab === 'api') updateApiCategorySelect();
         }
 
         // ===== RENDER USERS =====
@@ -891,6 +954,15 @@
             });
         }
 
+        function updateApiCategorySelect() {
+            const sel = document.getElementById('apiCategorySelect');
+            sel.innerHTML = '<option value="">Chọn mục để lưu</option>';
+            Object.keys(categoriesData).forEach(k => {
+                const c = categoriesData[k];
+                sel.innerHTML += `<option value="${k}">${c.icon||'📁'} ${c.name}</option>`;
+            });
+        }
+
         // ===== CATEGORY CRUD =====
         function openCategoryModal() {
             document.getElementById('categoryModalTitle').textContent = 'Thêm mục';
@@ -976,12 +1048,24 @@
                         <div class="actions">
                             <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
                             <button class="data" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Data (${stock})</button>
+                            <button class="api" onclick="getProductApiLink('${key}')"><i class="fas fa-link"></i> API</button>
                             <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i> Xóa</button>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
+        }
+
+        // ===== PRODUCT API LINK =====
+        function getProductApiLink(productId) {
+            const apiUrl = `https://${window.location.host}/api/product/${productId}`;
+            const text = `GET ${apiUrl}`;
+            navigator.clipboard.writeText(apiUrl).then(() => {
+                showToast('✅ Đã copy API link!', 'success');
+            }).catch(() => {
+                showToast(`📋 API: ${apiUrl}`, '');
+            });
         }
 
         // ===== PRODUCT CRUD =====
@@ -1344,6 +1428,178 @@
             const text = `shop_id: ${key}\ntoken: ${s.token}`;
             navigator.clipboard.writeText(text).then(() => showToast('✅ Đã copy shop_id & token!', 'success'))
                 .catch(() => showToast('❌ Không copy được!', 'error'));
+        }
+
+        // ===== API IMPORT =====
+        function fetchApiData() {
+            const endpoint = document.getElementById('apiEndpoint').value.trim();
+            const token = document.getElementById('apiToken').value.trim();
+            const resultEl = document.getElementById('apiResult');
+            const previewEl = document.getElementById('apiDataPreview');
+
+            if (!endpoint) {
+                showResult('error', '❌ Vui lòng nhập URL API!');
+                return;
+            }
+
+            showResult('', '⏳ Đang lấy dữ liệu...');
+
+            const headers = {};
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+
+            fetch(endpoint, { headers })
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    return res.json();
+                })
+                .then(data => {
+                    apiFetchedData = data;
+                    let products = [];
+                    if (data.products && Array.isArray(data.products)) {
+                        products = data.products;
+                    } else if (Array.isArray(data)) {
+                        products = data;
+                    } else if (data.data && Array.isArray(data.data)) {
+                        products = data.data;
+                    } else {
+                        // Try to find any array
+                        for (let key in data) {
+                            if (Array.isArray(data[key]) && data[key].length > 0 && typeof data[key][0] === 'object') {
+                                products = data[key];
+                                break;
+                            }
+                        }
+                    }
+
+                    if (products.length === 0) {
+                        throw new Error('Không tìm thấy danh sách sản phẩm trong JSON');
+                    }
+
+                    // Validate product structure
+                    const validProducts = products.filter(p => p.name && p.price !== undefined);
+                    if (validProducts.length === 0) {
+                        throw new Error('Sản phẩm phải có trường "name" và "price"');
+                    }
+
+                    apiFetchedData = validProducts;
+                    showResult('success', `✅ Đã lấy ${validProducts.length} sản phẩm từ API!`);
+
+                    // Show preview
+                    let previewHtml = `<div style="font-size:11px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">📋 Preview (${validProducts.length} sản phẩm):</div>`;
+                    previewHtml += `<table style="width:100%;font-size:10px;border-collapse:collapse;">`;
+                    previewHtml += `<tr style="background:var(--border-color);"><th style="padding:4px 6px;text-align:left;">#</th><th style="padding:4px 6px;text-align:left;">Tên</th><th style="padding:4px 6px;text-align:left;">Giá</th><th style="padding:4px 6px;text-align:left;">Dữ liệu</th></tr>`;
+                    validProducts.slice(0, 20).forEach((p, i) => {
+                        const dataCount = p.data ? p.data.split('\n').filter(d => d.trim()).length : 0;
+                        previewHtml += `<tr style="border-bottom:1px solid var(--border-color);">
+                            <td style="padding:3px 6px;">${i+1}</td>
+                            <td style="padding:3px 6px;">${p.name}</td>
+                            <td style="padding:3px 6px;">${(p.price||0).toLocaleString('vi-VN')}đ</td>
+                            <td style="padding:3px 6px;">${dataCount} món</td>
+                        </tr>`;
+                    });
+                    if (validProducts.length > 20) {
+                        previewHtml += `<tr><td colspan="4" style="padding:4px 6px;color:var(--text-muted);">... và ${validProducts.length - 20} sản phẩm khác</td></tr>`;
+                    }
+                    previewHtml += `</table>`;
+                    previewEl.innerHTML = previewHtml;
+                    previewEl.style.display = 'block';
+
+                    document.getElementById('importApiBtn').disabled = false;
+                    document.getElementById('importApiBtn').style.opacity = '1';
+                })
+                .catch(err => {
+                    showResult('error', `❌ Lỗi: ${err.message}`);
+                    previewEl.style.display = 'none';
+                    apiFetchedData = null;
+                    document.getElementById('importApiBtn').disabled = true;
+                    document.getElementById('importApiBtn').style.opacity = '0.5';
+                });
+        }
+
+        function showResult(type, message) {
+            const el = document.getElementById('apiResult');
+            el.textContent = message;
+            el.className = 'api-result show ' + type;
+        }
+
+        function clearApiResult() {
+            document.getElementById('apiResult').className = 'api-result';
+            document.getElementById('apiResult').textContent = '';
+            document.getElementById('apiDataPreview').style.display = 'none';
+            document.getElementById('apiDataPreview').innerHTML = '';
+            apiFetchedData = null;
+            document.getElementById('importApiBtn').disabled = true;
+            document.getElementById('importApiBtn').style.opacity = '0.5';
+        }
+
+        function importApiData() {
+            if (!apiFetchedData || apiFetchedData.length === 0) {
+                showToast('❌ Không có dữ liệu để nhập!', 'error');
+                return;
+            }
+
+            const category = document.getElementById('apiCategorySelect').value;
+            if (!category) {
+                showToast('❌ Vui lòng chọn mục để lưu!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('importApiBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Đang nhập...';
+
+            let successCount = 0;
+            let failCount = 0;
+            let promises = [];
+
+            apiFetchedData.forEach((p, index) => {
+                const name = p.name || `Sản phẩm ${index+1}`;
+                const price = parseInt(p.price) || 0;
+                const icon = p.icon || '📦';
+                const image = p.image || '';
+                const description = p.description || '';
+                const dataString = p.data ? p.data.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n') : '';
+
+                if (!dataString) {
+                    failCount++;
+                    return;
+                }
+
+                const productData = {
+                    name,
+                    price,
+                    category,
+                    icon,
+                    data: dataString,
+                    sold: 0
+                };
+                if (image) productData.image = image;
+                if (description) productData.description = description;
+
+                const ref = db.ref('products').push();
+                promises.push(ref.set(productData));
+            });
+
+            if (promises.length === 0) {
+                showToast('⚠️ Không có sản phẩm hợp lệ để nhập!', 'error');
+                btn.disabled = false;
+                btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                return;
+            }
+
+            Promise.all(promises)
+                .then(() => {
+                    const total = promises.length;
+                    showToast(`✅ Đã nhập ${total} sản phẩm vào kho! (${failCount} bị bỏ qua do thiếu dữ liệu)`, 'success');
+                    btn.disabled = false;
+                    btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                    clearApiResult();
+                })
+                .catch(err => {
+                    showToast(`❌ Lỗi khi nhập: ${err.message}`, 'error');
+                    btn.disabled = false;
+                    btn.textContent = '<i class="fas fa-upload"></i> Nhập vào kho';
+                });
         }
 
         // ===== REFRESH =====
