@@ -24,6 +24,7 @@
             --bg-badge-blue: #eaf3fc;
             --bg-badge-green: #e6f7ed;
             --bg-badge-gray: #f2f5f8;
+            --bg-success-light: #e6f7ed;
 
             --text-primary: #1a3b4f;
             --text-secondary: #4b6f88;
@@ -39,6 +40,7 @@
             --success: #1fa86a;
             --danger: #d94a6b;
             --warning: #d48c1c;
+            --purple: #6c5ce7;
 
             --radius: 12px;
             --radius-sm: 8px;
@@ -396,6 +398,92 @@
             font-size: 13px;
         }
 
+        .note-success {
+            background: var(--bg-success-light);
+            border-color: #b8e0cc;
+            color: #1a6e4a;
+        }
+
+        .note-success i {
+            color: var(--success);
+        }
+
+        /* ===== STEP LIST ===== */
+        .step-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 8px 0;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            padding: 6px 0 6px 32px;
+            position: relative;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 22px;
+            height: 22px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-list li code {
+            background: var(--bg-page);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-dark);
+        }
+
+        /* ===== FLOW CHART ===== */
+        .flow-box {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 8px;
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin: 8px 0;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .flow-box .step {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+        }
+
+        .flow-box .arrow {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .flow-box .highlight {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
             .app-header {
@@ -457,6 +545,11 @@
                 font-size: 11.5px;
                 padding: 8px 12px;
             }
+
+            .flow-box {
+                font-size: 11px;
+                padding: 8px 10px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -484,7 +577,7 @@
 
         <!-- HERO -->
         <div class="hero-card">
-            <h1>Tài liệu API đặt hàng</h1>
+            <h1>Tài liệu API đặt hàng &amp; nhập kho</h1>
             <p>
                 API dành cho website đối tác (đại lý) đặt mua sản phẩm bằng mã
                 <span class="inline-code">shop_id</span> +
@@ -492,6 +585,100 @@
                 được cấp trong trang quản trị (tab <strong>API / Đại lý</strong>).
                 Mỗi đại lý có số dư riêng, <strong>không dùng chung</strong> ví người dùng.
             </p>
+        </div>
+
+        <!-- ====== PHẦN MỚI: GET ĐỂ NHẬP KHO ====== -->
+        <div class="card">
+            <h2><i class="fas fa-cloud-upload-alt" style="color:var(--purple);"></i> GET sản phẩm từ API → Nhập kho</h2>
+            <p style="margin-bottom:8px;">
+                Bạn có thể <strong>lấy danh sách sản phẩm từ API bên ngoài</strong> (Vercel, Shopify, WooCommerce, ...)
+                và nhập trực tiếp vào kho hàng của KuanZGame.Store bằng tính năng <strong>"API Import"</strong>
+                trong tab <strong>API Import</strong> của trang quản trị.
+            </p>
+
+            <div class="flow-box">
+                <span class="step highlight">1. Lấy JSON</span>
+                <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+                <span class="step">2. Paste URL</span>
+                <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+                <span class="step">3. Chọn mục</span>
+                <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+                <span class="step highlight">4. Nhập kho</span>
+            </div>
+
+            <h3>📍 Cách dùng</h3>
+            <ol class="step-list">
+                <li>
+                    Chuẩn bị <strong>API endpoint</strong> trả về danh sách sản phẩm dạng JSON
+                    (ví dụ: <code>https://your-api.vercel.app/api/products</code>)
+                </li>
+                <li>
+                    Vào trang <strong>Quản trị → tab API Import</strong>
+                </li>
+                <li>
+                    Dán URL API vào ô <strong>"Lấy dữ liệu"</strong> và nhấn nút
+                </li>
+                <li>
+                    Hệ thống sẽ fetch và <strong>preview</strong> danh sách sản phẩm
+                </li>
+                <li>
+                    Chọn mục sản phẩm → nhấn <strong>"Nhập vào kho"</strong>
+                </li>
+            </ol>
+
+            <div class="note note-success">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>Định dạng JSON hỗ trợ:</strong>
+                    <ul style="margin-top:4px;padding-left:16px;font-size:12.5px;">
+                        <li><code>{ "products": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
+                        <li><code>[ { "name": "...", "price": 100000, "data": "..." } ]</code></li>
+                        <li><code>{ "data": [ { "name": "...", "price": 100000, "data": "..." } ] }</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>📦 Ví dụ JSON từ Vercel API</h3>
+            <div class="codebox">
+                <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                <pre>{
+  "products": [
+    {
+      "name": "Acc Free Fire VIP",
+      "price": 25000,
+      "icon": "🔥",
+      "image": "https://example.com/ff.jpg",
+      "description": "Acc Free Fire VIP - 100k diamonds",
+      "data": "acc1:pass1\nacc2:pass2\nacc3:pass3"
+    },
+    {
+      "name": "Acc Liên Quân",
+      "price": 15000,
+      "icon": "⚔️",
+      "image": "https://example.com/lq.jpg",
+      "description": "Acc Liên Quân rank cao",
+      "data": "lq1:pass1\nlq2:pass2"
+    }
+  ]
+}</pre>
+            </div>
+
+            <h3>🔄 Luồng dữ liệu</h3>
+            <div style="background:var(--bg-code);border-radius:var(--radius-sm);padding:12px 16px;color:#cfe4ff;font-family:'JetBrains Mono',monospace;font-size:11px;overflow-x:auto;margin:4px 0;">
+                <span style="color:#7a9bb3;">// Step 1: Gọi API GET từ Vercel</span><br>
+                GET https://vercel-api-mocha-zeta.vercel.app/api/products<br>
+                <span style="color:#7a9bb3;">// Step 2: Nhận JSON, preview trong admin</span><br>
+                <span style="color:#7a9bb3;">// Step 3: Nhấn "Nhập vào kho" → lưu vào Firebase</span><br>
+                <span style="color:#4a9aff;">✅ Sản phẩm đã có trong kho hàng!</span>
+            </div>
+
+            <div class="note">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                    <strong>Mẹo:</strong> Nếu bạn có API Vercel riêng, chỉ cần đảm bảo endpoint trả về JSON đúng định dạng.
+                    Hệ thống sẽ tự động nhận diện mảng sản phẩm dù lồng trong <code>products</code>, <code>data</code> hay mảng trực tiếp.
+                </div>
+            </div>
         </div>
 
         <!-- XÁC THỰC -->
@@ -660,13 +847,30 @@ console.log(data);</pre>
             </div>
         </div>
 
+        <!-- TỔNG KẾT -->
+        <div class="card" style="border:2px solid var(--purple);">
+            <h2><i class="fas fa-route" style="color:var(--purple);"></i> Tóm tắt luồng làm việc với GET</h2>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-color);">
+                    <span style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">1</span>
+                    <span style="font-size:13px;"><strong>GET</strong> từ Vercel API → lấy JSON sản phẩm</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-color);">
+                    <span style="background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">2</span>
+                    <span style="font-size:13px;">Admin <strong>preview</strong> dữ liệu, chọn mục</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
+                    <span style="background:var(--success);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;">3</span>
+                    <span style="font-size:13px;"><strong>Nhập vào kho</strong> → sản phẩm có sẵn để bán</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
         function copyBox(btn) {
-            // Lấy nội dung text bên trong codebox (loại bỏ nút copy)
             const codebox = btn.parentElement;
-            // clone để không ảnh hưởng DOM
             const clone = codebox.cloneNode(true);
             const copyBtn = clone.querySelector('.copy-btn');
             if (copyBtn) copyBtn.remove();
@@ -683,7 +887,6 @@ console.log(data);</pre>
                     btn.style.color = '';
                 }, 1800);
             }).catch(() => {
-                // fallback
                 const old = btn.textContent;
                 btn.textContent = '⚠️ Lỗi';
                 setTimeout(() => btn.textContent = old, 1500);
