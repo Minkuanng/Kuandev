@@ -291,6 +291,11 @@
         .api-config-box .config-row .badge-status.online { background: #d4edda; color: #155724; }
         .api-config-box .config-row .badge-status.offline { background: #f8d7da; color: #721c24; }
 
+        /* API Docs */
+        .api-docs-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-top: 12px; }
+        .api-docs-box pre { background: var(--bg-body); padding: 10px; border-radius: 6px; overflow-x: auto; font-size: 11px; color: var(--text-primary); border: 1px solid var(--border-color); }
+        .api-docs-box code { font-family: monospace; }
+
         @media (max-width: 600px) {
             .header { padding: 6px 10px; }
             .logo { font-size: 14px; }
@@ -523,22 +528,59 @@
                 <div class="api-result" id="apiResult"></div>
                 <div id="apiDataPreview" style="max-height:300px;overflow-y:auto;margin-top:8px;border:1px solid var(--border-color);border-radius:6px;padding:8px;background:var(--wallet-bg);display:none;"></div>
             </div>
-            <div style="font-size:11px;color:var(--text-muted);background:var(--wallet-bg);border:1px solid var(--border-color);border-radius:8px;padding:8px 10px;margin-top:8px;">
-                <i class="fas fa-info-circle"></i> <b>Định dạng JSON yêu cầu:</b>
-                <pre style="font-size:10px;background:var(--bg-body);padding:6px;border-radius:4px;margin-top:4px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;">
-{
+
+            <!-- ===== API DOCS ===== -->
+            <div class="api-docs-box">
+                <h4 style="color:var(--text-primary);font-size:13px;margin-bottom:8px;"><i class="fas fa-book"></i> Hướng dẫn sử dụng API Import</h4>
+                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
+                    <p><strong>1. Gửi dữ liệu từ bên ngoài vào:</strong> Sử dụng endpoint <code>POST /api/products</code> hoặc <code>POST /api/products/batch</code></p>
+                    <p><strong>2. Định dạng JSON:</strong></p>
+                </div>
+                <pre><code>{
   "products": [
     {
       "name": "Tên sản phẩm",
       "price": 100000,
-      "icon": "📦",
-      "image": "https://...",
-      "description": "Mô tả",
-      "data": "data1\ndata2\ndata3"
+      "icon": "🎮",
+      "image": "https://example.com/image.jpg",
+      "description": "Mô tả sản phẩm",
+      "data": "item1\nitem2\nitem3"
     }
   ]
-}
-                </pre>
+}</code></pre>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
+                    <p><strong>3. Ví dụ gọi API bằng cURL:</strong></p>
+                    <pre style="font-size:11px;"><code>curl -X POST https://your-api.vercel.app/api/products/batch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "category": "CATEGORY_ID_HERE",
+    "products": [
+      {
+        "name": "Acc Game 1",
+        "price": 50000,
+        "data": "acc1:pass1\nacc2:pass2"
+      }
+    ]
+  }'</code></pre>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
+                    <p><strong>4. Hoặc sử dụng JavaScript:</strong></p>
+                    <pre style="font-size:11px;"><code>fetch('https://your-api.vercel.app/api/products/batch', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    category: 'CATEGORY_ID_HERE',
+    products: [
+      { name: 'Acc Game', price: 50000, data: 'acc1:pass1\nacc2:pass2' }
+    ]
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data));</code></pre>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:10px;padding:8px;background:var(--wallet-bg);border-radius:6px;border:1px solid var(--border-color);">
+                    <i class="fas fa-info-circle"></i> <b>Lưu ý:</b> Bạn cần deploy API server lên Vercel để có endpoint thật. Xem file <code>api-server.js</code> trong source code.
+                </div>
             </div>
         </div>
 
@@ -1133,12 +1175,10 @@
             container.innerHTML = html;
         }
 
-        // ===== COPY PRODUCT API LINK (FIXED) =====
+        // ===== COPY PRODUCT API LINK =====
         function copyProductApiLink(productId) {
-            // Sử dụng API_BASE_URL đã cấu hình thay vì window.location.host
             const apiUrl = `${API_BASE_URL}/product/${productId}`;
             
-            // Kiểm tra xem API có tồn tại không trước khi copy
             fetch(apiUrl, { method: 'GET', headers: { 'Accept': 'application/json' } })
                 .then(res => {
                     if (res.ok) {
@@ -1149,14 +1189,12 @@
                         });
                     } else if (res.status === 404) {
                         showToast('⚠️ API chưa được tạo! Hãy deploy vercel-api trước.', 'error');
-                        // Vẫn copy link để tiện
                         navigator.clipboard.writeText(apiUrl).catch(() => {});
                     } else {
                         showToast(`⚠️ API phản hồi mã ${res.status}`, 'error');
                     }
                 })
                 .catch(() => {
-                    // Nếu không fetch được, vẫn copy link nhưng cảnh báo
                     navigator.clipboard.writeText(apiUrl).then(() => {
                         showToast('⚠️ Đã copy link API (chưa kiểm tra được kết nối)', 'error');
                     }).catch(() => {
@@ -1806,6 +1844,17 @@
         console.log('✅ Admin panel loaded!');
         console.log('📍 API Base URL:', API_BASE_URL);
         console.log('💡 Hãy cấu hình Base URL đúng với Vercel API của bạn!');
+        console.log('');
+        console.log('📌 CÁCH SỬ DỤNG API IMPORT:');
+        console.log('1. Deploy api-server.js lên Vercel');
+        console.log('2. Cấu hình Base URL trong tab API');
+        console.log('3. Gửi POST request đến /api/products hoặc /api/products/batch');
+        console.log('4. Dữ liệu sẽ tự động được nhập vào kho hàng!');
+        console.log('');
+        console.log('🔗 Ví dụ gọi API:');
+        console.log('curl -X POST https://your-api.vercel.app/api/products/batch \\');
+        console.log('  -H "Content-Type: application/json" \\');
+        console.log('  -d \'{"category":"CATEGORY_ID","products":[{"name":"Test","price":50000,"data":"item1\\nitem2"}]}\'');
     </script>
 </body>
 </html>
