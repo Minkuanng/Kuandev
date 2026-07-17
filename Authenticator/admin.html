@@ -3,1644 +3,1613 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản trị - KuanZGame.Store</title>
+    <title>Admin - KuanZGame.Store</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { 
-            --bg-body: #f0f7ff; --bg-card: #fff; --bg-header: #fff;
-            --text-primary: #2c5a7a; --text-secondary: #5a8fb5; --text-muted: #8ab3d4;
-            --border-color: #e3eef9; --shadow: 0 2px 12px rgba(0,0,0,0.06);
-            --shadow-popup: 0 8px 32px rgba(0,0,0,0.15);
-            --wallet-bg: #f0f7ff; --hover-bg: #f0f7ff;
-            --danger: #e74c6f; --success: #27ae60; --accent: #3b8fd6; --warning: #f39c12;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --purple: #6c5ce7;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s ease;
         }
-        body { background: var(--bg-body); min-height: 100vh; transition: var(--transition); }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        .header { background: var(--bg-header); padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; transition: var(--transition); backdrop-filter: blur(12px); }
+        /* Header */
+        .header { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
         .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo { font-size: 16px; font-weight: 700; color: var(--text-primary); }
-        .menu-icon { cursor: pointer; padding: 6px 8px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); width: 34px; height: 34px; flex-shrink: 0; }
-        .menu-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .menu-icon .bar { display: block; width: 18px; height: 2px; background: var(--text-secondary); border-radius: 2px; transition: var(--transition); flex-shrink: 0; }
-        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .logo { font-size: 18px; font-weight: 700; }
+        .logo span { color: var(--primary); }
+        .menu-btn { width: 36px; height: 36px; border: none; background: var(--bg); border-radius: var(--radius-sm); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: var(--transition); }
+        .menu-btn:hover { background: var(--border); }
+        .menu-btn .bar { display: block; width: 18px; height: 2px; background: var(--text); border-radius: 2px; }
 
-        .wallet-container { background: var(--wallet-bg); border: 2px solid var(--border-color); border-radius: 10px; padding: 4px 12px 4px 8px; display: flex; align-items: center; gap: 8px; transition: var(--transition); cursor: default; min-height: 36px; }
-        .wallet-container:hover { border-color: var(--accent); }
-        .wallet-icon-box { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .wallet-icon-box i { color: #fff; font-size: 13px; }
-        .wallet-info { display: flex; flex-direction: column; line-height: 1.2; }
-        .wallet-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .wallet-balance { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-        .wallet-balance span { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        .wallet { background: var(--bg); border-radius: var(--radius-sm); padding: 6px 14px 6px 10px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); }
+        .wallet-icon { width: 28px; height: 28px; background: var(--primary); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; }
+        .wallet-info { line-height: 1.2; }
+        .wallet-label { font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .wallet-balance { font-size: 14px; font-weight: 700; }
 
-        .bell-icon { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; font-size: 15px; color: var(--text-secondary); flex-shrink: 0; }
-        .bell-icon:hover { background: var(--hover-bg); transform: scale(1.05); color: var(--text-primary); }
-        .bell-icon .bell-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; position: absolute; top: 2px; right: 2px; border: 2px solid var(--bg-header); display: none; animation: pulse 2s infinite; }
-        .bell-icon .bell-dot.show { display: block; }
-        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        .icon-btn { width: 36px; height: 36px; border: 1px solid var(--border); background: var(--card); border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); color: var(--text-secondary); font-size: 14px; }
+        .icon-btn:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+        .icon-btn .dot { width: 6px; height: 6px; background: var(--danger); border-radius: 50%; position: absolute; top: 4px; right: 4px; display: none; }
+        .icon-btn .dot.show { display: block; }
+        .icon-btn-wrap { position: relative; }
 
-        .settings-wrapper { position: relative; }
-        .dot-menu { width: 34px; height: 34px; cursor: pointer; border-radius: 50%; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: var(--transition); padding: 6px; flex-shrink: 0; }
-        .dot-menu:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .dot-menu .dot { width: 3.5px; height: 3.5px; background: var(--text-secondary); border-radius: 50%; transition: var(--transition); }
-        .dot-menu:hover .dot { background: var(--text-primary); }
+        /* Sidebar */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--card); border-right: 1px solid var(--border); z-index: 300; transition: var(--transition); padding: 16px 0; overflow-y: auto; }
+        .sidebar.active { left: 0; }
+        .sidebar-header { padding: 0 16px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header .close { cursor: pointer; color: var(--text-muted); font-size: 18px; }
+        .sidebar-header .close:hover { color: var(--danger); }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-secondary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
+        .sidebar-item:hover { background: var(--bg); color: var(--text); }
+        .sidebar-item.active { background: var(--bg); color: var(--primary); font-weight: 600; }
+        .sidebar-item .icon { width: 20px; text-align: center; font-size: 15px; }
+        .sidebar-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .overlay.active { opacity: 1; visibility: visible; }
 
-        .popup { position: absolute; top: 42px; right: 0; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 160px; padding: 4px 0; border: 1px solid var(--border-color); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); z-index: 200; }
-        .popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .popup-item { padding: 8px 16px; color: var(--text-primary); font-size: 12px; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 10px; border: none; background: none; width: 100%; font-weight: 500; }
-        .popup-item:hover { background: var(--hover-bg); padding-left: 22px; }
-        .popup-divider { height: 1px; background: var(--border-color); margin: 4px 10px; }
-        .popup-item.logout { color: var(--danger); }
+        /* Content */
+        .content { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        .page-header h1 { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .page-header h1 small { font-size: 14px; font-weight: 400; color: var(--text-muted); }
 
-        .notif-popup { position: fixed; top: 56px; right: 12px; background: var(--bg-card); border-radius: 10px; box-shadow: var(--shadow-popup); min-width: 260px; max-width: 320px; max-height: 300px; overflow-y: auto; padding: 10px 0; border: 1px solid var(--border-color); z-index: 300; opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96); transition: var(--transition); }
-        .notif-popup.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-        .notif-popup .notif-header { padding: 0 12px 8px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-primary); display: flex; justify-content: space-between; font-size: 13px; }
-        .notif-popup .notif-header .close { cursor: pointer; transition: var(--transition); }
-        .notif-popup .notif-header .close:hover { color: var(--danger); }
-        .notif-popup .notif-item { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); font-size: 12px; display: flex; align-items: flex-start; gap: 8px; }
-        .notif-popup .notif-item i { margin-top: 2px; color: var(--text-secondary); }
-        .notif-popup .notif-item .time { font-size: 9px; color: var(--text-muted); margin-top: 2px; display: block; }
-        .notif-popup .notif-item.unread { background: var(--wallet-bg); border-left: 3px solid var(--danger); }
-        .notif-popup .notif-item.unread i { color: var(--danger); }
-        .notif-popup .empty { padding: 14px; text-align: center; color: var(--text-muted); font-size: 12px; }
-        .notif-popup .empty i { font-size: 20px; display: block; margin-bottom: 6px; }
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .stat { background: var(--card); padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--border); transition: var(--transition); }
+        .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .stat .number { font-size: 24px; font-weight: 700; }
+        .stat .number.green { color: var(--success); }
+        .stat .number.blue { color: var(--primary); }
+        .stat .number.orange { color: var(--warning); }
+        .stat .number.red { color: var(--danger); }
+        .stat .label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-        .side-menu { position: fixed; top: 0; left: -260px; width: 240px; height: 100vh; background: var(--bg-card); box-shadow: var(--shadow-popup); z-index: 300; transition: var(--transition); padding: 14px 0; border-right: 1px solid var(--border-color); overflow-y: auto; }
-        .side-menu.active { left: 0; }
-        .side-menu .menu-header { padding: 10px 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .side-menu .menu-header .close { cursor: pointer; font-size: 18px; color: var(--text-muted); transition: var(--transition); }
-        .side-menu .menu-header .close:hover { color: var(--danger); transform: rotate(90deg); }
-        .side-menu .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: var(--transition); color: var(--text-primary); border: none; background: none; width: 100%; font-size: 13px; font-weight: 500; }
-        .side-menu .menu-item:hover { background: var(--hover-bg); padding-left: 22px; }
-        .side-menu .menu-item .icon { font-size: 16px; width: 24px; text-align: center; }
-        .side-menu .menu-divider { height: 1px; background: var(--border-color); margin: 4px 12px; }
-        .menu-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 299; opacity: 0; visibility: hidden; transition: var(--transition); }
-        .menu-overlay.active { opacity: 1; visibility: visible; }
-
-        .content { padding: 14px 16px; max-width: 1400px; margin: 0 auto; }
-
-        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
-        .admin-header h1 { color: var(--text-primary); font-size: 18px; display: flex; align-items: center; gap: 8px; }
-        .admin-header .sub { color: var(--text-muted); font-size: 11px; font-weight: 400; }
-        .admin-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .btn-sm { padding: 5px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 4px; }
-        .btn-sm:hover { transform: translateY(-2px); }
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-success:hover { box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
-        .btn-warning { background: var(--warning); color: #fff; }
-        .btn-warning:hover { box-shadow: 0 4px 15px rgba(243,156,18,0.3); }
-        .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border-color); }
-        .btn-outline:hover { background: var(--hover-bg); border-color: var(--text-secondary); }
-        .btn-api { background: var(--purple); color: #fff; }
-        .btn-api:hover { box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
-        .btn-upload { background: #2ecc71; color: #fff; }
-        .btn-upload:hover { box-shadow: 0 4px 15px rgba(46,204,113,0.3); }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
-        .stat-card { background: var(--bg-card); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .stat-card .num { font-size: 18px; font-weight: 700; color: var(--text-primary); }
-        .stat-card .num.green { color: var(--success); }
-        .stat-card .num.red { color: var(--danger); }
-        .stat-card .num.orange { color: var(--warning); }
-        .stat-card .num.blue { color: var(--accent); }
-        .stat-card .label { font-size: 9px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
-
-        .tabs { display: flex; gap: 2px; margin-bottom: 14px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; }
-        .tabs .tab { padding: 6px 14px; border: none; background: none; color: var(--text-muted); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 12px; border-bottom: 3px solid transparent; }
-        .tabs .tab:hover { color: var(--text-primary); }
-        .tabs .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        /* Tabs */
+        .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
+        .tab { padding: 8px 16px; border: none; background: none; color: var(--text-muted); font-weight: 500; cursor: pointer; transition: var(--transition); font-size: 13px; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .tab:hover { color: var(--text); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-content { display: none; animation: fadeIn 0.25s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .user-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-        .user-card { background: var(--bg-card); border-radius: 10px; padding: 10px 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
-        .user-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .user-card .user-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-        .user-card .user-header .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--text-secondary)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
-        .user-card .user-header .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
-        .user-card .user-header .info .email { font-size: 9px; color: var(--text-muted); word-break: break-all; }
-        .user-card .balance { font-size: 15px; font-weight: 700; color: var(--accent); padding: 2px 0; display: flex; align-items: center; gap: 4px; }
-        .user-card .balance i { font-size: 12px; color: var(--warning); }
-        .user-card .status { font-size: 9px; padding: 2px 8px; border-radius: 6px; display: inline-block; font-weight: 500; }
-        .user-card .status.online { background: #d4edda; color: #155724; }
-        .user-card .status.offline { background: #f8d7da; color: #721c24; }
-        .user-card .status.blocked { background: #fff3cd; color: #856404; }
-        .user-card .actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border-color); }
-        .user-card .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 3px; }
-        .user-card .actions button:hover { transform: scale(1.05); }
-        .user-card .actions .add { background: var(--success); color: #fff; }
-        .user-card .actions .sub { background: var(--danger); color: #fff; }
-        .user-card .actions .block { background: var(--warning); color: #fff; }
-        .user-card .actions .unblock { background: var(--accent); color: #fff; }
+        /* Buttons */
+        .btn { padding: 6px 14px; border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-danger:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .btn-warning { background: var(--warning); color: #fff; }
+        .btn-outline { background: transparent; color: var(--text-secondary); border: 2px solid var(--border); }
+        .btn-outline:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+        .btn-sm { padding: 4px 10px; font-size: 11px; }
+        .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
 
-        .category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .category-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: var(--shadow); }
-        .category-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .category-item .icon { width: 32px; height: 32px; border-radius: 50%; background: var(--wallet-bg); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
-        .category-item .icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .category-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
-        .category-item .info .count { font-size: 9px; color: var(--text-muted); }
-        .category-item .actions button { padding: 2px 6px; border: none; border-radius: 4px; font-size: 9px; cursor: pointer; transition: var(--transition); }
-        .category-item .actions .edit { background: var(--wallet-bg); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .category-item .actions .edit:hover { background: var(--accent); color: #fff; }
-        .category-item .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
-        .category-item .actions .del:hover { background: var(--danger); color: #fff; }
+        /* Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+        .card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border); transition: var(--transition); }
+        .card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .card .top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .card .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .card .name { font-weight: 600; font-size: 13px; }
+        .card .sub { font-size: 11px; color: var(--text-muted); }
+        .card .balance { font-size: 16px; font-weight: 700; color: var(--primary); padding: 4px 0; }
+        .card .actions { display: flex; gap: 4px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+        .card .actions .btn { flex: 1; justify-content: center; }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-        .product-card { background: var(--bg-card); border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); transition: var(--transition); box-shadow: var(--shadow); }
-        .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .product-card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        .product-card .top .img { width: 38px; height: 38px; border-radius: 8px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
-        .product-card .top .img img { width: 100%; height: 100%; object-fit: cover; }
-        .product-card .top .title .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
-        .product-card .top .title .cat { font-size: 9px; color: var(--text-muted); background: var(--wallet-bg); padding: 1px 6px; border-radius: 4px; display: inline-block; margin-top: 2px; }
-        .product-card .details { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
-        .product-card .details .item { background: var(--wallet-bg); border-radius: 4px; padding: 3px 6px; text-align: center; border: 1px solid var(--border-color); }
-        .product-card .details .item .lbl { font-size: 7px; color: var(--text-muted); text-transform: uppercase; }
-        .product-card .details .item .val { font-size: 12px; font-weight: 700; color: var(--text-primary); }
-        .product-card .details .item .val.price { color: var(--accent); }
-        .product-card .details .item .val.stock { color: var(--success); }
-        .product-card .desc { font-size: 10px; color: var(--text-muted); background: var(--wallet-bg); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 6px; max-height: 36px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .product-card .actions { display: flex; gap: 4px; flex-wrap: wrap; }
-        .product-card .actions button { padding: 2px 8px; border: none; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 3px; flex: 1; justify-content: center; }
-        .product-card .actions button:hover { transform: scale(1.05); }
-        .product-card .actions .edit { background: var(--accent); color: #fff; }
-        .product-card .actions .data { background: var(--warning); color: #fff; }
-        .product-card .actions .del { background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; }
-        .product-card .actions .del:hover { background: var(--danger); color: #fff; }
+        .badge { font-size: 10px; padding: 2px 10px; border-radius: 20px; font-weight: 500; display: inline-block; }
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
 
-        .order-list { display: flex; flex-direction: column; gap: 6px; }
-        .order-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); transition: var(--transition); display: flex; gap: 10px; align-items: center; box-shadow: var(--shadow); }
-        .order-item:hover { transform: translateX(4px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .order-item .img { width: 34px; height: 34px; border-radius: 6px; background: var(--wallet-bg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
-        .order-item .img img { width: 100%; height: 100%; object-fit: cover; }
-        .order-item .info .name { font-weight: 600; color: var(--text-primary); font-size: 12px; }
-        .order-item .info .meta { font-size: 10px; color: var(--text-muted); display: flex; gap: 8px; flex-wrap: wrap; }
-        .order-item .info .meta span { display: flex; align-items: center; gap: 3px; }
-        .order-item .info .code { font-size: 10px; color: var(--accent); font-weight: 600; font-family: monospace; }
-        .order-item .badge { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 500; flex-shrink: 0; }
-        .order-item .badge.success { background: #d4edda; color: #155724; }
-        .order-item .badge.failed { background: #f8d7da; color: #721c24; }
-        .order-item .del-btn { padding: 2px 8px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 10px; flex-shrink: 0; }
-        .order-item .del-btn:hover { background: var(--danger); color: #fff; }
+        /* Product Card */
+        .product-card .details { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 6px 0; }
+        .product-card .detail { background: var(--bg); border-radius: 4px; padding: 4px 8px; text-align: center; }
+        .product-card .detail .lbl { font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
+        .product-card .detail .val { font-size: 13px; font-weight: 600; }
+        .product-card .desc { font-size: 11px; color: var(--text-secondary); background: var(--bg); padding: 6px 8px; border-radius: 4px; margin: 6px 0; max-height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        .voucher-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-        .voucher-item { background: var(--bg-card); border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; transition: var(--transition); box-shadow: var(--shadow); min-width: 140px; }
-        .voucher-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-popup); border-color: var(--accent); }
-        .voucher-item .code { font-weight: 700; color: var(--accent); font-size: 13px; font-family: monospace; }
-        .voucher-item .info { flex: 1; font-size: 10px; color: var(--text-muted); }
-        .voucher-item .del-btn { padding: 2px 6px; background: #fef0f2; color: var(--danger); border: 1px solid #fdd5d9; border-radius: 4px; cursor: pointer; transition: var(--transition); font-size: 9px; }
-        .voucher-item .del-btn:hover { background: var(--danger); color: #fff; }
+        /* Order */
+        .order-item { background: var(--card); border-radius: var(--radius-sm); padding: 10px 14px; border: 1px solid var(--border); display: flex; gap: 12px; align-items: center; transition: var(--transition); margin-bottom: 6px; }
+        .order-item:hover { border-color: var(--primary); }
+        .order-item .info { flex: 1; }
+        .order-item .info .name { font-weight: 600; font-size: 13px; }
+        .order-item .info .meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; }
+        .order-item .info .meta span { display: flex; align-items: center; gap: 4px; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
+        /* Voucher */
+        .voucher-item { background: var(--card); border-radius: var(--radius-sm); padding: 10px 14px; border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; transition: var(--transition); margin-bottom: 6px; }
+        .voucher-item:hover { border-color: var(--primary); }
+        .voucher-item .code { font-weight: 700; color: var(--primary); font-size: 14px; font-family: monospace; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px; }
         .modal-overlay.active { display: flex; }
-        .modal { background: var(--bg-card); border-radius: 14px; padding: 18px 20px; max-width: 520px; width: 100%; border: 1px solid var(--border-color); max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        @keyframes modalIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        .modal h3 { color: var(--text-primary); text-align: center; margin-bottom: 10px; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .modal .row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; flex-wrap: wrap; }
-        .modal .row label { color: var(--text-muted); font-size: 11px; min-width: 70px; font-weight: 500; }
-        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); min-width: 60px; }
-        .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,143,214,0.1); }
+        .modal { background: var(--card); border-radius: var(--radius); padding: 20px 24px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalIn 0.25s ease; box-shadow: var(--shadow-lg); }
+        @keyframes modalIn { from { transform: scale(0.95) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal h3 { font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .modal .row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+        .modal .row label { font-size: 12px; color: var(--text-secondary); min-width: 70px; font-weight: 500; }
+        .modal .row input, .modal .row select, .modal .row textarea { flex: 1; padding: 6px 10px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; background: var(--card); color: var(--text); transition: var(--transition); min-width: 60px; }
+        .modal .row input:focus, .modal .row select:focus, .modal .row textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
         .modal .row textarea { min-height: 60px; resize: vertical; font-family: inherit; }
-        .modal .row .preview { width: 40px; height: 40px; border-radius: 6px; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
-        .modal .row .preview img { width: 100%; height: 100%; object-fit: cover; }
-        .modal .row .word-count { font-size: 9px; color: var(--text-muted); }
-        .modal .row .word-count.warning { color: var(--warning); }
-        .modal .row .word-count.danger { color: var(--danger); }
-        .modal .row .data-list { flex: 1; max-height: 120px; overflow-y: auto; border: 2px solid var(--border-color); border-radius: 4px; padding: 4px; background: var(--bg-card); }
-        .modal .row .data-list .item { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-primary); }
-        .modal .row .data-list .item:last-child { border-bottom: none; }
-        .modal .row .data-list .item .remove { color: var(--danger); cursor: pointer; padding: 1px 4px; border-radius: 4px; transition: var(--transition); }
-        .modal .row .data-list .item .remove:hover { background: var(--danger); color: #fff; }
-        .modal .actions { display: flex; gap: 4px; margin-top: 10px; flex-wrap: wrap; }
-        .modal .actions button { flex: 1; padding: 6px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); min-width: 50px; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .modal .actions .cancel { background: var(--wallet-bg); color: var(--text-muted); border: 1px solid var(--border-color); }
-        .modal .actions .cancel:hover { background: var(--hover-bg); }
-        .modal .actions .save { background: var(--accent); color: #fff; }
-        .modal .actions .save:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59,143,214,0.3); }
-        .modal .actions .danger { background: var(--danger); color: #fff; }
-        .modal .actions .danger:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231,76,111,0.3); }
-        .modal .actions .success { background: var(--success); color: #fff; }
-        .modal .actions .success:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(39,174,96,0.3); }
-        .modal .upload-area { border: 2px dashed var(--border-color); border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; transition: var(--transition); background: var(--wallet-bg); }
-        .modal .upload-area:hover { border-color: var(--accent); background: var(--hover-bg); }
-        .modal .upload-area .icon { font-size: 24px; color: var(--text-muted); }
-        .modal .upload-area .text { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-        .modal .upload-area input[type="file"] { display: none; }
+        .modal .actions { display: flex; gap: 6px; margin-top: 16px; }
+        .modal .actions .btn { flex: 1; justify-content: center; padding: 8px; }
 
-        .loading { text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px; }
-        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 6px 16px; background: var(--bg-card); color: var(--text-primary); border-radius: 8px; box-shadow: var(--shadow-popup); border: 1px solid var(--border-color); z-index: 999; opacity: 0; transition: 0.4s; font-weight: 500; font-size: 11px; pointer-events: none; }
+        /* Media Library */
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .media-item { background: var(--card); border-radius: var(--radius-sm); border: 2px solid var(--border); overflow: hidden; transition: var(--transition); cursor: pointer; position: relative; }
+        .media-item:hover { border-color: var(--primary); transform: scale(1.02); }
+        .media-item img { width: 100%; height: 120px; object-fit: cover; display: block; }
+        .media-item .info { padding: 6px 8px; font-size: 11px; }
+        .media-item .info .name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .media-item .info .meta { color: var(--text-muted); font-size: 10px; }
+        .media-item .selected { position: absolute; top: 4px; right: 4px; background: var(--primary); color: #fff; border-radius: 50%; width: 24px; height: 24px; display: none; align-items: center; justify-content: center; }
+        .media-item.selected { border-color: var(--primary); }
+        .media-item.selected .selected { display: flex; }
+        .media-item .actions-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); padding: 4px; display: none; gap: 4px; justify-content: center; }
+        .media-item:hover .actions-overlay { display: flex; }
+        .media-item .actions-overlay .btn { font-size: 10px; padding: 2px 8px; }
+
+        /* Upload zone */
+        .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px; text-align: center; transition: var(--transition); cursor: pointer; margin-bottom: 16px; }
+        .upload-zone:hover { border-color: var(--primary); background: var(--bg); }
+        .upload-zone .icon { font-size: 40px; color: var(--text-muted); }
+        .upload-zone .text { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+        .upload-zone.dragover { border-color: var(--primary); background: #eff6ff; }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 24px; background: var(--text); color: #fff; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 999; opacity: 0; transition: 0.3s; font-size: 13px; pointer-events: none; }
         .toast.show { opacity: 1; }
-        .toast.error { border-color: var(--danger); color: var(--danger); }
-        .toast.success { border-color: var(--success); color: var(--success); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
 
-        .empty-state { text-align: center; padding: 24px 16px; color: var(--text-muted); }
-        .empty-state .icon { font-size: 32px; display: block; margin-bottom: 4px; }
-
-        .btn-back { margin-top: 10px; padding: 6px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: var(--transition); border: 2px solid var(--border-color); background: transparent; color: var(--text-secondary); width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .btn-back:hover { background: var(--hover-bg); border-color: var(--text-secondary); transform: translateY(-2px); }
-
-        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-body); z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: 0.4s; }
+        /* Loading */
+        .loading-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: 0.3s; }
         .loading-overlay.hidden { opacity: 0; pointer-events: none; display: none !important; }
-        .loading-spinner { width: 36px; height: 36px; border: 4px solid var(--border-color); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-radius: 50%; border-top-color: var(--primary); animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: var(--text-primary); font-size: 13px; font-weight: 500; }
 
-        /* API Import UI */
-        .api-import-box { background: var(--bg-card); border: 2px dashed var(--border-color); border-radius: 10px; padding: 12px 16px; margin-bottom: 12px; transition: var(--transition); }
-        .api-import-box:hover { border-color: var(--accent); }
-        .api-import-box .api-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-        .api-import-box .api-row input { flex: 1; min-width: 150px; padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); transition: var(--transition); }
-        .api-import-box .api-row input:focus { outline: none; border-color: var(--accent); }
-        .api-import-box .api-row select { padding: 6px 10px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 12px; background: var(--bg-card); color: var(--text-primary); }
-        .api-import-box .api-row button { padding: 6px 16px; border: none; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 6px; }
-        .api-import-box .api-row button:hover { transform: translateY(-2px); }
-        .api-import-box .api-result { margin-top: 6px; padding: 6px 10px; border-radius: 6px; font-size: 11px; display: none; }
-        .api-import-box .api-result.show { display: block; }
-        .api-import-box .api-result.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .api-import-box .api-result.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .empty .icon { font-size: 40px; display: block; margin-bottom: 8px; }
 
-        /* API Docs */
-        .api-docs-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; margin-top: 12px; }
-        .api-docs-box pre { background: var(--bg-body); padding: 10px; border-radius: 6px; overflow-x: auto; font-size: 11px; color: var(--text-primary); border: 1px solid var(--border-color); }
-        .api-docs-box code { font-family: monospace; }
-        .api-endpoint { background: var(--wallet-bg); padding: 6px 10px; border-radius: 6px; font-family: monospace; font-size: 12px; color: var(--accent); border: 1px solid var(--border-color); word-break: break-all; }
-
-        .upload-progress { width: 100%; height: 4px; background: var(--border-color); border-radius: 4px; overflow: hidden; margin-top: 6px; display: none; }
-        .upload-progress .bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; border-radius: 4px; }
-
-        @media (max-width: 600px) {
-            .header { padding: 6px 10px; }
-            .logo { font-size: 14px; }
-            .content { padding: 8px 10px; }
-            .stats-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); }
-            .user-grid { grid-template-columns: 1fr; }
-            .product-grid { grid-template-columns: 1fr; }
-            .order-item { flex-wrap: wrap; }
-            .modal { padding: 12px 14px; }
+        /* Responsive */
+        @media (max-width: 640px) {
+            .content { padding: 12px; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .grid { grid-template-columns: 1fr; }
+            .media-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal { padding: 16px; }
             .modal .row { flex-direction: column; align-items: stretch; }
             .modal .row label { min-width: auto; }
-            .tabs .tab { padding: 4px 10px; font-size: 11px; }
-            .admin-header h1 { font-size: 15px; }
-            .wallet-container { padding: 3px 8px 3px 6px; min-height: 30px; }
-            .wallet-icon-box { width: 22px; height: 22px; }
-            .wallet-icon-box i { font-size: 10px; }
-            .wallet-balance { font-size: 11px; }
-            .wallet-label { font-size: 7px; }
-            .menu-icon { width: 28px; height: 28px; padding: 4px 6px; }
-            .menu-icon .bar { width: 14px; height: 2px; }
-            .bell-icon { width: 28px; height: 28px; font-size: 13px; }
-            .dot-menu { width: 28px; height: 28px; }
-            .notif-popup { right: 6px; left: 6px; min-width: auto; }
-            .api-import-box .api-row { flex-direction: column; align-items: stretch; }
+            .header { padding: 8px 12px; }
+            .wallet { padding: 4px 10px 4px 6px; }
+            .wallet-balance { font-size: 12px; }
+            .wallet-icon { width: 24px; height: 24px; font-size: 10px; }
+            .order-item { flex-wrap: wrap; }
+            .page-header h1 { font-size: 18px; }
+            .tabs { gap: 2px; }
+            .tab { padding: 6px 12px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- LOADING -->
+    <!-- Loading -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">⏳ Đang tải...</div>
+        <div class="spinner"></div>
+        <div style="color:var(--text-secondary);font-weight:500;">Đang tải...</div>
     </div>
 
-    <!-- MENU -->
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
-    <div class="side-menu" id="sideMenu">
-        <div class="menu-header">
-            <span style="font-weight:700;color:var(--text-primary);"><i class="fas fa-bars"></i> Menu</span>
-            <span class="close" onclick="closeMenu()"><i class="fas fa-times"></i></span>
+    <!-- Sidebar -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span style="font-weight:700;font-size:16px;">⚡ Admin</span>
+            <span class="close" onclick="closeSidebar()"><i class="fas fa-times"></i></span>
         </div>
-        <button class="menu-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span>Trang chủ</button>
-        <button class="menu-item" onclick="goHistory()"><span class="icon"><i class="fas fa-history"></i></span>Lịch sử</button>
-        <button class="menu-item" onclick="goTopup()"><span class="icon"><i class="fas fa-coins"></i></span>Nạp tiền</button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="goSupport()"><span class="icon"><i class="fas fa-headset"></i></span>Hỗ trợ</button>
+        <button class="sidebar-item active" data-tab="dashboard" onclick="switchTab('dashboard')"><span class="icon"><i class="fas fa-chart-pie"></i></span> Tổng quan</button>
+        <button class="sidebar-item" data-tab="users" onclick="switchTab('users')"><span class="icon"><i class="fas fa-users"></i></span> Người dùng</button>
+        <button class="sidebar-item" data-tab="categories" onclick="switchTab('categories')"><span class="icon"><i class="fas fa-folder"></i></span> Danh mục</button>
+        <button class="sidebar-item" data-tab="products" onclick="switchTab('products')"><span class="icon"><i class="fas fa-box"></i></span> Sản phẩm</button>
+        <button class="sidebar-item" data-tab="orders" onclick="switchTab('orders')"><span class="icon"><i class="fas fa-truck"></i></span> Đơn hàng</button>
+        <button class="sidebar-item" data-tab="vouchers" onclick="switchTab('vouchers')"><span class="icon"><i class="fas fa-ticket"></i></span> Mã giảm giá</button>
+        <button class="sidebar-item" data-tab="shops" onclick="switchTab('shops')"><span class="icon"><i class="fas fa-store"></i></span> Đại lý API</button>
+        <button class="sidebar-item" data-tab="media" onclick="switchTab('media')"><span class="icon"><i class="fas fa-images"></i></span> Thư viện ảnh</button>
+        <button class="sidebar-item" data-tab="docs" onclick="switchTab('docs')"><span class="icon"><i class="fas fa-file"></i></span> Tài liệu</button>
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-item" onclick="goHome()"><span class="icon"><i class="fas fa-home"></i></span> Trang chủ</button>
+        <button class="sidebar-item" onclick="logout()"><span class="icon"><i class="fas fa-sign-out-alt"></i></span> Đăng xuất</button>
     </div>
 
-    <!-- HEADER -->
+    <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <div class="menu-icon" onclick="toggleMenu()">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-            <div class="logo">🛠️ Admin</div>
+            <button class="menu-btn" onclick="toggleSidebar()">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </button>
+            <div class="logo">KuanZ<span>Admin</span></div>
         </div>
         <div class="header-right">
-            <div class="wallet-container">
-                <div class="wallet-icon-box"><i class="fas fa-wallet"></i></div>
+            <div class="wallet">
+                <div class="wallet-icon"><i class="fas fa-wallet"></i></div>
                 <div class="wallet-info">
-                    <span class="wallet-label">Số dư</span>
-                    <span class="wallet-balance"><span id="balanceAmount">0</span> <span>VND</span></span>
+                    <div class="wallet-label">Số dư</div>
+                    <div class="wallet-balance"><span id="balanceAmount">0</span>đ</div>
                 </div>
             </div>
-            <div class="bell-icon" onclick="toggleNotif()"><div class="bell-dot" id="notifDot"></div><i class="fas fa-bell"></i></div>
-            <div class="settings-wrapper">
-                <div class="dot-menu" onclick="togglePopup(event)">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-                <div class="popup" id="settingsPopup">
-                    <button class="popup-item" onclick="goToProfile()"><i class="fas fa-user"></i> Thông tin</button>
-                    <button class="popup-item" onclick="goToSecurity()"><i class="fas fa-shield-alt"></i> Bảo mật</button>
-                    <button class="popup-item" onclick="goToSettings()"><i class="fas fa-cog"></i> Cài đặt</button>
-                    <div class="popup-divider"></div>
-                    <button class="popup-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
-                </div>
+            <div class="icon-btn-wrap">
+                <button class="icon-btn" onclick="toggleNotif()"><i class="fas fa-bell"></i><span class="dot" id="notifDot"></span></button>
             </div>
+            <button class="icon-btn" onclick="togglePopup(event)"><i class="fas fa-ellipsis-v"></i></button>
         </div>
     </header>
 
-    <!-- NOTIFICATION -->
-    <div class="notif-popup" id="notifPopup">
-        <div class="notif-header"><span><i class="fas fa-bullhorn"></i> Thông báo</span><span class="close" onclick="toggleNotif()"><i class="fas fa-times"></i></span></div>
-        <div id="notifList"><div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div></div>
+    <!-- Popup -->
+    <div class="popup" id="settingsPopup" style="position:fixed;top:60px;right:20px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);min-width:160px;padding:4px 0;border:1px solid var(--border);opacity:0;visibility:hidden;transform:translateY(-8px);transition:var(--transition);z-index:200;">
+        <button class="sidebar-item" onclick="goToProfile()"><span class="icon"><i class="fas fa-user"></i></span> Thông tin</button>
+        <button class="sidebar-item" onclick="goToSettings()"><span class="icon"><i class="fas fa-cog"></i></span> Cài đặt</button>
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-item" onclick="logout()" style="color:var(--danger);"><span class="icon"><i class="fas fa-sign-out-alt"></i></span> Đăng xuất</button>
     </div>
 
-    <!-- CONTENT -->
+    <!-- Notifications -->
+    <div class="popup" id="notifPopup" style="position:fixed;top:60px;right:20px;background:var(--card);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);min-width:280px;max-width:360px;max-height:320px;overflow-y:auto;padding:8px 0;border:1px solid var(--border);opacity:0;visibility:hidden;transform:translateY(-8px);transition:var(--transition);z-index:200;">
+        <div style="padding:0 12px 8px;border-bottom:1px solid var(--border);font-weight:600;display:flex;justify-content:space-between;font-size:13px;">
+            <span>📢 Thông báo</span>
+            <span style="cursor:pointer;color:var(--text-muted);" onclick="toggleNotif()"><i class="fas fa-times"></i></span>
+        </div>
+        <div id="notifList"><div class="empty"><span class="icon">🔔</span>Chưa có thông báo</div></div>
+    </div>
+
+    <!-- Content -->
     <div class="content">
 
-        <!-- ADMIN HEADER -->
-        <div class="admin-header">
-            <div>
-                <h1><i class="fas fa-crown" style="color:var(--warning);"></i> Quản trị <span class="sub">| Quản lý toàn bộ hệ thống</span></h1>
-            </div>
-            <div class="admin-actions">
-                <button class="btn-sm btn-outline" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 id="pageTitle">📊 Tổng quan <small>Quản lý hệ thống</small></h1>
+            <div class="btn-group">
+                <button class="btn btn-outline btn-sm" onclick="refreshAll()"><i class="fas fa-sync"></i> Làm mới</button>
             </div>
         </div>
 
-        <!-- STATS -->
-        <div class="stats-grid" id="dashboardStats">
-            <div class="stat-card"><div class="num blue" id="dashUsers">0</div><div class="label"><i class="fas fa-users"></i> Người dùng</div></div>
-            <div class="stat-card"><div class="num blue" id="dashCategories">0</div><div class="label"><i class="fas fa-folder"></i> Mục SP</div></div>
-            <div class="stat-card"><div class="num orange" id="dashProducts">0</div><div class="label"><i class="fas fa-warehouse"></i> Sản phẩm</div></div>
-            <div class="stat-card"><div class="num green" id="dashOrders">0</div><div class="label"><i class="fas fa-truck"></i> Đơn hàng</div></div>
-            <div class="stat-card"><div class="num green" id="dashRevenue">0</div><div class="label"><i class="fas fa-coins"></i> DT hôm nay</div></div>
-            <div class="stat-card"><div class="num" id="dashVouchers">0</div><div class="label"><i class="fas fa-ticket-alt"></i> Mã giảm giá</div></div>
+        <!-- Stats -->
+        <div class="stats" id="stats">
+            <div class="stat"><div class="number blue" id="statUsers">0</div><div class="label">👤 Người dùng</div></div>
+            <div class="stat"><div class="number blue" id="statCategories">0</div><div class="label">📁 Danh mục</div></div>
+            <div class="stat"><div class="number orange" id="statProducts">0</div><div class="label">📦 Sản phẩm</div></div>
+            <div class="stat"><div class="number green" id="statOrders">0</div><div class="label">🚚 Đơn hàng</div></div>
+            <div class="stat"><div class="number green" id="statRevenue">0</div><div class="label">💰 Doanh thu hôm nay</div></div>
+            <div class="stat"><div class="number" id="statVouchers">0</div><div class="label">🎫 Mã giảm giá</div></div>
         </div>
 
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-pie"></i> Tổng quan</button>
-            <button class="tab" data-tab="users" onclick="switchTab('users')"><i class="fas fa-users"></i> Người dùng</button>
-            <button class="tab" data-tab="categories" onclick="switchTab('categories')"><i class="fas fa-folder"></i> Mục SP</button>
-            <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-warehouse"></i> Kho hàng</button>
-            <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-truck"></i> Đơn hàng</button>
-            <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')"><i class="fas fa-ticket-alt"></i> Mã giảm giá</button>
-            <button class="tab" data-tab="api" onclick="switchTab('api')"><i class="fas fa-code"></i> API & Tài liệu</button>
+        <!-- Tabs -->
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Tổng quan</button>
+            <button class="tab" data-tab="users" onclick="switchTab('users')">👤 Người dùng</button>
+            <button class="tab" data-tab="categories" onclick="switchTab('categories')">📁 Danh mục</button>
+            <button class="tab" data-tab="products" onclick="switchTab('products')">📦 Sản phẩm</button>
+            <button class="tab" data-tab="orders" onclick="switchTab('orders')">🚚 Đơn hàng</button>
+            <button class="tab" data-tab="vouchers" onclick="switchTab('vouchers')">🎫 Mã giảm giá</button>
+            <button class="tab" data-tab="shops" onclick="switchTab('shops')">🏪 Đại lý</button>
+            <button class="tab" data-tab="media" onclick="switchTab('media')">🖼️ Thư viện</button>
+            <button class="tab" data-tab="docs" onclick="switchTab('docs')">📄 Tài liệu</button>
         </div>
 
-        <!-- TAB: DASHBOARD -->
+        <!-- Tab: Dashboard -->
         <div class="tab-content active" id="tab-dashboard">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
-                <div class="stat-card"><div class="num green" id="dashTodayOrders">0</div><div class="label"><i class="fas fa-shopping-cart"></i> Đơn hôm nay</div></div>
-                <div class="stat-card"><div class="num orange" id="dashTotalSold">0</div><div class="label"><i class="fas fa-box"></i> Tổng bán được</div></div>
-                <div class="stat-card"><div class="num blue" id="dashOnlineUsers">0</div><div class="label"><i class="fas fa-circle" style="color:var(--success);"></i> Đang online</div></div>
-                <div class="stat-card"><div class="num red" id="dashBlockedUsers">0</div><div class="label"><i class="fas fa-lock"></i> Đã khóa</div></div>
+            <div class="stats">
+                <div class="stat"><div class="number green" id="statTodayOrders">0</div><div class="label">🛒 Đơn hôm nay</div></div>
+                <div class="stat"><div class="number orange" id="statTotalSold">0</div><div class="label">📦 Tổng bán</div></div>
+                <div class="stat"><div class="number green" id="statOnline">0</div><div class="label">🟢 Đang online</div></div>
+                <div class="stat"><div class="number red" id="statBlocked">0</div><div class="label">🔒 Đã khóa</div></div>
             </div>
         </div>
 
-        <!-- TAB: USERS -->
+        <!-- Tab: Users -->
         <div class="tab-content" id="tab-users">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="btn-sm btn-primary" onclick="loadUsersAdmin()"><i class="fas fa-sync"></i> Làm mới</button>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary btn-sm" onclick="loadUsers()"><i class="fas fa-sync"></i> Làm mới</button>
             </div>
-            <div id="userGrid" class="user-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+            <div class="grid" id="userGrid"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- TAB: CATEGORIES -->
+        <!-- Tab: Categories -->
         <div class="tab-content" id="tab-categories">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="btn-sm btn-primary" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm mục</button>
-                <button class="btn-sm btn-danger" onclick="confirmDeleteAllCategories()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary btn-sm" onclick="openCategoryModal()"><i class="fas fa-plus"></i> Thêm danh mục</button>
             </div>
-            <div id="categoryList" class="category-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+            <div id="categoryGrid" class="grid"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- TAB: PRODUCTS -->
+        <!-- Tab: Products -->
         <div class="tab-content" id="tab-products">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="btn-sm btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm SP</button>
-                <button class="btn-sm btn-danger" onclick="confirmDeleteAllProducts()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary btn-sm" onclick="openProductModal()"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
             </div>
-            <div id="productGrid" class="product-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+            <div id="productGrid" class="grid"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- TAB: ORDERS -->
+        <!-- Tab: Orders -->
         <div class="tab-content" id="tab-orders">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="btn-sm btn-danger" onclick="confirmDeleteAllOrders()"><i class="fas fa-trash"></i> Xóa tất cả đơn</button>
-            </div>
-            <div id="ordersList" class="order-list"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+            <div id="ordersList"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- TAB: VOUCHERS -->
+        <!-- Tab: Vouchers -->
         <div class="tab-content" id="tab-vouchers">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="btn-sm btn-primary" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã</button>
-                <button class="btn-sm btn-danger" onclick="confirmDeleteAllVouchers()"><i class="fas fa-trash"></i> Xóa tất cả</button>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary btn-sm" onclick="openVoucherModal()"><i class="fas fa-plus"></i> Tạo mã</button>
             </div>
-            <div id="voucherList" class="voucher-grid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>
+            <div id="voucherGrid"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- TAB: API & DOCS -->
-        <div class="tab-content" id="tab-api">
-            <!-- Import từ API -->
-            <div class="api-import-box">
-                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-                    <span style="font-weight:600;color:var(--text-primary);font-size:13px;"><i class="fas fa-cloud-upload-alt" style="color:var(--accent);"></i> Nhập dữ liệu sản phẩm từ API</span>
-                </div>
-                <div class="api-row">
-                    <input type="text" id="apiEndpoint" placeholder="https://your-api.vercel.app/api/products" style="flex:2;" />
-                    <input type="text" id="apiToken" placeholder="API Token (nếu cần)" style="flex:1;" />
-                    <button class="btn-api" onclick="fetchApiData()"><i class="fas fa-download"></i> Lấy dữ liệu</button>
-                </div>
-                <div class="api-row" style="margin-top:6px;">
-                    <select id="apiCategorySelect" style="flex:1;min-width:120px;">
-                        <option value="">Chọn mục để lưu</option>
-                    </select>
-                    <button class="btn-sm btn-success" onclick="importApiData()" id="importApiBtn"><i class="fas fa-upload"></i> Nhập vào kho</button>
-                    <button class="btn-sm btn-outline" onclick="clearApiResult()"><i class="fas fa-times"></i> Xóa kết quả</button>
-                </div>
-                <div class="api-result" id="apiResult"></div>
-                <div id="apiDataPreview" style="max-height:300px;overflow-y:auto;margin-top:8px;border:1px solid var(--border-color);border-radius:6px;padding:8px;background:var(--wallet-bg);display:none;"></div>
+        <!-- Tab: Shops -->
+        <div class="tab-content" id="tab-shops">
+            <div class="btn-group" style="margin-bottom:12px;">
+                <button class="btn btn-primary btn-sm" onclick="openShopModal()"><i class="fas fa-plus"></i> Tạo đại lý</button>
             </div>
-
-            <!-- API Endpoints -->
-            <div class="api-docs-box">
-                <h4 style="color:var(--text-primary);font-size:13px;margin-bottom:8px;"><i class="fas fa-plug"></i> API Endpoints</h4>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px;">
-                    <div style="background:var(--wallet-bg);padding:6px 10px;border-radius:6px;border:1px solid var(--border-color);">
-                        <div style="font-size:9px;color:var(--text-muted);">GET</div>
-                        <div class="api-endpoint" style="font-size:11px;">/api/products</div>
-                        <div style="font-size:9px;color:var(--text-muted);">Lấy tất cả sản phẩm</div>
-                    </div>
-                    <div style="background:var(--wallet-bg);padding:6px 10px;border-radius:6px;border:1px solid var(--border-color);">
-                        <div style="font-size:9px;color:var(--text-muted);">GET</div>
-                        <div class="api-endpoint" style="font-size:11px;">/api/product/:id</div>
-                        <div style="font-size:9px;color:var(--text-muted);">Lấy chi tiết sản phẩm</div>
-                    </div>
-                    <div style="background:var(--wallet-bg);padding:6px 10px;border-radius:6px;border:1px solid var(--border-color);">
-                        <div style="font-size:9px;color:var(--text-muted);">POST</div>
-                        <div class="api-endpoint" style="font-size:11px;">/api/products/batch</div>
-                        <div style="font-size:9px;color:var(--text-muted);">Nhập nhiều sản phẩm</div>
-                    </div>
-                    <div style="background:var(--wallet-bg);padding:6px 10px;border-radius:6px;border:1px solid var(--border-color);">
-                        <div style="font-size:9px;color:var(--text-muted);">POST</div>
-                        <div class="api-endpoint" style="font-size:11px;">/api/order</div>
-                        <div style="font-size:9px;color:var(--text-muted);">Tạo đơn hàng</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tài liệu API -->
-            <div class="api-docs-box">
-                <h4 style="color:var(--text-primary);font-size:13px;margin-bottom:8px;"><i class="fas fa-book"></i> Hướng dẫn sử dụng API</h4>
-                
-                <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
-                    <p><strong>1. Nhập sản phẩm hàng loạt:</strong></p>
-                </div>
-                <pre><code>POST /api/products/batch
-Content-Type: application/json
-
-{
-  "category": "CATEGORY_ID",
-  "products": [
-    {
-      "name": "Tên sản phẩm",
-      "price": 100000,
-      "icon": "🎮",
-      "image": "https://example.com/image.jpg",
-      "description": "Mô tả sản phẩm",
-      "data": "item1\nitem2\nitem3"
-    }
-  ]
-}</code></pre>
-
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
-                    <p><strong>2. Lấy danh sách sản phẩm:</strong></p>
-                </div>
-                <pre><code>GET /api/products</code></pre>
-
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
-                    <p><strong>3. Lấy chi tiết sản phẩm:</strong></p>
-                </div>
-                <pre><code>GET /api/product/{productId}</code></pre>
-
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
-                    <p><strong>4. Tạo đơn hàng (cho đại lý):</strong></p>
-                </div>
-                <pre><code>POST /api/order
-Content-Type: application/json
-
-{
-  "shop_id": "YOUR_SHOP_ID",
-  "token": "YOUR_TOKEN",
-  "product_id": "PRODUCT_ID",
-  "quantity": 1
-}</code></pre>
-
-                <div style="font-size:11px;color:var(--text-muted);margin-top:10px;padding:8px;background:var(--wallet-bg);border-radius:6px;border:1px solid var(--border-color);">
-                    <i class="fas fa-info-circle"></i> <b>Lưu ý:</b> Cần deploy API server lên Vercel. Xem <a href="https://github.com/Minkuanng/vercel-api" target="_blank" style="color:var(--accent);">github.com/Minkuanng/vercel-api</a>
-                </div>
-            </div>
+            <div class="grid" id="shopGrid"><div class="empty"><span class="icon">⏳</span>Đang tải...</div></div>
         </div>
 
-        <!-- BACK BUTTON -->
-        <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</button>
+        <!-- Tab: Media Library -->
+        <div class="tab-content" id="tab-media">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="text">Kéo thả ảnh vào đây hoặc click để chọn</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Hỗ trợ JPG, PNG, GIF, WebP, SVG</div>
+                <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+            </div>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <input type="text" id="mediaSearch" placeholder="🔍 Tìm kiếm ảnh..." style="padding:6px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);flex:1;min-width:120px;font-size:13px;" oninput="filterMedia()">
+            </div>
+            <div class="media-grid" id="mediaGrid"><div class="empty"><span class="icon">🖼️</span>Chưa có ảnh nào</div></div>
+        </div>
+
+        <!-- Tab: Docs -->
+        <div class="tab-content" id="tab-docs">
+            <div class="upload-zone" id="docUploadZone" onclick="document.getElementById('docInput').click()">
+                <div class="icon"><i class="fas fa-file-upload"></i></div>
+                <div class="text">Tải lên tài liệu (PDF, DOC, DOCX, TXT, ZIP)</div>
+                <input type="file" id="docInput" accept=".pdf,.doc,.docx,.txt,.zip" multiple style="display:none;">
+            </div>
+            <div class="btn-group" style="margin-bottom:12px;">
+                <input type="text" id="docSearch" placeholder="🔍 Tìm kiếm tài liệu..." style="padding:6px 12px;border:2px solid var(--border);border-radius:var(--radius-sm);flex:1;min-width:120px;font-size:13px;" oninput="filterDocs()">
+            </div>
+            <div id="docGrid" class="grid"><div class="empty"><span class="icon">📄</span>Chưa có tài liệu nào</div></div>
+        </div>
+
+        <!-- Back -->
+        <button class="btn btn-outline" style="margin-top:20px;width:100%;justify-content:center;" onclick="goHome()"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</button>
     </div>
 
-    <!-- MODALS -->
-    <!-- CATEGORY MODAL -->
+    <!-- Modals -->
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
-            <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm mục</span></h3>
-            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên mục" /></div>
-            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
+            <h3><i class="fas fa-folder"></i> <span id="categoryModalTitle">Thêm danh mục</span></h3>
+            <div class="row"><label>Tên:</label><input type="text" id="categoryName" placeholder="Tên danh mục"></div>
+            <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁"></div>
             <div class="row">
-                <label>Hình:</label>
-                <input type="text" id="categoryImage" placeholder="URL hình ảnh" />
-                <div class="preview" id="categoryImagePreview">🖼️</div>
+                <label>Ảnh:</label>
+                <button class="btn btn-outline btn-sm" onclick="openMediaPicker('categoryImage')"><i class="fas fa-images"></i> Chọn ảnh</button>
+                <input type="hidden" id="categoryImage">
+                <div id="categoryImagePreview" style="width:50px;height:50px;border-radius:var(--radius-sm);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;">🖼️</div>
             </div>
-            <input type="hidden" id="categoryEditId" />
+            <input type="hidden" id="categoryEditId">
             <div class="actions">
-                <button class="save" onclick="saveCategory()"><i class="fas fa-save"></i> Lưu</button>
-                <button class="cancel" onclick="closeCategoryModal()"><i class="fas fa-times"></i> Đóng</button>
+                <button class="btn btn-primary" onclick="saveCategory()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="btn btn-outline" onclick="closeCategoryModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- PRODUCT MODAL -->
     <div class="modal-overlay" id="productModal">
         <div class="modal">
-            <h3><i class="fas fa-warehouse"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
-            <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm" /></div>
-            <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND" /></div>
+            <h3><i class="fas fa-box"></i> <span id="productModalTitle">Thêm sản phẩm</span></h3>
+            <div class="row"><label>Tên:</label><input type="text" id="productName" placeholder="Tên sản phẩm"></div>
+            <div class="row"><label>Giá:</label><input type="number" id="productPrice" placeholder="Giá VND"></div>
             <div class="row">
-                <label>Mục:</label>
-                <select id="productCategory"><option value="">Chọn mục</option></select>
+                <label>Danh mục:</label>
+                <select id="productCategory"><option value="">Chọn danh mục</option></select>
             </div>
-            <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
+            <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦"></div>
             <div class="row">
-                <label>Hình:</label>
-                <div style="flex:1;display:flex;gap:4px;flex-wrap:wrap;">
-                    <input type="text" id="productImage" placeholder="URL hình ảnh" style="flex:1;min-width:100px;" />
-                    <button class="btn-sm btn-upload" onclick="document.getElementById('productImageFile').click()" type="button"><i class="fas fa-upload"></i> Tải lên</button>
-                    <input type="file" id="productImageFile" accept="image/*" style="display:none;" onchange="handleProductImageUpload(event)" />
-                </div>
-                <div class="preview" id="productImagePreview">🖼️</div>
-            </div>
-            <div class="row upload-area" onclick="document.getElementById('productImageFile').click()">
-                <div><span class="icon">🖼️</span></div>
-                <div class="text">Nhấn để chọn ảnh tải lên</div>
-                <div class="upload-progress" id="productUploadProgress"><div class="bar" id="productUploadBar"></div></div>
+                <label>Ảnh:</label>
+                <button class="btn btn-outline btn-sm" onclick="openMediaPicker('productImage')"><i class="fas fa-images"></i> Chọn ảnh</button>
+                <input type="hidden" id="productImage">
+                <div id="productImagePreview" style="width:50px;height:50px;border-radius:var(--radius-sm);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;">🖼️</div>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Mô tả:</label>
-                <textarea id="productDesc" placeholder="Mô tả sản phẩm (tối đa 240 từ)" rows="3" maxlength="1500"></textarea>
-                <div style="display:flex;justify-content:flex-end;font-size:10px;"><span class="word-count" id="wordCount">0/240 từ</span></div>
+                <textarea id="productDesc" placeholder="Mô tả sản phẩm" rows="3"></textarea>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Dữ liệu (mỗi dòng 1 món):</label>
-                <textarea id="productData" placeholder="VD:&#10;acc1:pass1&#10;acc2:pass2" rows="4"></textarea>
-                <span style="font-size:9px;color:var(--text-muted);">📌 Mỗi dòng = 1 sản phẩm trong kho</span>
+                <textarea id="productData" placeholder="acc1:pass1&#10;acc2:pass2" rows="4"></textarea>
             </div>
-            <input type="hidden" id="productEditId" />
+            <input type="hidden" id="productEditId">
             <div class="actions">
-                <button class="save" onclick="saveProduct()"><i class="fas fa-save"></i> Lưu</button>
-                <button class="cancel" onclick="closeProductModal()"><i class="fas fa-times"></i> Đóng</button>
+                <button class="btn btn-primary" onclick="saveProduct()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="btn btn-outline" onclick="closeProductModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- DATA MODAL -->
-    <div class="modal-overlay" id="dataModal">
-        <div class="modal">
-            <h3><i class="fas fa-database"></i> Quản lý dữ liệu</h3>
-            <div class="row"><label>Sản phẩm:</label><span id="dataProductName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label>Số lượng:</label><span id="dataCount" style="color:var(--accent);font-weight:700;"></span></div>
-            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;">Danh sách:</label>
-                <div class="data-list" id="dataList"></div>
-            </div>
-            <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
-                <label style="min-width:auto;">Thêm mới:</label>
-                <div style="display:flex;gap:4px;">
-                    <input type="text" id="dataNewItem" placeholder="Nhập dữ liệu mới" style="flex:1;" />
-                    <button class="save" onclick="addDataItem()" style="padding:4px 10px;border:none;border-radius:4px;background:var(--success);color:#fff;cursor:pointer;font-weight:600;font-size:11px;"><i class="fas fa-plus"></i> Thêm</button>
-                </div>
-            </div>
-            <input type="hidden" id="dataProductId" />
-            <div class="actions">
-                <button class="cancel" onclick="closeDataModal()"><i class="fas fa-times"></i> Đóng</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- VOUCHER MODAL -->
     <div class="modal-overlay" id="voucherModal">
         <div class="modal">
-            <h3><i class="fas fa-ticket-alt"></i> Tạo mã giảm giá</h3>
-            <div class="row"><label>Mã:</label><input type="text" id="voucherCode" placeholder="VD: SALE10" style="text-transform:uppercase;" /></div>
+            <h3><i class="fas fa-ticket"></i> Tạo mã giảm giá</h3>
+            <div class="row"><label>Mã:</label><input type="text" id="voucherCode" placeholder="SALE10" style="text-transform:uppercase;"></div>
             <div class="row">
                 <label>Loại:</label>
-                <select id="voucherType">
-                    <option value="percent">Giảm %</option>
-                    <option value="fixed">Giảm tiền</option>
-                </select>
+                <select id="voucherType"><option value="percent">Giảm %</option><option value="fixed">Giảm tiền</option></select>
             </div>
-            <div class="row"><label>Giá trị:</label><input type="number" id="voucherValue" placeholder="10 hoặc 50000" /></div>
-            <div class="row"><label>Số lượt:</label><input type="number" id="voucherMaxUses" placeholder="Số lần" value="10" /></div>
+            <div class="row"><label>Giá trị:</label><input type="number" id="voucherValue" placeholder="10 hoặc 50000"></div>
+            <div class="row"><label>Số lượt:</label><input type="number" id="voucherMaxUses" value="10"></div>
             <div class="actions">
-                <button class="save" onclick="saveVoucher()"><i class="fas fa-save"></i> Lưu</button>
-                <button class="cancel" onclick="closeVoucherModal()"><i class="fas fa-times"></i> Đóng</button>
+                <button class="btn btn-primary" onclick="saveVoucher()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="btn btn-outline" onclick="closeVoucherModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- MONEY MODAL -->
-    <div class="modal-overlay" id="moneyModal">
+    <div class="modal-overlay" id="shopModal">
         <div class="modal">
-            <h3><i class="fas fa-coins"></i> <span id="moneyModalTitle">Điều chỉnh số dư</span></h3>
-            <div class="row"><label>Người dùng:</label><span id="moneyUserName" style="color:var(--text-primary);font-weight:600;"></span></div>
-            <div class="row"><label>Số dư:</label><span id="moneyCurrentBalance" style="color:var(--accent);font-weight:700;"></span></div>
-            <div class="row"><label>Số tiền:</label><input type="number" id="moneyAmount" placeholder="Nhập số tiền" /></div>
-            <div class="row"><label>Ghi chú:</label><input type="text" id="moneyNote" placeholder="Lý do" /></div>
-            <input type="hidden" id="moneyUserId" />
+            <h3><i class="fas fa-store"></i> <span id="shopModalTitle">Tạo đại lý</span></h3>
+            <div class="row"><label>Tên:</label><input type="text" id="shopName" placeholder="Tên đại lý"></div>
+            <div class="row"><label>shop_id:</label><input type="text" id="shopId" placeholder="Để trống tự sinh"></div>
+            <div class="row">
+                <label>Token:</label>
+                <input type="text" id="shopToken" readonly style="font-family:monospace;font-size:11px;flex:2;">
+                <button class="btn btn-outline btn-sm" onclick="regenToken()"><i class="fas fa-rotate"></i></button>
+            </div>
+            <div class="row"><label>Số dư:</label><input type="number" id="shopBalance" value="0"></div>
+            <div class="row">
+                <label>Trạng thái:</label>
+                <select id="shopStatus"><option value="active">Hoạt động</option><option value="banned">Khóa</option></select>
+            </div>
+            <input type="hidden" id="shopEditId">
             <div class="actions">
-                <button class="success" onclick="moneyAction('add')"><i class="fas fa-plus"></i> Cộng</button>
-                <button class="danger" onclick="moneyAction('sub')"><i class="fas fa-minus"></i> Trừ</button>
-                <button class="cancel" onclick="closeMoneyModal()"><i class="fas fa-times"></i> Đóng</button>
+                <button class="btn btn-primary" onclick="saveShop()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="btn btn-outline" onclick="closeShopModal()"><i class="fas fa-times"></i> Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- TOAST -->
+    <div class="modal-overlay" id="mediaPickerModal">
+        <div class="modal" style="max-width:700px;">
+            <h3><i class="fas fa-images"></i> Chọn ảnh</h3>
+            <div class="media-grid" id="pickerGrid" style="max-height:400px;overflow-y:auto;"></div>
+            <div class="actions" style="margin-top:12px;">
+                <button class="btn btn-primary" onclick="closeMediaPicker()"><i class="fas fa-check"></i> Chọn</button>
+                <button class="btn btn-outline" onclick="closeMediaPicker()"><i class="fas fa-times"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ===== FIREBASE =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
-            authDomain: "shop-c6777.firebaseapp.com",
-            databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "shop-c6777",
-            storageBucket: "shop-c6777.firebasestorage.app",
-            messagingSenderId: "43186563268",
-            appId: "1:43186563268:web:0d392ba57039a919670191"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-        const storage = firebase.storage();
-
-        // ===== VARIABLES =====
-        let isAdmin = false;
-        let isDataLoaded = false;
-        let categoriesData = {};
-        let productsData = {};
-        let ordersData = {};
-        let vouchersData = {};
-        let usersData = {};
-        let onlineUsersMap = {};
-        let apiFetchedData = null;
-
-        // ===== TOAST =====
-        function showToast(msg, type = '') {
-            const el = document.getElementById('toast');
-            el.textContent = msg;
-            el.className = 'toast ' + type;
-            el.classList.add('show');
-            clearTimeout(el.timeout);
-            el.timeout = setTimeout(() => el.classList.remove('show'), 2500);
-        }
-
-        // ===== LOADING =====
-        function hideLoading() {
-            const overlay = document.querySelector('.loading-overlay');
-            if (overlay) { overlay.classList.add('hidden'); overlay.style.display = 'none'; }
-        }
-        function showLoading() {
-            const overlay = document.querySelector('.loading-overlay');
-            if (overlay) { overlay.style.display = 'flex'; overlay.classList.remove('hidden'); }
-        }
-
-        // ===== QUICK LOGIN =====
-        function checkQuickLogin() {
-            const quickUid = localStorage.getItem('quickLoginUid');
-            const quickToken = localStorage.getItem('quickLoginToken');
-            const quickPending = localStorage.getItem('quickLoginPending');
-            return !!(quickUid && quickToken && quickPending === 'true');
-        }
-
-        async function completeQuickLogin() {
-            const quickUid = localStorage.getItem('quickLoginUid');
-            if (!quickUid) return false;
-            try {
-                await db.ref('presence/' + quickUid).set(true);
-                db.ref('presence/' + quickUid).onDisconnect().set(false);
-                const snap = await db.ref('users/' + quickUid).once('value');
-                const data = snap.val();
-                if (data) {
-                    document.getElementById('balanceAmount').textContent = (data.balance || 0).toLocaleString('vi-VN');
-                    if (data.isAdmin === true) {
-                        isAdmin = true;
-                        loadAllData();
-                    } else {
-                        alert('⚠️ Không có quyền truy cập!');
-                        window.location.replace('../index.html');
-                        return false;
-                    }
-                }
-                isDataLoaded = true;
-                hideLoading();
-                return true;
-            } catch (error) {
-                console.error('Lỗi:', error);
-                return false;
-            }
-        }
-
-        // ===== LOAD ALL DATA =====
-        function loadAllData() {
-            db.ref('users').on('value', snap => { usersData = snap.val() || {}; renderUsers(); updateDashboard(); });
-            db.ref('presence').on('value', snap => { onlineUsersMap = snap.val() || {}; renderUsers(); });
-            db.ref('categories').on('value', snap => { categoriesData = snap.val() || {}; renderCategories(); updateCategorySelect(); updateDashboard(); });
-            db.ref('products').on('value', snap => { productsData = snap.val() || {}; renderProducts(); updateDashboard(); });
-            db.ref('orders').on('value', snap => { ordersData = snap.val() || {}; renderOrders(); updateDashboard(); });
-            db.ref('vouchers').on('value', snap => { vouchersData = snap.val() || {}; renderVouchers(); updateDashboard(); });
-            db.ref('notifications').on('value', snap => {
-                const notifs = snap.val();
-                const list = document.getElementById('notifList');
-                const dot = document.getElementById('notifDot');
-                const uid = auth.currentUser?.uid || localStorage.getItem('quickLoginUid');
-                if (notifs) {
-                    const keys = Object.keys(notifs).reverse();
-                    let html = '', hasUnread = false;
-                    keys.forEach(key => {
-                        const n = notifs[key];
-                        const isUnread = !n.readBy || !n.readBy[uid];
-                        if (isUnread) hasUnread = true;
-                        html += `<div class="notif-item ${isUnread?'unread':''}"><i class="fas fa-bell"></i> ${n.message}<span class="time"><i class="far fa-clock"></i> ${new Date(n.timestamp).toLocaleString('vi-VN')}</span></div>`;
-                    });
-                    list.innerHTML = html;
-                    dot.classList.toggle('show', hasUnread && localStorage.getItem('notifEnabled') !== 'false');
-                } else {
-                    list.innerHTML = `<div class="empty"><i class="far fa-bell-slash"></i> Chưa có thông báo</div>`;
-                    dot.classList.remove('show');
-                }
-            });
-            setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 3000);
-        }
-
-        // ===== UPDATE DASHBOARD =====
-        function updateDashboard() {
-            const u = Object.keys(usersData).length;
-            const c = Object.keys(categoriesData).length;
-            const p = Object.keys(productsData).length;
-            const o = Object.keys(ordersData).length;
-            const v = Object.keys(vouchersData).length;
-            document.getElementById('dashUsers').textContent = u;
-            document.getElementById('dashCategories').textContent = c;
-            document.getElementById('dashProducts').textContent = p;
-            document.getElementById('dashOrders').textContent = o;
-            document.getElementById('dashVouchers').textContent = v;
-            
-            let todayRevenue = 0, todayOrders = 0, totalSold = 0, blocked = 0, online = 0;
-            const today = new Date(); today.setHours(0,0,0,0);
-            Object.keys(ordersData).forEach(key => {
-                const ord = ordersData[key];
-                totalSold += ord.quantity || 0;
-                if (ord.timestamp >= today.getTime()) {
-                    todayRevenue += ord.price || 0;
-                    todayOrders++;
-                }
-            });
-            Object.keys(usersData).forEach(key => {
-                if (usersData[key].blocked === true) blocked++;
-                if (onlineUsersMap[key] === true) online++;
-            });
-            document.getElementById('dashRevenue').textContent = todayRevenue.toLocaleString('vi-VN') + 'đ';
-            document.getElementById('dashTodayOrders').textContent = todayOrders;
-            document.getElementById('dashTotalSold').textContent = totalSold;
-            document.getElementById('dashOnlineUsers').textContent = online;
-            document.getElementById('dashBlockedUsers').textContent = blocked;
-        }
-
-        // ===== SWITCH TAB =====
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            if (tab === 'users') renderUsers();
-            if (tab === 'categories') renderCategories();
-            if (tab === 'products') renderProducts();
-            if (tab === 'orders') renderOrders();
-            if (tab === 'vouchers') renderVouchers();
-            if (tab === 'dashboard') updateDashboard();
-            if (tab === 'api') updateApiCategorySelect();
-        }
-
-        // ===== RENDER USERS =====
-        function renderUsers() {
-            const container = document.getElementById('userGrid');
-            const keys = Object.keys(usersData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">👤</span>Chưa có người dùng</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const u = usersData[key];
-                if (u.isAdmin === true) return;
-                const isOnline = onlineUsersMap[key] === true;
-                const isBlocked = u.blocked === true;
-                const name = u.displayName || u.email || 'Chưa đặt tên';
-                const email = u.email || 'Không có email';
-                const initial = name.charAt(0).toUpperCase() || '?';
-                const statusClass = isBlocked ? 'blocked' : (isOnline ? 'online' : 'offline');
-                const statusText = isBlocked ? '🔒 Đã khóa' : (isOnline ? '🟢 Online' : '⚪ Offline');
-                html += `
-                    <div class="user-card">
-                        <div class="user-header">
-                            <div class="avatar">${initial}</div>
-                            <div class="info">
-                                <div class="name">${name}</div>
-                                <div class="email">${email}</div>
-                            </div>
-                        </div>
-                        <div class="balance"><i class="fas fa-coins"></i> ${(u.balance||0).toLocaleString('vi-VN')} VND</div>
-                        <div><span class="status ${statusClass}">${statusText}</span></div>
-                        <div class="actions">
-                            <button class="add" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'add')"><i class="fas fa-plus"></i></button>
-                            <button class="sub" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'sub')"><i class="fas fa-minus"></i></button>
-                            ${isBlocked ? 
-                                `<button class="unblock" onclick="toggleBlock('${key}',false)"><i class="fas fa-unlock"></i></button>` :
-                                `<button class="block" onclick="toggleBlock('${key}',true)"><i class="fas fa-lock"></i></button>`
-                            }
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function loadUsersAdmin() { renderUsers(); showToast('🔄 Đã làm mới!', 'success'); }
-
-        // ===== TOGGLE BLOCK =====
-        function toggleBlock(uid, block) {
-            if (confirm(block ? '🔒 Khóa người dùng này?' : '🔓 Mở khóa?')) {
-                db.ref('users/' + uid + '/blocked').set(block).then(() => {
-                    showToast(block ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success');
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== MONEY =====
-        function openMoneyModal(uid, name, balance, action) {
-            document.getElementById('moneyModalTitle').textContent = action === 'add' ? '💰 Cộng tiền' : '💰 Trừ tiền';
-            document.getElementById('moneyUserName').textContent = name;
-            document.getElementById('moneyCurrentBalance').textContent = balance.toLocaleString('vi-VN') + ' VND';
-            document.getElementById('moneyAmount').value = '';
-            document.getElementById('moneyNote').value = '';
-            document.getElementById('moneyUserId').value = uid;
-            document.getElementById('moneyModal').classList.add('active');
-        }
-        function closeMoneyModal() { document.getElementById('moneyModal').classList.remove('active'); }
-
-        function moneyAction(action) {
-            const uid = document.getElementById('moneyUserId').value;
-            const amount = parseInt(document.getElementById('moneyAmount').value);
-            const note = document.getElementById('moneyNote').value.trim() || 'Admin điều chỉnh';
-            if (!uid || !amount || amount <= 0) { showToast('❌ Nhập số tiền hợp lệ!', 'error'); return; }
-            const isAdd = action === 'add';
-            db.ref('users/' + uid + '/balance').transaction(c => { const v = c || 0; return isAdd ? v + amount : Math.max(0, v - amount); })
-                .then(r => {
-                    showToast(`✅ ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ thành công!`, 'success');
-                    closeMoneyModal();
-                    db.ref('notifications').push({ message: `💳 ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ. Lý do: ${note}`, timestamp: Date.now(), from: 'Admin', readBy: {} });
-                }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        // ===== RENDER CATEGORIES =====
-        function renderCategories() {
-            const container = document.getElementById('categoryList');
-            const keys = Object.keys(categoriesData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📁</span>Chưa có mục</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const c = categoriesData[key];
-                const count = Object.keys(productsData).filter(p => productsData[p]?.category === key).length;
-                const img = c.image || '';
-                html += `
-                    <div class="category-item">
-                        <div class="icon">${img ? `<img src="${img}" onerror="this.parentElement.textContent='${c.icon||'📁'}'" />` : (c.icon||'📁')}</div>
-                        <div class="info"><div class="name">${c.name||'Chưa tên'}</div><div class="count">${count} sp</div></div>
-                        <div class="actions">
-                            <button class="edit" onclick="editCategory('${key}')"><i class="fas fa-edit"></i></button>
-                            <button class="del" onclick="deleteCategory('${key}')"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function updateCategorySelect() {
-            const sel = document.getElementById('productCategory');
-            sel.innerHTML = '<option value="">Chọn mục</option>';
-            Object.keys(categoriesData).forEach(k => {
-                const c = categoriesData[k];
-                sel.innerHTML += `<option value="${k}">${c.icon||'📁'} ${c.name}</option>`;
-            });
-        }
-
-        function updateApiCategorySelect() {
-            const sel = document.getElementById('apiCategorySelect');
-            sel.innerHTML = '<option value="">Chọn mục để lưu</option>';
-            Object.keys(categoriesData).forEach(k => {
-                const c = categoriesData[k];
-                sel.innerHTML += `<option value="${k}">${c.icon||'📁'} ${c.name}</option>`;
-            });
-        }
-
-        // ===== CATEGORY CRUD =====
-        function openCategoryModal() {
-            document.getElementById('categoryModalTitle').textContent = 'Thêm mục';
-            document.getElementById('categoryName').value = '';
-            document.getElementById('categoryIcon').value = '📁';
-            document.getElementById('categoryImage').value = '';
-            document.getElementById('categoryImagePreview').textContent = '🖼️';
-            document.getElementById('categoryEditId').value = '';
-            document.getElementById('categoryModal').classList.add('active');
-            document.getElementById('categoryImage').oninput = function() {
-                const p = document.getElementById('categoryImagePreview');
-                const v = this.value.trim();
-                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            };
-        }
-        function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('active'); }
-
-        function editCategory(key) {
-            const c = categoriesData[key]; if (!c) return;
-            document.getElementById('categoryModalTitle').textContent = 'Sửa mục';
-            document.getElementById('categoryName').value = c.name || '';
-            document.getElementById('categoryIcon').value = c.icon || '📁';
-            document.getElementById('categoryImage').value = c.image || '';
-            document.getElementById('categoryEditId').value = key;
-            const p = document.getElementById('categoryImagePreview');
-            p.innerHTML = c.image ? `<img src="${c.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            document.getElementById('categoryModal').classList.add('active');
-        }
-
-        function saveCategory() {
-            const name = document.getElementById('categoryName').value.trim();
-            const icon = document.getElementById('categoryIcon').value.trim() || '📁';
-            const image = document.getElementById('categoryImage').value.trim();
-            const editId = document.getElementById('categoryEditId').value;
-            if (!name) { showToast('❌ Nhập tên mục!', 'error'); return; }
-            const data = { name, icon }; if (image) data.image = image;
-            const ref = editId ? db.ref('categories/' + editId) : db.ref('categories').push();
-            ref.set(data).then(() => { showToast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm!', 'success'); closeCategoryModal(); })
-                .catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function deleteCategory(key) {
-            if (confirm('🗑️ Xóa mục này?')) {
-                db.ref('categories/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllCategories() {
-            if (confirm('🗑️ Xóa TẤT CẢ mục?')) {
-                db.ref('categories').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== UPLOAD IMAGE =====
-        function handleProductImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                showToast('❌ Vui lòng chọn file ảnh!', 'error');
-                return;
-            }
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('❌ Ảnh không quá 5MB!', 'error');
-                return;
-            }
-
-            const progressBar = document.getElementById('productUploadBar');
-            const progressContainer = document.getElementById('productUploadProgress');
-            progressContainer.style.display = 'block';
-            progressBar.style.width = '0%';
-
-            const path = 'products/' + Date.now() + '_' + file.name;
-            const uploadTask = storage.ref(path).put(file);
-
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    progressBar.style.width = progress + '%';
-                },
-                (error) => {
-                    showToast('❌ Lỗi tải lên: ' + error.message, 'error');
-                    progressContainer.style.display = 'none';
-                },
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-                        document.getElementById('productImage').value = url;
-                        document.getElementById('productImagePreview').innerHTML = `<img src="${url}" />`;
-                        progressContainer.style.display = 'none';
-                        showToast('✅ Tải ảnh lên thành công!', 'success');
-                    });
-                }
-            );
-        }
-
-        // ===== RENDER PRODUCTS =====
-        function renderProducts() {
-            const container = document.getElementById('productGrid');
-            const keys = Object.keys(productsData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📦</span>Kho hàng trống</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const p = productsData[key];
-                const dataList = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-                const stock = dataList.length;
-                const catName = categoriesData[p.category]?.name || 'Không mục';
-                const catIcon = categoriesData[p.category]?.icon || '📁';
-                html += `
-                    <div class="product-card">
-                        <div class="top">
-                            <div class="img">${p.image ? `<img src="${p.image}" onerror="this.parentElement.textContent='${p.icon||'📦'}'" />` : (p.icon||'📦')}</div>
-                            <div class="title">
-                                <div class="name">${p.name||'Sản phẩm'}</div>
-                                <div class="cat">${catIcon} ${catName}</div>
-                            </div>
-                        </div>
-                        <div class="details">
-                            <div class="item"><div class="lbl">Giá</div><div class="val price">${(p.price||0).toLocaleString('vi-VN')}đ</div></div>
-                            <div class="item"><div class="lbl">Tồn kho</div><div class="val stock">${stock}</div></div>
-                            <div class="item"><div class="lbl">Đã bán</div><div class="val">${p.sold||0}</div></div>
-                            <div class="item"><div class="lbl">Trạng thái</div><div class="val" style="color:${stock>0?'var(--success)':'var(--danger)'};font-size:11px;">${stock>0?'🟢 Còn':'🔴 Hết'}</div></div>
-                        </div>
-                        ${p.description ? `<div class="desc">${p.description}</div>` : ''}
-                        <div class="actions">
-                            <button class="edit" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
-                            <button class="data" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Data (${stock})</button>
-                            <button class="del" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i> Xóa</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ===== PRODUCT CRUD =====
-        document.getElementById('productDesc').addEventListener('input', function() {
-            const words = this.value.trim() ? this.value.trim().split(/\s+/).length : 0;
-            const el = document.getElementById('wordCount');
-            el.textContent = `${words}/240 từ`;
-            el.className = 'word-count' + (words > 240 ? ' danger' : words > 200 ? ' warning' : '');
-        });
-
-        function openProductModal() {
-            document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
-            ['productName','productPrice','productCategory','productIcon','productImage','productDesc','productData'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.type !== 'number') el.value = '';
-                else if (el) el.value = '';
-            });
-            document.getElementById('productIcon').value = '📦';
-            document.getElementById('wordCount').textContent = '0/240 từ';
-            document.getElementById('wordCount').className = 'word-count';
-            document.getElementById('productImagePreview').textContent = '🖼️';
-            document.getElementById('productEditId').value = '';
-            document.getElementById('productUploadProgress').style.display = 'none';
-            updateCategorySelect();
-            document.getElementById('productModal').classList.add('active');
-            document.getElementById('productImage').oninput = function() {
-                const p = document.getElementById('productImagePreview');
-                const v = this.value.trim();
-                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            };
-        }
-        function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
-
-        function editProduct(key) {
-            const p = productsData[key]; if (!p) return;
-            document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
-            document.getElementById('productName').value = p.name || '';
-            document.getElementById('productPrice').value = p.price || '';
-            document.getElementById('productCategory').value = p.category || '';
-            document.getElementById('productIcon').value = p.icon || '📦';
-            document.getElementById('productImage').value = p.image || '';
-            document.getElementById('productDesc').value = p.description || '';
-            document.getElementById('productData').value = p.data || '';
-            document.getElementById('productEditId').value = key;
-            document.getElementById('productUploadProgress').style.display = 'none';
-            const words = p.description ? p.description.trim().split(/\s+/).length : 0;
-            const el = document.getElementById('wordCount');
-            el.textContent = `${words}/240 từ`;
-            el.className = 'word-count' + (words > 240 ? ' danger' : words > 200 ? ' warning' : '');
-            const preview = document.getElementById('productImagePreview');
-            preview.innerHTML = p.image ? `<img src="${p.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            updateCategorySelect();
-            document.getElementById('productModal').classList.add('active');
-        }
-
-        function saveProduct() {
-            const name = document.getElementById('productName').value.trim();
-            const price = parseInt(document.getElementById('productPrice').value);
-            const category = document.getElementById('productCategory').value;
-            const icon = document.getElementById('productIcon').value.trim() || '📦';
-            const image = document.getElementById('productImage').value.trim();
-            const description = document.getElementById('productDesc').value.trim();
-            const dataRaw = document.getElementById('productData').value;
-            const dataString = dataRaw.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n');
-            const editId = document.getElementById('productEditId').value;
-            const words = description ? description.trim().split(/\s+/).length : 0;
-            if (words > 240) { showToast('❌ Mô tả vượt quá 240 từ!', 'error'); return; }
-            if (!name) { showToast('❌ Nhập tên sản phẩm!', 'error'); return; }
-            if (!price || price < 0) { showToast('❌ Nhập giá hợp lệ!', 'error'); return; }
-            if (!category) { showToast('❌ Chọn mục!', 'error'); return; }
-            if (!dataString) { showToast('❌ Nhập ít nhất 1 dữ liệu!', 'error'); return; }
-            const data = { name, price, category, icon, data: dataString, sold: 0 };
-            if (image) data.image = image;
-            if (description) data.description = description;
-            const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
-            ref.set(data).then(() => {
-                const count = dataString.split('\n').length;
-                showToast(editId ? '✅ Đã cập nhật!' : `✅ Đã thêm ${count} món!`, 'success');
-                closeProductModal();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function deleteProduct(key) {
-            if (confirm('🗑️ Xóa sản phẩm?')) {
-                db.ref('products/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllProducts() {
-            if (confirm('🗑️ Xóa TẤT CẢ sản phẩm?')) {
-                db.ref('products').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== DATA MANAGEMENT =====
-        function openDataModal(productId, productName) {
-            const p = productsData[productId]; if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
-            const dataArray = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            document.getElementById('dataProductName').textContent = productName;
-            document.getElementById('dataCount').textContent = dataArray.length;
-            document.getElementById('dataProductId').value = productId;
-            document.getElementById('dataNewItem').value = '';
-            renderDataList(dataArray);
-            document.getElementById('dataModal').classList.add('active');
-        }
-
-        function renderDataList(data) {
-            const container = document.getElementById('dataList');
-            if (data.length === 0) { container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:6px;">Chưa có dữ liệu</div>`; return; }
-            let html = '';
-            data.forEach((item, i) => {
-                html += `<div class="item"><span>${i+1}. ${item}</span><span class="remove" onclick="removeDataItem(${i})"><i class="fas fa-times"></i></span></div>`;
-            });
-            container.innerHTML = html;
-            document.getElementById('dataCount').textContent = data.length;
-        }
-
-        function addDataItem() {
-            const input = document.getElementById('dataNewItem');
-            const newItem = input.value.trim();
-            if (!newItem) { showToast('❌ Nhập dữ liệu!', 'error'); return; }
-            const productId = document.getElementById('dataProductId').value;
-            const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
-            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            current.push(newItem);
-            const newStr = current.join('\n');
-            db.ref('products/' + productId + '/data').set(newStr).then(() => {
-                showToast('✅ Đã thêm!', 'success');
-                renderDataList(current);
-                productsData[productId].data = newStr;
-                renderProducts();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function removeDataItem(index) {
-            if (!confirm('🗑️ Xóa dữ liệu này?')) return;
-            const productId = document.getElementById('dataProductId').value;
-            const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
-            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            current.splice(index, 1);
-            const newStr = current.join('\n');
-            db.ref('products/' + productId + '/data').set(newStr).then(() => {
-                showToast('✅ Đã xóa!', 'success');
-                renderDataList(current);
-                productsData[productId].data = newStr;
-                renderProducts();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function closeDataModal() { document.getElementById('dataModal').classList.remove('active'); }
-
-        // ===== RENDER ORDERS =====
-        function renderOrders() {
-            const container = document.getElementById('ordersList');
-            const keys = Object.keys(ordersData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📦</span>Chưa có đơn hàng</div>`; return; }
-            let html = '';
-            const sorted = keys.sort((a,b) => (ordersData[b]?.timestamp||0) - (ordersData[a]?.timestamp||0));
-            sorted.forEach(key => {
-                const o = ordersData[key];
-                const status = o.status || 'success';
-                html += `
-                    <div class="order-item">
-                        <div class="img">${o.productImage ? `<img src="${o.productImage}" onerror="this.parentElement.textContent='${o.productIcon||'📦'}'" />` : (o.productIcon||'📦')}</div>
-                        <div class="info">
-                            <div class="name">${o.productName||'Sản phẩm'}</div>
-                            <div class="meta">
-                                <span><i class="fas fa-coins"></i> ${(o.price||0).toLocaleString('vi-VN')}đ</span>
-                                <span><i class="fas fa-user"></i> ${o.userName||'Khách'}</span>
-                                <span class="code"><i class="fas fa-key"></i> ${o.orderCode||'#'+key.substring(0,6)}</span>
-                                <span><i class="fas fa-clock"></i> ${new Date(o.timestamp).toLocaleString('vi-VN')}</span>
-                            </div>
-                        </div>
-                        <span class="badge ${status}">${status==='success'?'✅ Thành công':'❌ Thất bại'}</span>
-                        <button class="del-btn" onclick="deleteOrder('${key}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function deleteOrder(key) {
-            if (confirm('🗑️ Xóa đơn hàng?')) {
-                db.ref('orders/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllOrders() {
-            if (confirm('🗑️ Xóa TẤT CẢ đơn hàng?')) {
-                db.ref('orders').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== RENDER VOUCHERS =====
-        function renderVouchers() {
-            const container = document.getElementById('voucherList');
-            const keys = Object.keys(vouchersData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">🎫</span>Chưa có mã giảm giá</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const v = vouchersData[key];
-                const typeText = v.type === 'percent' ? `${v.value}%` : `${v.value.toLocaleString('vi-VN')}đ`;
-                html += `
-                    <div class="voucher-item">
-                        <span class="code">${key}</span>
-                        <span class="info">Giảm ${typeText} • ${v.usedCount||0}/${v.maxUses||0} lượt</span>
-                        <button class="del-btn" onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ===== VOUCHER CRUD =====
-        function openVoucherModal() {
-            document.getElementById('voucherCode').value = '';
-            document.getElementById('voucherType').value = 'percent';
-            document.getElementById('voucherValue').value = '';
-            document.getElementById('voucherMaxUses').value = '10';
-            document.getElementById('voucherModal').classList.add('active');
-        }
-        function closeVoucherModal() { document.getElementById('voucherModal').classList.remove('active'); }
-
-        function saveVoucher() {
-            const code = document.getElementById('voucherCode').value.trim().toUpperCase();
-            const type = document.getElementById('voucherType').value;
-            const value = parseInt(document.getElementById('voucherValue').value);
-            const maxUses = parseInt(document.getElementById('voucherMaxUses').value) || 10;
-            if (!code) { showToast('❌ Nhập mã!', 'error'); return; }
-            if (!value || value <= 0) { showToast('❌ Nhập giá trị!', 'error'); return; }
-            if (type === 'percent' && value > 100) { showToast('❌ % không quá 100!', 'error'); return; }
-            db.ref('vouchers/' + code).set({ type, value, maxUses, usedCount: 0 })
-                .then(() => { showToast('✅ Đã tạo!', 'success'); closeVoucherModal(); })
-                .catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function deleteVoucher(key) {
-            if (confirm(`🗑️ Xóa mã "${key}"?`)) {
-                db.ref('vouchers/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllVouchers() {
-            if (confirm('🗑️ Xóa TẤT CẢ mã?')) {
-                db.ref('vouchers').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== API IMPORT =====
-        function fetchApiData() {
-            const endpoint = document.getElementById('apiEndpoint').value.trim();
-            const token = document.getElementById('apiToken').value.trim();
-            const resultEl = document.getElementById('apiResult');
-            const previewEl = document.getElementById('apiDataPreview');
-
-            if (!endpoint) {
-                showResult('error', '❌ Vui lòng nhập URL API!');
-                return;
-            }
-
-            showResult('', '⏳ Đang lấy dữ liệu...');
-
-            const headers = {};
-            if (token) headers['Authorization'] = 'Bearer ' + token;
-
-            fetch(endpoint, { headers })
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-                    return res.json();
-                })
-                .then(data => {
-                    let products = [];
-                    if (data.products && Array.isArray(data.products)) {
-                        products = data.products;
-                    } else if (Array.isArray(data)) {
-                        products = data;
-                    } else if (data.data && Array.isArray(data.data)) {
-                        products = data.data;
-                    } else {
-                        for (let key in data) {
-                            if (Array.isArray(data[key]) && data[key].length > 0 && typeof data[key][0] === 'object') {
-                                products = data[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    if (products.length === 0) {
-                        throw new Error('Không tìm thấy danh sách sản phẩm trong JSON');
-                    }
-
-                    const validProducts = products.filter(p => p.name && p.price !== undefined);
-                    if (validProducts.length === 0) {
-                        throw new Error('Sản phẩm phải có trường "name" và "price"');
-                    }
-
-                    apiFetchedData = validProducts;
-                    showResult('success', `✅ Đã lấy ${validProducts.length} sản phẩm từ API!`);
-
-                    let previewHtml = `<div style="font-size:11px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">📋 Preview (${validProducts.length} sản phẩm):</div>`;
-                    previewHtml += `<table style="width:100%;font-size:10px;border-collapse:collapse;">`;
-                    previewHtml += `<tr style="background:var(--border-color);"><th style="padding:4px 6px;text-align:left;">#</th><th style="padding:4px 6px;text-align:left;">Tên</th><th style="padding:4px 6px;text-align:left;">Giá</th><th style="padding:4px 6px;text-align:left;">Dữ liệu</th></tr>`;
-                    validProducts.slice(0, 20).forEach((p, i) => {
-                        const dataCount = p.data ? p.data.split('\n').filter(d => d.trim()).length : 0;
-                        previewHtml += `<tr style="border-bottom:1px solid var(--border-color);">
-                            <td style="padding:3px 6px;">${i+1}</td>
-                            <td style="padding:3px 6px;">${p.name}</td>
-                            <td style="padding:3px 6px;">${(p.price||0).toLocaleString('vi-VN')}đ</td>
-                            <td style="padding:3px 6px;">${dataCount} món</td>
-                        </tr>`;
-                    });
-                    if (validProducts.length > 20) {
-                        previewHtml += `<tr><td colspan="4" style="padding:4px 6px;color:var(--text-muted);">... và ${validProducts.length - 20} sản phẩm khác</td></tr>`;
-                    }
-                    previewHtml += `</table>`;
-                    previewEl.innerHTML = previewHtml;
-                    previewEl.style.display = 'block';
-
-                    document.getElementById('importApiBtn').disabled = false;
-                    document.getElementById('importApiBtn').style.opacity = '1';
-                })
-                .catch(err => {
-                    showResult('error', `❌ Lỗi: ${err.message}`);
-                    previewEl.style.display = 'none';
-                    apiFetchedData = null;
-                    document.getElementById('importApiBtn').disabled = true;
-                    document.getElementById('importApiBtn').style.opacity = '0.5';
-                });
-        }
-
-        function showResult(type, message) {
-            const el = document.getElementById('apiResult');
-            el.textContent = message;
-            el.className = 'api-result show ' + type;
-        }
-
-        function clearApiResult() {
-            document.getElementById('apiResult').className = 'api-result';
-            document.getElementById('apiResult').textContent = '';
-            document.getElementById('apiDataPreview').style.display = 'none';
-            document.getElementById('apiDataPreview').innerHTML = '';
-            apiFetchedData = null;
-            document.getElementById('importApiBtn').disabled = true;
-            document.getElementById('importApiBtn').style.opacity = '0.5';
-        }
-
-        function importApiData() {
-            if (!apiFetchedData || apiFetchedData.length === 0) {
-                showToast('❌ Không có dữ liệu để nhập!', 'error');
-                return;
-            }
-
-            const category = document.getElementById('apiCategorySelect').value;
-            if (!category) {
-                showToast('❌ Vui lòng chọn mục để lưu!', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('importApiBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Đang nhập...';
-
-            let successCount = 0;
-            let failCount = 0;
-            let promises = [];
-
-            apiFetchedData.forEach((p, index) => {
-                const name = p.name || `Sản phẩm ${index+1}`;
-                const price = parseInt(p.price) || 0;
-                const icon = p.icon || '📦';
-                const image = p.image || '';
-                const description = p.description || '';
-                const dataString = p.data ? p.data.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n') : '';
-
-                if (!dataString) {
-                    failCount++;
-                    return;
-                }
-
-                const productData = {
-                    name,
-                    price,
-                    category,
-                    icon,
-                    data: dataString,
-                    sold: 0
-                };
-                if (image) productData.image = image;
-                if (description) productData.description = description;
-
-                const ref = db.ref('products').push();
-                promises.push(ref.set(productData));
-            });
-
-            if (promises.length === 0) {
-                showToast('⚠️ Không có sản phẩm hợp lệ để nhập!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                return;
-            }
-
-            Promise.all(promises)
-                .then(() => {
-                    const total = promises.length;
-                    showToast(`✅ Đã nhập ${total} sản phẩm vào kho! (${failCount} bị bỏ qua do thiếu dữ liệu)`, 'success');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                    clearApiResult();
-                })
-                .catch(err => {
-                    showToast(`❌ Lỗi khi nhập: ${err.message}`, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                });
-        }
-
-        // ===== REFRESH =====
-        function refreshAll() {
-            showLoading();
-            setTimeout(() => {
-                loadAllData();
-                setTimeout(() => { hideLoading(); showToast('🔄 Đã làm mới!', 'success'); }, 1000);
-            }, 500);
-        }
-
-        // ===== AUTH =====
-        auth.onAuthStateChanged(async (user) => {
-            if (checkQuickLogin()) {
-                const success = await completeQuickLogin();
-                if (success) return;
-                localStorage.removeItem('quickLoginUid');
-                localStorage.removeItem('quickLoginToken');
-                localStorage.removeItem('quickLoginPending');
-                window.location.replace('login.html');
-                return;
-            }
-            if (!user) {
-                if (!localStorage.getItem('quickLoginUid') || !localStorage.getItem('quickLoginToken')) {
-                    window.location.replace('login.html');
-                }
-                return;
-            }
-            db.ref('users/' + user.uid).once('value', snap => {
-                const data = snap.val();
-                if (!data || data.isAdmin !== true) {
-                    alert('⚠️ Không có quyền truy cập!');
-                    window.location.replace('../index.html');
-                    return;
-                }
-                isAdmin = true;
-                loadAllData();
-            });
-            db.ref('users/' + user.uid + '/balance').on('value', snap => {
-                document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
-            });
-            if (!isDataLoaded) {
-                setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 5000);
-            }
-        });
-
-        // ===== MENU =====
-        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('menuOverlay').classList.toggle('active'); }
-        function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
-            document.getElementById('menuOverlay').classList.remove('active'); }
-
-        function togglePopup(e) { 
-            e.stopPropagation(); 
-            document.getElementById('settingsPopup').classList.toggle('active'); 
-        }
-        document.addEventListener('click', function(e) {
-            const popup = document.getElementById('settingsPopup');
-            const wrapper = document.querySelector('.settings-wrapper');
-            if (!wrapper.contains(e.target)) popup.classList.remove('active');
-        });
-
-        function toggleNotif() {
-            const popup = document.getElementById('notifPopup');
-            popup.classList.toggle('active');
-            const user = auth.currentUser;
-            const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
-            if (uid && localStorage.getItem('autoView') !== 'false') {
+    // ===== FIREBASE =====
+    const firebaseConfig = {
+        apiKey: "AIzaSyCPDDRt520fSynXCGrr2aF-KvpnS_ZuIm8",
+        authDomain: "shop-c6777.firebaseapp.com",
+        databaseURL: "https://shop-c6777-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "shop-c6777",
+        storageBucket: "shop-c6777.firebasestorage.app",
+        messagingSenderId: "43186563268",
+        appId: "1:43186563268:web:0d392ba57039a919670191"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // ===== STATE =====
+    let isAdmin = false;
+    let usersData = {};
+    let categoriesData = {};
+    let productsData = {};
+    let ordersData = {};
+    let vouchersData = {};
+    let shopsData = {};
+    let mediaData = {};
+    let docsData = {};
+    let onlineUsers = {};
+    let pickerCallback = null;
+    let pickerTarget = null;
+
+    // ===== API BASE =====
+    const API_BASE = 'https://vercel-api-mocha-zeta.vercel.app/api';
+
+    // ===== TOAST =====
+    function toast(msg, type = '') {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.className = 'toast ' + type;
+        el.classList.add('show');
+        clearTimeout(el._timer);
+        el._timer = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    // ===== LOADING =====
+    function showLoading() {
+        const el = document.getElementById('loadingOverlay');
+        el.style.display = 'flex';
+        el.classList.remove('hidden');
+    }
+    function hideLoading() {
+        const el = document.getElementById('loadingOverlay');
+        el.classList.add('hidden');
+        setTimeout(() => el.style.display = 'none', 300);
+    }
+
+    // ===== SIDEBAR =====
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('active');
+        document.getElementById('overlay').classList.remove('active');
+    }
+
+    // ===== POPUP =====
+    function togglePopup(e) {
+        e.stopPropagation();
+        const el = document.getElementById('settingsPopup');
+        el.classList.toggle('active');
+        el.style.opacity = el.classList.contains('active') ? '1' : '0';
+        el.style.visibility = el.classList.contains('active') ? 'visible' : 'hidden';
+    }
+    document.addEventListener('click', () => {
+        const el = document.getElementById('settingsPopup');
+        el.classList.remove('active');
+        el.style.opacity = '0';
+        el.style.visibility = 'hidden';
+    });
+
+    // ===== NOTIFICATIONS =====
+    function toggleNotif() {
+        const el = document.getElementById('notifPopup');
+        el.classList.toggle('active');
+        el.style.opacity = el.classList.contains('active') ? '1' : '0';
+        el.style.visibility = el.classList.contains('active') ? 'visible' : 'hidden';
+        if (el.classList.contains('active')) {
+            const uid = auth.currentUser?.uid || localStorage.getItem('quickLoginUid');
+            if (uid) {
                 db.ref('notifications').once('value', snap => {
                     const notifs = snap.val();
-                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + uid).set(true));
+                    if (notifs) {
+                        Object.keys(notifs).forEach(key => {
+                            db.ref('notifications/' + key + '/readBy/' + uid).set(true);
+                        });
+                    }
                 });
                 document.getElementById('notifDot').classList.remove('show');
             }
         }
+    }
 
-        function goHome() { closeMenu(); window.location.href = '../index.html'; }
-        function goHistory() { closeMenu(); window.location.href = '../Pages/history.html'; }
-        function goTopup() { closeMenu(); showToast('💰 Đang phát triển!', 'error'); }
-        function goSupport() { closeMenu(); showToast('🆘 Đang phát triển!', 'error'); }
-        function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
-        function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
-        function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
+    // ===== SWITCH TAB =====
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
+        document.querySelectorAll('.sidebar-item').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.sidebar-item[data-tab="${tab}"]`)?.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + tab)?.classList.add('active');
+        closeSidebar();
 
-        function logout() {
-            if (confirm('Đăng xuất?')) {
-                const user = auth.currentUser;
-                if (user) db.ref('presence/' + user.uid).set(false);
-                auth.signOut().then(() => {
-                    localStorage.removeItem('quickLoginUid');
-                    localStorage.removeItem('quickLoginEmail');
-                    localStorage.removeItem('quickLoginToken');
-                    localStorage.removeItem('quickLoginPending');
-                    window.location.replace('login.html');
-                });
+        const titles = {
+            dashboard: '📊 Tổng quan',
+            users: '👤 Người dùng',
+            categories: '📁 Danh mục',
+            products: '📦 Sản phẩm',
+            orders: '🚚 Đơn hàng',
+            vouchers: '🎫 Mã giảm giá',
+            shops: '🏪 Đại lý API',
+            media: '🖼️ Thư viện ảnh',
+            docs: '📄 Tài liệu'
+        };
+        document.getElementById('pageTitle').innerHTML = titles[tab] || tab;
+
+        if (tab === 'users') renderUsers();
+        if (tab === 'categories') renderCategories();
+        if (tab === 'products') renderProducts();
+        if (tab === 'orders') renderOrders();
+        if (tab === 'vouchers') renderVouchers();
+        if (tab === 'shops') renderShops();
+        if (tab === 'media') renderMedia();
+        if (tab === 'docs') renderDocs();
+        if (tab === 'dashboard') updateStats();
+    }
+
+    // ===== UPDATE STATS =====
+    function updateStats() {
+        const u = Object.keys(usersData).length;
+        const c = Object.keys(categoriesData).length;
+        const p = Object.keys(productsData).length;
+        const o = Object.keys(ordersData).length;
+        const v = Object.keys(vouchersData).length;
+        document.getElementById('statUsers').textContent = u;
+        document.getElementById('statCategories').textContent = c;
+        document.getElementById('statProducts').textContent = p;
+        document.getElementById('statOrders').textContent = o;
+        document.getElementById('statVouchers').textContent = v;
+
+        let revenue = 0, todayOrders = 0, totalSold = 0, blocked = 0, online = 0;
+        const today = new Date(); today.setHours(0,0,0,0);
+        Object.values(ordersData).forEach(ord => {
+            totalSold += ord.quantity || 0;
+            if (ord.timestamp >= today.getTime()) {
+                revenue += ord.price || 0;
+                todayOrders++;
             }
+        });
+        Object.values(usersData).forEach(u => { if (u.blocked) blocked++; });
+        Object.values(onlineUsers).forEach(v => { if (v) online++; });
+
+        document.getElementById('statRevenue').textContent = revenue.toLocaleString('vi-VN') + 'đ';
+        document.getElementById('statTodayOrders').textContent = todayOrders;
+        document.getElementById('statTotalSold').textContent = totalSold;
+        document.getElementById('statOnline').textContent = online;
+        document.getElementById('statBlocked').textContent = blocked;
+    }
+
+    // ===== LOAD DATA =====
+    function loadAllData() {
+        db.ref('users').on('value', snap => { usersData = snap.val() || {}; renderUsers(); updateStats(); });
+        db.ref('presence').on('value', snap => { onlineUsers = snap.val() || {}; renderUsers(); });
+        db.ref('categories').on('value', snap => { categoriesData = snap.val() || {}; renderCategories(); updateCategorySelect(); updateStats(); });
+        db.ref('products').on('value', snap => { productsData = snap.val() || {}; renderProducts(); updateStats(); });
+        db.ref('orders').on('value', snap => { ordersData = snap.val() || {}; renderOrders(); updateStats(); });
+        db.ref('vouchers').on('value', snap => { vouchersData = snap.val() || {}; renderVouchers(); updateStats(); });
+        db.ref('shops').on('value', snap => { shopsData = snap.val() || {}; renderShops(); updateStats(); });
+        db.ref('media').on('value', snap => { mediaData = snap.val() || {}; renderMedia(); });
+        db.ref('docs').on('value', snap => { docsData = snap.val() || {}; renderDocs(); });
+        db.ref('notifications').on('value', snap => {
+            const notifs = snap.val();
+            const list = document.getElementById('notifList');
+            const dot = document.getElementById('notifDot');
+            const uid = auth.currentUser?.uid || localStorage.getItem('quickLoginUid');
+            if (notifs) {
+                const keys = Object.keys(notifs).reverse();
+                let html = '', hasUnread = false;
+                keys.forEach(key => {
+                    const n = notifs[key];
+                    const isUnread = !n.readBy || !n.readBy[uid];
+                    if (isUnread) hasUnread = true;
+                    html += `<div style="padding:6px 12px;border-bottom:1px solid var(--border);font-size:12px;${isUnread?'background:var(--bg);border-left:3px solid var(--primary);':''}">
+                        ${n.message}<br><span style="font-size:10px;color:var(--text-muted);">${new Date(n.timestamp).toLocaleString('vi-VN')}</span>
+                    </div>`;
+                });
+                list.innerHTML = html;
+                dot.classList.toggle('show', hasUnread);
+            } else {
+                list.innerHTML = '<div class="empty"><span class="icon">🔔</span>Chưa có thông báo</div>';
+                dot.classList.remove('show');
+            }
+        });
+        setTimeout(() => hideLoading(), 1000);
+    }
+
+    // ===== RENDER USERS =====
+    function renderUsers() {
+        const container = document.getElementById('userGrid');
+        const keys = Object.keys(usersData).filter(k => !usersData[k].isAdmin);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">👤</span>Chưa có người dùng</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const u = usersData[key];
+            const online = onlineUsers[key] === true;
+            const blocked = u.blocked === true;
+            const name = u.displayName || u.email || 'Chưa đặt tên';
+            html += `
+                <div class="card">
+                    <div class="top">
+                        <div class="avatar">${name.charAt(0).toUpperCase()}</div>
+                        <div><div class="name">${name}</div><div class="sub">${u.email || ''}</div></div>
+                    </div>
+                    <div class="balance">${(u.balance||0).toLocaleString('vi-VN')}đ</div>
+                    <div><span class="badge ${blocked?'badge-danger':online?'badge-success':'badge-warning'}">${blocked?'🔒 Khóa':online?'🟢 Online':'⚪ Offline'}</span></div>
+                    <div class="actions">
+                        <button class="btn btn-success btn-sm" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'add')"><i class="fas fa-plus"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="openMoneyModal('${key}','${name.replace(/'/g,"\\'")}',${u.balance||0},'sub')"><i class="fas fa-minus"></i></button>
+                        ${blocked ?
+                            `<button class="btn btn-primary btn-sm" onclick="toggleBlock('${key}',false)"><i class="fas fa-unlock"></i></button>` :
+                            `<button class="btn btn-warning btn-sm" onclick="toggleBlock('${key}',true)"><i class="fas fa-lock"></i></button>`
+                        }
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+    function loadUsers() { renderUsers(); toast('✅ Đã làm mới!', 'success'); }
+
+    // ===== TOGGLE BLOCK =====
+    function toggleBlock(uid, block) {
+        if (!confirm(block ? '🔒 Khóa người dùng này?' : '🔓 Mở khóa?')) return;
+        db.ref('users/' + uid + '/blocked').set(block)
+            .then(() => toast(block ? '✅ Đã khóa!' : '✅ Đã mở khóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== MONEY =====
+    let moneyUserId = '';
+    function openMoneyModal(uid, name, balance, action) {
+        moneyUserId = uid;
+        document.getElementById('moneyModalTitle').textContent = action === 'add' ? '💰 Cộng tiền' : '💰 Trừ tiền';
+        document.getElementById('moneyUserName').textContent = name;
+        document.getElementById('moneyCurrentBalance').textContent = balance.toLocaleString('vi-VN') + 'đ';
+        document.getElementById('moneyAmount').value = '';
+        document.getElementById('moneyNote').value = '';
+        document.getElementById('moneyModal').classList.add('active');
+        document.getElementById('moneyAction').dataset.action = action;
+    }
+    function closeMoneyModal() { document.getElementById('moneyModal').classList.remove('active'); }
+
+    function moneyAction(action) {
+        const amount = parseInt(document.getElementById('moneyAmount').value);
+        const note = document.getElementById('moneyNote').value.trim() || 'Admin điều chỉnh';
+        if (!moneyUserId || !amount || amount <= 0) { toast('❌ Nhập số tiền hợp lệ!', 'error'); return; }
+        const isAdd = action === 'add';
+        db.ref('users/' + moneyUserId + '/balance').transaction(c => {
+            const v = c || 0;
+            return isAdd ? v + amount : Math.max(0, v - amount);
+        }).then(() => {
+            toast(`✅ ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ thành công!`, 'success');
+            closeMoneyModal();
+            db.ref('notifications').push({
+                message: `💳 ${isAdd?'Cộng':'Trừ'} ${amount.toLocaleString('vi-VN')}đ. Lý do: ${note}`,
+                timestamp: Date.now(),
+                readBy: {}
+            });
+        }).catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== RENDER CATEGORIES =====
+    function renderCategories() {
+        const container = document.getElementById('categoryGrid');
+        const keys = Object.keys(categoriesData);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">📁</span>Chưa có danh mục</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const c = categoriesData[key];
+            const count = Object.values(productsData).filter(p => p.category === key).length;
+            const img = c.image || '';
+            html += `
+                <div class="card">
+                    <div class="top">
+                        <div style="width:40px;height:40px;border-radius:var(--radius-sm);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;">
+                            ${img ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.textContent='${c.icon||'📁'}'">` : (c.icon||'📁')}
+                        </div>
+                        <div><div class="name">${c.name||'Chưa tên'}</div><div class="sub">${count} sản phẩm</div></div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="editCategory('${key}')"><i class="fas fa-edit"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCategory('${key}')"><i class="fas fa-trash"></i> Xóa</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function updateCategorySelect() {
+        const sel = document.getElementById('productCategory');
+        sel.innerHTML = '<option value="">Chọn danh mục</option>';
+        Object.keys(categoriesData).forEach(k => {
+            const c = categoriesData[k];
+            sel.innerHTML += `<option value="${k}">${c.icon||'📁'} ${c.name}</option>`;
+        });
+    }
+
+    // ===== CATEGORY CRUD =====
+    function openCategoryModal() {
+        document.getElementById('categoryModalTitle').textContent = 'Thêm danh mục';
+        document.getElementById('categoryName').value = '';
+        document.getElementById('categoryIcon').value = '📁';
+        document.getElementById('categoryImage').value = '';
+        document.getElementById('categoryImagePreview').textContent = '🖼️';
+        document.getElementById('categoryEditId').value = '';
+        document.getElementById('categoryModal').classList.add('active');
+    }
+    function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('active'); }
+
+    function editCategory(key) {
+        const c = categoriesData[key];
+        if (!c) return;
+        document.getElementById('categoryModalTitle').textContent = 'Sửa danh mục';
+        document.getElementById('categoryName').value = c.name || '';
+        document.getElementById('categoryIcon').value = c.icon || '📁';
+        document.getElementById('categoryImage').value = c.image || '';
+        document.getElementById('categoryImagePreview').innerHTML = c.image ? `<img src="${c.image}" style="width:100%;height:100%;object-fit:cover;">` : '🖼️';
+        document.getElementById('categoryEditId').value = key;
+        document.getElementById('categoryModal').classList.add('active');
+    }
+
+    function saveCategory() {
+        const name = document.getElementById('categoryName').value.trim();
+        const icon = document.getElementById('categoryIcon').value.trim() || '📁';
+        const image = document.getElementById('categoryImage').value.trim();
+        const editId = document.getElementById('categoryEditId').value;
+        if (!name) { toast('❌ Nhập tên danh mục!', 'error'); return; }
+        const data = { name, icon };
+        if (image) data.image = image;
+        const ref = editId ? db.ref('categories/' + editId) : db.ref('categories').push();
+        ref.set(data).then(() => {
+            toast(editId ? '✅ Đã cập nhật!' : '✅ Đã thêm!', 'success');
+            closeCategoryModal();
+        }).catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function deleteCategory(key) {
+        if (!confirm('🗑️ Xóa danh mục này?')) return;
+        db.ref('categories/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== RENDER PRODUCTS =====
+    function renderProducts() {
+        const container = document.getElementById('productGrid');
+        const keys = Object.keys(productsData);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">📦</span>Kho hàng trống</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const p = productsData[key];
+            const dataList = p.data ? p.data.split('\n').filter(d => d.trim()) : [];
+            const stock = dataList.length;
+            const catName = categoriesData[p.category]?.name || 'Không mục';
+            const img = p.image || '';
+            html += `
+                <div class="card product-card">
+                    <div class="top">
+                        <div style="width:44px;height:44px;border-radius:var(--radius-sm);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;">
+                            ${img ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.textContent='${p.icon||'📦'}'">` : (p.icon||'📦')}
+                        </div>
+                        <div><div class="name">${p.name||'Sản phẩm'}</div><div class="sub">${catName}</div></div>
+                    </div>
+                    <div class="details">
+                        <div class="detail"><div class="lbl">Giá</div><div class="val">${(p.price||0).toLocaleString('vi-VN')}đ</div></div>
+                        <div class="detail"><div class="lbl">Tồn kho</div><div class="val" style="color:${stock>0?'var(--success)':'var(--danger)'}">${stock}</div></div>
+                        <div class="detail"><div class="lbl">Đã bán</div><div class="val">${p.sold||0}</div></div>
+                        <div class="detail"><div class="lbl">Trạng thái</div><div class="val" style="font-size:11px;color:${stock>0?'var(--success)':'var(--danger)'}">${stock>0?'✅ Còn':'❌ Hết'}</div></div>
+                    </div>
+                    ${p.description ? `<div class="desc">${p.description}</div>` : ''}
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="editProduct('${key}')"><i class="fas fa-edit"></i> Sửa</button>
+                        <button class="btn btn-warning btn-sm" onclick="openDataModal('${key}','${p.name.replace(/'/g,"\\'")}')"><i class="fas fa-database"></i> Data</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct('${key}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // ===== PRODUCT CRUD =====
+    function openProductModal() {
+        document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
+        ['productName','productPrice','productCategory','productIcon','productImage','productDesc','productData'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.type !== 'number') el.value = '';
+            else if (el) el.value = '';
+        });
+        document.getElementById('productIcon').value = '📦';
+        document.getElementById('productImagePreview').textContent = '🖼️';
+        document.getElementById('productEditId').value = '';
+        updateCategorySelect();
+        document.getElementById('productModal').classList.add('active');
+    }
+    function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
+
+    function editProduct(key) {
+        const p = productsData[key];
+        if (!p) return;
+        document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
+        document.getElementById('productName').value = p.name || '';
+        document.getElementById('productPrice').value = p.price || '';
+        document.getElementById('productCategory').value = p.category || '';
+        document.getElementById('productIcon').value = p.icon || '📦';
+        document.getElementById('productImage').value = p.image || '';
+        document.getElementById('productImagePreview').innerHTML = p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">` : '🖼️';
+        document.getElementById('productDesc').value = p.description || '';
+        document.getElementById('productData').value = p.data || '';
+        document.getElementById('productEditId').value = key;
+        updateCategorySelect();
+        document.getElementById('productModal').classList.add('active');
+    }
+
+    function saveProduct() {
+        const name = document.getElementById('productName').value.trim();
+        const price = parseInt(document.getElementById('productPrice').value);
+        const category = document.getElementById('productCategory').value;
+        const icon = document.getElementById('productIcon').value.trim() || '📦';
+        const image = document.getElementById('productImage').value.trim();
+        const description = document.getElementById('productDesc').value.trim();
+        const dataRaw = document.getElementById('productData').value;
+        const dataString = dataRaw.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n');
+        const editId = document.getElementById('productEditId').value;
+
+        if (!name) { toast('❌ Nhập tên sản phẩm!', 'error'); return; }
+        if (!price || price < 0) { toast('❌ Nhập giá hợp lệ!', 'error'); return; }
+        if (!category) { toast('❌ Chọn danh mục!', 'error'); return; }
+        if (!dataString) { toast('❌ Nhập ít nhất 1 dữ liệu!', 'error'); return; }
+
+        const data = { name, price, category, icon, data: dataString, sold: 0 };
+        if (image) data.image = image;
+        if (description) data.description = description;
+
+        const ref = editId ? db.ref('products/' + editId) : db.ref('products').push();
+        ref.set(data).then(() => {
+            toast(editId ? '✅ Đã cập nhật!' : `✅ Đã thêm ${dataString.split('\n').length} món!`, 'success');
+            closeProductModal();
+        }).catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function deleteProduct(key) {
+        if (!confirm('🗑️ Xóa sản phẩm này?')) return;
+        db.ref('products/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== DATA MANAGEMENT =====
+    let currentDataProductId = '';
+
+    function openDataModal(productId, productName) {
+        const p = productsData[productId];
+        if (!p) { toast('❌ Không tìm thấy!', 'error'); return; }
+        currentDataProductId = productId;
+        document.getElementById('dataProductName').textContent = productName;
+        renderDataList(p.data ? p.data.split('\n').filter(d => d.trim()) : []);
+        document.getElementById('dataModal').classList.add('active');
+    }
+
+    function renderDataList(data) {
+        const container = document.getElementById('dataList');
+        if (!data || data.length === 0) {
+            container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:8px;">Chưa có dữ liệu</div>';
+            document.getElementById('dataCount').textContent = '0';
+            return;
+        }
+        let html = '';
+        data.forEach((item, i) => {
+            html += `<div class="order-item" style="padding:4px 8px;margin-bottom:2px;">
+                <span style="flex:1;font-size:12px;">${i+1}. ${item}</span>
+                <button class="btn btn-danger btn-sm" onclick="removeDataItem(${i})" style="padding:2px 6px;"><i class="fas fa-times"></i></button>
+            </div>`;
+        });
+        container.innerHTML = html;
+        document.getElementById('dataCount').textContent = data.length;
+    }
+
+    function addDataItem() {
+        const input = document.getElementById('dataNewItem');
+        const newItem = input.value.trim();
+        if (!newItem) { toast('❌ Nhập dữ liệu!', 'error'); return; }
+        const p = productsData[currentDataProductId];
+        if (!p) { toast('❌ Không tìm thấy!', 'error'); return; }
+        const current = p.data ? p.data.split('\n').filter(d => d.trim()) : [];
+        current.push(newItem);
+        const newStr = current.join('\n');
+        db.ref('products/' + currentDataProductId + '/data').set(newStr).then(() => {
+            toast('✅ Đã thêm!', 'success');
+            renderDataList(current);
+            productsData[currentDataProductId].data = newStr;
+            renderProducts();
+            input.value = '';
+        }).catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function removeDataItem(index) {
+        if (!confirm('🗑️ Xóa dữ liệu này?')) return;
+        const p = productsData[currentDataProductId];
+        if (!p) { toast('❌ Không tìm thấy!', 'error'); return; }
+        const current = p.data ? p.data.split('\n').filter(d => d.trim()) : [];
+        current.splice(index, 1);
+        const newStr = current.join('\n');
+        db.ref('products/' + currentDataProductId + '/data').set(newStr).then(() => {
+            toast('✅ Đã xóa!', 'success');
+            renderDataList(current);
+            productsData[currentDataProductId].data = newStr;
+            renderProducts();
+        }).catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function closeDataModal() { document.getElementById('dataModal').classList.remove('active'); }
+
+    // ===== RENDER ORDERS =====
+    function renderOrders() {
+        const container = document.getElementById('ordersList');
+        const keys = Object.keys(ordersData);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">🚚</span>Chưa có đơn hàng</div>';
+            return;
+        }
+        let html = '';
+        const sorted = keys.sort((a,b) => (ordersData[b]?.timestamp||0) - (ordersData[a]?.timestamp||0));
+        sorted.forEach(key => {
+            const o = ordersData[key];
+            const status = o.status || 'success';
+            html += `
+                <div class="order-item">
+                    <div style="width:36px;height:36px;border-radius:var(--radius-sm);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;overflow:hidden;">
+                        ${o.productImage ? `<img src="${o.productImage}" style="width:100%;height:100%;object-fit:cover;">` : (o.productIcon||'📦')}
+                    </div>
+                    <div class="info">
+                        <div class="name">${o.productName||'Sản phẩm'}</div>
+                        <div class="meta">
+                            <span>💰 ${(o.price||0).toLocaleString('vi-VN')}đ</span>
+                            <span>👤 ${o.userName||'Khách'}</span>
+                            <span>🔑 ${o.orderCode||'#'+key.substring(0,6)}</span>
+                            <span>🕐 ${new Date(o.timestamp).toLocaleString('vi-VN')}</span>
+                        </div>
+                    </div>
+                    <span class="badge ${status==='success'?'badge-success':'badge-danger'}">${status==='success'?'✅ Thành công':'❌ Thất bại'}</span>
+                    <button class="btn btn-danger btn-sm" onclick="deleteOrder('${key}')"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function deleteOrder(key) {
+        if (!confirm('🗑️ Xóa đơn hàng?')) return;
+        db.ref('orders/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== RENDER VOUCHERS =====
+    function renderVouchers() {
+        const container = document.getElementById('voucherGrid');
+        const keys = Object.keys(vouchersData);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">🎫</span>Chưa có mã giảm giá</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const v = vouchersData[key];
+            const typeText = v.type === 'percent' ? `${v.value}%` : `${v.value.toLocaleString('vi-VN')}đ`;
+            html += `
+                <div class="voucher-item">
+                    <span class="code">${key}</span>
+                    <span style="flex:1;font-size:12px;color:var(--text-secondary);">Giảm ${typeText}</span>
+                    <span style="font-size:11px;color:var(--text-muted);">${v.usedCount||0}/${v.maxUses||0}</span>
+                    <button class="btn btn-danger btn-sm" onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // ===== VOUCHER CRUD =====
+    function openVoucherModal() {
+        document.getElementById('voucherCode').value = '';
+        document.getElementById('voucherType').value = 'percent';
+        document.getElementById('voucherValue').value = '';
+        document.getElementById('voucherMaxUses').value = '10';
+        document.getElementById('voucherModal').classList.add('active');
+    }
+    function closeVoucherModal() { document.getElementById('voucherModal').classList.remove('active'); }
+
+    function saveVoucher() {
+        const code = document.getElementById('voucherCode').value.trim().toUpperCase();
+        const type = document.getElementById('voucherType').value;
+        const value = parseInt(document.getElementById('voucherValue').value);
+        const maxUses = parseInt(document.getElementById('voucherMaxUses').value) || 10;
+        if (!code) { toast('❌ Nhập mã!', 'error'); return; }
+        if (!value || value <= 0) { toast('❌ Nhập giá trị!', 'error'); return; }
+        if (type === 'percent' && value > 100) { toast('❌ % không quá 100!', 'error'); return; }
+        db.ref('vouchers/' + code).set({ type, value, maxUses, usedCount: 0 })
+            .then(() => { toast('✅ Đã tạo!', 'success'); closeVoucherModal(); })
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function deleteVoucher(key) {
+        if (!confirm(`🗑️ Xóa mã "${key}"?`)) return;
+        db.ref('vouchers/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    // ===== RENDER SHOPS =====
+    function renderShops() {
+        const container = document.getElementById('shopGrid');
+        const keys = Object.keys(shopsData);
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">🏪</span>Chưa có đại lý</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const s = shopsData[key];
+            const banned = s.status === 'banned';
+            html += `
+                <div class="card">
+                    <div class="top">
+                        <div style="width:40px;height:40px;border-radius:50%;background:var(--bg);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏪</div>
+                        <div><div class="name">${s.name || key}</div><div class="sub">${banned ? '🔒 Đã khóa' : '✅ Hoạt động'}</div></div>
+                    </div>
+                    <div class="balance">${(s.balance||0).toLocaleString('vi-VN')}đ</div>
+                    <div style="font-size:11px;color:var(--text-muted);font-family:monospace;word-break:break-all;padding:4px 0;">
+                        shop_id: ${key}<br>token: ${s.token || ''}
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="copyShopInfo('${key}')"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="btn btn-warning btn-sm" onclick="editShop('${key}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteShop('${key}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function genToken() {
+        const bytes = new Uint8Array(24);
+        (window.crypto || window.msCrypto).getRandomValues(bytes);
+        return 'sk_' + Array.from(bytes).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+    function regenToken() { document.getElementById('shopToken').value = genToken(); }
+
+    function openShopModal() {
+        document.getElementById('shopModalTitle').textContent = 'Tạo đại lý';
+        document.getElementById('shopName').value = '';
+        document.getElementById('shopId').value = '';
+        document.getElementById('shopId').removeAttribute('disabled');
+        document.getElementById('shopToken').value = genToken();
+        document.getElementById('shopBalance').value = '0';
+        document.getElementById('shopStatus').value = 'active';
+        document.getElementById('shopEditId').value = '';
+        document.getElementById('shopModal').classList.add('active');
+    }
+    function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
+
+    function editShop(key) {
+        const s = shopsData[key];
+        if (!s) return;
+        document.getElementById('shopModalTitle').textContent = 'Sửa đại lý';
+        document.getElementById('shopName').value = s.name || '';
+        document.getElementById('shopId').value = key;
+        document.getElementById('shopId').setAttribute('disabled', 'disabled');
+        document.getElementById('shopToken').value = s.token || genToken();
+        document.getElementById('shopBalance').value = s.balance || 0;
+        document.getElementById('shopStatus').value = s.status || 'active';
+        document.getElementById('shopEditId').value = key;
+        document.getElementById('shopModal').classList.add('active');
+    }
+
+    function saveShop() {
+        const name = document.getElementById('shopName').value.trim();
+        let shopId = document.getElementById('shopId').value.trim();
+        const token = document.getElementById('shopToken').value.trim();
+        const balance = parseInt(document.getElementById('shopBalance').value) || 0;
+        const status = document.getElementById('shopStatus').value;
+        const editId = document.getElementById('shopEditId').value;
+
+        if (!name) { toast('❌ Nhập tên đại lý!', 'error'); return; }
+        if (!token) { toast('❌ Thiếu token!', 'error'); return; }
+
+        if (editId) {
+            db.ref('shops/' + editId).update({ name, token, balance, status })
+                .then(() => { toast('✅ Đã lưu!', 'success'); closeShopModal(); })
+                .catch(err => toast('❌ ' + err.message, 'error'));
+            return;
         }
 
-        // ===== MODAL CLOSE ON OVERLAY =====
-        document.querySelectorAll('.modal-overlay').forEach(el => {
-            el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-        });
+        if (!shopId) shopId = 'shop_' + Math.random().toString(36).substring(2, 9);
+        if (shopsData[shopId]) { toast('❌ shop_id đã tồn tại!', 'error'); return; }
 
-        // ===== START =====
+        db.ref('shops/' + shopId).set({ name, token, balance, status, totalOrders: 0, createdAt: Date.now() })
+            .then(() => { toast('✅ Đã tạo đại lý!', 'success'); closeShopModal(); })
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function deleteShop(key) {
+        if (!confirm(`🗑️ Xóa đại lý "${shopsData[key]?.name || key}"?`)) return;
+        db.ref('shops/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function copyShopInfo(key) {
+        const s = shopsData[key];
+        if (!s) return;
+        const text = `shop_id: ${key}\ntoken: ${s.token}`;
+        navigator.clipboard.writeText(text)
+            .then(() => toast('✅ Đã copy!', 'success'))
+            .catch(() => toast('❌ Không copy được!', 'error'));
+    }
+
+    // ===== MEDIA LIBRARY =====
+    let mediaFilter = '';
+
+    function renderMedia() {
+        const container = document.getElementById('mediaGrid');
+        const keys = Object.keys(mediaData).filter(k => {
+            if (!mediaFilter) return true;
+            return mediaData[k].name?.toLowerCase().includes(mediaFilter.toLowerCase());
+        });
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">🖼️</span>Chưa có ảnh nào</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const m = mediaData[key];
+            html += `
+                <div class="media-item" onclick="selectMedia('${key}')">
+                    <img src="${m.url}" alt="${m.name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%23e2e8f0%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%2394a3b8%22 font-size=%2230%22%3E🖼️%3C/text%3E%3C/svg%3E'">
+                    <div class="selected"><i class="fas fa-check"></i></div>
+                    <div class="info">
+                        <div class="name">${m.name}</div>
+                        <div class="meta">${(m.size/1024).toFixed(1)}KB • ${new Date(m.uploadedAt).toLocaleDateString('vi-VN')}</div>
+                    </div>
+                    <div class="actions-overlay">
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();copyMediaUrl('${key}')"><i class="fas fa-copy"></i></button>
+                        <button class="btn btn-warning btn-sm" onclick="event.stopPropagation();renameMedia('${key}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteMedia('${key}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function filterMedia() {
+        mediaFilter = document.getElementById('mediaSearch').value.trim();
+        renderMedia();
+    }
+
+    // Upload Media
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        uploadFiles(this.files);
+        this.value = '';
+    });
+
+    document.getElementById('uploadZone').addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    document.getElementById('uploadZone').addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+    document.getElementById('uploadZone').addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        uploadFiles(e.dataTransfer.files);
+    });
+
+    function uploadFiles(files) {
+        if (files.length === 0) return;
+        const allowed = ['image/jpeg','image/png','image/gif','image/webp','image/svg+xml'];
+        let count = 0;
+        Array.from(files).forEach(file => {
+            if (!allowed.includes(file.type)) {
+                toast('⚠️ Bỏ qua: ' + file.name + ' (không hỗ trợ)', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                const key = 'media_' + Date.now() + '_' + Math.random().toString(36).substring(2,6);
+                const mediaItem = {
+                    name: file.name,
+                    url: dataUrl,
+                    size: file.size,
+                    type: file.type,
+                    uploadedAt: Date.now()
+                };
+                db.ref('media/' + key).set(mediaItem).then(() => {
+                    count++;
+                    if (count === files.length) {
+                        toast(`✅ Đã upload ${count} ảnh!`, 'success');
+                    }
+                }).catch(err => toast('❌ Lỗi upload: ' + err.message, 'error'));
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function deleteMedia(key) {
+        if (!confirm('🗑️ Xóa ảnh này?')) return;
+        db.ref('media/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function renameMedia(key) {
+        const m = mediaData[key];
+        if (!m) return;
+        const newName = prompt('Đổi tên ảnh:', m.name);
+        if (newName && newName.trim()) {
+            db.ref('media/' + key + '/name').set(newName.trim())
+                .then(() => toast('✅ Đã đổi tên!', 'success'))
+                .catch(err => toast('❌ ' + err.message, 'error'));
+        }
+    }
+
+    function copyMediaUrl(key) {
+        const m = mediaData[key];
+        if (!m) return;
+        navigator.clipboard.writeText(m.url)
+            .then(() => toast('✅ Đã copy URL!', 'success'))
+            .catch(() => toast('❌ Không copy được!', 'error'));
+    }
+
+    function selectMedia(key) {
+        if (pickerCallback) {
+            const m = mediaData[key];
+            if (m) {
+                pickerCallback(m.url);
+                closeMediaPicker();
+            }
+        }
+    }
+
+    // ===== MEDIA PICKER =====
+    function openMediaPicker(target) {
+        pickerTarget = target;
+        pickerCallback = function(url) {
+            document.getElementById(target).value = url;
+            const preview = document.getElementById(target + 'Preview');
+            if (preview) {
+                preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+            }
+        };
+        const grid = document.getElementById('pickerGrid');
+        const keys = Object.keys(mediaData);
+        if (keys.length === 0) {
+            grid.innerHTML = '<div class="empty"><span class="icon">🖼️</span>Chưa có ảnh nào. Hãy upload lên thư viện!</div>';
+        } else {
+            let html = '';
+            keys.forEach(key => {
+                const m = mediaData[key];
+                html += `
+                    <div class="media-item" onclick="selectMedia('${key}')" style="cursor:pointer;">
+                        <img src="${m.url}" alt="${m.name}" style="height:100px;object-fit:cover;">
+                        <div class="info"><div class="name">${m.name}</div></div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+        document.getElementById('mediaPickerModal').classList.add('active');
+    }
+
+    function closeMediaPicker() {
+        document.getElementById('mediaPickerModal').classList.remove('active');
+        pickerCallback = null;
+        pickerTarget = null;
+    }
+
+    // ===== DOCS =====
+    let docFilter = '';
+
+    function renderDocs() {
+        const container = document.getElementById('docGrid');
+        const keys = Object.keys(docsData).filter(k => {
+            if (!docFilter) return true;
+            return docsData[k].name?.toLowerCase().includes(docFilter.toLowerCase());
+        });
+        if (keys.length === 0) {
+            container.innerHTML = '<div class="empty"><span class="icon">📄</span>Chưa có tài liệu nào</div>';
+            return;
+        }
+        let html = '';
+        keys.forEach(key => {
+            const d = docsData[key];
+            const icon = d.type?.includes('pdf') ? '📕' : d.type?.includes('word') ? '📘' : d.type?.includes('zip') ? '📦' : '📄';
+            html += `
+                <div class="card">
+                    <div class="top">
+                        <div style="font-size:28px;">${icon}</div>
+                        <div>
+                            <div class="name">${d.name}</div>
+                            <div class="sub">${(d.size/1024).toFixed(1)}KB • ${new Date(d.uploadedAt).toLocaleDateString('vi-VN')}</div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="copyDocUrl('${key}')"><i class="fas fa-copy"></i> URL</button>
+                        <button class="btn btn-warning btn-sm" onclick="renameDoc('${key}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteDoc('${key}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function filterDocs() {
+        docFilter = document.getElementById('docSearch').value.trim();
+        renderDocs();
+    }
+
+    document.getElementById('docInput').addEventListener('change', function(e) {
+        const files = this.files;
+        if (files.length === 0) return;
+        const allowed = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','text/plain','application/zip'];
+        let count = 0;
+        Array.from(files).forEach(file => {
+            if (!allowed.includes(file.type) && !file.name.endsWith('.zip')) {
+                toast('⚠️ Bỏ qua: ' + file.name + ' (không hỗ trợ)', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                const key = 'doc_' + Date.now() + '_' + Math.random().toString(36).substring(2,6);
+                const docItem = {
+                    name: file.name,
+                    url: dataUrl,
+                    size: file.size,
+                    type: file.type || file.name.split('.').pop(),
+                    uploadedAt: Date.now()
+                };
+                db.ref('docs/' + key).set(docItem).then(() => {
+                    count++;
+                    if (count === files.length) {
+                        toast(`✅ Đã upload ${count} tài liệu!`, 'success');
+                    }
+                }).catch(err => toast('❌ Lỗi upload: ' + err.message, 'error'));
+            };
+            reader.readAsDataURL(file);
+        });
+        this.value = '';
+    });
+
+    document.getElementById('docUploadZone').addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    document.getElementById('docUploadZone').addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+    document.getElementById('docUploadZone').addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        document.getElementById('docInput').files = files;
+        document.getElementById('docInput').dispatchEvent(new Event('change'));
+    });
+
+    function deleteDoc(key) {
+        if (!confirm('🗑️ Xóa tài liệu này?')) return;
+        db.ref('docs/' + key).remove()
+            .then(() => toast('✅ Đã xóa!', 'success'))
+            .catch(err => toast('❌ ' + err.message, 'error'));
+    }
+
+    function renameDoc(key) {
+        const d = docsData[key];
+        if (!d) return;
+        const newName = prompt('Đổi tên tài liệu:', d.name);
+        if (newName && newName.trim()) {
+            db.ref('docs/' + key + '/name').set(newName.trim())
+                .then(() => toast('✅ Đã đổi tên!', 'success'))
+                .catch(err => toast('❌ ' + err.message, 'error'));
+        }
+    }
+
+    function copyDocUrl(key) {
+        const d = docsData[key];
+        if (!d) return;
+        navigator.clipboard.writeText(d.url)
+            .then(() => toast('✅ Đã copy URL!', 'success'))
+            .catch(() => toast('❌ Không copy được!', 'error'));
+    }
+
+    // ===== REFRESH =====
+    function refreshAll() {
         showLoading();
-        console.log('✅ Admin panel loaded!');
-        console.log('🔗 API Endpoints:');
-        console.log('  GET  /api/products - Lấy tất cả sản phẩm');
-        console.log('  GET  /api/product/:id - Lấy chi tiết sản phẩm');
-        console.log('  POST /api/products/batch - Nhập nhiều sản phẩm');
-        console.log('  POST /api/order - Tạo đơn hàng');
+        setTimeout(() => {
+            loadAllData();
+            setTimeout(() => { hideLoading(); toast('🔄 Đã làm mới!', 'success'); }, 1000);
+        }, 500);
+    }
+
+    // ===== AUTH =====
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            const quickUid = localStorage.getItem('quickLoginUid');
+            if (quickUid) {
+                try {
+                    const snap = await db.ref('users/' + quickUid).once('value');
+                    const data = snap.val();
+                    if (data && data.isAdmin) {
+                        isAdmin = true;
+                        document.getElementById('balanceAmount').textContent = (data.balance||0).toLocaleString('vi-VN');
+                        loadAllData();
+                        return;
+                    }
+                } catch(e) {}
+            }
+            window.location.replace('login.html');
+            return;
+        }
+        db.ref('users/' + user.uid).once('value', snap => {
+            const data = snap.val();
+            if (!data || data.isAdmin !== true) {
+                alert('⚠️ Không có quyền truy cập!');
+                window.location.replace('../index.html');
+                return;
+            }
+            isAdmin = true;
+            document.getElementById('balanceAmount').textContent = (data.balance||0).toLocaleString('vi-VN');
+            loadAllData();
+        });
+        db.ref('users/' + user.uid + '/balance').on('value', snap => {
+            document.getElementById('balanceAmount').textContent = (snap.val()||0).toLocaleString('vi-VN');
+        });
+    });
+
+    // ===== NAVIGATION =====
+    function goHome() { window.location.href = '../index.html'; }
+    function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
+    function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
+
+    function logout() {
+        if (!confirm('Đăng xuất?')) return;
+        const user = auth.currentUser;
+        if (user) db.ref('presence/' + user.uid).set(false);
+        auth.signOut().then(() => {
+            localStorage.removeItem('quickLoginUid');
+            localStorage.removeItem('quickLoginToken');
+            localStorage.removeItem('quickLoginPending');
+            window.location.replace('login.html');
+        });
+    }
+
+    // ===== MODAL CLOSE ON OVERLAY =====
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+        el.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+    });
+
+    // ===== START =====
+    showLoading();
+    console.log('✅ Admin Panel v2.0 loaded!');
+    console.log('📌 API Base:', API_BASE);
+    console.log('📌 Features: Users | Categories | Products | Orders | Vouchers | Shops | Media Library | Docs');
     </script>
+
 </body>
 </html>
