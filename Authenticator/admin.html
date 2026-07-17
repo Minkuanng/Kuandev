@@ -230,6 +230,13 @@
         .modal .row textarea { min-height: 60px; resize: vertical; font-family: inherit; }
         .modal .row .preview { width: 40px; height: 40px; border-radius: 6px; border: 2px solid var(--border-color); background: var(--wallet-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
         .modal .row .preview img { width: 100%; height: 100%; object-fit: cover; }
+        .image-upload-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .img-upload-preview { width: 64px; height: 64px; border-radius: 8px; border: 2px dashed var(--border-color); background: var(--wallet-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; color: var(--text-muted); cursor: pointer; overflow: hidden; flex-shrink: 0; gap: 2px; transition: var(--transition); }
+        .img-upload-preview:hover { border-color: var(--accent); color: var(--accent); }
+        .img-upload-preview i { font-size: 16px; }
+        .img-upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .img-upload-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .img-upload-hint { font-size: 10px; color: var(--text-muted); width: 100%; margin-top: 2px; }
         .modal .row .word-count { font-size: 9px; color: var(--text-muted); }
         .modal .row .word-count.warning { color: var(--warning); }
         .modal .row .word-count.danger { color: var(--danger); }
@@ -499,7 +506,7 @@
                 </div>
                 <div class="config-row">
                     <label>Base URL:</label>
-                    <input type="text" id="apiBaseUrl" value="https://vercel-api-mocha-zeta.vercel.app/api" placeholder="https://your-api.vercel.app/api" />
+                    <input type="text" id="apiBaseUrl" value="https://vercel-api-minkuanngs-projects.vercel.app/api" placeholder="https://your-api.vercel.app/api" />
                     <button class="btn-sm btn-primary" onclick="testApiConnection()"><i class="fas fa-check"></i> Kiểm tra</button>
                     <button class="btn-sm btn-outline" onclick="saveApiConfig()"><i class="fas fa-save"></i> Lưu</button>
                 </div>
@@ -533,7 +540,7 @@
             <div class="api-docs-box">
                 <h4 style="color:var(--text-primary);font-size:13px;margin-bottom:8px;"><i class="fas fa-book"></i> Hướng dẫn sử dụng API Import</h4>
                 <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">
-                    <p><strong>1. Gửi dữ liệu từ bên ngoài vào:</strong> Sử dụng endpoint <code>POST /api/products</code> hoặc <code>POST /api/products/batch</code></p>
+                    <p><strong>1. Gửi dữ liệu từ bên ngoài vào:</strong> Sử dụng endpoint <code>POST /api/products</code> hoặc <code>POST /api/products-batch</code></p>
                     <p><strong>2. Định dạng JSON:</strong></p>
                 </div>
                 <pre><code>{
@@ -550,7 +557,7 @@
 }</code></pre>
                 <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
                     <p><strong>3. Ví dụ gọi API bằng cURL:</strong></p>
-                    <pre style="font-size:11px;"><code>curl -X POST https://your-api.vercel.app/api/products/batch \
+                    <pre style="font-size:11px;"><code>curl -X POST https://vercel-api-minkuanngs-projects.vercel.app/api/products-batch \
   -H "Content-Type: application/json" \
   -d '{
     "category": "CATEGORY_ID_HERE",
@@ -565,7 +572,7 @@
                 </div>
                 <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
                     <p><strong>4. Hoặc sử dụng JavaScript:</strong></p>
-                    <pre style="font-size:11px;"><code>fetch('https://your-api.vercel.app/api/products/batch', {
+                    <pre style="font-size:11px;"><code>fetch('https://vercel-api-minkuanngs-projects.vercel.app/api/products-batch', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -579,7 +586,7 @@
 .then(data => console.log(data));</code></pre>
                 </div>
                 <div style="font-size:11px;color:var(--text-muted);margin-top:10px;padding:8px;background:var(--wallet-bg);border-radius:6px;border:1px solid var(--border-color);">
-                    <i class="fas fa-info-circle"></i> <b>Lưu ý:</b> Bạn cần deploy API server lên Vercel để có endpoint thật. Xem file <code>api-server.js</code> trong source code.
+                    <i class="fas fa-info-circle"></i> <b>Lưu ý:</b> API đã được deploy sẵn tại <code>vercel-api-minkuanngs-projects.vercel.app</code> (repo GitHub <code>Minkuanng/vercel-api</code>), không cần tự dựng thêm.
                 </div>
             </div>
         </div>
@@ -597,8 +604,18 @@
             <div class="row"><label>Icon:</label><input type="text" id="categoryIcon" placeholder="📁" value="📁" /></div>
             <div class="row">
                 <label>Hình:</label>
-                <input type="text" id="categoryImage" placeholder="URL hình ảnh" />
-                <div class="preview" id="categoryImagePreview">🖼️</div>
+                <div class="image-upload-wrap">
+                    <div class="img-upload-preview" id="categoryImagePreview" onclick="document.getElementById('categoryImageFile').click()">
+                        <i class="fas fa-image"></i><span>Chọn ảnh</span>
+                    </div>
+                    <div class="img-upload-actions">
+                        <input type="file" id="categoryImageFile" accept="image/*" style="display:none" onchange="handleImageSelect(event,'category')" />
+                        <button type="button" class="btn-sm btn-outline" onclick="document.getElementById('categoryImageFile').click()"><i class="fas fa-upload"></i> Chọn ảnh từ máy</button>
+                        <button type="button" class="btn-sm btn-outline" id="categoryImageClearBtn" style="display:none;" onclick="clearImage('category')"><i class="fas fa-times"></i> Xóa ảnh</button>
+                    </div>
+                    <input type="hidden" id="categoryImage" />
+                    <div class="img-upload-hint" id="categoryImageHint">Chưa chọn ảnh — ảnh sẽ tự nén nhỏ trước khi lưu</div>
+                </div>
             </div>
             <input type="hidden" id="categoryEditId" />
             <div class="actions">
@@ -621,8 +638,18 @@
             <div class="row"><label>Icon:</label><input type="text" id="productIcon" placeholder="📦" value="📦" /></div>
             <div class="row">
                 <label>Hình:</label>
-                <input type="text" id="productImage" placeholder="URL hình ảnh" />
-                <div class="preview" id="productImagePreview">🖼️</div>
+                <div class="image-upload-wrap">
+                    <div class="img-upload-preview" id="productImagePreview" onclick="document.getElementById('productImageFile').click()">
+                        <i class="fas fa-image"></i><span>Chọn ảnh</span>
+                    </div>
+                    <div class="img-upload-actions">
+                        <input type="file" id="productImageFile" accept="image/*" style="display:none" onchange="handleImageSelect(event,'product')" />
+                        <button type="button" class="btn-sm btn-outline" onclick="document.getElementById('productImageFile').click()"><i class="fas fa-upload"></i> Chọn ảnh từ máy</button>
+                        <button type="button" class="btn-sm btn-outline" id="productImageClearBtn" style="display:none;" onclick="clearImage('product')"><i class="fas fa-times"></i> Xóa ảnh</button>
+                    </div>
+                    <input type="hidden" id="productImage" />
+                    <div class="img-upload-hint" id="productImageHint">Chưa chọn ảnh — ảnh sẽ tự nén nhỏ trước khi lưu</div>
+                </div>
             </div>
             <div class="row" style="flex-direction:column;align-items:stretch;gap:4px;">
                 <label style="min-width:auto;">Mô tả:</label>
@@ -763,7 +790,7 @@
         let usersData = {};
         let onlineUsersMap = {};
         let apiFetchedData = null;
-        let API_BASE_URL = 'https://vercel-api-mocha-zeta.vercel.app/api';
+        let API_BASE_URL = 'https://vercel-api-minkuanngs-projects.vercel.app/api';
 
         // ===== TOAST =====
         function showToast(msg, type = '') {
@@ -1082,19 +1109,81 @@
         }
 
         // ===== CATEGORY CRUD =====
+        // ===== ẢNH: CHỌN TRỰC TIẾP TỪ MÁY, KHÔNG CẦN LINK / GITHUB =====
+        // Ảnh được nén nhỏ ngay trên trình duyệt rồi lưu thẳng vào Firebase (dạng base64),
+        // không cần upload lên GitHub hay dịch vụ ảnh nào khác.
+        function compressImageToBase64(file, maxSize = 700, quality = 0.72) {
+            return new Promise((resolve, reject) => {
+                if (!file.type.startsWith('image/')) { reject(new Error('File chọn không phải hình ảnh')); return; }
+                if (file.size > 8 * 1024 * 1024) { reject(new Error('Ảnh quá lớn (tối đa 8MB)')); return; }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let { width, height } = img;
+                        if (width > maxSize || height > maxSize) {
+                            if (width > height) { height = Math.round(height * maxSize / width); width = maxSize; }
+                            else { width = Math.round(width * maxSize / height); height = maxSize; }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = () => reject(new Error('Không đọc được ảnh, thử ảnh khác'));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error('Không đọc được file'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function setImagePreview(prefix, dataUrl) {
+            const preview = document.getElementById(prefix + 'ImagePreview');
+            const hint = document.getElementById(prefix + 'ImageHint');
+            const clearBtn = document.getElementById(prefix + 'ImageClearBtn');
+            if (dataUrl) {
+                preview.innerHTML = `<img src="${dataUrl}" />`;
+                if (hint) hint.textContent = '✅ Đã chọn ảnh (sẽ lưu khi bấm Lưu)';
+                if (clearBtn) clearBtn.style.display = 'inline-flex';
+            } else {
+                preview.innerHTML = '<i class="fas fa-image"></i><span>Chọn ảnh</span>';
+                if (hint) hint.textContent = 'Chưa chọn ảnh — ảnh sẽ tự nén nhỏ trước khi lưu';
+                if (clearBtn) clearBtn.style.display = 'none';
+            }
+        }
+
+        async function handleImageSelect(event, prefix) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const hint = document.getElementById(prefix + 'ImageHint');
+            if (hint) hint.textContent = '⏳ Đang xử lý ảnh...';
+            try {
+                const dataUrl = await compressImageToBase64(file);
+                document.getElementById(prefix + 'Image').value = dataUrl;
+                setImagePreview(prefix, dataUrl);
+                showToast('✅ Đã chọn ảnh!', 'success');
+            } catch (err) {
+                showToast('❌ ' + err.message, 'error');
+                setImagePreview(prefix, document.getElementById(prefix + 'Image').value || '');
+            } finally {
+                event.target.value = '';
+            }
+        }
+
+        function clearImage(prefix) {
+            document.getElementById(prefix + 'Image').value = '';
+            setImagePreview(prefix, '');
+        }
+
         function openCategoryModal() {
             document.getElementById('categoryModalTitle').textContent = 'Thêm mục';
             document.getElementById('categoryName').value = '';
             document.getElementById('categoryIcon').value = '📁';
             document.getElementById('categoryImage').value = '';
-            document.getElementById('categoryImagePreview').textContent = '🖼️';
+            setImagePreview('category', '');
             document.getElementById('categoryEditId').value = '';
             document.getElementById('categoryModal').classList.add('active');
-            document.getElementById('categoryImage').oninput = function() {
-                const p = document.getElementById('categoryImagePreview');
-                const v = this.value.trim();
-                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            };
         }
         function closeCategoryModal() { document.getElementById('categoryModal').classList.remove('active'); }
 
@@ -1105,8 +1194,7 @@
             document.getElementById('categoryIcon').value = c.icon || '📁';
             document.getElementById('categoryImage').value = c.image || '';
             document.getElementById('categoryEditId').value = key;
-            const p = document.getElementById('categoryImagePreview');
-            p.innerHTML = c.image ? `<img src="${c.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
+            setImagePreview('category', c.image || '');
             document.getElementById('categoryModal').classList.add('active');
         }
 
@@ -1177,7 +1265,7 @@
 
         // ===== COPY PRODUCT API LINK =====
         function copyProductApiLink(productId) {
-            const apiUrl = `${API_BASE_URL}/product/${productId}`;
+            const apiUrl = `${API_BASE_URL}/product?id=${productId}`;
             
             fetch(apiUrl, { method: 'GET', headers: { 'Accept': 'application/json' } })
                 .then(res => {
@@ -1215,21 +1303,15 @@
             document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
             ['productName','productPrice','productCategory','productIcon','productImage','productDesc','productData'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el && el.type !== 'number') el.value = '';
-                else if (el) el.value = '';
+                if (el) el.value = '';
             });
             document.getElementById('productIcon').value = '📦';
             document.getElementById('wordCount').textContent = '0/240 từ';
             document.getElementById('wordCount').className = 'word-count';
-            document.getElementById('productImagePreview').textContent = '🖼️';
+            setImagePreview('product', '');
             document.getElementById('productEditId').value = '';
             updateCategorySelect();
             document.getElementById('productModal').classList.add('active');
-            document.getElementById('productImage').oninput = function() {
-                const p = document.getElementById('productImagePreview');
-                const v = this.value.trim();
-                p.innerHTML = v ? `<img src="${v}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
-            };
         }
         function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
 
@@ -1248,8 +1330,7 @@
             const el = document.getElementById('wordCount');
             el.textContent = `${words}/240 từ`;
             el.className = 'word-count' + (words > 240 ? ' danger' : words > 200 ? ' warning' : '');
-            const preview = document.getElementById('productImagePreview');
-            preview.innerHTML = p.image ? `<img src="${p.image}" onerror="this.parentElement.textContent='❌'" />` : '🖼️';
+            setImagePreview('product', p.image || '');
             updateCategorySelect();
             document.getElementById('productModal').classList.add('active');
         }
@@ -1323,538 +1404,4 @@
             if (!newItem) { showToast('❌ Nhập dữ liệu!', 'error'); return; }
             const productId = document.getElementById('dataProductId').value;
             const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
-            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            current.push(newItem);
-            const newStr = current.join('\n');
-            db.ref('products/' + productId + '/data').set(newStr).then(() => {
-                showToast('✅ Đã thêm!', 'success');
-                renderDataList(current);
-                productsData[productId].data = newStr;
-                renderProducts();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function removeDataItem(index) {
-            if (!confirm('🗑️ Xóa dữ liệu này?')) return;
-            const productId = document.getElementById('dataProductId').value;
-            const p = productsData[productId];
-            if (!p) { showToast('❌ Không tìm thấy!', 'error'); return; }
-            const current = p.data ? p.data.split('\n').filter(d => d.trim() !== '') : [];
-            current.splice(index, 1);
-            const newStr = current.join('\n');
-            db.ref('products/' + productId + '/data').set(newStr).then(() => {
-                showToast('✅ Đã xóa!', 'success');
-                renderDataList(current);
-                productsData[productId].data = newStr;
-                renderProducts();
-            }).catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function closeDataModal() { document.getElementById('dataModal').classList.remove('active'); }
-
-        // ===== RENDER ORDERS =====
-        function renderOrders() {
-            const container = document.getElementById('ordersList');
-            const keys = Object.keys(ordersData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">📦</span>Chưa có đơn hàng</div>`; return; }
-            let html = '';
-            const sorted = keys.sort((a,b) => (ordersData[b]?.timestamp||0) - (ordersData[a]?.timestamp||0));
-            sorted.forEach(key => {
-                const o = ordersData[key];
-                const status = o.status || 'success';
-                html += `
-                    <div class="order-item">
-                        <div class="img">${o.productImage ? `<img src="${o.productImage}" onerror="this.parentElement.textContent='${o.productIcon||'📦'}'" />` : (o.productIcon||'📦')}</div>
-                        <div class="info">
-                            <div class="name">${o.productName||'Sản phẩm'}</div>
-                            <div class="meta">
-                                <span><i class="fas fa-coins"></i> ${(o.price||0).toLocaleString('vi-VN')}đ</span>
-                                <span><i class="fas fa-user"></i> ${o.userName||'Khách'}</span>
-                                <span class="code"><i class="fas fa-key"></i> ${o.orderCode||'#'+key.substring(0,6)}</span>
-                                <span><i class="fas fa-clock"></i> ${new Date(o.timestamp).toLocaleString('vi-VN')}</span>
-                            </div>
-                        </div>
-                        <span class="badge ${status}">${status==='success'?'✅ Thành công':'❌ Thất bại'}</span>
-                        <button class="del-btn" onclick="deleteOrder('${key}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function deleteOrder(key) {
-            if (confirm('🗑️ Xóa đơn hàng?')) {
-                db.ref('orders/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllOrders() {
-            if (confirm('🗑️ Xóa TẤT CẢ đơn hàng?')) {
-                db.ref('orders').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== RENDER VOUCHERS =====
-        function renderVouchers() {
-            const container = document.getElementById('voucherList');
-            const keys = Object.keys(vouchersData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">🎫</span>Chưa có mã giảm giá</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const v = vouchersData[key];
-                const typeText = v.type === 'percent' ? `${v.value}%` : `${v.value.toLocaleString('vi-VN')}đ`;
-                html += `
-                    <div class="voucher-item">
-                        <span class="code">${key}</span>
-                        <span class="info">Giảm ${typeText} • ${v.usedCount||0}/${v.maxUses||0} lượt</span>
-                        <button class="del-btn" onclick="deleteVoucher('${key}')"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ===== VOUCHER CRUD =====
-        function openVoucherModal() {
-            document.getElementById('voucherCode').value = '';
-            document.getElementById('voucherType').value = 'percent';
-            document.getElementById('voucherValue').value = '';
-            document.getElementById('voucherMaxUses').value = '10';
-            document.getElementById('voucherModal').classList.add('active');
-        }
-        function closeVoucherModal() { document.getElementById('voucherModal').classList.remove('active'); }
-
-        function saveVoucher() {
-            const code = document.getElementById('voucherCode').value.trim().toUpperCase();
-            const type = document.getElementById('voucherType').value;
-            const value = parseInt(document.getElementById('voucherValue').value);
-            const maxUses = parseInt(document.getElementById('voucherMaxUses').value) || 10;
-            if (!code) { showToast('❌ Nhập mã!', 'error'); return; }
-            if (!value || value <= 0) { showToast('❌ Nhập giá trị!', 'error'); return; }
-            if (type === 'percent' && value > 100) { showToast('❌ % không quá 100!', 'error'); return; }
-            db.ref('vouchers/' + code).set({ type, value, maxUses, usedCount: 0 })
-                .then(() => { showToast('✅ Đã tạo!', 'success'); closeVoucherModal(); })
-                .catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function deleteVoucher(key) {
-            if (confirm(`🗑️ Xóa mã "${key}"?`)) {
-                db.ref('vouchers/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-        function confirmDeleteAllVouchers() {
-            if (confirm('🗑️ Xóa TẤT CẢ mã?')) {
-                db.ref('vouchers').remove().then(() => showToast('✅ Đã xóa tất cả!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        // ===== SHOPS (API RESELLERS) =====
-        function renderShops() {
-            const container = document.getElementById('shopGrid');
-            const keys = Object.keys(shopsData);
-            if (keys.length === 0) { container.innerHTML = `<div class="empty-state"><span class="icon">🔌</span>Chưa có đại lý API</div>`; return; }
-            let html = '';
-            keys.forEach(key => {
-                const s = shopsData[key];
-                const banned = s.status === 'banned';
-                html += `
-                    <div class="product-card">
-                        <div class="top">
-                            <div class="img"><i class="fas fa-plug"></i></div>
-                            <div class="title">
-                                <div class="name">${s.name || key}</div>
-                                <div class="cat">${banned ? '🔒 Đã khóa' : '✅ Hoạt động'}</div>
-                            </div>
-                        </div>
-                        <div class="details">
-                            <div class="item"><div class="lbl">Số dư</div><div class="val price">${(s.balance||0).toLocaleString('vi-VN')}đ</div></div>
-                            <div class="item"><div class="lbl">Đơn API</div><div class="val stock">${s.totalOrders||0}</div></div>
-                        </div>
-                        <div class="desc" style="font-family:monospace;font-size:9px;word-break:break-all;">
-                            shop_id: ${key}<br>token: ${s.token || ''}
-                        </div>
-                        <div class="actions">
-                            <button class="edit" onclick="copyShopInfo('${key}')"><i class="fas fa-copy"></i> Copy</button>
-                            <button class="data" onclick="editShop('${key}')"><i class="fas fa-edit"></i> Sửa</button>
-                            <button class="del" onclick="deleteShop('${key}')"><i class="fas fa-trash"></i> Xóa</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function genToken() {
-            const bytes = new Uint8Array(24);
-            (window.crypto || window.msCrypto).getRandomValues(bytes);
-            const hex = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
-            return 'sk_' + hex;
-        }
-
-        function regenToken() {
-            document.getElementById('shopToken').value = genToken();
-        }
-
-        function openShopModal() {
-            document.getElementById('shopModalTitle').textContent = 'Tạo đại lý API';
-            document.getElementById('shopName').value = '';
-            document.getElementById('shopId').value = '';
-            document.getElementById('shopId').removeAttribute('disabled');
-            document.getElementById('shopToken').value = genToken();
-            document.getElementById('shopBalance').value = 0;
-            document.getElementById('shopStatus').value = 'active';
-            document.getElementById('shopEditId').value = '';
-            document.getElementById('shopModal').classList.add('active');
-        }
-        function closeShopModal() { document.getElementById('shopModal').classList.remove('active'); }
-
-        function editShop(key) {
-            const s = shopsData[key]; if (!s) return;
-            document.getElementById('shopModalTitle').textContent = 'Sửa đại lý API';
-            document.getElementById('shopName').value = s.name || '';
-            document.getElementById('shopId').value = key;
-            document.getElementById('shopId').setAttribute('disabled', 'disabled');
-            document.getElementById('shopToken').value = s.token || genToken();
-            document.getElementById('shopBalance').value = s.balance || 0;
-            document.getElementById('shopStatus').value = s.status || 'active';
-            document.getElementById('shopEditId').value = key;
-            document.getElementById('shopModal').classList.add('active');
-        }
-
-        function saveShop() {
-            const name = document.getElementById('shopName').value.trim();
-            let shopId = document.getElementById('shopId').value.trim();
-            const token = document.getElementById('shopToken').value.trim();
-            const balance = parseInt(document.getElementById('shopBalance').value) || 0;
-            const status = document.getElementById('shopStatus').value;
-            const editId = document.getElementById('shopEditId').value;
-
-            if (!name) { showToast('❌ Nhập tên đại lý!', 'error'); return; }
-            if (!token) { showToast('❌ Thiếu token!', 'error'); return; }
-
-            if (editId) {
-                db.ref('shops/' + editId).update({ name, token, balance, status })
-                    .then(() => { showToast('✅ Đã lưu!', 'success'); closeShopModal(); })
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-                return;
-            }
-
-            if (!shopId) shopId = 'shop_' + Math.random().toString(36).substring(2, 9);
-            if (shopsData[shopId]) { showToast('❌ shop_id đã tồn tại!', 'error'); return; }
-
-            db.ref('shops/' + shopId).set({ name, token, balance, status, totalOrders: 0, totalSpent: 0, createdAt: Date.now() })
-                .then(() => { showToast('✅ Đã tạo đại lý!', 'success'); closeShopModal(); })
-                .catch(err => showToast('❌ ' + err.message, 'error'));
-        }
-
-        function deleteShop(key) {
-            if (confirm(`🗑️ Xóa đại lý "${shopsData[key]?.name || key}"?`)) {
-                db.ref('shops/' + key).remove().then(() => showToast('✅ Đã xóa!', 'success'))
-                    .catch(err => showToast('❌ ' + err.message, 'error'));
-            }
-        }
-
-        function copyShopInfo(key) {
-            const s = shopsData[key]; if (!s) return;
-            const text = `shop_id: ${key}\ntoken: ${s.token}`;
-            navigator.clipboard.writeText(text).then(() => showToast('✅ Đã copy shop_id & token!', 'success'))
-                .catch(() => showToast('❌ Không copy được!', 'error'));
-        }
-
-        // ===== API IMPORT =====
-        function fetchApiData() {
-            const endpoint = document.getElementById('apiEndpoint').value.trim();
-            const token = document.getElementById('apiToken').value.trim();
-            const resultEl = document.getElementById('apiResult');
-            const previewEl = document.getElementById('apiDataPreview');
-
-            if (!endpoint) {
-                showResult('error', '❌ Vui lòng nhập URL API!');
-                return;
-            }
-
-            showResult('', '⏳ Đang lấy dữ liệu...');
-
-            const headers = {};
-            if (token) headers['Authorization'] = 'Bearer ' + token;
-
-            fetch(endpoint, { headers })
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-                    return res.json();
-                })
-                .then(data => {
-                    apiFetchedData = data;
-                    let products = [];
-                    if (data.products && Array.isArray(data.products)) {
-                        products = data.products;
-                    } else if (Array.isArray(data)) {
-                        products = data;
-                    } else if (data.data && Array.isArray(data.data)) {
-                        products = data.data;
-                    } else {
-                        for (let key in data) {
-                            if (Array.isArray(data[key]) && data[key].length > 0 && typeof data[key][0] === 'object') {
-                                products = data[key];
-                                break;
-                            }
-                        }
-                    }
-
-                    if (products.length === 0) {
-                        throw new Error('Không tìm thấy danh sách sản phẩm trong JSON');
-                    }
-
-                    const validProducts = products.filter(p => p.name && p.price !== undefined);
-                    if (validProducts.length === 0) {
-                        throw new Error('Sản phẩm phải có trường "name" và "price"');
-                    }
-
-                    apiFetchedData = validProducts;
-                    showResult('success', `✅ Đã lấy ${validProducts.length} sản phẩm từ API!`);
-
-                    let previewHtml = `<div style="font-size:11px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">📋 Preview (${validProducts.length} sản phẩm):</div>`;
-                    previewHtml += `<table style="width:100%;font-size:10px;border-collapse:collapse;">`;
-                    previewHtml += `<tr style="background:var(--border-color);"><th style="padding:4px 6px;text-align:left;">#</th><th style="padding:4px 6px;text-align:left;">Tên</th><th style="padding:4px 6px;text-align:left;">Giá</th><th style="padding:4px 6px;text-align:left;">Dữ liệu</th></tr>`;
-                    validProducts.slice(0, 20).forEach((p, i) => {
-                        const dataCount = p.data ? p.data.split('\n').filter(d => d.trim()).length : 0;
-                        previewHtml += `<tr style="border-bottom:1px solid var(--border-color);">
-                            <td style="padding:3px 6px;">${i+1}</td>
-                            <td style="padding:3px 6px;">${p.name}</td>
-                            <td style="padding:3px 6px;">${(p.price||0).toLocaleString('vi-VN')}đ</td>
-                            <td style="padding:3px 6px;">${dataCount} món</td>
-                        </tr>`;
-                    });
-                    if (validProducts.length > 20) {
-                        previewHtml += `<tr><td colspan="4" style="padding:4px 6px;color:var(--text-muted);">... và ${validProducts.length - 20} sản phẩm khác</td></tr>`;
-                    }
-                    previewHtml += `</table>`;
-                    previewEl.innerHTML = previewHtml;
-                    previewEl.style.display = 'block';
-
-                    document.getElementById('importApiBtn').disabled = false;
-                    document.getElementById('importApiBtn').style.opacity = '1';
-                })
-                .catch(err => {
-                    showResult('error', `❌ Lỗi: ${err.message}`);
-                    previewEl.style.display = 'none';
-                    apiFetchedData = null;
-                    document.getElementById('importApiBtn').disabled = true;
-                    document.getElementById('importApiBtn').style.opacity = '0.5';
-                });
-        }
-
-        function showResult(type, message) {
-            const el = document.getElementById('apiResult');
-            el.textContent = message;
-            el.className = 'api-result show ' + type;
-        }
-
-        function clearApiResult() {
-            document.getElementById('apiResult').className = 'api-result';
-            document.getElementById('apiResult').textContent = '';
-            document.getElementById('apiDataPreview').style.display = 'none';
-            document.getElementById('apiDataPreview').innerHTML = '';
-            apiFetchedData = null;
-            document.getElementById('importApiBtn').disabled = true;
-            document.getElementById('importApiBtn').style.opacity = '0.5';
-        }
-
-        function importApiData() {
-            if (!apiFetchedData || apiFetchedData.length === 0) {
-                showToast('❌ Không có dữ liệu để nhập!', 'error');
-                return;
-            }
-
-            const category = document.getElementById('apiCategorySelect').value;
-            if (!category) {
-                showToast('❌ Vui lòng chọn mục để lưu!', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('importApiBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Đang nhập...';
-
-            let successCount = 0;
-            let failCount = 0;
-            let promises = [];
-
-            apiFetchedData.forEach((p, index) => {
-                const name = p.name || `Sản phẩm ${index+1}`;
-                const price = parseInt(p.price) || 0;
-                const icon = p.icon || '📦';
-                const image = p.image || '';
-                const description = p.description || '';
-                const dataString = p.data ? p.data.split('\n').map(d => d.trim()).filter(d => d !== '').join('\n') : '';
-
-                if (!dataString) {
-                    failCount++;
-                    return;
-                }
-
-                const productData = {
-                    name,
-                    price,
-                    category,
-                    icon,
-                    data: dataString,
-                    sold: 0
-                };
-                if (image) productData.image = image;
-                if (description) productData.description = description;
-
-                const ref = db.ref('products').push();
-                promises.push(ref.set(productData));
-            });
-
-            if (promises.length === 0) {
-                showToast('⚠️ Không có sản phẩm hợp lệ để nhập!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                return;
-            }
-
-            Promise.all(promises)
-                .then(() => {
-                    const total = promises.length;
-                    showToast(`✅ Đã nhập ${total} sản phẩm vào kho! (${failCount} bị bỏ qua do thiếu dữ liệu)`, 'success');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                    clearApiResult();
-                })
-                .catch(err => {
-                    showToast(`❌ Lỗi khi nhập: ${err.message}`, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-upload"></i> Nhập vào kho';
-                });
-        }
-
-        // ===== REFRESH =====
-        function refreshAll() {
-            showLoading();
-            setTimeout(() => {
-                loadAllData();
-                setTimeout(() => { hideLoading(); showToast('🔄 Đã làm mới!', 'success'); }, 1000);
-            }, 500);
-        }
-
-        // ===== AUTH =====
-        auth.onAuthStateChanged(async (user) => {
-            if (checkQuickLogin()) {
-                const success = await completeQuickLogin();
-                if (success) return;
-                localStorage.removeItem('quickLoginUid');
-                localStorage.removeItem('quickLoginToken');
-                localStorage.removeItem('quickLoginPending');
-                window.location.replace('login.html');
-                return;
-            }
-            if (!user) {
-                if (!localStorage.getItem('quickLoginUid') || !localStorage.getItem('quickLoginToken')) {
-                    window.location.replace('login.html');
-                }
-                return;
-            }
-            db.ref('users/' + user.uid).once('value', snap => {
-                const data = snap.val();
-                if (!data || data.isAdmin !== true) {
-                    alert('⚠️ Không có quyền truy cập!');
-                    window.location.replace('../index.html');
-                    return;
-                }
-                isAdmin = true;
-                loadAllData();
-            });
-            db.ref('users/' + user.uid + '/balance').on('value', snap => {
-                document.getElementById('balanceAmount').textContent = (snap.val() || 0).toLocaleString('vi-VN');
-            });
-            if (!isDataLoaded) {
-                setTimeout(() => { if (!isDataLoaded) { isDataLoaded = true; hideLoading(); } }, 5000);
-            }
-        });
-
-        // ===== MENU =====
-        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active');
-            document.getElementById('menuOverlay').classList.toggle('active'); }
-        function closeMenu() { document.getElementById('sideMenu').classList.remove('active');
-            document.getElementById('menuOverlay').classList.remove('active'); }
-
-        function togglePopup(e) { 
-            e.stopPropagation(); 
-            document.getElementById('settingsPopup').classList.toggle('active'); 
-        }
-        document.addEventListener('click', function(e) {
-            const popup = document.getElementById('settingsPopup');
-            const wrapper = document.querySelector('.settings-wrapper');
-            if (!wrapper.contains(e.target)) popup.classList.remove('active');
-        });
-
-        function toggleNotif() {
-            const popup = document.getElementById('notifPopup');
-            popup.classList.toggle('active');
-            const user = auth.currentUser;
-            const uid = user ? user.uid : localStorage.getItem('quickLoginUid');
-            if (uid && localStorage.getItem('autoView') !== 'false') {
-                db.ref('notifications').once('value', snap => {
-                    const notifs = snap.val();
-                    if (notifs) Object.keys(notifs).forEach(key => db.ref('notifications/' + key + '/readBy/' + uid).set(true));
-                });
-                document.getElementById('notifDot').classList.remove('show');
-            }
-        }
-
-        function goHome() { closeMenu(); window.location.href = '../index.html'; }
-        function goHistory() { closeMenu(); window.location.href = '../Pages/history.html'; }
-        function goTopup() { closeMenu(); showToast('💰 Đang phát triển!', 'error'); }
-        function goSupport() { closeMenu(); showToast('🆘 Đang phát triển!', 'error'); }
-        function goToProfile() { window.location.href = '../Pop-up/profile.html'; }
-        function goToSecurity() { window.location.href = '../Pop-up/security.html'; }
-        function goToSettings() { window.location.href = '../Pop-up/settings.html'; }
-
-        function logout() {
-            if (confirm('Đăng xuất?')) {
-                const user = auth.currentUser;
-                if (user) db.ref('presence/' + user.uid).set(false);
-                auth.signOut().then(() => {
-                    localStorage.removeItem('quickLoginUid');
-                    localStorage.removeItem('quickLoginEmail');
-                    localStorage.removeItem('quickLoginToken');
-                    localStorage.removeItem('quickLoginPending');
-                    window.location.replace('login.html');
-                });
-            }
-        }
-
-        // ===== MODAL CLOSE ON OVERLAY =====
-        document.querySelectorAll('.modal-overlay').forEach(el => {
-            el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-        });
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'theme' || e.key === 'theme_name') { applyTheme(); }
-        });
-
-        // ===== START =====
-        showLoading();
-        console.log('✅ Admin panel loaded!');
-        console.log('📍 API Base URL:', API_BASE_URL);
-        console.log('💡 Hãy cấu hình Base URL đúng với Vercel API của bạn!');
-        console.log('');
-        console.log('📌 CÁCH SỬ DỤNG API IMPORT:');
-        console.log('1. Deploy api-server.js lên Vercel');
-        console.log('2. Cấu hình Base URL trong tab API');
-        console.log('3. Gửi POST request đến /api/products hoặc /api/products/batch');
-        console.log('4. Dữ liệu sẽ tự động được nhập vào kho hàng!');
-        console.log('');
-        console.log('🔗 Ví dụ gọi API:');
-        console.log('curl -X POST https://your-api.vercel.app/api/products/batch \\');
-        console.log('  -H "Content-Type: application/json" \\');
-        console.log('  -d \'{"category":"CATEGORY_ID","products":[{"name":"Test","price":50000,"data":"item1\\nitem2"}]}\'');
-    </script>
-</body>
-</html>
+            if (!p) { showToast('❌ Kh
