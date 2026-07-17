@@ -955,19 +955,37 @@
                     <div>
                         <strong>Kiểm tra cấu trúc thư mục</strong>
                         <div style="font-size:13px;color:var(--text-secondary);">
-                            Vercel định tuyến theo tên file, nên tên/đường dẫn phải khớp chính xác:
+                            Toàn bộ file API đặt <strong>phẳng</strong> trong <code>api/</code>, không có thư mục con.
+                            URL đẹp như <code>/api/product/:id</code> được giữ nguyên nhờ <code>rewrites</code> trong <code>vercel.json</code>:
                         </div>
                         <div class="codebox" style="margin-top:6px;">
                             <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                            <pre>api/
-├── hello.js
-├── product/
-│   └── [id].js
-└── products/
-    ├── index.js
-    └── batch.js
+                            <pre>vercel.json
+package.json
+api/
+├── index.js            (GET /api)
+├── hello.js             (GET /api/hello)
+├── balance.js           (GET /api/balance)
+├── order.js             (POST /api/order)
+├── products.js          (GET+POST /api/products)
+├── products-batch.js    (POST /api/products/batch, qua rewrite)
+└── product.js           (GET /api/product/:id, qua rewrite)
 lib/
 └── firebase.js</pre>
+                        </div>
+                        <div class="codebox" style="margin-top:6px;">
+                            <button class="copy-btn" onclick="copyBox(this)">Copy</button>
+                            <pre>// vercel.json
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/product/:id", "destination": "/api/product?id=:id" },
+    { "source": "/api/products/batch", "destination": "/api/products-batch" }
+  ]
+}</pre>
+                        </div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+                            ⚠️ Không được đặt file trong thư mục con (vd <code>api/product/[id].js</code>) — trước đây từng gây lỗi 404 vì thư mục con không tạo đúng khi upload qua GitHub web.
                         </div>
                     </div>
                 </div>
