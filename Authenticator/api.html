@@ -534,13 +534,13 @@
                 <div class="endpoint-item">
                     <span class="method post">POST</span>
                     <span class="status-badge active">✓ Hoạt động</span>
-                    <div class="path">/api/products/batch</div>
+                    <div class="path">/api/products-batch</div>
                     <div class="desc">📦 Nhập nhiều sản phẩm cùng lúc</div>
                 </div>
                 <div class="endpoint-item">
                     <span class="method get">GET</span>
                     <span class="status-badge active">✓ Hoạt động</span>
-                    <div class="path">/api/product/:id</div>
+                    <div class="path">/api/product?id=xxx</div>
                     <div class="desc">🔍 Lấy chi tiết một sản phẩm theo ID</div>
                 </div>
                 <div class="endpoint-item">
@@ -632,13 +632,13 @@
             </div>
         </div>
 
-        <!-- ===== POST /api/products/batch - Nhập nhiều sản phẩm ===== -->
+        <!-- ===== POST /api/products-batch - Nhập nhiều sản phẩm ===== -->
         <div class="card" style="border:2px solid var(--purple);">
-            <h2><i class="fas fa-layer-group" style="color:var(--purple);"></i> 📥 POST /api/products/batch - Nhập nhiều sản phẩm</h2>
+            <h2><i class="fas fa-layer-group" style="color:var(--purple);"></i> 📥 POST /api/products-batch - Nhập nhiều sản phẩm</h2>
 
             <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;margin-bottom:10px;">
                 <span class="badge post">POST</span>
-                <span style="color:var(--text-secondary);">https://vercel-api-minkuanngs-projects.vercel.app/api/products/batch</span>
+                <span style="color:var(--text-secondary);">https://vercel-api-minkuanngs-projects.vercel.app/api/products-batch</span>
             </div>
 
             <p><strong>Dùng để:</strong> Nhập nhiều sản phẩm cùng lúc, tiết kiệm thời gian.</p>
@@ -659,7 +659,7 @@
             <h3>Ví dụ cURL</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>curl -X POST https://vercel-api-minkuanngs-projects.vercel.app/api/products/batch \
+                <pre>curl -X POST https://vercel-api-minkuanngs-projects.vercel.app/api/products-batch \
   -H "Content-Type: application/json" \
   -d '{
     "category": "-NkGgxTsjL1Kb3R2XcF",
@@ -874,13 +874,13 @@
             </div>
         </div>
 
-        <!-- ===== GET /api/product/:id - Chi tiết sản phẩm ===== -->
+        <!-- ===== GET /api/product?id=xxx - Chi tiết sản phẩm ===== -->
         <div class="card">
-            <h2><i class="fas fa-search"></i> 🔍 GET /api/product/:id - Chi tiết sản phẩm</h2>
+            <h2><i class="fas fa-search"></i> 🔍 GET /api/product?id=xxx - Chi tiết sản phẩm</h2>
 
             <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;margin-bottom:10px;">
                 <span class="badge get">GET</span>
-                <span style="color:var(--text-secondary);">https://vercel-api-minkuanngs-projects.vercel.app/api/product/:id</span>
+                <span style="color:var(--text-secondary);">https://vercel-api-minkuanngs-projects.vercel.app/api/product?id=xxx</span>
             </div>
 
             <p><strong>Dùng để:</strong> Lấy chi tiết một sản phẩm theo ID.</p>
@@ -888,7 +888,7 @@
             <h3>Ví dụ cURL</h3>
             <div class="codebox">
                 <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                <pre>curl https://vercel-api-minkuanngs-projects.vercel.app/api/product/-Nabc123xyz</pre>
+                <pre>curl "https://vercel-api-minkuanngs-projects.vercel.app/api/product?id=-Nabc123xyz"</pre>
             </div>
 
             <h3>✅ Response thành công</h3>
@@ -955,8 +955,9 @@
                     <div>
                         <strong>Kiểm tra cấu trúc thư mục</strong>
                         <div style="font-size:13px;color:var(--text-secondary);">
-                            Toàn bộ file API đặt <strong>phẳng</strong> trong <code>api/</code>, không có thư mục con.
-                            URL đẹp như <code>/api/product/:id</code> được giữ nguyên nhờ <code>rewrites</code> trong <code>vercel.json</code>:
+                            Toàn bộ file API đặt <strong>phẳng</strong> trong <code>api/</code>, không có thư mục con,
+                            và <strong>không dùng rewrites</strong> (rewrites từng gây lỗi 404 không ổn định) —
+                            URL API bám sát 100% theo tên file:
                         </div>
                         <div class="codebox" style="margin-top:6px;">
                             <button class="copy-btn" onclick="copyBox(this)">Copy</button>
@@ -968,24 +969,21 @@ api/
 ├── balance.js           (GET /api/balance)
 ├── order.js             (POST /api/order)
 ├── products.js          (GET+POST /api/products)
-├── products-batch.js    (POST /api/products/batch, qua rewrite)
-└── product.js           (GET /api/product/:id, qua rewrite)
+├── products-batch.js    (POST /api/products-batch)
+└── product.js           (GET /api/product?id=xxx)
 lib/
 └── firebase.js</pre>
                         </div>
                         <div class="codebox" style="margin-top:6px;">
                             <button class="copy-btn" onclick="copyBox(this)">Copy</button>
-                            <pre>// vercel.json
+                            <pre>// vercel.json (không còn rewrites)
 {
-  "version": 2,
-  "rewrites": [
-    { "source": "/api/product/:id", "destination": "/api/product?id=:id" },
-    { "source": "/api/products/batch", "destination": "/api/products-batch" }
-  ]
+  "version": 2
 }</pre>
                         </div>
                         <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
-                            ⚠️ Không được đặt file trong thư mục con (vd <code>api/product/[id].js</code>) — trước đây từng gây lỗi 404 vì thư mục con không tạo đúng khi upload qua GitHub web.
+                            ⚠️ Không đặt file trong thư mục con (vd <code>api/product/[id].js</code>) và không dùng <code>rewrites</code> —
+                            cả hai đều từng gây lỗi 404 khi deploy. Tên file = đường dẫn URL, đơn giản và chắc chắn nhất.
                         </div>
                     </div>
                 </div>
